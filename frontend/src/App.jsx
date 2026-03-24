@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import FeaturesPage from './pages/FeaturesPage';
+import HowItWorksPage from './pages/HowItWorksPage';
 import './index.css';
 
 const MainLayout = ({ children }) => (
@@ -22,6 +23,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MainLayout><HomePage /></MainLayout>} />
         <Route path="/features" element={<MainLayout><FeaturesPage /></MainLayout>} />
+        <Route path="/how-it-works" element={<MainLayout><HowItWorksPage /></MainLayout>} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>
