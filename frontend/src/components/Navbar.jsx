@@ -7,7 +7,7 @@ const Navbar = () => {
   const menuItems = [
     { name: 'Home', path: '/' },
     { name: 'Features', path: '/features' },
-    { name: 'How it Works', path: '/#how-it-works' },
+    { name: 'How it Works', path: '/how-it-works' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' }
   ];
@@ -33,6 +33,7 @@ const Navbar = () => {
                 key={item.name} 
                 component={RouterLink}
                 to={item.path}
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 sx={{ 
                   color: '#333', 
                   fontSize: '15px', 

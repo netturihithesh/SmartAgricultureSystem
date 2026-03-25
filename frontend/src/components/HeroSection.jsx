@@ -52,6 +52,7 @@ const HeroSection = () => {
             </Button>
             <Button 
               variant="outlined" 
+              onClick={() => navigate('/how-it-works')}
               sx={{ 
                 color: '#fff', fontSize: '16px', fontWeight: 600, 
                 height: '48px', borderRadius: '10px', px: '32px', 
