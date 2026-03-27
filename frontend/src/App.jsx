@@ -9,6 +9,7 @@ import FeaturesPage from './pages/FeaturesPage';
 import HowItWorksPage from './pages/HowItWorksPage';
 import ContactPage from './pages/ContactPage';
 import AboutPage from './pages/AboutPage';
+import DashboardPage from './pages/DashboardPage';
 import './index.css';
 
 const MainLayout = ({ children }) => (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/how-it-works" element={<MainLayout><HowItWorksPage /></MainLayout>} />
         <Route path="/contact" element={<MainLayout><ContactPage /></MainLayout>} />
         <Route path="/about" element={<MainLayout><AboutPage /></MainLayout>} />
+        <Route path="/dashboard" element={<MainLayout><DashboardPage /></MainLayout>} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>
