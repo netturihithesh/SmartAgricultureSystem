@@ -5,7 +5,6 @@ import { supabase } from '../supabase';
 import HeroSection from '../components/HeroSection';
 import ProblemSection from '../components/ProblemSection';
 import FeaturesSection from '../components/FeaturesSection';
-import HowItWorks from '../components/HowItWorks';
 import StatsSection from '../components/StatsSection';
 import AboutSection from '../components/AboutSection';
 import CTASection from '../components/CTASection';
@@ -39,7 +38,6 @@ const HomePage = () => {
       <HeroSection />
       <ProblemSection />
       <FeaturesSection />
-      <HowItWorks />
       <StatsSection />
       <AboutSection />
       <CTASection />
