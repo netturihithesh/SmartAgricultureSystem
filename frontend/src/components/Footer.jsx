@@ -56,7 +56,17 @@ const Footer = () => {
             <Typography sx={{ color: '#fff', fontSize: '16px', mb: '16px', fontWeight: 700 }}>Contact</Typography>
             <Typography sx={{ fontSize: '14px', mb: 1, opacity: 0.8 }}>Email: support@smartagri.ai</Typography>
             <Typography sx={{ fontSize: '14px', mb: 1, opacity: 0.8 }}>Phone: +1 (555) 123-4567</Typography>
-            <Typography sx={{ fontSize: '14px', mb: 1, opacity: 0.8 }}>Location: Precision Farm Rd, Valley, CA</Typography>
+            <Typography sx={{ fontSize: '14px', mb: 1, opacity: 0.8 }}>
+              Location: 
+              <Link 
+                href="https://maps.app.goo.gl/xi53BKjYm8Ek6jt4A" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                sx={{ ml: 0.5, color: '#66BB6A', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
+              >
+                Osmania University, Hyderabad, India
+              </Link>
+            </Typography>
           </Grid>
         </Grid>
       </Container>

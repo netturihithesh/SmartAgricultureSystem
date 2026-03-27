@@ -151,16 +151,31 @@ const ContactPage = () => {
               </Typography>
               
               <Stack spacing={'18px'}>
-                {/* Location */}
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Box sx={{ display: 'flex', p: 1.2, backgroundColor: '#e8f5e9', borderRadius: '10px', color: '#2e7d32' }}>
-                    <LocationIcon />
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    <Box sx={{ display: 'flex', p: 1.2, backgroundColor: '#e8f5e9', borderRadius: '10px', color: '#2e7d32' }}>
+                      <LocationIcon />
+                    </Box>
+                    <Box sx={{ flex: 1 }}>
+                      <Typography variant="body2" color="text.secondary" fontWeight={500}>Address</Typography>
+                      <Typography
+                        variant="body1"
+                        fontWeight={600}
+                        color="#1a1a1a"
+                        component="a"
+                        href="https://maps.app.goo.gl/xi53BKjYm8Ek6jt4A"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        sx={{
+                          textDecoration: 'none',
+                          '&:hover': { color: '#2e7d32', textDecoration: 'underline' },
+                          cursor: 'pointer',
+                          display: 'block'
+                        }}
+                      >
+                        Osmania University, Hyderabad
+                      </Typography>
+                    </Box>
                   </Box>
-                  <Box>
-                    <Typography variant="body2" color="text.secondary" fontWeight={500}>Address</Typography>
-                    <Typography variant="body1" fontWeight={600} color="#1a1a1a">Digital Agriculture Lab</Typography>
-                  </Box>
-                </Box>
 
                 {/* Email */}
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -185,32 +200,23 @@ const ContactPage = () => {
                 </Box>
               </Stack>
 
-              {/* 5. Minimal Map / Illustration (Abstract UI Element) */}
-              <Box 
-                sx={{ 
-                  mt: 'auto', 
-                  pt: 4, 
-                  display: 'flex', 
-                  justifyContent: 'center' 
-                }}
-              >
-                 <Box 
-                  sx={{ 
-                    width: '100%', 
-                    height: '120px', 
-                    borderRadius: '12px',
-                    backgroundColor: '#e8f5e9',
-                    backgroundImage: 'radial-gradient(#c8e6c9 2px, transparent 2px)',
-                    backgroundSize: '20px 20px',
-                    opacity: 0.6,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                 >
-                    {/* Abstract Pin */}
-                    <LocationIcon sx={{ color: '#2e7d32', fontSize: 32, opacity: 0.8 }} />
-                 </Box>
+              {/* Google Map Embed */}
+              <Box sx={{ mt: 'auto', pt: 4 }}>
+                <Box sx={{
+                  width: '100%', height: '200px', borderRadius: '12px',
+                  overflow: 'hidden', border: '1px solid #e8ecea'
+                }}>
+                  <iframe
+                    title="Osmania University Location"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3807.135272639016!2d78.52514732609063!3d17.418003883474937!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb9971a0691e33%3A0x7d190f2a686a424e!2sOsmania%20University!5e0!3m2!1sen!2sin!4v1743068102640!5m2!1sen!2sin"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
+                </Box>
               </Box>
 
             </Box>
