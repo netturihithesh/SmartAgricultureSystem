@@ -25,8 +25,8 @@ const LoginPage = () => {
 
       if (error) throw error;
       
-      // Navigate to the secure dashboard on success
-      navigate('/dashboard');
+      // Navigate directly to the Action Home Page on success
+      navigate('/');
     } catch (err) {
       setErrorMsg(err.message || 'Invalid email or password.');
     } finally {

@@ -1,0 +1,2281 @@
+[
+  {
+    "name": "Paddy(Basmati)",
+    "api_name": "Paddy(Basmati)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Clay Soil",
+        "Loamy Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Rabi",
+        "Summer",
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 18,
+      "cost_per_acre": 22000
+    }
+  },
+  {
+    "name": "Paddy(Common)",
+    "api_name": "Paddy(Common)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Clay Soil",
+        "Alluvial Soil",
+        "Black Soil",
+        "Red Soil",
+        "Laterite Soil",
+        "Loamy Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Rabi",
+        "Summer",
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 25,
+      "cost_per_acre": 18000
+    }
+  },
+  {
+    "name": "Bajra",
+    "api_name": "Bajra(Pearl Millet/Cumbu)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Sandy Soil",
+        "Black Soil",
+        "Red Soil",
+        "Alluvial Soil",
+        "Loamy Soil"
+      ],
+      "seasons": [
+        "Kharif"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 10,
+      "cost_per_acre": 7000
+    }
+  },
+  {
+    "name": "Barley",
+    "api_name": "Barley(Jau)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Sandy Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Rabi"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 15,
+      "cost_per_acre": 10000
+    }
+  },
+  {
+    "name": "Foxtail Millet",
+    "api_name": "Foxtail Millet(Navane)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Red Soil",
+        "Sandy Soil",
+        "Loamy Soil",
+        "Alluvial Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Rabi"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 8,
+      "cost_per_acre": 6000
+    }
+  },
+  {
+    "name": "Jowar",
+    "api_name": "Jowar(Sorghum)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Black Soil",
+        "Alluvial Soil",
+        "Red Soil",
+        "Loamy Soil",
+        "Sandy Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Rabi"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 10,
+      "cost_per_acre": 8000
+    }
+  },
+  {
+    "name": "Kodo Millet",
+    "api_name": "Kodo Millet(Varagu)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Red Soil",
+        "Sandy Soil",
+        "Loamy Soil",
+        "Alluvial Soil",
+        "Laterite Soil"
+      ],
+      "seasons": [
+        "Kharif"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 6,
+      "cost_per_acre": 5500
+    }
+  },
+  {
+    "name": "Maize",
+    "api_name": "Maize",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Red Soil",
+        "Black Soil",
+        "Laterite Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Rabi"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 22,
+      "cost_per_acre": 12000
+    }
+  },
+  {
+    "name": "Ragi",
+    "api_name": "Ragi(Finger Millet)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Red Soil",
+        "Sandy Soil",
+        "Loamy Soil",
+        "Alluvial Soil",
+        "Laterite Soil"
+      ],
+      "seasons": [
+        "Kharif"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 12,
+      "cost_per_acre": 9000
+    }
+  },
+  {
+    "name": "Thinai",
+    "api_name": "Thinai(Italian Millet)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Red Soil",
+        "Loamy Soil",
+        "Sandy Soil",
+        "Alluvial Soil"
+      ],
+      "seasons": [
+        "Kharif"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 7,
+      "cost_per_acre": 6000
+    }
+  },
+  {
+    "name": "Wheat",
+    "api_name": "Wheat",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Loamy Soil",
+        "Clay Soil",
+        "Alluvial Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Rabi"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 18,
+      "cost_per_acre": 14000
+    }
+  },
+  {
+    "name": "Arhar",
+    "api_name": "Arhar(Tur/Red Gram)(Whole)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Black Soil",
+        "Alluvial Soil",
+        "Red Soil",
+        "Loamy Soil",
+        "Laterite Soil"
+      ],
+      "seasons": [
+        "Kharif"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 6,
+      "cost_per_acre": 15000
+    }
+  },
+  {
+    "name": "Alasande Gram",
+    "api_name": "Alasande Gram",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Sandy Soil",
+        "Loamy Soil",
+        "Alluvial Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Rabi"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 5,
+      "cost_per_acre": 9000
+    }
+  },
+  {
+    "name": "Avare Dal",
+    "api_name": "Avare Dal",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Red Soil",
+        "Loamy Soil",
+        "Alluvial Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Rabi"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 7,
+      "cost_per_acre": 11000
+    }
+  },
+  {
+    "name": "Bengal Gram",
+    "api_name": "Bengal Gram(Gram)(Whole)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Black Soil",
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Clay Soil"
+      ],
+      "seasons": [
+        "Rabi"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 8,
+      "cost_per_acre": 12000
+    }
+  },
+  {
+    "name": "Black Gram",
+    "api_name": "Black Gram(Urd Beans)(Whole)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Black Soil",
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Rabi"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 5,
+      "cost_per_acre": 10000
+    }
+  },
+  {
+    "name": "Cowpea",
+    "api_name": "Cowpea(Lobia/Karamani)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Sandy Soil",
+        "Loamy Soil",
+        "Alluvial Soil",
+        "Red Soil",
+        "Laterite Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Summer"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 6,
+      "cost_per_acre": 9000
+    }
+  },
+  {
+    "name": "Field Pea",
+    "api_name": "Field Pea",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Clay Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Rabi"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 8,
+      "cost_per_acre": 11000
+    }
+  },
+  {
+    "name": "Green Gram",
+    "api_name": "Green Gram(Moong)(Whole)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Sandy Soil",
+        "Red Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Summer"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 5,
+      "cost_per_acre": 9500
+    }
+  },
+  {
+    "name": "Green Peas",
+    "api_name": "Green Peas",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Clay Soil"
+      ],
+      "seasons": [
+        "Rabi"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 35,
+      "cost_per_acre": 18000
+    }
+  },
+  {
+    "name": "Groundnut",
+    "api_name": "Groundnut",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Sandy Soil",
+        "Loamy Soil",
+        "Red Soil",
+        "Alluvial Soil",
+        "Laterite Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Summer"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 10,
+      "cost_per_acre": 17000
+    }
+  },
+  {
+    "name": "Indian Beans",
+    "api_name": "Indian Beans(Seam)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Red Soil",
+        "Loamy Soil",
+        "Alluvial Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Rabi"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 6,
+      "cost_per_acre": 12000
+    }
+  },
+  {
+    "name": "Kabuli Chana",
+    "api_name": "Kabuli Chana(Chickpeas-White)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Black Soil",
+        "Clay Soil"
+      ],
+      "seasons": [
+        "Rabi"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 7,
+      "cost_per_acre": 14000
+    }
+  },
+  {
+    "name": "Kulthi",
+    "api_name": "Kulthi(Horse Gram)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Red Soil",
+        "Laterite Soil",
+        "Sandy Soil",
+        "Gravelly Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Rabi"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 4,
+      "cost_per_acre": 6000
+    }
+  },
+  {
+    "name": "Lentil",
+    "api_name": "Lentil(Masur)(Whole)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Clay Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Rabi"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 6,
+      "cost_per_acre": 11000
+    }
+  },
+  {
+    "name": "Pegeon Pea",
+    "api_name": "Pegeon Pea(Arhar Fali)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Black Soil",
+        "Alluvial Soil",
+        "Red Soil",
+        "Loamy Soil",
+        "Laterite Soil"
+      ],
+      "seasons": [
+        "Kharif"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 7,
+      "cost_per_acre": 16000
+    }
+  },
+  {
+    "name": "Soyabean",
+    "api_name": "Soyabean",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Black Soil",
+        "Loamy Soil",
+        "Alluvial Soil"
+      ],
+      "seasons": [
+        "Kharif"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 10,
+      "cost_per_acre": 15000
+    }
+  },
+  {
+    "name": "Amaranthus",
+    "api_name": "Amaranthus",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Red Soil",
+        "Sandy Soil",
+        "Clay Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Rabi",
+        "Summer"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 40,
+      "cost_per_acre": 8500
+    }
+  },
+  {
+    "name": "Ashgourd",
+    "api_name": "Ashgourd",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Sandy Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Summer",
+        "Kharif"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 120,
+      "cost_per_acre": 15000
+    }
+  },
+  {
+    "name": "Beetroot",
+    "api_name": "Beetroot",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Sandy Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Rabi"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 100,
+      "cost_per_acre": 18000
+    }
+  },
+  {
+    "name": "Bhindi",
+    "api_name": "Bhindi(Ladies Finger)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Black Soil",
+        "Red Soil",
+        "Sandy Soil"
+      ],
+      "seasons": [
+        "Summer",
+        "Kharif"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 45,
+      "cost_per_acre": 20000
+    }
+  },
+  {
+    "name": "Bitter gourd",
+    "api_name": "Bitter gourd",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Sandy Soil",
+        "Loamy Soil",
+        "Alluvial Soil",
+        "Red Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Summer",
+        "Kharif"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 40,
+      "cost_per_acre": 18000
+    }
+  },
+  {
+    "name": "Bottle gourd",
+    "api_name": "Bottle gourd",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Sandy Soil",
+        "Loamy Soil",
+        "Alluvial Soil",
+        "Black Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Summer",
+        "Kharif"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 70,
+      "cost_per_acre": 16000
+    }
+  },
+  {
+    "name": "Brinjal",
+    "api_name": "Brinjal",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Clay Soil",
+        "Black Soil",
+        "Red Soil",
+        "Laterite Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Rabi",
+        "Summer"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 120,
+      "cost_per_acre": 25000
+    }
+  },
+  {
+    "name": "Cabbage",
+    "api_name": "Cabbage",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Sandy Soil",
+        "Clay Soil"
+      ],
+      "seasons": [
+        "Rabi"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 150,
+      "cost_per_acre": 22000
+    }
+  },
+  {
+    "name": "Capsicum",
+    "api_name": "Capsicum",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Loamy Soil",
+        "Alluvial Soil",
+        "Red Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Rabi"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 50,
+      "cost_per_acre": 40000
+    }
+  },
+  {
+    "name": "Carrot",
+    "api_name": "Carrot",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Sandy Soil"
+      ],
+      "seasons": [
+        "Rabi"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 120,
+      "cost_per_acre": 18000
+    }
+  },
+  {
+    "name": "Cauliflower",
+    "api_name": "Cauliflower",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Clay Soil"
+      ],
+      "seasons": [
+        "Rabi"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 100,
+      "cost_per_acre": 25000
+    }
+  },
+  {
+    "name": "Cluster beans",
+    "api_name": "Cluster beans",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Sandy Soil",
+        "Black Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Summer"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 35,
+      "cost_per_acre": 12000
+    }
+  },
+  {
+    "name": "Colacasia",
+    "api_name": "Colacasia",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Clay Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Kharif"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 150,
+      "cost_per_acre": 45000
+    }
+  },
+  {
+    "name": "Cucumbar",
+    "api_name": "Cucumbar(Kheera)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Sandy Soil",
+        "Loamy Soil",
+        "Alluvial Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Summer",
+        "Kharif"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 40,
+      "cost_per_acre": 15000
+    }
+  },
+  {
+    "name": "Drumstick",
+    "api_name": "Drumstick",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Red Soil",
+        "Sandy Soil",
+        "Loamy Soil",
+        "Laterite Soil",
+        "Black Soil",
+        "Alluvial Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Rabi",
+        "Summer"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 150,
+      "cost_per_acre": 12000
+    }
+  },
+  {
+    "name": "Elephant Yam",
+    "api_name": "Elephant Yam(Suran)",
+    "crop_duration_type": "long_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Clay Soil",
+        "Black Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Kharif"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 180,
+      "cost_per_acre": 50000
+    }
+  },
+  {
+    "name": "Knool Khol",
+    "api_name": "Knool Khol",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Clay Soil"
+      ],
+      "seasons": [
+        "Rabi"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 80,
+      "cost_per_acre": 18000
+    }
+  },
+  {
+    "name": "Little gourd",
+    "api_name": "Little gourd(Kundru)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Sandy Soil",
+        "Loamy Soil",
+        "Alluvial Soil",
+        "Red Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Summer",
+        "Kharif",
+        "Rabi"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 50,
+      "cost_per_acre": 20000
+    }
+  },
+  {
+    "name": "Long Melon",
+    "api_name": "Long Melon(Kakri)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Sandy Soil",
+        "Loamy Soil",
+        "Alluvial Soil"
+      ],
+      "seasons": [
+        "Summer"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 35,
+      "cost_per_acre": 10000
+    }
+  },
+  {
+    "name": "Onion",
+    "api_name": "Onion",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Red Soil",
+        "Black Soil",
+        "Sandy Soil"
+      ],
+      "seasons": [
+        "Rabi",
+        "Kharif",
+        "Summer"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 100,
+      "cost_per_acre": 28000
+    }
+  },
+  {
+    "name": "Pea Pod",
+    "api_name": "Pea Pod/Pea Cod/हरी मटर",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Clay Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Rabi"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 35,
+      "cost_per_acre": 18000
+    }
+  },
+  {
+    "name": "Pointed gourd",
+    "api_name": "Pointed gourd(Parval)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Sandy Soil"
+      ],
+      "seasons": [
+        "Summer",
+        "Kharif"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 60,
+      "cost_per_acre": 25000
+    }
+  },
+  {
+    "name": "Potato",
+    "api_name": "Potato",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Sandy Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Rabi"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 100,
+      "cost_per_acre": 40000
+    }
+  },
+  {
+    "name": "Pumpkin",
+    "api_name": "Pumpkin",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Sandy Soil",
+        "Black Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Summer"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 100,
+      "cost_per_acre": 15000
+    }
+  },
+  {
+    "name": "Raddish",
+    "api_name": "Raddish",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Sandy Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Rabi",
+        "Kharif",
+        "Summer"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 80,
+      "cost_per_acre": 12000
+    }
+  },
+  {
+    "name": "Ridgeguard",
+    "api_name": "Ridgeguard(Tori)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Sandy Soil",
+        "Loamy Soil",
+        "Alluvial Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Summer",
+        "Kharif"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 50,
+      "cost_per_acre": 15000
+    }
+  },
+  {
+    "name": "Round gourd",
+    "api_name": "Round gourd",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Sandy Soil",
+        "Loamy Soil",
+        "Alluvial Soil"
+      ],
+      "seasons": [
+        "Summer",
+        "Kharif"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 40,
+      "cost_per_acre": 12000
+    }
+  },
+  {
+    "name": "Snakeguard",
+    "api_name": "Snakeguard",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Sandy Soil",
+        "Red Soil",
+        "Laterite Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Summer"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 60,
+      "cost_per_acre": 18000
+    }
+  },
+  {
+    "name": "Spinach",
+    "api_name": "Spinach",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Clay Soil",
+        "Black Soil",
+        "Sandy Soil"
+      ],
+      "seasons": [
+        "Rabi",
+        "Kharif",
+        "Summer"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 60,
+      "cost_per_acre": 10000
+    }
+  },
+  {
+    "name": "Sponge gourd",
+    "api_name": "Sponge gourd",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Sandy Soil",
+        "Loamy Soil",
+        "Alluvial Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Summer",
+        "Kharif"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 45,
+      "cost_per_acre": 14000
+    }
+  },
+  {
+    "name": "Sweet Potato",
+    "api_name": "Sweet Potato",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Sandy Soil",
+        "Loamy Soil",
+        "Red Soil",
+        "Laterite Soil",
+        "Alluvial Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Rabi"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 80,
+      "cost_per_acre": 18000
+    }
+  },
+  {
+    "name": "Tomato",
+    "api_name": "Tomato",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Red Soil",
+        "Sandy Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Rabi",
+        "Summer"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 120,
+      "cost_per_acre": 35000
+    }
+  },
+  {
+    "name": "Turnip",
+    "api_name": "Turnip",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Sandy Soil"
+      ],
+      "seasons": [
+        "Rabi"
+      ]
+    },
+    "water_need": "less_water",
+    "economics": {
+      "avg_yield_per_acre": 100,
+      "cost_per_acre": 15000
+    }
+  },
+  {
+    "name": "Yam",
+    "api_name": "Yam(Ratalu)",
+    "crop_duration_type": "long_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Clay Soil",
+        "Black Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Kharif"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 160,
+      "cost_per_acre": 45000
+    }
+  },
+  {
+    "name": "Amla",
+    "api_name": "Amla(Nelli Kai)",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Red Soil",
+        "Sandy Soil",
+        "Black Soil",
+        "Loamy Soil",
+        "Laterite Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 40,
+      "cost_per_acre": 20000
+    }
+  },
+  {
+    "name": "Apple",
+    "api_name": "Apple",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Loamy Soil",
+        "Alluvial Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 60,
+      "cost_per_acre": 80000
+    }
+  },
+  {
+    "name": "Apricot",
+    "api_name": "Apricot(Jardalu/Khumani)",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Sandy Soil",
+        "Loamy Soil",
+        "Alluvial Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 30,
+      "cost_per_acre": 50000
+    }
+  },
+  {
+    "name": "Banana",
+    "api_name": "Banana",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Clay Soil",
+        "Loamy Soil",
+        "Black Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Annual"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 200,
+      "cost_per_acre": 60000
+    }
+  },
+  {
+    "name": "Ber",
+    "api_name": "Ber(Zizyphus/Borehannu)",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Sandy Soil",
+        "Alluvial Soil",
+        "Red Soil",
+        "Black Soil",
+        "Loamy Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 50,
+      "cost_per_acre": 15000
+    }
+  },
+  {
+    "name": "Chikoos",
+    "api_name": "Chikoos(Sapota)",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Sandy Soil",
+        "Laterite Soil",
+        "Black Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 80,
+      "cost_per_acre": 30000
+    }
+  },
+  {
+    "name": "Custard Apple",
+    "api_name": "Custard Apple(Sharifa)",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Sandy Soil",
+        "Red Soil",
+        "Loamy Soil",
+        "Black Soil",
+        "Laterite Soil",
+        "Alluvial Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 30,
+      "cost_per_acre": 25000
+    }
+  },
+  {
+    "name": "Fig",
+    "api_name": "Fig(Anjura/Anjeer)",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Black Soil",
+        "Sandy Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 40,
+      "cost_per_acre": 35000
+    }
+  },
+  {
+    "name": "Grapes",
+    "api_name": "Grapes",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Sandy Soil",
+        "Loamy Soil",
+        "Black Soil",
+        "Alluvial Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 100,
+      "cost_per_acre": 120000
+    }
+  },
+  {
+    "name": "Guava",
+    "api_name": "Guava",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Red Soil",
+        "Black Soil",
+        "Laterite Soil",
+        "Sandy Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 120,
+      "cost_per_acre": 30000
+    }
+  },
+  {
+    "name": "Jack Fruit",
+    "api_name": "Jack Fruit",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Red Soil",
+        "Laterite Soil",
+        "Loamy Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 200,
+      "cost_per_acre": 15000
+    }
+  },
+  {
+    "name": "Jamun",
+    "api_name": "Jamun(Narale Hannu)",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Clay Soil",
+        "Loamy Soil",
+        "Black Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 80,
+      "cost_per_acre": 12000
+    }
+  },
+  {
+    "name": "Kinnow",
+    "api_name": "Kinnow",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Sandy Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 150,
+      "cost_per_acre": 50000
+    }
+  },
+  {
+    "name": "Lemon",
+    "api_name": "Lemon",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Black Soil",
+        "Red Soil",
+        "Laterite Soil",
+        "Sandy Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 80,
+      "cost_per_acre": 35000
+    }
+  },
+  {
+    "name": "Litchi",
+    "api_name": "Litchi",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Clay Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 40,
+      "cost_per_acre": 60000
+    }
+  },
+  {
+    "name": "Mango",
+    "api_name": "Mango",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Laterite Soil",
+        "Red Soil",
+        "Loamy Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 60,
+      "cost_per_acre": 40000
+    }
+  },
+  {
+    "name": "Sweet Lime",
+    "api_name": "Mousambi(Sweet Lime)",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Black Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 120,
+      "cost_per_acre": 50000
+    }
+  },
+  {
+    "name": "Orange",
+    "api_name": "Orange",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Black Soil",
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 100,
+      "cost_per_acre": 55000
+    }
+  },
+  {
+    "name": "Papaya",
+    "api_name": "Papaya",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Sandy Soil",
+        "Loamy Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Annual"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 250,
+      "cost_per_acre": 45000
+    }
+  },
+  {
+    "name": "Peach",
+    "api_name": "Peach",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Loamy Soil",
+        "Sandy Soil",
+        "Alluvial Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 30,
+      "cost_per_acre": 60000
+    }
+  },
+  {
+    "name": "Pear",
+    "api_name": "Pear(Marasebu)",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Loamy Soil",
+        "Alluvial Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 50,
+      "cost_per_acre": 55000
+    }
+  },
+  {
+    "name": "Pineapple",
+    "api_name": "Pineapple",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Laterite Soil",
+        "Sandy Soil",
+        "Loamy Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 150,
+      "cost_per_acre": 70000
+    }
+  },
+  {
+    "name": "Plum",
+    "api_name": "Plum",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Loamy Soil",
+        "Sandy Soil",
+        "Alluvial Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 30,
+      "cost_per_acre": 55000
+    }
+  },
+  {
+    "name": "Pomegranate",
+    "api_name": "Pomegranate",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Black Soil",
+        "Sandy Soil",
+        "Loamy Soil",
+        "Red Soil",
+        "Laterite Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 60,
+      "cost_per_acre": 50000
+    }
+  },
+  {
+    "name": "Water Melon",
+    "api_name": "Water Melon",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Sandy Soil",
+        "Alluvial Soil",
+        "Loamy Soil"
+      ],
+      "seasons": [
+        "Summer"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 150,
+      "cost_per_acre": 20000
+    }
+  },
+  {
+    "name": "Arecanut",
+    "api_name": "Arecanut(Betelnut/Supari)",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Laterite Soil",
+        "Red Soil",
+        "Loamy Soil",
+        "Alluvial Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 10,
+      "cost_per_acre": 60000
+    }
+  },
+  {
+    "name": "Black pepper",
+    "api_name": "Black pepper",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Laterite Soil",
+        "Red Soil",
+        "Loamy Soil",
+        "Alluvial Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 5,
+      "cost_per_acre": 40000
+    }
+  },
+  {
+    "name": "Cardamoms",
+    "api_name": "Cardamoms",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Laterite Soil",
+        "Red Soil",
+        "Loamy Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 3,
+      "cost_per_acre": 80000
+    }
+  },
+  {
+    "name": "Cashewnuts",
+    "api_name": "Cashewnuts",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Laterite Soil",
+        "Red Soil",
+        "Sandy Soil",
+        "Coastal Alluvial Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 8,
+      "cost_per_acre": 25000
+    }
+  },
+  {
+    "name": "Castor Seed",
+    "api_name": "Castor Seed",
+    "crop_duration_type": "long_term",
+    "conditions": {
+      "soil_types": [
+        "Red Soil",
+        "Sandy Soil",
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Rabi"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 7,
+      "cost_per_acre": 12000
+    }
+  },
+  {
+    "name": "Chili Red",
+    "api_name": "Chili Red",
+    "crop_duration_type": "long_term",
+    "conditions": {
+      "soil_types": [
+        "Black Soil",
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Rabi"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 15,
+      "cost_per_acre": 35000
+    }
+  },
+  {
+    "name": "Cloves",
+    "api_name": "Cloves",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Laterite Soil",
+        "Red Soil",
+        "Loamy Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 2,
+      "cost_per_acre": 50000
+    }
+  },
+  {
+    "name": "Coffee",
+    "api_name": "Coffee",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Laterite Soil",
+        "Red Soil",
+        "Loamy Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 4,
+      "cost_per_acre": 80000
+    }
+  },
+  {
+    "name": "Coriander",
+    "api_name": "Coriander(Leaves/Seed)",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Black Soil",
+        "Loamy Soil",
+        "Alluvial Soil"
+      ],
+      "seasons": [
+        "Rabi",
+        "Kharif"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 6,
+      "cost_per_acre": 12000
+    }
+  },
+  {
+    "name": "Cotton",
+    "api_name": "Cotton",
+    "crop_duration_type": "long_term",
+    "conditions": {
+      "soil_types": [
+        "Black Soil",
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Kharif"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 15,
+      "cost_per_acre": 22000
+    }
+  },
+  {
+    "name": "Garlic",
+    "api_name": "Garlic",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Loamy Soil",
+        "Alluvial Soil",
+        "Black Soil"
+      ],
+      "seasons": [
+        "Rabi"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 40,
+      "cost_per_acre": 35000
+    }
+  },
+  {
+    "name": "Ginger",
+    "api_name": "Ginger(Green)",
+    "crop_duration_type": "long_term",
+    "conditions": {
+      "soil_types": [
+        "Loamy Soil",
+        "Laterite Soil",
+        "Alluvial Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Kharif"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 80,
+      "cost_per_acre": 60000
+    }
+  },
+  {
+    "name": "Jute",
+    "api_name": "Jute",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Clay Soil"
+      ],
+      "seasons": [
+        "Kharif"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 12,
+      "cost_per_acre": 18000
+    }
+  },
+  {
+    "name": "Mustard",
+    "api_name": "Mustard",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Loamy Soil",
+        "Sandy Soil"
+      ],
+      "seasons": [
+        "Rabi"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 7,
+      "cost_per_acre": 12000
+    }
+  },
+  {
+    "name": "Rubber",
+    "api_name": "Rubber",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Laterite Soil",
+        "Red Soil",
+        "Loamy Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 8,
+      "cost_per_acre": 90000
+    }
+  },
+  {
+    "name": "Sugarcane",
+    "api_name": "Sugarcane",
+    "crop_duration_type": "long_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Black Soil",
+        "Loamy Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Annual"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 350,
+      "cost_per_acre": 50000
+    }
+  },
+  {
+    "name": "Tea",
+    "api_name": "Tea",
+    "crop_duration_type": "perennial",
+    "conditions": {
+      "soil_types": [
+        "Laterite Soil",
+        "Red Soil",
+        "Loamy Soil"
+      ],
+      "seasons": [
+        "Perennial"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 10,
+      "cost_per_acre": 120000
+    }
+  },
+  {
+    "name": "Tobacco",
+    "api_name": "Tobacco",
+    "crop_duration_type": "short_term",
+    "conditions": {
+      "soil_types": [
+        "Alluvial Soil",
+        "Black Soil",
+        "Red Soil",
+        "Loamy Soil"
+      ],
+      "seasons": [
+        "Kharif",
+        "Rabi"
+      ]
+    },
+    "water_need": "moderate_water",
+    "economics": {
+      "avg_yield_per_acre": 8,
+      "cost_per_acre": 25000
+    }
+  },
+  {
+    "name": "Turmeric",
+    "api_name": "Turmeric",
+    "crop_duration_type": "long_term",
+    "conditions": {
+      "soil_types": [
+        "Loamy Soil",
+        "Alluvial Soil",
+        "Black Soil",
+        "Red Soil"
+      ],
+      "seasons": [
+        "Kharif"
+      ]
+    },
+    "water_need": "more_water",
+    "economics": {
+      "avg_yield_per_acre": 100,
+      "cost_per_acre": 55000
+    }
+  }
+]

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, CircularProgress } from '@mui/material';
-import { Navigate } from 'react-router-dom';
 import { supabase } from '../supabase';
+import ActionHome from './ActionHome';
 import HeroSection from '../components/HeroSection';
 import ProblemSection from '../components/ProblemSection';
 import FeaturesSection from '../components/FeaturesSection';
@@ -19,6 +19,12 @@ const HomePage = () => {
       setSession(session);
       setLoading(false);
     });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, currentSession) => {
+      setSession(currentSession);
+    });
+
+    return () => subscription?.unsubscribe();
   }, []);
 
   if (loading) {
@@ -29,9 +35,9 @@ const HomePage = () => {
     );
   }
 
-  // If the user is logged in, skip the marketing page and send them to their dashboard
+  // If the user is logged in, show the personalized Action Home instead of Marketing
   if (session) {
-    return <Navigate to="/dashboard" replace />;
+    return <ActionHome session={session} />;
   }
 
   return (

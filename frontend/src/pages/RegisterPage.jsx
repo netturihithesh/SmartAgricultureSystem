@@ -112,9 +112,9 @@ const RegisterPage = () => {
           if (profileError) throw profileError;
 
           // Success message injection before redirect
-          setSuccessMsg('Account created successfully! Loading your personal dashboard...');
+          setSuccessMsg('Account created successfully! Taking you to the Home action page...');
           setTimeout(() => {
-            navigate('/dashboard'); 
+            navigate('/'); 
           }, 2000);
         }
       } catch (err) {
@@ -363,10 +363,13 @@ const RegisterPage = () => {
                       InputProps={{ sx: inputStyles, startAdornment: <InputAdornment position="start"><Terrain sx={{ color: iconColor }} /></InputAdornment> }}
                     >
                       <MenuItem value="" disabled>Select Soil Type</MenuItem>
+                      <MenuItem value="Alluvial Soil">Alluvial Soil</MenuItem>
                       <MenuItem value="Black Soil">Black Soil</MenuItem>
                       <MenuItem value="Red Soil">Red Soil</MenuItem>
+                      <MenuItem value="Laterite Soil">Laterite Soil</MenuItem>
                       <MenuItem value="Sandy Soil">Sandy Soil</MenuItem>
                       <MenuItem value="Clay Soil">Clay Soil</MenuItem>
+                      <MenuItem value="Loamy Soil">Loamy Soil</MenuItem>
                     </TextField>
                   </Box>
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, Button, Box, Container } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Box, Container, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { Agriculture as EcoIcon } from '@mui/icons-material';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { supabase } from '../supabase';
@@ -14,6 +14,7 @@ const Navbar = () => {
   ];
   const navigate = useNavigate();
   const [session, setSession] = useState(null);
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -28,8 +29,15 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    navigate('/');
+    try {
+      setLogoutDialogOpen(false); // Close the dialog immediately
+      await supabase.auth.signOut();
+    } catch (e) {
+      console.error("Sign out error", e);
+    } finally {
+      // Force navigation back to the Marketing layout unconditionally
+      navigate('/');
+    }
   };
 
   return (
@@ -78,7 +86,7 @@ const Navbar = () => {
                 </Button>
                 <Button 
                   variant="contained"
-                  onClick={handleLogout} 
+                  onClick={() => setLogoutDialogOpen(true)} 
                   sx={{ backgroundColor: '#2E7D32', color: '#fff', fontSize: '14px', '&:hover': { backgroundColor: '#1B5E20' }, boxShadow: 'none' }}
                 >
                   Sign Out
@@ -96,6 +104,30 @@ const Navbar = () => {
           </Box>
         </Toolbar>
       </Container>
+
+      {/* Logout Confirmation Dialog */}
+      <Dialog
+        open={logoutDialogOpen}
+        onClose={() => setLogoutDialogOpen(false)}
+        PaperProps={{ sx: { borderRadius: '16px', padding: 1 } }}
+      >
+        <DialogTitle sx={{ fontWeight: 800, color: '#1B5E20' }}>
+          Confirm Sign Out
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ color: '#555', fontWeight: 500 }}>
+            Are you sure you want to sign out of your SmartAgri account? You will need to log back in to access your dashboard and crop recommendations.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions sx={{ padding: '16px 24px' }}>
+          <Button onClick={() => setLogoutDialogOpen(false)} sx={{ color: '#666', fontWeight: 600 }}>
+            Cancel
+          </Button>
+          <Button onClick={handleLogout} variant="contained" sx={{ backgroundColor: '#D32F2F', color: '#fff', fontWeight: 700, borderRadius: '8px', '&:hover': { backgroundColor: '#B71C1C' }, boxShadow: 'none' }}>
+            Yes, Sign Out
+          </Button>
+        </DialogActions>
+      </Dialog>
     </AppBar>
   );
 };
