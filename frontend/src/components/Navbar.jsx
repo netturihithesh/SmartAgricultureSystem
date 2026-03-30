@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, Button, Box, Container, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
-import { Agriculture as EcoIcon } from '@mui/icons-material';
+import { 
+  AppBar, Toolbar, Typography, Button, Box, Container, Dialog, 
+  DialogTitle, DialogContent, DialogContentText, DialogActions, 
+  Tooltip, IconButton, Drawer, List, ListItem, ListItemButton, 
+  ListItemText, useTheme 
+} from '@mui/material';
+import { 
+  Agriculture as EcoIcon, Menu as MenuIcon, Close as CloseIcon 
+} from '@mui/icons-material';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { supabase } from '../supabase';
 import { useColorMode } from '../context/ThemeContext';
@@ -156,7 +163,7 @@ const Navbar = () => {
                     </Button>
                     <Button
                       variant="contained"
-                      onClick={handleLogout}
+                      onClick={() => setLogoutDialogOpen(true)}
                       sx={{ backgroundColor: '#2E7D32', color: '#fff', fontSize: '14px', '&:hover': { backgroundColor: '#1B5E20' }, boxShadow: 'none' }}
                     >
                       Sign Out
@@ -247,37 +254,36 @@ const Navbar = () => {
           ))}
         </List>
 
-          {/* Action Buttons */}
-          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-            {session ? (
-              <>
-                <Button 
-                  variant="outlined"
-                  onClick={() => navigate('/dashboard')} 
-                  sx={{ borderColor: '#E0E0E0', color: '#333', fontSize: '14px', '&:hover': { backgroundColor: '#F5F5F5', borderColor: '#BDBDBD' }, boxShadow: 'none' }}
-                >
-                  Dashboard
-                </Button>
-                <Button 
-                  variant="contained"
-                  onClick={() => setLogoutDialogOpen(true)} 
-                  sx={{ backgroundColor: '#2E7D32', color: '#fff', fontSize: '14px', '&:hover': { backgroundColor: '#1B5E20' }, boxShadow: 'none' }}
-                >
-                  Sign Out
-                </Button>
-              </>
-            ) : (
+        {/* Action Buttons within Drawer */}
+        <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
+          {session ? (
+            <>
+              <Button 
+                variant="outlined"
+                onClick={() => { setDrawerOpen(false); navigate('/dashboard'); }} 
+                sx={{ borderColor: '#E0E0E0', color: textColor, fontSize: '14px', '&:hover': { backgroundColor: hoverBg, borderColor: '#BDBDBD' }, boxShadow: 'none' }}
+              >
+                Dashboard
+              </Button>
               <Button 
                 variant="contained"
-                onClick={handleLogout}
-                sx={{ backgroundColor: '#2E7D32', color: '#fff', fontSize: '15px', fontWeight: 600, borderRadius: '8px', py: 1.1, '&:hover': { backgroundColor: '#1B5E20' }, boxShadow: 'none' }}
+                onClick={() => { setDrawerOpen(false); setLogoutDialogOpen(true); }} 
+                sx={{ backgroundColor: '#D32F2F', color: '#fff', fontSize: '14px', '&:hover': { backgroundColor: '#B71C1C' }, boxShadow: 'none' }}
               >
                 Sign Out
               </Button>
-            )}
-          </Box>
-        </Toolbar>
-      </Container>
+            </>
+          ) : (
+            <Button 
+              variant="contained"
+              onClick={() => { setDrawerOpen(false); navigate('/login'); }}
+              sx={{ backgroundColor: '#2E7D32', color: '#fff', fontSize: '15px', fontWeight: 600, borderRadius: '8px', py: 1.1, '&:hover': { backgroundColor: '#1B5E20' }, boxShadow: 'none' }}
+            >
+              Log In
+            </Button>
+          )}
+        </Box>
+      </Drawer>
 
       {/* Logout Confirmation Dialog */}
       <Dialog
@@ -302,7 +308,7 @@ const Navbar = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </AppBar>
+    </>
   );
 };
 
