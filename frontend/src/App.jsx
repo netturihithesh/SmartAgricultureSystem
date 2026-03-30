@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ThemeProvider, CssBaseline } from '@mui/material';
+import { ColorModeProvider, useColorMode } from './context/ThemeContext';
+import { getTheme } from './theme';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -20,6 +23,29 @@ const MainLayout = ({ children }) => (
     <Footer />
   </div>
 );
+
+function ThemedApp() {
+  const { mode } = useColorMode();
+  const theme = useMemo(() => getTheme(mode), [mode]);
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <Routes>
+          <Route path="/" element={<MainLayout><HomePage /></MainLayout>} />
+          <Route path="/features" element={<MainLayout><FeaturesPage /></MainLayout>} />
+          <Route path="/how-it-works" element={<MainLayout><HowItWorksPage /></MainLayout>} />
+          <Route path="/contact" element={<MainLayout><ContactPage /></MainLayout>} />
+          <Route path="/about" element={<MainLayout><AboutPage /></MainLayout>} />
+          <Route path="/dashboard" element={<MainLayout><DashboardPage /></MainLayout>} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
+  );
+}
 
 function App() {
   return (

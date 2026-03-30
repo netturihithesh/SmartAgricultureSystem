@@ -1,132 +1,68 @@
 import React from 'react';
-import { 
-  Box, 
-  Container, 
-  Typography, 
-  Grid, 
-  TextField, 
-  Button, 
-  Paper,
-  Stack 
+import {
+  Box, Container, Typography, Grid, TextField, Button, Paper, Stack, useTheme
 } from '@mui/material';
-import { 
-  LocationOn as LocationIcon, 
-  Email as EmailIcon, 
-  AccessTime as AccessTimeIcon,
-  ArrowForward as ArrowForwardIcon
+import {
+  LocationOn as LocationIcon, Email as EmailIcon,
+  AccessTime as AccessTimeIcon, ArrowForward as ArrowForwardIcon
 } from '@mui/icons-material';
 
 const ContactPage = () => {
   const [isSent, setIsSent] = React.useState(false);
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+
+  const bgDefault = theme.palette.background.default;
+  const bgPaper = theme.palette.background.paper;
+  const textPrimary = theme.palette.text.primary;
+  const textSecondary = theme.palette.text.secondary;
+  const borderColor = isDark ? '#333' : '#e8ecea';
+  const altBg = isDark ? '#243028' : '#f7faf8';
+  const iconBg = isDark ? '#334d3d' : '#e8f5e9';
 
   return (
-    <Box sx={{ mt: '70px', width: '100%', pb: 8 }}>
-      {/* 1. Compact Page Header */}
-      <Box 
-        sx={{ 
-          backgroundColor: '#f7faf8', 
-          pt: '60px', 
-          pb: '30px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          textAlign: 'center'
-        }}
-      >
+    <Box sx={{ mt: '70px', width: '100%', pb: 8, backgroundColor: bgDefault }}>
+      {/* Header */}
+      <Box sx={{ backgroundColor: altBg, pt: '60px', pb: '30px', textAlign: 'center' }}>
         <Container maxWidth="md" sx={{ maxWidth: '680px !important' }}>
-          <Typography 
-            variant="h3" 
-            component="h1" 
-            sx={{ fontWeight: 800, color: '#1a1a1a', mb: 2, fontSize: { xs: '2.5rem', md: '3rem' } }}
-          >
+          <Typography variant="h3" component="h1"
+            sx={{ fontWeight: 800, color: textPrimary, mb: 2, fontSize: { xs: '2.5rem', md: '3rem' } }}>
             Contact SmartAgri
           </Typography>
-          <Typography 
-            variant="h6" 
-            sx={{ color: '#555', fontWeight: 400, lineHeight: 1.6 }}
-          >
+          <Typography variant="h6" sx={{ color: textSecondary, fontWeight: 400, lineHeight: 1.6 }}>
             Have questions about smart crop planning or AI recommendations?<br />
             Our team is here to help you.
           </Typography>
         </Container>
       </Box>
 
-      {/* 2. Main Contact Section (Core Layout) */}
+      {/* Main Contact Section */}
       <Container maxWidth="lg" sx={{ pt: 8, pb: 8 }}>
         <Grid container spacing={8} justifyContent="center" alignItems="stretch">
-          
-          {/* 3. Contact Form Component (Left - 60%) */}
+
+          {/* Contact Form */}
           <Grid item xs={12} md={7}>
-            <Paper 
-              elevation={0}
-              sx={{ 
-                p: '30px', 
-                borderRadius: '16px', 
-                border: '1px solid #e8ecea',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
-                backgroundColor: '#ffffff'
-              }}
-            >
+            <Paper elevation={0} sx={{
+              p: '30px', borderRadius: '16px', border: `1px solid ${borderColor}`,
+              backgroundColor: bgPaper
+            }}>
               <form onSubmit={(e) => { e.preventDefault(); setIsSent(true); }}>
                 <Stack spacing={'16px'}>
-                  <TextField 
-                    fullWidth 
-                    label="Full Name" 
-                    variant="outlined" 
-                    placeholder="John Doe"
-                    required
-                    InputProps={{ sx: { borderRadius: '8px' } }}
-                  />
-                  <TextField 
-                    fullWidth 
-                    label="Email Address" 
-                    type="email" 
-                    variant="outlined" 
-                    placeholder="john@example.com"
-                    required
-                    InputProps={{ sx: { borderRadius: '8px' } }}
-                  />
-                  <TextField 
-                    fullWidth 
-                    label="Subject" 
-                    variant="outlined" 
-                    placeholder="How can we help you?"
-                    InputProps={{ sx: { borderRadius: '8px' } }}
-                  />
-                  <TextField 
-                    fullWidth 
-                    label="Message" 
-                    multiline 
-                    rows={4} 
-                    variant="outlined" 
-                    placeholder="Type your message here..."
-                    required
-                    sx={{
-                      '& .MuiInputBase-root': {
-                        minHeight: '120px',
-                        alignItems: 'flex-start',
-                        borderRadius: '8px'
-                      }
-                    }}
-                  />
-                  <Button 
-                    type="submit"
-                    variant="contained" 
-                    sx={{ 
-                      mt: 1,
-                      height: '48px', 
-                      borderRadius: '10px', 
-                      backgroundColor: '#2e7d32', 
-                      color: 'white',
-                      fontWeight: 600,
-                      textTransform: 'none',
-                      fontSize: '16px',
-                      '&:hover': {
-                        backgroundColor: '#1b5e20',
-                        opacity: 0.9
-                      }
-                    }}
-                  >
+                  <TextField fullWidth label="Full Name" variant="outlined" placeholder="John Doe" required
+                    InputProps={{ sx: { borderRadius: '8px' } }} />
+                  <TextField fullWidth label="Email Address" type="email" variant="outlined" placeholder="john@example.com" required
+                    InputProps={{ sx: { borderRadius: '8px' } }} />
+                  <TextField fullWidth label="Subject" variant="outlined" placeholder="How can we help you?"
+                    InputProps={{ sx: { borderRadius: '8px' } }} />
+                  <TextField fullWidth label="Message" multiline rows={4} variant="outlined"
+                    placeholder="Type your message here..." required
+                    sx={{ '& .MuiInputBase-root': { minHeight: '120px', alignItems: 'flex-start', borderRadius: '8px' } }} />
+                  <Button type="submit" variant="contained" sx={{
+                    mt: 1, height: '48px', borderRadius: '10px',
+                    backgroundColor: '#2e7d32', color: 'white', fontWeight: 600,
+                    textTransform: 'none', fontSize: '16px',
+                    '&:hover': { backgroundColor: '#1b5e20' }
+                  }}>
                     {isSent ? 'Sent ✓' : 'Send Message'}
                   </Button>
                 </Stack>
@@ -134,33 +70,41 @@ const ContactPage = () => {
             </Paper>
           </Grid>
 
-          {/* 4. Contact Information Card (Right - 40%) */}
+          {/* Contact Info */}
           <Grid item xs={12} md={5}>
-            <Box 
-              sx={{ 
-                backgroundColor: '#f7faf8', 
-                p: '30px', 
-                borderRadius: '16px',
-                height: '100%',
-                display: 'flex',
-                flexDirection: 'column'
-              }}
-            >
-              <Typography variant="h5" sx={{ fontWeight: 700, color: '#1a1a1a', mb: 3 }}>
-                Get in Touch
-              </Typography>
-              
+            <Box sx={{
+              backgroundColor: altBg, p: '30px', borderRadius: '16px',
+              height: '100%', display: 'flex', flexDirection: 'column',
+              border: `1px solid ${borderColor}`
+            }}>
+              <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary, mb: 3 }}>Get in Touch</Typography>
               <Stack spacing={'18px'}>
-                {/* Location */}
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Box sx={{ display: 'flex', p: 1.2, backgroundColor: '#e8f5e9', borderRadius: '10px', color: '#2e7d32' }}>
-                    <LocationIcon />
+<<<<<<< Updated upstream
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    <Box sx={{ display: 'flex', p: 1.2, backgroundColor: '#e8f5e9', borderRadius: '10px', color: '#2e7d32' }}>
+                      <LocationIcon />
+                    </Box>
+                    <Box sx={{ flex: 1 }}>
+                      <Typography variant="body2" color="text.secondary" fontWeight={500}>Address</Typography>
+                      <Typography
+                        variant="body1"
+                        fontWeight={600}
+                        color="#1a1a1a"
+                        component="a"
+                        href="https://maps.app.goo.gl/xi53BKjYm8Ek6jt4A"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        sx={{
+                          textDecoration: 'none',
+                          '&:hover': { color: '#2e7d32', textDecoration: 'underline' },
+                          cursor: 'pointer',
+                          display: 'block'
+                        }}
+                      >
+                        Osmania University, Hyderabad
+                      </Typography>
+                    </Box>
                   </Box>
-                  <Box>
-                    <Typography variant="body2" color="text.secondary" fontWeight={500}>Address</Typography>
-                    <Typography variant="body1" fontWeight={600} color="#1a1a1a">Digital Agriculture Lab</Typography>
-                  </Box>
-                </Box>
 
                 {/* Email */}
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -183,67 +127,85 @@ const ContactPage = () => {
                     <Typography variant="body1" fontWeight={600} color="#1a1a1a">Mon – Sat : 9AM – 6PM</Typography>
                   </Box>
                 </Box>
+=======
+                {[
+                  { icon: <LocationIcon />, label: 'Address', value: 'Osmania University, Hyderabad' },
+                  { icon: <EmailIcon />, label: 'Email Support', value: 'support@smartagri.ai' },
+                  { icon: <AccessTimeIcon />, label: 'Support Hours', value: 'Mon – Sat : 9AM – 6PM' },
+                ].map(({ icon, label, value }) => (
+                  <Box key={label} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    <Box sx={{ display: 'flex', p: 1.2, backgroundColor: iconBg, borderRadius: '10px', color: '#2e7d32' }}>
+                      {icon}
+                    </Box>
+                    <Box sx={{ flex: 1 }}>
+                      <Typography variant="body2" color="text.secondary" fontWeight={500}>{label}</Typography>
+                      {label === 'Address' ? (
+                        <Typography
+                          variant="body1"
+                          fontWeight={600}
+                          color="text.primary"
+                          component="a"
+                          href="https://maps.app.goo.gl/xi53BKjYm8Ek6jt4A"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          sx={{
+                            textDecoration: 'none',
+                            '&:hover': { color: '#2e7d32', textDecoration: 'underline' },
+                            cursor: 'pointer',
+                            display: 'block'
+                          }}
+                        >
+                          {value}
+                        </Typography>
+                      ) : (
+                        <Typography variant="body1" fontWeight={600} color="text.primary">{value}</Typography>
+                      )}
+                    </Box>
+                  </Box>
+                ))}
+>>>>>>> Stashed changes
               </Stack>
 
-              {/* 5. Minimal Map / Illustration (Abstract UI Element) */}
-              <Box 
-                sx={{ 
-                  mt: 'auto', 
-                  pt: 4, 
-                  display: 'flex', 
-                  justifyContent: 'center' 
-                }}
-              >
-                 <Box 
-                  sx={{ 
-                    width: '100%', 
-                    height: '120px', 
-                    borderRadius: '12px',
-                    backgroundColor: '#e8f5e9',
-                    backgroundImage: 'radial-gradient(#c8e6c9 2px, transparent 2px)',
-                    backgroundSize: '20px 20px',
-                    opacity: 0.6,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                 >
-                    {/* Abstract Pin */}
-                    <LocationIcon sx={{ color: '#2e7d32', fontSize: 32, opacity: 0.8 }} />
-                 </Box>
+              {/* Google Map Embed */}
+              <Box sx={{ mt: 'auto', pt: 4 }}>
+                <Box sx={{
+                  width: '100%', height: '200px', borderRadius: '12px',
+<<<<<<< Updated upstream
+                  overflow: 'hidden', border: '1px solid #e8ecea'
+=======
+                  overflow: 'hidden', border: `1px solid ${borderColor}`
+>>>>>>> Stashed changes
+                }}>
+                  <iframe
+                    title="Osmania University Location"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3807.135272639016!2d78.52514732609063!3d17.418003883474937!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb9971a0691e33%3A0x7d190f2a686a424e!2sOsmania%20University!5e0!3m2!1sen!2sin!4v1743068102640!5m2!1sen!2sin"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
+                </Box>
               </Box>
-
             </Box>
           </Grid>
         </Grid>
       </Container>
 
-      {/* 6. Bottom Minimal CTA */}
-      <Box sx={{ mt: '60px', pt: '50px', textAlign: 'center' }}>
-        <Typography variant="h6" sx={{ fontWeight: 600, color: '#333', mb: 2 }}>
+      {/* Bottom CTA */}
+      <Box sx={{ mt: '60px', pt: '50px', textAlign: 'center', borderTop: `1px solid ${borderColor}` }}>
+        <Typography variant="h6" sx={{ fontWeight: 600, color: textPrimary, mb: 2 }}>
           Ready to start smart crop planning?
         </Typography>
-        <Button 
-          variant="outlined" 
-          endIcon={<ArrowForwardIcon />}
-          sx={{ 
-            color: '#2e7d32', 
-            borderColor: '#2e7d32', 
-            borderRadius: '8px',
-            textTransform: 'none',
-            fontWeight: 600,
-            px: 3,
-            py: 1,
-            '&:hover': {
-              backgroundColor: '#f1f8e9',
-              borderColor: '#1b5e20'
-            }
-          }}
-        >
+        <Button variant="outlined" endIcon={<ArrowForwardIcon />} sx={{
+          color: '#2e7d32', borderColor: '#2e7d32', borderRadius: '8px',
+          textTransform: 'none', fontWeight: 600, px: 3, py: 1,
+          '&:hover': { backgroundColor: isDark ? '#334d3d' : '#f1f8e9', borderColor: '#1b5e20' }
+        }}>
           Get Recommendation
         </Button>
       </Box>
-
     </Box>
   );
 };
