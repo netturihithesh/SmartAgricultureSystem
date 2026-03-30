@@ -394,32 +394,6 @@ const RegisterPage = () => {
               </Fade>
             )}
 
-            {/* Navigation Buttons */}
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px', mt: '16px' }}>
-              
-              {activeStep === 1 && (
-                <Typography sx={{ textAlign: 'center', fontSize: '14px', fontWeight: 600, color: '#2E7D32', mb: '-8px' }}>
-                  🌾 Almost done! Complete your setup to get recommendations.
-                </Typography>
-              )}
-
-              <Box sx={{ display: 'flex', gap: '16px' }}>
-                {activeStep === 1 && (
-                  <Button 
-                    type="button"
-                    onClick={() => setActiveStep(0)}
-                    variant="outlined" 
-                    sx={{ 
-                      height: '60px', borderRadius: '14px', flex: '0 0 60px', minWidth: '60px',
-                      borderColor: '#E0E0E0', color: '#666', transition: 'all 0.25s ease',
-                      '&:hover': { borderColor: '#999', backgroundColor: '#F5F5F5' }
-                    }}
-                  />
-                  <TextField fullWidth placeholder="Confirm Password" type={showPassword ? 'text' : 'password'} name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required InputProps={{ sx: inputStyles, startAdornment: <InputAdornment position="start"><Lock sx={{ color: iconColor }} /></InputAdornment> }} />
-                </Box>
-              </Fade>
-            )}
-
             {activeStep === 1 && (
               <Fade in={activeStep === 1}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
