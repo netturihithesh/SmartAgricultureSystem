@@ -12,41 +12,7 @@ import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { supabase } from '../supabase';
 import { useColorMode } from '../context/ThemeContext';
 
-// Bulb SVG that glows in light mode and is dim in dark mode
-const BulbIcon = ({ isDark }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    width="26"
-    height="26"
-    style={{ transition: 'all 0.4s ease', display: 'block' }}
-  >
-    {/* Glow effect in light mode */}
-    {!isDark && (
-      <circle cx="12" cy="10" r="7" fill="rgba(251,192,45,0.18)" />
-    )}
-    {/* Bulb glass */}
-    <path
-      d="M12 2a7 7 0 0 1 4 12.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26A7 7 0 0 1 12 2z"
-      fill={isDark ? '#555' : '#FBC02D'}
-      style={{ transition: 'fill 0.4s ease' }}
-    />
-    {/* Filament lines */}
-    <line x1="9" y1="17" x2="15" y2="17" stroke={isDark ? '#888' : '#E65100'} strokeWidth="1.2" strokeLinecap="round" />
-    <line x1="9.5" y1="19" x2="14.5" y2="19" stroke={isDark ? '#888' : '#E65100'} strokeWidth="1.2" strokeLinecap="round" />
-    <line x1="10.5" y1="21" x2="13.5" y2="21" stroke={isDark ? '#888' : '#E65100'} strokeWidth="1.2" strokeLinecap="round" />
-    {/* Shine in light mode */}
-    {!isDark && (
-      <>
-        <line x1="12" y1="0.5" x2="12" y2="1.5" stroke="#FBC02D" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="18.5" y1="3" x2="17.8" y2="3.7" stroke="#FBC02D" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="5.5" y1="3" x2="6.2" y2="3.7" stroke="#FBC02D" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="21" y1="9.5" x2="20" y2="9.5" stroke="#FBC02D" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="3" y1="9.5" x2="4" y2="9.5" stroke="#FBC02D" strokeWidth="1.5" strokeLinecap="round" />
-      </>
-    )}
-  </svg>
-);
+
 
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -180,30 +146,7 @@ const Navbar = () => {
                 )}
               </Box>
 
-              {/* Bulb Theme Toggle */}
-              <Tooltip title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'} arrow>
-                <IconButton
-                  onClick={toggleColorMode}
-                  aria-label="Toggle light/dark mode"
-                  sx={{
-                    width: 42,
-                    height: 42,
-                    borderRadius: '50%',
-                    backgroundColor: isDark ? '#3d5c48' : '#FFF8E1',
-                    border: isDark ? '1.5px solid #444' : '1.5px solid #FBC02D',
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      backgroundColor: isDark ? '#333' : '#FFF3CD',
-                      transform: 'scale(1.1)',
-                      boxShadow: isDark
-                        ? '0 0 0 0 transparent'
-                        : '0 0 12px rgba(251,192,45,0.6)',
-                    },
-                  }}
-                >
-                  <BulbIcon isDark={isDark} />
-                </IconButton>
-              </Tooltip>
+
 
               {/* Mobile Hamburger */}
               <IconButton
