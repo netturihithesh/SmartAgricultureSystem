@@ -79,55 +79,6 @@ const ContactPage = () => {
             }}>
               <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary, mb: 3 }}>Get in Touch</Typography>
               <Stack spacing={'18px'}>
-<<<<<<< Updated upstream
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Box sx={{ display: 'flex', p: 1.2, backgroundColor: '#e8f5e9', borderRadius: '10px', color: '#2e7d32' }}>
-                      <LocationIcon />
-                    </Box>
-                    <Box sx={{ flex: 1 }}>
-                      <Typography variant="body2" color="text.secondary" fontWeight={500}>Address</Typography>
-                      <Typography
-                        variant="body1"
-                        fontWeight={600}
-                        color="#1a1a1a"
-                        component="a"
-                        href="https://maps.app.goo.gl/xi53BKjYm8Ek6jt4A"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        sx={{
-                          textDecoration: 'none',
-                          '&:hover': { color: '#2e7d32', textDecoration: 'underline' },
-                          cursor: 'pointer',
-                          display: 'block'
-                        }}
-                      >
-                        Osmania University, Hyderabad
-                      </Typography>
-                    </Box>
-                  </Box>
-
-                {/* Email */}
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Box sx={{ display: 'flex', p: 1.2, backgroundColor: '#e8f5e9', borderRadius: '10px', color: '#2e7d32' }}>
-                    <EmailIcon />
-                  </Box>
-                  <Box>
-                    <Typography variant="body2" color="text.secondary" fontWeight={500}>Email Support</Typography>
-                    <Typography variant="body1" fontWeight={600} color="#1a1a1a">support@smartagri.ai</Typography>
-                  </Box>
-                </Box>
-
-                {/* Hours */}
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Box sx={{ display: 'flex', p: 1.2, backgroundColor: '#e8f5e9', borderRadius: '10px', color: '#2e7d32' }}>
-                    <AccessTimeIcon />
-                  </Box>
-                  <Box>
-                    <Typography variant="body2" color="text.secondary" fontWeight={500}>Support Hours</Typography>
-                    <Typography variant="body1" fontWeight={600} color="#1a1a1a">Mon – Sat : 9AM – 6PM</Typography>
-                  </Box>
-                </Box>
-=======
                 {[
                   { icon: <LocationIcon />, label: 'Address', value: 'Osmania University, Hyderabad' },
                   { icon: <EmailIcon />, label: 'Email Support', value: 'support@smartagri.ai' },
@@ -163,18 +114,13 @@ const ContactPage = () => {
                     </Box>
                   </Box>
                 ))}
->>>>>>> Stashed changes
               </Stack>
 
               {/* Google Map Embed */}
               <Box sx={{ mt: 'auto', pt: 4 }}>
                 <Box sx={{
                   width: '100%', height: '200px', borderRadius: '12px',
-<<<<<<< Updated upstream
-                  overflow: 'hidden', border: '1px solid #e8ecea'
-=======
                   overflow: 'hidden', border: `1px solid ${borderColor}`
->>>>>>> Stashed changes
                 }}>
                   <iframe
                     title="Osmania University Location"
