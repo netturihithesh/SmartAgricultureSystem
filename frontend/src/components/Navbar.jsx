@@ -117,20 +117,20 @@ const Navbar = () => {
             {/* Right side: Auth + Bulb toggle */}
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               {/* Desktop Auth Buttons */}
-              <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
+              <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1.5 }}>
                 {session ? (
                   <>
                     <Button
                       variant="outlined"
                       onClick={() => navigate('/dashboard')}
-                      sx={{ borderColor: '#E0E0E0', color: textColor, fontSize: '14px', '&:hover': { backgroundColor: hoverBg, borderColor: '#BDBDBD' }, boxShadow: 'none' }}
+                      sx={{ borderColor: '#E0E0E0', color: textColor, fontSize: '14px', textTransform: 'none', fontWeight: 700, borderRadius: '20px', px: 3, '&:hover': { backgroundColor: hoverBg, borderColor: '#BDBDBD' }, boxShadow: 'none' }}
                     >
                       Dashboard
                     </Button>
                     <Button
                       variant="contained"
                       onClick={() => setLogoutDialogOpen(true)}
-                      sx={{ backgroundColor: '#2E7D32', color: '#fff', fontSize: '14px', '&:hover': { backgroundColor: '#1B5E20' }, boxShadow: 'none' }}
+                      sx={{ backgroundColor: '#2E7D32', color: '#fff', fontSize: '14px', textTransform: 'none', fontWeight: 700, borderRadius: '20px', px: 3, '&:hover': { backgroundColor: '#1B5E20' }, boxShadow: 'none' }}
                     >
                       Sign Out
                     </Button>
@@ -139,9 +139,9 @@ const Navbar = () => {
                   <Button
                     variant="contained"
                     onClick={() => navigate('/login')}
-                    sx={{ backgroundColor: '#2E7D32', color: '#fff', fontSize: '15px', '&:hover': { backgroundColor: '#1B5E20' }, boxShadow: 'none' }}
+                    sx={{ backgroundColor: '#2E7D32', color: '#fff', fontSize: '14.5px', textTransform: 'none', fontWeight: 700, borderRadius: '20px', px: 4, '&:hover': { backgroundColor: '#1B5E20' }, boxShadow: 'none' }}
                   >
-                    Login
+                    Log in
                   </Button>
                 )}
               </Box>

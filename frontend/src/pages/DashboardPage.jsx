@@ -297,9 +297,9 @@ const DashboardPage = () => {
             value={editData.irrigation} 
             onChange={(e) => setEditData({...editData, irrigation: e.target.value})}
           >
-            <MenuItem value="Good Water Available">Good Water Available</MenuItem>
-            <MenuItem value="Limited Water">Limited Water</MenuItem>
-            <MenuItem value="No Irrigation">No Irrigation</MenuItem>
+            <MenuItem value="more_water">High (Canal)</MenuItem>
+            <MenuItem value="moderate_water">Med (Borewell)</MenuItem>
+            <MenuItem value="less_water">Low (Rainfed)</MenuItem>
           </TextField>
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>

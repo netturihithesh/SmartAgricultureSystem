@@ -14,6 +14,10 @@ import ContactPage from './pages/ContactPage';
 import AboutPage from './pages/AboutPage';
 import DashboardPage from './pages/DashboardPage';
 import RecommendationPage from './pages/RecommendationPage';
+import FarmCalendar from './pages/FarmCalendar';
+import WeatherCenter from './pages/WeatherCenter';
+import FarmAnalytics from './pages/FarmAnalytics';
+import AddCropPage from './pages/AddCropPage';
 import './index.css';
 
 const MainLayout = ({ children }) => (
@@ -39,6 +43,10 @@ function ThemedApp() {
           <Route path="/contact" element={<MainLayout><ContactPage /></MainLayout>} />
           <Route path="/about" element={<MainLayout><AboutPage /></MainLayout>} />
           <Route path="/dashboard" element={<MainLayout><DashboardPage /></MainLayout>} />
+          <Route path="/dashboard/calendar" element={<MainLayout><FarmCalendar /></MainLayout>} />
+          <Route path="/dashboard/weather" element={<MainLayout><WeatherCenter /></MainLayout>} />
+          <Route path="/dashboard/analytics" element={<MainLayout><FarmAnalytics /></MainLayout>} />
+          <Route path="/add-crop" element={<MainLayout><AddCropPage /></MainLayout>} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Routes>
@@ -57,6 +65,10 @@ function App() {
         <Route path="/contact" element={<MainLayout><ContactPage /></MainLayout>} />
         <Route path="/about" element={<MainLayout><AboutPage /></MainLayout>} />
         <Route path="/dashboard" element={<MainLayout><DashboardPage /></MainLayout>} />
+        <Route path="/dashboard/calendar" element={<MainLayout><FarmCalendar /></MainLayout>} />
+        <Route path="/dashboard/weather" element={<MainLayout><WeatherCenter /></MainLayout>} />
+        <Route path="/dashboard/analytics" element={<MainLayout><FarmAnalytics /></MainLayout>} />
+        <Route path="/add-crop" element={<MainLayout><AddCropPage /></MainLayout>} />
         <Route path="/recommendation" element={<MainLayout><RecommendationPage /></MainLayout>} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />

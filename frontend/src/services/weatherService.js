@@ -104,7 +104,7 @@ export const fetchWeatherAndAlerts = async (locationString, apiKey) => {
       };
     }
 
-    const finalResult = { weather: currentForecast, alert };
+    const finalResult = { weather: currentForecast, alert, forecastList: forecastData.list };
 
     // Save the fresh data to cache before returning
     try {

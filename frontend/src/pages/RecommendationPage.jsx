@@ -107,14 +107,31 @@ const RecommendationPage = () => {
   if (!profile) return null;
 
   return (
-    <Box sx={{ p: { xs: 1.5, md: 4 }, maxWidth: '1200px', margin: '0 auto', minHeight: '100vh', mt: { xs: 1, md: 3 }, pb: { xs: 10, md: 4 } }}>
+    <Box sx={{ 
+      p: { xs: 1.5, md: 4 }, 
+      pt: { xs: '85px', md: '100px' },
+      minHeight: '100vh', 
+      pb: { xs: 12, md: 4 },
+      backgroundImage: 'radial-gradient(rgba(46,125,50,0.03) 1px, transparent 1px)',
+      backgroundSize: '20px 20px'
+    }}>
+      <Box sx={{ maxWidth: '1200px', margin: '0 auto' }}>
 
-      {/* HEADER SECTION (More compact on mobile) */}
-      <Box sx={{ mb: { xs: 2, md: 4 }, textAlign: { xs: 'left', md: 'center' }, px: { xs: 1, md: 0 } }}>
-        <Typography variant="h3" sx={{ fontWeight: 800, color: '#1B5E20', display: 'flex', alignItems: 'center', justifyContent: { xs: 'flex-start', md: 'center' }, gap: 1, mb: 0.5, fontSize: { xs: '24px', sm: '36px' } }}>
-          <Spa fontSize="medium" sx={{ color: '#2E7D32' }} /> Smart Crop Match
+      {/* HERO SECTION CRAZY GOOD */}
+      <Box sx={{ 
+        mb: { xs: 3, md: 5 }, 
+        textAlign: { xs: 'left', md: 'center' }, 
+        px: { xs: 2.5, md: 3 },
+        py: { xs: 3, md: 4 },
+        background: 'linear-gradient(135deg, #eafaf1, #ffffff)',
+        border: '1px solid #d7f0df',
+        borderRadius: '22px',
+        boxShadow: '0 8px 24px rgba(34, 139, 34, 0.08)'
+      }}>
+        <Typography variant="h3" sx={{ fontWeight: 800, color: '#1B5E20', mb: 1.5, fontSize: { xs: '26px', sm: '38px' }, letterSpacing: '-0.5px' }}>
+          Smart Crop Match
         </Typography>
-        <Typography sx={{ color: '#666', fontSize: { xs: '14px', md: '16px' }, fontWeight: 500, lineHeight: 1.4 }}>
+        <Typography sx={{ color: '#555', fontSize: { xs: '15px', md: '17px' }, fontWeight: 500, lineHeight: 1.5, maxWidth: '600px', mx: 'auto' }}>
           Find the absolute best crops for your farm combining your local soil and live market economics.
         </Typography>
       </Box>
@@ -123,133 +140,174 @@ const RecommendationPage = () => {
 
         {/* LEFT COLUMN: Premium Mobile Input Section */}
         <Grid item xs={12} md={4} sx={{ position: { md: 'relative' } }}>
-          <Paper
-            sx={{
-              p: { xs: 2.5, md: 4 },
-              borderRadius: '20px',
-              backgroundColor: '#fff',
-              border: '1px solid #E0E0E0',
-              position: { md: 'sticky' },
-              top: '100px',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.03)'
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
-              <FilterList sx={{ color: '#2E7D32' }} />
-              <Typography sx={{ fontSize: '18px', fontWeight: 800, color: '#333' }}>Farm Conditions</Typography>
-            </Box>
+          <Box sx={{ maxWidth: '420px', margin: '0 auto' }}>
+            <Typography sx={{ fontSize: '28px', fontWeight: 800, color: '#222', mb: '22px', display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <FilterList sx={{ color: '#2E7D32', fontSize: '32px' }} /> Farm Conditions
+            </Typography>
 
-            <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
-
-              {/* Editable Field 1 (Half Width) */}
-              <Box sx={{ gridColumn: { xs: 'span 1', md: 'span 2' } }}>
-                <Typography sx={{ fontSize: '13px', fontWeight: 700, color: '#555', mb: 0.5, display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                  <GridOn fontSize="small" sx={{ color: '#795548', fontSize: '16px' }} /> Soil
-                </Typography>
-                <Select
-                  value={soilType}
-                  onChange={(e) => setSoilType(e.target.value)}
-                  fullWidth
-                  sx={{ borderRadius: '10px', backgroundColor: '#FAFAFA', fontWeight: 600, color: '#333', '.MuiSelect-select': { py: 1.2, px: 1.5, fontSize: '14px' } }}
-                >
-                  <MenuItem value="Alluvial Soil">Alluvial</MenuItem>
-                  <MenuItem value="Black Soil">Black</MenuItem>
-                  <MenuItem value="Red Soil">Red</MenuItem>
-                  <MenuItem value="Laterite Soil">Laterite</MenuItem>
-                  <MenuItem value="Sandy Soil">Sandy</MenuItem>
-                  <MenuItem value="Clay Soil">Clay</MenuItem>
-                  <MenuItem value="Loamy Soil">Loamy Soil</MenuItem>
-                </Select>
-              </Box>
-
-              {/* Editable Field 2 (Half Width) */}
-              <Box sx={{ gridColumn: { xs: 'span 1', md: 'span 2' } }}>
-                <Typography sx={{ fontSize: '13px', fontWeight: 700, color: '#555', mb: 0.5, display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                  <Opacity fontSize="small" sx={{ color: '#1976D2', fontSize: '16px' }} /> Water
-                </Typography>
-                <Select
-                  value={waterAvailability}
-                  onChange={(e) => setWaterAvailability(e.target.value)}
-                  fullWidth
-                  sx={{ borderRadius: '10px', backgroundColor: '#FAFAFA', fontWeight: 600, color: '#333', '.MuiSelect-select': { py: 1.2, px: 1.5, fontSize: '14px' } }}
-                >
-                  <MenuItem value="more_water">High (Canal)</MenuItem>
-                  <MenuItem value="moderate_water">Med (Borewell)</MenuItem>
-                  <MenuItem value="less_water">Low (Rainfed)</MenuItem>
-                </Select>
-              </Box>
-
-              {/* Editable Field 3 (Full Width) */}
-              <Box sx={{ gridColumn: 'span 2' }}>
-                <Typography sx={{ fontSize: '13px', fontWeight: 700, color: '#555', mb: 0.5, display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                  <DateRange fontSize="small" sx={{ color: '#F57F17', fontSize: '16px' }} /> Duration Plan
-                </Typography>
-                <Select
-                  value={cropDurationType}
-                  onChange={(e) => setCropDurationType(e.target.value)}
-                  fullWidth
-                  sx={{ borderRadius: '10px', backgroundColor: '#FAFAFA', fontWeight: 600, color: '#333', '.MuiSelect-select': { py: 1.2, px: 1.5, fontSize: '14px' } }}
-                >
-                  <MenuItem value="short_term">Short Term {'(< 120 Days)'}</MenuItem>
-                  <MenuItem value="long_term">Long Term {'(> 120 Days)'}</MenuItem>
-                  <MenuItem value="perennial">Perennial {'(Years)'}</MenuItem>
-                </Select>
-              </Box>
-
-              <Box sx={{ gridColumn: 'span 2', mt: 1, mb: 1 }}>
-                <Divider sx={{ opacity: 0.6 }} />
-              </Box>
-
-              {/* Auto Field Group */}
-              <Box sx={{ gridColumn: 'span 2', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, backgroundColor: '#F9FBE7', p: 1.5, borderRadius: '10px', border: '1px solid #F0F4C3' }}>
-                <Box sx={{ textAlign: 'left', overflow: 'hidden' }}>
-                  <Typography sx={{ fontSize: { xs: '10px', sm: '11px' }, fontWeight: 700, color: '#888', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Season</Typography>
-                  <Typography sx={{ fontSize: { xs: '13px', sm: '14px' }, fontWeight: 800, color: '#33691E', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{profile.season}</Typography>
-                </Box>
-                <Box sx={{ textAlign: 'center', overflow: 'hidden' }}>
-                  <Typography sx={{ fontSize: { xs: '10px', sm: '11px' }, fontWeight: 700, color: '#888', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Temp</Typography>
-                  <Typography sx={{ fontSize: { xs: '13px', sm: '14px' }, fontWeight: 800, color: '#E65100', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{temperature !== null ? `${temperature}°C` : '...'}</Typography>
-                </Box>
-                <Box sx={{ textAlign: 'right', overflow: 'hidden' }}>
-                  <Typography sx={{ fontSize: { xs: '10px', sm: '11px' }, fontWeight: 700, color: '#888', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>District</Typography>
-                  <Typography sx={{ fontSize: { xs: '13px', sm: '14px' }, fontWeight: 800, color: '#222', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{profile.location.split(',')[0]}</Typography>
-                </Box>
-              </Box>
-
-            </Box>
-
-            {/* Desktop Only Button (Mobile button is sticky at bottom of DOM) */}
-            <Button
-              variant="contained"
-              onClick={handleRecommendation}
-              disabled={uiState === 'loading'}
-              endIcon={uiState === 'loading' ? null : <ArrowForward />}
+            <Paper
+              elevation={0}
               sx={{
-                display: { xs: 'none', md: 'flex' },
-                mt: 3, py: 1.8, borderRadius: '12px', fontWeight: 800, fontSize: '15px',
-                backgroundColor: '#2E7D32', color: '#fff',
-                boxShadow: '0 4px 16px rgba(46,125,50,0.25)',
-                '&:hover': { backgroundColor: '#1B5E20', transform: 'translateY(-2px)' }, transition: 'all 0.2s', width: '100%'
+                padding: '24px 20px',
+                borderRadius: '24px',
+                backgroundColor: '#ffffff',
+                border: '1px solid #e8e8e8',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.04)',
+                position: { md: 'sticky' },
+                top: '100px',
               }}
             >
-              {uiState === 'loading' ? <CircularProgress size={24} sx={{ color: '#fff' }} /> : 'Analyze Best Crops'}
-            </Button>
-          </Paper>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+
+                {/* Editable Field 1 */}
+                <Box>
+                  <Typography sx={{ fontSize: '15px', fontWeight: 700, color: '#555', mb: '8px', display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                    <GridOn fontSize="small" sx={{ color: '#795548' }} /> Soil
+                  </Typography>
+                  <Select
+                    value={soilType}
+                    onChange={(e) => setSoilType(e.target.value)}
+                    fullWidth
+                    sx={{
+                      height: '54px', borderRadius: '14px', backgroundColor: '#fff', fontSize: '16px', fontWeight: 600, color: '#222',
+                      '& .MuiOutlinedInput-notchedOutline': { borderColor: '#d9d9d9' },
+                      '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#b0b0b0' },
+                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#2e7d32', borderWidth: '1px' },
+                      '&.Mui-focused': { boxShadow: '0 0 0 4px rgba(46,125,50,0.08)' }
+                    }}
+                  >
+                    <MenuItem value="Alluvial Soil">Alluvial</MenuItem>
+                    <MenuItem value="Black Soil">Black</MenuItem>
+                    <MenuItem value="Red Soil">Red</MenuItem>
+                    <MenuItem value="Laterite Soil">Laterite</MenuItem>
+                    <MenuItem value="Sandy Soil">Sandy</MenuItem>
+                    <MenuItem value="Clay Soil">Clay</MenuItem>
+                    <MenuItem value="Loamy Soil">Loamy Soil</MenuItem>
+                  </Select>
+                </Box>
+
+                {/* Editable Field 2 */}
+                <Box>
+                  <Typography sx={{ fontSize: '15px', fontWeight: 700, color: '#555', mb: '8px', display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                    <Opacity fontSize="small" sx={{ color: '#1976D2' }} /> Water
+                  </Typography>
+                  <Select
+                    value={waterAvailability}
+                    onChange={(e) => setWaterAvailability(e.target.value)}
+                    fullWidth
+                    sx={{
+                      height: '54px', borderRadius: '14px', backgroundColor: '#fff', fontSize: '16px', fontWeight: 600, color: '#222',
+                      '& .MuiOutlinedInput-notchedOutline': { borderColor: '#d9d9d9' },
+                      '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#b0b0b0' },
+                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#2e7d32', borderWidth: '1px' },
+                      '&.Mui-focused': { boxShadow: '0 0 0 4px rgba(46,125,50,0.08)' }
+                    }}
+                  >
+                    <MenuItem value="more_water">High (Canal)</MenuItem>
+                    <MenuItem value="moderate_water">Med (Borewell)</MenuItem>
+                    <MenuItem value="less_water">Low (Rainfed)</MenuItem>
+                  </Select>
+                </Box>
+
+                {/* Editable Field 3 */}
+                <Box>
+                  <Typography sx={{ fontSize: '15px', fontWeight: 700, color: '#555', mb: '8px', display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                    <DateRange fontSize="small" sx={{ color: '#F57F17' }} /> Duration Plan
+                  </Typography>
+                  <Select
+                    value={cropDurationType}
+                    onChange={(e) => setCropDurationType(e.target.value)}
+                    fullWidth
+                    sx={{
+                      height: '54px', borderRadius: '14px', backgroundColor: '#fff', fontSize: '16px', fontWeight: 600, color: '#222',
+                      '& .MuiOutlinedInput-notchedOutline': { borderColor: '#d9d9d9' },
+                      '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#b0b0b0' },
+                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#2e7d32', borderWidth: '1px' },
+                      '&.Mui-focused': { boxShadow: '0 0 0 4px rgba(46,125,50,0.08)' }
+                    }}
+                  >
+                    <MenuItem value="short_term">Short Term {'(< 120 Days)'}</MenuItem>
+                    <MenuItem value="long_term">Long Term {'(> 120 Days)'}</MenuItem>
+                    <MenuItem value="perennial">Perennial {'(Years)'}</MenuItem>
+                  </Select>
+                </Box>
+
+              </Box>
+
+              {/* ACTION PANEL (Grouped Weather + CTA) */}
+              <Box sx={{ 
+                background: '#fafafa', 
+                borderRadius: '20px', 
+                padding: '18px', 
+                mt: '22px',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.7)'
+              }}>
+                {/* Weather Strip */}
+                <Box sx={{ 
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '14px', padding: '14px 18px', mb: '16px',
+                  borderRadius: '16px', background: '#fffdf5', border: '1px solid #f2d27a',
+                }}>
+                  <Typography sx={{ fontWeight: 800, color: '#D84315', fontSize: '18px', display: 'flex', alignItems: 'center', lineHeight: 1 }}>
+                    ☀️ {temperature !== null ? `${temperature}°C` : '...'}
+                  </Typography>
+                  <Box sx={{ width: '1.5px', height: '16px', backgroundColor: '#e0c07c', borderRadius: '1px', opacity: 0.8 }} />
+                  <Typography sx={{ fontWeight: 700, color: '#444', fontSize: '18px', display: 'flex', alignItems: 'center', lineHeight: 1 }}>
+                    {profile.season}
+                  </Typography>
+                </Box>
+
+                {/* Analyze Button */}
+                <Button
+                  variant="contained"
+                  onClick={handleRecommendation}
+                  disabled={uiState === 'loading'}
+                  endIcon={uiState === 'loading' ? null : <ArrowForward />}
+                  sx={{
+                    width: '100%', height: '56px', borderRadius: '16px',
+                    backgroundColor: '#2e7d32',
+                    color: 'white', fontSize: '20px', fontWeight: 800, letterSpacing: '0.4px',
+                    boxShadow: '0 8px 18px rgba(46,125,50,0.18)',
+                    transition: 'all 0.2s ease', textTransform: 'uppercase',
+                    '&:hover': { backgroundColor: '#1b5e20', boxShadow: '0 10px 22px rgba(46,125,50,0.25)' },
+                    '&:active': { transform: 'scale(0.98)' }
+                  }}
+                >
+                  {uiState === 'loading' ? <CircularProgress size={24} sx={{ color: '#fff' }} /> : 'Analyze Best Crops'}
+                </Button>
+              </Box>
+
+            </Paper>
+          </Box>
         </Grid>
 
         {/* RIGHT COLUMN: Results Section */}
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={8} sx={{ display: 'flex', flexDirection: 'column' }}>
 
           {uiState === 'initial' && (
-            <Box sx={{ height: '100%', minHeight: { xs: '300px', md: '500px' }, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '2px dashed #E0E0E0', borderRadius: '24px', backgroundColor: '#FAFAFA', p: 4 }}>
-              <Spa sx={{ fontSize: '50px', color: '#BDBDBD', mb: 2 }} />
-              <Typography variant="h6" sx={{ fontWeight: 800, color: '#555', mb: 1, textAlign: 'center' }}>Ready to Calculate</Typography>
-              <Typography sx={{ color: '#888', fontWeight: 500, textAlign: 'center', fontSize: '14px', maxWidth: '250px' }}>Apply your filters and click analyze to fetch live market profits.</Typography>
+            <Box sx={{ 
+              flex: 1,
+              width: '100%', 
+              minHeight: { xs: '300px', md: 'calc(100vh - 140px)' },
+              borderRadius: '24px',
+              background: 'linear-gradient(90deg, #f2f2f2 25%, #f8f8f8 50%, #f2f2f2 75%)',
+              backgroundSize: '200% 100%',
+              animation: 'shimmer 1.5s infinite',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+              border: '1px solid #eee'
+            }}>
+              <Spa sx={{ fontSize: '48px', color: '#e0e0e0', mb: 2 }} />
+              <Typography sx={{ color: '#aaa', fontWeight: 600, fontSize: '16px' }}>Configure farm settings to view recommendations</Typography>
             </Box>
           )}
 
           {uiState === 'loading' && (
-            <Box sx={{ height: '100%', minHeight: { xs: '300px', md: '500px' }, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRadius: '24px', backgroundColor: '#f0f5f1', p: 4 }}>
+            <Box sx={{ 
+              flex: 1,
+              width: '100%', 
+              minHeight: { xs: '300px', md: 'calc(100vh - 140px)' }, 
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', 
+              borderRadius: '24px', backgroundColor: '#f0f5f1', p: 4 
+            }}>
               <CircularProgress size={50} sx={{ color: '#2E7D32', mb: 3 }} />
               <Typography variant="h6" sx={{ fontWeight: 800, color: '#2E7D32', mb: 1 }}>Strict Multi-Filtering...</Typography>
               <Typography sx={{ color: '#666', fontWeight: 600, fontSize: '14px', textAlign: 'center' }}>Fetching Live Agmarknet Prices for survivors.</Typography>
@@ -266,14 +324,19 @@ const RecommendationPage = () => {
                   {topCrops.map((crop, idx) => (
                     <Paper key={crop.name} sx={{
                       p: { xs: 2.5, sm: 3 },
-                      borderRadius: '18px',
-                      backgroundColor: idx === 0 ? '#F1F8E9' : '#fff',
-                      border: idx === 0 ? '2px solid #4CAF50' : '1px solid #E0E0E0',
-                      boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
+                      borderRadius: '20px',
+                      background: idx === 0 ? 'linear-gradient(135deg, #f8fff5, #ffffff)' : '#fff',
+                      borderLeft: '5px solid #2E7D32',
+                      borderTop: idx === 0 ? '1px solid #d7f0df' : '1px solid #eee',
+                      borderBottom: idx === 0 ? '1px solid #d7f0df' : '1px solid #eee',
+                      borderRight: idx === 0 ? '1px solid #d7f0df' : '1px solid #eee',
+                      boxShadow: idx === 0 ? '0 14px 34px rgba(46,125,50,0.18)' : '0 10px 30px rgba(0,0,0,0.08)',
+                      transform: idx === 0 ? 'scale(1.02)' : 'none',
                       position: 'relative',
                       overflow: 'hidden',
                       transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                      '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 8px 24px rgba(0,0,0,0.06)' }
+                      mb: idx === 0 ? 3 : 2,
+                      '&:hover': { transform: idx === 0 ? 'scale(1.02) translateY(-2px)' : 'translateY(-2px)', boxShadow: '0 15px 35px rgba(0,0,0,0.12)' }
                     }}>
                       {/* Faded Background Medal */}
                       <Box sx={{ position: 'absolute', top: 0, right: 0, width: '60px', height: '60px', backgroundColor: getMedalColor(idx), opacity: idx === 0 ? 0.15 : 0.05, borderBottomLeftRadius: '100%' }} />
@@ -300,25 +363,24 @@ const RecommendationPage = () => {
                           </Box>
                         </Box>
 
-                        {/* 3 Metric Mini Cards & Action */}
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, width: { xs: '100%', sm: '210px' }, pt: { xs: 2, sm: 0 }, borderTop: { xs: '1px solid #EEE', sm: 'none' } }}>
-                          
-                          <Box sx={{ display: 'grid', gridTemplateColumns: '1fr', gap: '6px' }}>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1, px: 1.2, borderRadius: '8px', backgroundColor: '#F9FAFB', border: '1px solid #F3F4F6' }}>
-                              <Typography sx={{ fontSize: '10.5px', fontWeight: 700, color: '#6B7280' }}>PROFIT / ACRE</Typography>
-                              <Typography sx={{ fontSize: '11.5px', fontWeight: 800, color: '#374151' }}>₹{crop.profitPerAcre.toLocaleString()}</Typography>
+                        {/* LIVE PROFIT WIDGET */}
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, width: { xs: '100%', sm: 'auto' }, pt: { xs: 2, sm: 0 }, borderTop: { xs: '1px solid #EEE', sm: 'none' } }}>
+                          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' }, gap: '10px' }}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', p: 1.2, borderRadius: '12px', backgroundColor: '#F0FDF4', border: '1px solid #DCFCE7', alignItems: 'flex-start', minWidth: '100px' }}>
+                              <Typography sx={{ fontSize: '11px', fontWeight: 700, color: '#166534', mb: 0.5 }}>💰 Total Profit</Typography>
+                              <Typography sx={{ fontSize: '14px', fontWeight: 800, color: '#166534' }}>₹{crop.totalProfit.toLocaleString()}</Typography>
                             </Box>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1, px: 1.2, borderRadius: '8px', backgroundColor: '#F0FDF4', border: '1px solid #DCFCE7' }}>
-                              <Typography sx={{ fontSize: '10.5px', fontWeight: 700, color: '#166534' }}>TOTAL PROFIT</Typography>
-                              <Typography sx={{ fontSize: '11.5px', fontWeight: 800, color: '#166534' }}>₹{crop.totalProfit.toLocaleString()}</Typography>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', p: 1.2, borderRadius: '12px', backgroundColor: '#FFFBEB', border: '1px solid #FEF3C7', alignItems: 'flex-start', minWidth: '110px' }}>
+                              <Typography sx={{ fontSize: '11px', fontWeight: 800, color: '#B45309', mb: 0.5 }}>📅 Monthly Income</Typography>
+                              <Typography sx={{ fontSize: '15px', fontWeight: 900, color: '#D97706' }}>₹{crop.monthlyIncome.toLocaleString()}</Typography>
                             </Box>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1, px: 1.2, borderRadius: '8px', backgroundColor: '#FFFBEB', border: '1px solid #FEF3C7' }}>
-                              <Typography sx={{ fontSize: '10.5px', fontWeight: 800, color: '#B45309' }}>MONTHLY EST.</Typography>
-                              <Typography sx={{ fontSize: '13px', fontWeight: 900, color: '#D97706' }}>₹{crop.monthlyIncome.toLocaleString()}</Typography>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', p: 1.2, borderRadius: '12px', backgroundColor: '#F9FAFB', border: '1px solid #F3F4F6', alignItems: 'flex-start', minWidth: '100px' }}>
+                              <Typography sx={{ fontSize: '11px', fontWeight: 700, color: '#6B7280', mb: 0.5 }}>🌾 Per Acre</Typography>
+                              <Typography sx={{ fontSize: '14px', fontWeight: 800, color: '#374151' }}>₹{crop.profitPerAcre.toLocaleString()}</Typography>
                             </Box>
                           </Box>
 
-                          <Button size="small" variant={idx === 0 ? "contained" : "outlined"} fullWidth sx={{ borderRadius: '8px', fontWeight: 700, textTransform: 'none', backgroundColor: idx === 0 ? '#2E7D32' : 'transparent', color: idx === 0 ? '#fff' : '#2E7D32', borderColor: '#2E7D32', mt: 0.5 }}>
+                          <Button size="small" variant={idx === 0 ? "contained" : "outlined"} fullWidth sx={{ borderRadius: '10px', fontWeight: 700, textTransform: 'none', backgroundColor: idx === 0 ? '#2E7D32' : 'transparent', color: idx === 0 ? '#fff' : '#2E7D32', borderColor: '#2E7D32', mt: 0.5, py: 0.8 }}>
                             Cultivation Plan
                           </Button>
                         </Box>
@@ -384,30 +446,7 @@ const RecommendationPage = () => {
         </Grid>
       </Grid>
 
-      {/* 🚀 STICKY BOTTOM BUTTON FOR MOBILE */}
-      <Box sx={{
-        display: { xs: 'flex', md: 'none' },
-        position: 'fixed',
-        bottom: 0, left: 0, right: 0,
-        p: 2,
-        background: 'linear-gradient(to top, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%)',
-        zIndex: 100
-      }}>
-        <Button
-          variant="contained"
-          fullWidth
-          onClick={handleRecommendation}
-          disabled={uiState === 'loading'}
-          sx={{
-            py: 1.8, borderRadius: '16px', fontWeight: 800, fontSize: '16px',
-            backgroundColor: '#2E7D32', color: '#fff',
-            boxShadow: '0 8px 24px rgba(46,125,50,0.3)',
-            textTransform: 'none'
-          }}
-        >
-          {uiState === 'loading' ? <CircularProgress size={24} sx={{ color: '#fff' }} /> : 'Analyze Best Crops'}
-        </Button>
-      </Box>
+
 
       <style>{`
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -416,7 +455,12 @@ const RecommendationPage = () => {
           50% { transform: scale(1.5); opacity: 0; }
           100% { transform: scale(1); opacity: 0; }
         }
+        @keyframes shimmer {
+          0% { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
+        }
       `}</style>
+      </Box>
     </Box>
   );
 };

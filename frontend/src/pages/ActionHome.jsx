@@ -63,71 +63,73 @@ const ActionHome = ({ session }) => {
   if (!profile) return null; // Or some fallback error state
 
   return (
-    <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: '800px', margin: '0 auto', minHeight: '80vh', mt: { xs: 2, md: 4 } }}>
+    <Box className="dashboard-container" sx={{ maxWidth: '1100px', margin: '0 auto', padding: { xs: '16px', md: '32px 24px' }, pt: { xs: '90px', md: '110px' }, minHeight: '80vh' }}>
       
       {/* 1. Top Bar */}
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, mb: 4 }}>
-        <Typography variant="h4" sx={{ fontWeight: 800, color: '#111', fontSize: { xs: '26px', sm: '32px' } }}>
+      <Box className="hero-section" sx={{ mt: '20px', mb: '24px' }}>
+        <Typography variant="h4" sx={{ fontWeight: 800, color: '#111', fontSize: '26px', letterSpacing: '-0.5px' }}>
           Welcome, {profile.full_name?.split(' ')[0]} 👋
         </Typography>
         
-        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+        <Box className="badge-row" sx={{ display: 'flex', gap: '12px', flexWrap: 'wrap', mt: '12px' }}>
           <Chip 
-            icon={<LocationOn sx={{ color: '#E64A19 !important' }} />} 
+            icon={<LocationOn fontSize="small" sx={{ color: '#888 !important' }} />} 
             label={profile.location} 
-            sx={{ backgroundColor: '#FBE9E7', color: '#D84315', fontWeight: 600, fontSize: '14px', px: 1 }} 
+            size="small"
+            sx={{ backgroundColor: '#FAFAFA', color: '#444', fontWeight: 600, fontSize: '13px', border: '1px solid #E0E0E0', borderRadius: '6px' }} 
           />
           <Chip 
-            icon={<WbSunny sx={{ color: '#F57F17 !important' }} />} 
+            icon={<WbSunny fontSize="small" sx={{ color: '#888 !important' }} />} 
             label={`Season: ${profile.season || 'Kharif'}`} 
-            sx={{ backgroundColor: '#FFFDE7', color: '#F57F17', fontWeight: 600, fontSize: '14px', px: 1 }} 
+            size="small"
+            sx={{ backgroundColor: '#FAFAFA', color: '#444', fontWeight: 600, fontSize: '13px', border: '1px solid #E0E0E0', borderRadius: '6px' }} 
           />
         </Box>
       </Box>
 
       {/* 4. Smart Alert */}
       {smartAlert && (
-        <Paper sx={{ 
-          p: 2.5, mb: 4, borderRadius: '16px', backgroundColor: smartAlert.bgColor, 
-          border: `1px solid ${smartAlert.iconColor}40`, display: 'flex', alignItems: 'center', gap: 2 
+        <Paper className="alert-card" sx={{ 
+          padding: '16px 18px', marginTop: '18px', marginBottom: '24px', borderRadius: '18px', backgroundColor: smartAlert.bgColor, 
+          border: `1px solid ${smartAlert.iconColor}40`, display: 'flex', alignItems: 'flex-start', gap: '12px', boxShadow: 'none'
         }}>
-          <Avatar sx={{ backgroundColor: smartAlert.iconColor, color: '#fff' }}>
-            {smartAlert.severity === 'success' ? <Spoke /> : <WarningAmber />}
+          <Avatar sx={{ backgroundColor: smartAlert.iconColor, color: '#fff', width: 36, height: 36 }}>
+            {smartAlert.severity === 'success' ? <Spoke fontSize="small" /> : <WarningAmber fontSize="small" />}
           </Avatar>
-          <Box>
-            <Typography sx={{ fontWeight: 700, color: smartAlert.iconColor, fontSize: '15px' }}>
+          <Box className="alert-content">
+            <Typography sx={{ fontWeight: 700, color: smartAlert.iconColor, fontSize: '15px', mb: '4px' }}>
               {smartAlert.title}
             </Typography>
-            <Typography sx={{ color: '#555', fontSize: '14px', fontWeight: 500 }}>
+            <Typography sx={{ color: '#555', fontSize: '14px', fontWeight: 500, lineHeight: 1.4 }}>
               {smartAlert.message}
             </Typography>
           </Box>
         </Paper>
       )}
 
-      {/* 2. Main Action (CENTER FOCUS) OR 5. Current Crop */}
-      <Paper sx={{ 
-        p: { xs: 4, sm: 6 }, mb: 4, borderRadius: '24px', textAlign: 'center',
-        background: 'linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%)',
-        color: '#fff', boxShadow: '0 24px 48px rgba(46,125,50,0.3)',
-        position: 'relative', overflow: 'hidden'
-      }}>
-        <Spoke sx={{ position: 'absolute', top: '-10%', left: '-5%', fontSize: '150px', color: 'rgba(255,255,255,0.05)', animation: 'spin 20s linear infinite', '@keyframes spin': { '100%': { transform: 'rotate(360deg)' } } }} />
-        
-        {hasCurrentCrop ? (
+      {/* 2. Main Action: Split Hero or Current Crop */}
+      {hasCurrentCrop ? (
+        <Paper className="home-card" sx={{ 
+          p: '28px', mb: '24px', borderRadius: '22px', textAlign: 'center', minHeight: '220px',
+          background: 'linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%)',
+          color: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)',
+          position: 'relative', overflow: 'hidden'
+        }}>
+          <Spoke sx={{ position: 'absolute', top: '-10%', left: '-5%', fontSize: '150px', color: 'rgba(255,255,255,0.05)', animation: 'spin 20s linear infinite', '@keyframes spin': { '100%': { transform: 'rotate(360deg)' } } }} />
+          
           <Box sx={{ position: 'relative', zIndex: 1 }}>
             <Agriculture sx={{ fontSize: '48px', mb: 2, color: '#C8E6C9' }} />
             <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, letterSpacing: '-0.5px' }}>
               🌾 Current Crop: Paddy
             </Typography>
-            <Typography sx={{ fontSize: '16px', color: '#E8F5E9', mb: 4, fontWeight: 500 }}>
+            <Typography sx={{ fontSize: '16px', color: '#E8F5E9', mb: 3, fontWeight: 500 }}>
               Next Task: Apply Fertilizer Tomorrow
             </Typography>
             <Button 
               variant="contained" 
               onClick={() => navigate('/dashboard')}
               sx={{ 
-                backgroundColor: '#fff', color: '#1B5E20', borderRadius: '14px', py: 1.5, px: 4,
+                backgroundColor: '#fff', color: '#1B5E20', borderRadius: '14px', py: 1.5, px: 4, width: '100%', maxWidth: '300px',
                 fontSize: '16px', fontWeight: 800, textTransform: 'none',
                 '&:hover': { backgroundColor: '#F1F8E9', transform: 'scale(1.02)' }, transition: 'all 0.2s ease'
               }}
@@ -135,54 +137,85 @@ const ActionHome = ({ session }) => {
               View Plan
             </Button>
           </Box>
-        ) : (
-          <Box sx={{ position: 'relative', zIndex: 1 }}>
-            <Agriculture sx={{ fontSize: '56px', mb: 2, color: '#C8E6C9' }} />
-            <Typography variant="h4" sx={{ fontWeight: 800, mb: 1.5, letterSpacing: '-0.5px', fontSize: { xs: '24px', sm: '32px' } }}>
-              Start Crop Recommendation
-            </Typography>
-            <Typography sx={{ fontSize: '15px', color: '#E8F5E9', mb: 4, maxWidth: '400px', mx: 'auto', fontWeight: 500 }}>
-              Let our AI analyze your soil, land size, and weather to predict the most profitable crop.
-            </Typography>
+        </Paper>
+      ) : (
+        <Box className="main-grid" sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: '24px', mt: '24px', mb: '24px' }}>
+          {/* Path A: Machine Learning Route */}
+          <Paper className="home-card" sx={{
+            p: '28px', borderRadius: '22px', backgroundColor: '#fff',
+            border: '1px solid #ececec', boxShadow: '0 6px 18px rgba(0,0,0,0.04)',
+            display: 'flex', flexDirection: 'column', minHeight: '220px'
+          }}>
+            <Box sx={{ flexGrow: 1, mb: '18px' }}>
+              <Typography variant="h5" sx={{ fontWeight: 800, mb: '10px', color: '#222', letterSpacing: '-0.5px' }}>
+                🌾 Crop Recommendation
+              </Typography>
+              <Typography sx={{ fontSize: '15px', color: '#666', fontWeight: 500, lineHeight: 1.5 }}>
+                Get smart AI suggestions taking your farm metrics into account to maximize yield.
+              </Typography>
+            </Box>
             <Button 
               variant="contained" 
-              endIcon={<ArrowForward />}
               onClick={handleRecommendationClick}
               sx={{ 
-                backgroundColor: '#fff', color: '#1B5E20', borderRadius: '16px', py: 2, px: 5,
-                fontSize: { xs: '16px', sm: '18px' }, fontWeight: 800, textTransform: 'none',
-                boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-                '&:hover': { backgroundColor: '#F1F8E9', transform: 'translateY(-2px)', boxShadow: '0 12px 32px rgba(0,0,0,0.2)' }, transition: 'all 0.3s ease'
+                backgroundColor: '#2e7d32', color: '#fff', borderRadius: '14px', height: '52px',
+                fontSize: '16px', fontWeight: 700, textTransform: 'none', width: '100%',
+                boxShadow: 'none',
+                '&:hover': { backgroundColor: '#1b5e20' }, transition: 'all 0.2s ease'
               }}
             >
-              Get Recommendation
+              Analyze Best Crops
             </Button>
-          </Box>
-        )}
-      </Paper>
+          </Paper>
+
+          {/* Path B: Manual Expert Route */}
+          <Paper className="home-card" sx={{
+            p: '28px', borderRadius: '22px', backgroundColor: '#fff',
+            border: '1px solid #ececec', boxShadow: '0 6px 18px rgba(0,0,0,0.04)',
+            display: 'flex', flexDirection: 'column', minHeight: '220px'
+          }}>
+            <Box sx={{ flexGrow: 1, mb: '18px' }}>
+              <Typography variant="h5" sx={{ fontWeight: 800, mb: '10px', color: '#222', letterSpacing: '-0.5px' }}>
+                🌱 Add Existing Plan
+              </Typography>
+              <Typography sx={{ fontSize: '15px', color: '#666', fontWeight: 500, lineHeight: 1.5 }}>
+                Already know what you're planting? Add your crop manually directly to your dashboard.
+              </Typography>
+            </Box>
+            <Button 
+              variant="outlined" 
+              sx={{ 
+                backgroundColor: '#f5fdf6', color: '#2e7d32', borderRadius: '14px', height: '52px',
+                fontSize: '16px', fontWeight: 700, textTransform: 'none', width: '100%',
+                border: '1px solid #cce8d0',
+                '&:hover': { backgroundColor: '#e8f5e9', borderColor: '#2e7d32' }, transition: 'all 0.2s ease'
+              }}
+              onClick={() => navigate('/add-crop')}
+            >
+              ➕ Add Crop Manually
+            </Button>
+          </Paper>
+        </Box>
+      )}
 
       {/* 3. Quick Options */}
-      <Typography sx={{ fontSize: '16px', fontWeight: 700, color: '#444', mb: 2 }}>Quick Access</Typography>
-      <Grid container spacing={2}>
-        <Grid size={{ xs: 12, sm: 4 }}>
-          <Box sx={{ p: 2, borderRadius: '16px', backgroundColor: '#FAFAFA', border: '1px solid #EEE', display: 'flex', alignItems: 'center', gap: 1.5, cursor: 'pointer', '&:hover': { backgroundColor: '#F5F5F5' } }}>
-            <CalendarMonth sx={{ color: '#1976D2' }} />
-            <Typography sx={{ fontWeight: 600, color: '#333', fontSize: '15px' }}>Open Calendar</Typography>
+      <Box className="quick-access" sx={{ mt: '28px', mb: '48px' }}>
+        <Typography sx={{ fontSize: '16px', fontWeight: 800, color: '#222', mb: '16px' }}>Quick Access</Typography>
+        <Box className="quick-grid" sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' }, gap: '18px' }}>
+          <Box className="quick-card" onClick={() => navigate('/dashboard/calendar')} sx={{ height: '72px', borderRadius: '16px', backgroundColor: '#fff', border: '1px solid #e8e8e8', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer', transition: 'all 0.25s ease', '&:hover': { transform: 'translateY(-3px)', boxShadow: '0 8px 20px rgba(0,0,0,0.08)' } }}>
+            <CalendarMonth sx={{ color: '#1976D2', fontSize: '24px' }} />
+            <Typography sx={{ fontWeight: 600, color: '#333', fontSize: '13px' }}>Calendar</Typography>
           </Box>
-        </Grid>
-        <Grid size={{ xs: 12, sm: 4 }}>
-          <Box sx={{ p: 2, borderRadius: '16px', backgroundColor: '#FAFAFA', border: '1px solid #EEE', display: 'flex', alignItems: 'center', gap: 1.5, cursor: 'pointer', '&:hover': { backgroundColor: '#F5F5F5' } }}>
-            <WbCloudy sx={{ color: '#0288D1' }} />
-            <Typography sx={{ fontWeight: 600, color: '#333', fontSize: '15px' }}>Weather Alerts</Typography>
+          <Box className="quick-card" onClick={() => navigate('/dashboard/weather')} sx={{ height: '72px', borderRadius: '16px', backgroundColor: '#fff', border: '1px solid #e8e8e8', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer', transition: 'all 0.25s ease', '&:hover': { transform: 'translateY(-3px)', boxShadow: '0 8px 20px rgba(0,0,0,0.08)' } }}>
+            <WbCloudy sx={{ color: '#0288D1', fontSize: '24px' }} />
+            <Typography sx={{ fontWeight: 600, color: '#333', fontSize: '13px' }}>Weather</Typography>
           </Box>
-        </Grid>
-        <Grid size={{ xs: 12, sm: 4 }}>
-          <Box sx={{ p: 2, borderRadius: '16px', backgroundColor: '#FAFAFA', border: '1px solid #EEE', display: 'flex', alignItems: 'center', gap: 1.5, cursor: 'pointer', '&:hover': { backgroundColor: '#F5F5F5' } }}>
-            <BarChart sx={{ color: '#7B1FA2' }} />
-            <Typography sx={{ fontWeight: 600, color: '#333', fontSize: '15px' }}>Analytics</Typography>
+          <Box className="quick-card" onClick={() => navigate('/dashboard/analytics')} sx={{ height: '72px', borderRadius: '16px', backgroundColor: '#fff', border: '1px solid #e8e8e8', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer', transition: 'all 0.25s ease', '&:hover': { transform: 'translateY(-3px)', boxShadow: '0 8px 20px rgba(0,0,0,0.08)' } }}>
+            <BarChart sx={{ color: '#7B1FA2', fontSize: '24px' }} />
+            <Typography sx={{ fontWeight: 600, color: '#333', fontSize: '13px' }}>Analytics</Typography>
           </Box>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
       
     </Box>
   );

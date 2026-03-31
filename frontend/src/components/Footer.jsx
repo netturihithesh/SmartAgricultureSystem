@@ -9,71 +9,46 @@ const Footer = () => {
   const bottomBg = isDark ? '#060f06' : '#0D3010';
 
   return (
-    <Box sx={{ backgroundColor: footerBg, color: 'rgba(255,255,255,0.8)', pt: { xs: '48px', md: '72px' }, transition: 'background-color 0.3s ease' }}>
-      <Container maxWidth="lg">
-        <Grid container spacing={5} sx={{ mb: '48px' }}>
-          {/* Col 1 */}
-          <Grid item xs={12} md={4} sx={{ borderRight: { md: '1px solid rgba(255,255,255,0.1)' }, pr: { md: '32px' } }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2, color: '#fff' }}>
-              <EcoIcon fontSize="large" sx={{ color: '#66BB6A' }} />
-              <Typography variant="h5" sx={{ fontWeight: 800, letterSpacing: '0.5px' }}>SmartAgri</Typography>
+    <Box className="footer" sx={{ backgroundColor: footerBg, color: 'rgba(255,255,255,0.8)', pt: '32px', pb: 0, mt: '48px', transition: 'background-color 0.3s ease' }}>
+      <Container maxWidth={false} sx={{ maxWidth: '1100px', mx: 'auto', px: '24px' }}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '18px', mb: '28px' }}>
+          
+          {/* Col 1: Brand & Contact */}
+          <Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: '12px', color: '#fff' }}>
+              <EcoIcon sx={{ color: '#66BB6A' }} />
+              <Typography sx={{ fontWeight: 800, fontSize: '16px', letterSpacing: '0.5px' }}>SmartAgri</Typography>
             </Box>
-            <Typography sx={{ fontSize: '14px', lineHeight: 1.6, mb: 3, opacity: 0.8 }}>
-              Empowering agriculture through predictive analytics, machine learning, and AI-driven decision support systems.
+            <Typography sx={{ fontSize: '13px', lineHeight: 1.5, mb: '16px', opacity: 0.8 }}>
+              AI-driven support systems for agriculture.
             </Typography>
-            <Box sx={{ display: 'flex', gap: 1 }}>
-              {[<Twitter />, <LinkedIn />, <GitHub />].map((icon, i) => (
-                <IconButton key={i} sx={{ color: 'rgba(255,255,255,0.8)', '&:hover': { color: '#fff', backgroundColor: 'rgba(255,255,255,0.1)' } }}>
+            <Box sx={{ display: 'flex', gap: 0 }}>
+              {[<Twitter fontSize="small" />, <LinkedIn fontSize="small" />, <GitHub fontSize="small" />].map((icon, i) => (
+                <IconButton size="small" key={i} sx={{ color: 'rgba(255,255,255,0.8)', p: 0.5, mr: 1, '&:hover': { color: '#fff' } }}>
                   {icon}
                 </IconButton>
               ))}
             </Box>
-          </Grid>
+          </Box>
 
-          {/* Col 2 */}
-          <Grid item xs={12} sm={6} md={2} sx={{ pl: { md: '32px' } }}>
-            <Typography sx={{ color: '#fff', fontSize: '16px', mb: '16px', fontWeight: 700 }}>Platform</Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-              {['AI Models', 'Dashboard', 'Pricing', 'Case Studies'].map((item) => (
-                <Link key={item} href="#" underline="none" sx={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', transition: 'color 0.2s', '&:hover': { color: '#FBC02D' } }}>{item}</Link>
+          {/* Col 2: Solutions + Links */}
+          <Box sx={{ pl: '12px' }}>
+            <Typography sx={{ color: '#fff', fontSize: '14px', mb: '12px', fontWeight: 700 }}>Solutions</Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {['Crop Analysis', 'Yield Prediction', 'My Dashboard'].map((item) => (
+                <Link key={item} href="#" underline="none" sx={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', transition: 'color 0.2s', '&:hover': { color: '#FBC02D' } }}>{item}</Link>
               ))}
+              <Typography sx={{ fontSize: '13px', mt: '8px', opacity: 0.7, textDecoration: 'underline' }}>support@smartagri.ai</Typography>
             </Box>
-          </Grid>
+          </Box>
 
-          {/* Col 3 */}
-          <Grid item xs={12} sm={6} md={3}>
-            <Typography sx={{ color: '#fff', fontSize: '16px', mb: '16px', fontWeight: 700 }}>Solutions</Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-              {['Crop Recommendation', 'Yield Prediction', 'Climate Analysis', 'Fertilizer Optimization'].map((item) => (
-                <Link key={item} href="#" underline="none" sx={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', transition: 'color 0.2s', '&:hover': { color: '#FBC02D' } }}>{item}</Link>
-              ))}
-            </Box>
-          </Grid>
-
-          {/* Col 4 */}
-          <Grid item xs={12} sm={12} md={3}>
-            <Typography sx={{ color: '#fff', fontSize: '16px', mb: '16px', fontWeight: 700 }}>Contact</Typography>
-            <Typography sx={{ fontSize: '14px', mb: 1, opacity: 0.8 }}>Email: support@smartagri.ai</Typography>
-            <Typography sx={{ fontSize: '14px', mb: 1, opacity: 0.8 }}>Phone: +1 (555) 123-4567</Typography>
-            <Typography sx={{ fontSize: '14px', mb: 1, opacity: 0.8 }}>
-              Location: 
-              <Link 
-                href="https://maps.app.goo.gl/xi53BKjYm8Ek6jt4A" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                sx={{ ml: 0.5, color: '#66BB6A', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
-              >
-                Osmania University, Hyderabad, India
-              </Link>
-            </Typography>
-          </Grid>
-        </Grid>
+        </Box>
       </Container>
 
       {/* Bottom Bar */}
-      <Box sx={{ borderTop: '1px solid rgba(255,255,255,0.08)', py: '24px', textAlign: 'center', backgroundColor: bottomBg }}>
-        <Container maxWidth="lg">
-          <Typography sx={{ fontSize: '14px', opacity: 0.6 }}>© {new Date().getFullYear()} SmartAgri System. All rights reserved.</Typography>
+      <Box sx={{ borderTop: '1px solid rgba(255,255,255,0.08)', py: '18px', textAlign: 'center', backgroundColor: bottomBg }}>
+        <Container maxWidth={false} sx={{ maxWidth: '1100px', mx: 'auto', px: '24px' }}>
+          <Typography sx={{ fontSize: '12px', opacity: 0.6 }}>© {new Date().getFullYear()} SmartAgri. All rights reserved.</Typography>
         </Container>
       </Box>
     </Box>
