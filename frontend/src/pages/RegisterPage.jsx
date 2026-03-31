@@ -54,7 +54,7 @@ const RegisterPage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'landSize' && value !== '' && Number(value) < 0) return;
+    if (name === 'landSize' && value !== '' && Number(value) <= 0) return;
     if (name === 'state') {
       setFormData({ ...formData, state: value, district: '' });
     } else {
@@ -357,8 +357,11 @@ const RegisterPage = () => {
                   <Box>
                     <Typography sx={{ fontSize: '15px', fontWeight: 600, color: '#222', mb: '6px' }}>Land Size</Typography>
                     <TextField fullWidth variant="outlined" type="number" name="landSize" value={formData.landSize} onChange={handleChange} required 
-                      placeholder="2.5" helperText="(Enter total area of your farm)" FormHelperTextProps={{ sx: { fontSize: '13px', ml: 0 } }}
-                      inputProps={{ min: '0', step: 'any' }}
+                      placeholder="2.5"
+                      error={formData.landSize !== '' && Number(formData.landSize) <= 0}
+                      helperText={formData.landSize !== '' && Number(formData.landSize) <= 0 ? 'Land size must be greater than 0' : '(Enter total area of your farm)'}
+                      FormHelperTextProps={{ sx: { fontSize: '13px', ml: 0 } }}
+                      inputProps={{ min: '0.01', step: 'any' }}
                       InputProps={{ 
                         sx: inputStyles, 
                         startAdornment: <InputAdornment position="start"><SquareFoot sx={{ color: iconColor }} /></InputAdornment>,
@@ -408,7 +411,9 @@ const RegisterPage = () => {
                     {['Black Soil', 'Red Soil', 'Sandy Soil', 'Clay Soil'].map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
                   </TextField>
                   <TextField fullWidth type="number" name="landSize" value={formData.landSize} onChange={handleChange} required placeholder="Land Size (Acres)"
-                    inputProps={{ min: '0', step: 'any' }}
+                    error={formData.landSize !== '' && Number(formData.landSize) <= 0}
+                    helperText={formData.landSize !== '' && Number(formData.landSize) <= 0 ? 'Land size must be greater than 0' : ''}
+                    inputProps={{ min: '0.01', step: 'any' }}
                     InputProps={{ sx: inputStyles, startAdornment: <InputAdornment position="start"><SquareFoot sx={{ color: iconColor }} /></InputAdornment>, endAdornment: <Typography sx={{ fontWeight: 600, color: textSecondary }}>Acres</Typography> }} />
                   <TextField select fullWidth name="irrigation" value={formData.irrigation} onChange={handleChange} required InputProps={{ sx: inputStyles, startAdornment: <InputAdornment position="start"><WaterDrop sx={{ color: iconColor }} /></InputAdornment> }}>
                     <MenuItem value="" disabled>Irrigation</MenuItem>

@@ -1,48 +1,112 @@
-import React, { useState } from 'react';
-import { Box, Typography, Paper, TextField, MenuItem, Button, Autocomplete } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import {
+  Box, Typography, Paper, TextField, MenuItem, Button,
+  Autocomplete, CircularProgress
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Spa, Add } from '@mui/icons-material';
 import cropData from '../data/crop_data.json';
+import { supabase } from '../supabase';
 
-// Dynamic Database Mapping
+// ─── Static Options ────────────────────────────────────────────────────────────
 const cropOptions = [...new Set(cropData.map(c => c.name))].sort();
+
+// Quick lookup: crop name → duration type
+const cropDurationMap = cropData.reduce((acc, c) => {
+  acc[c.name] = c.crop_duration_type;
+  return acc;
+}, {});
+
 const waterOptions = [
-  { label: 'High (Canal)', value: 'more_water' },
-  { label: 'Med (Borewell)', value: 'moderate_water' },
-  { label: 'Low (Rainfed)', value: 'less_water' }
+  { label: 'High (Canal / Good Water)', value: 'Good Water Available' },
+  { label: 'Medium (Borewell / Limited)', value: 'Limited Water' },
+  { label: 'Low (Rainfed / No Irrigation)', value: 'No Irrigation' },
 ];
+
 const durationOptions = [
   { label: 'Short (< 4 months)', value: 'short_term' },
-  { label: 'Medium (4-6 months)', value: 'medium_term' },
+  { label: 'Medium (4–6 months)', value: 'medium_term' },
   { label: 'Long (> 6 months)', value: 'long_term' },
-  { label: 'Perennial (Years)', value: 'perennial' }
+  { label: 'Perennial (Years)', value: 'perennial' },
 ];
 
+const parseLandSize = (raw) => (raw ? raw.replace(/[^0-9.]/g, '').trim() : '');
+
+// ─── Component ─────────────────────────────────────────────────────────────────
 const AddCropPage = () => {
   const navigate = useNavigate();
+  const [loadingProfile, setLoadingProfile] = useState(true);
+
   const [formData, setFormData] = useState({
     cropName: null,
     landSize: '',
     waterSource: '',
     duration: '',
     sowingDate: '',
-    notes: ''
+    notes: '',
   });
+
+  // ── Load profile for land size and water source ─────────────────────────────
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) { setLoadingProfile(false); return; }
+
+        const { data: profile, error } = await supabase
+          .from('profiles')
+          .select('land_size, irrigation')
+          .eq('id', user.id)
+          .single();
+
+        if (!error && profile) {
+          setFormData(prev => ({
+            ...prev,
+            landSize: parseLandSize(profile.land_size),
+            waterSource: profile.irrigation || '',
+          }));
+        }
+      } catch (err) {
+        console.warn('Profile load failed:', err.message);
+      } finally {
+        setLoadingProfile(false);
+      }
+    };
+    load();
+  }, []);
+
+  // ── When crop name changes, auto-fill duration from crop_data.json ──────────
+  const handleCropChange = (_, newVal) => {
+    const duration = newVal ? (cropDurationMap[newVal] || '') : '';
+    setFormData(prev => ({ ...prev, cropName: newVal, duration }));
+  };
+
+  const set = (key) => (e) => setFormData(prev => ({ ...prev, [key]: e.target.value }));
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simulate API Database Sync before returning to unified Dashboard Core
-    setTimeout(() => {
-      navigate('/dashboard');
-    }, 400);
+    setTimeout(() => navigate('/dashboard'), 400);
   };
 
+  const inputSx = { borderRadius: '14px', backgroundColor: '#fafafa' };
+
+  if (loadingProfile) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+        <CircularProgress sx={{ color: '#2e7d32' }} />
+      </Box>
+    );
+  }
+
   return (
-    <Box className="add-crop-container" sx={{ maxWidth: '650px', margin: '0 auto', padding: '24px', minHeight: '80vh', pt: { xs: '90px', md: '110px' } }}>
-      
-      {/* Page Hero Header */}
+    <Box sx={{ maxWidth: '650px', margin: '0 auto', padding: '24px', minHeight: '80vh', pt: { xs: '90px', md: '110px' } }}>
+
+      {/* Header */}
       <Box sx={{ textAlign: 'center', mb: '32px' }}>
-        <Typography variant="h4" sx={{ fontWeight: 800, color: '#111', fontSize: '32px', letterSpacing: '-0.5px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1.5 }}>
+        <Typography variant="h4" sx={{
+          fontWeight: 800, color: '#111', fontSize: '32px',
+          letterSpacing: '-0.5px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1.5
+        }}>
           Add Crop <Spa sx={{ color: '#2e7d32', fontSize: '32px' }} />
         </Typography>
         <Typography sx={{ color: '#555', fontSize: '15px', mt: 1, fontWeight: 500 }}>
@@ -50,87 +114,144 @@ const AddCropPage = () => {
         </Typography>
       </Box>
 
-      {/* Main Centered Minimal Form Card */}
-      <Paper className="add-crop-card" sx={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '20px', padding: { xs: '24px', sm: '32px' }, boxShadow: '0 6px 18px rgba(0,0,0,0.04)' }}>
+      {/* Form Card */}
+      <Paper sx={{
+        background: '#ffffff', border: '1px solid #e5e7eb',
+        borderRadius: '20px', padding: { xs: '24px', sm: '32px' },
+        boxShadow: '0 6px 18px rgba(0,0,0,0.04)'
+      }}>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
-          
-          <Autocomplete
-            options={cropOptions}
-            value={formData.cropName}
-            onChange={(e, newVal) => setFormData({...formData, cropName: newVal})}
-            renderInput={(params) => (
-              <TextField {...params} label="Crop Name" required variant="outlined" placeholder="Select Crop" InputProps={{ ...params.InputProps, sx: { borderRadius: '14px', backgroundColor: '#fafafa' } }}/>
-            )}
-            sx={{ '& .MuiOutlinedInput-root': { borderRadius: '14px' } }}
-          />
 
-          <TextField 
-            label="Land Size (Acres)" 
-            type="number" 
-            required 
-            fullWidth 
-            placeholder="e.g., 5.5"
-            value={formData.landSize} 
-            onChange={(e) => setFormData({...formData, landSize: e.target.value})} 
-            InputProps={{ sx: { borderRadius: '14px', backgroundColor: '#fafafa' }, inputProps: { min: 0, step: 'any' } }}
-          />
+          {/* Crop Name */}
+          <Box>
+            <Typography sx={{ fontSize: '13px', fontWeight: 700, color: '#555', textTransform: 'uppercase', letterSpacing: '0.5px', mb: '8px' }}>
+              Crop Name
+            </Typography>
+            <Autocomplete
+              options={cropOptions}
+              value={formData.cropName}
+              onChange={handleCropChange}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  required
+                  placeholder="Select or type crop name"
+                  InputProps={{ ...params.InputProps, sx: inputSx }}
+                />
+              )}
+              sx={{ '& .MuiOutlinedInput-root': { borderRadius: '14px' } }}
+            />
+          </Box>
 
-          <TextField 
-            select 
-            label="Water Availability" 
-            required 
-            fullWidth 
-            value={formData.waterSource} 
-            onChange={(e) => setFormData({...formData, waterSource: e.target.value})}
-            InputProps={{ sx: { borderRadius: '14px', backgroundColor: '#fafafa' } }}
-          >
-            {waterOptions.map(opt => <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>)}
-          </TextField>
+          {/* Land Size */}
+          <Box>
+            <Typography sx={{ fontSize: '13px', fontWeight: 700, color: '#555', textTransform: 'uppercase', letterSpacing: '0.5px', mb: '8px' }}>
+              Land Size (Acres)
+            </Typography>
+            <TextField
+              type="number"
+              required
+              fullWidth
+              placeholder="e.g., 5.5"
+              value={formData.landSize}
+              onChange={set('landSize')}
+              error={formData.landSize !== '' && Number(formData.landSize) <= 0}
+              helperText={formData.landSize !== '' && Number(formData.landSize) <= 0 ? 'Land size must be greater than 0' : ''}
+              InputProps={{ sx: inputSx, inputProps: { min: 0.01, step: 'any' } }}
+            />
+          </Box>
 
-          <TextField 
-            select 
-            label="Duration" 
-            required 
-            fullWidth 
-            value={formData.duration} 
-            onChange={(e) => setFormData({...formData, duration: e.target.value})}
-            InputProps={{ sx: { borderRadius: '14px', backgroundColor: '#fafafa' } }}
-          >
-            {durationOptions.map(opt => <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>)}
-          </TextField>
+          {/* Water Availability */}
+          <Box>
+            <Typography sx={{ fontSize: '13px', fontWeight: 700, color: '#555', textTransform: 'uppercase', letterSpacing: '0.5px', mb: '8px' }}>
+              Water Availability
+            </Typography>
+            <TextField
+              select
+              required
+              fullWidth
+              value={formData.waterSource}
+              onChange={set('waterSource')}
+              InputProps={{ sx: inputSx }}
+            >
+              {waterOptions.map(opt => (
+                <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+              ))}
+            </TextField>
+          </Box>
 
-          <TextField 
-            label="Sowing Date" 
-            type="date" 
-            required 
-            fullWidth 
-            InputLabelProps={{ shrink: true }}
-            value={formData.sowingDate} 
-            onChange={(e) => setFormData({...formData, sowingDate: e.target.value})} 
-            InputProps={{ sx: { borderRadius: '14px', backgroundColor: '#fafafa' } }}
-          />
+          {/* Duration — auto-filled from crop data */}
+          <Box>
+            <Typography sx={{ fontSize: '13px', fontWeight: 700, color: '#555', textTransform: 'uppercase', letterSpacing: '0.5px', mb: '8px' }}>
+              Crop Duration
+            </Typography>
+            <TextField
+              select
+              required
+              fullWidth
+              value={formData.duration}
+              onChange={set('duration')}
+              InputProps={{ sx: inputSx }}
+            >
+              <MenuItem value="" disabled>
+                {formData.cropName ? 'Select duration' : 'Select a crop first'}
+              </MenuItem>
+              {durationOptions.map(opt => (
+                <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+              ))}
+            </TextField>
+          </Box>
 
-          <TextField 
-            label="Notes (Optional)" 
-            multiline
-            rows={2}
-            fullWidth 
-            placeholder="Example: Expecting early monsoon"
-            value={formData.notes} 
-            onChange={(e) => setFormData({...formData, notes: e.target.value})} 
-            InputProps={{ sx: { borderRadius: '14px', backgroundColor: '#fafafa' } }}
-          />
+          {/* Sowing Date */}
+          <Box>
+            <Typography sx={{ fontSize: '13px', fontWeight: 700, color: '#555', textTransform: 'uppercase', letterSpacing: '0.5px', mb: '8px' }}>
+              Sowing Date
+            </Typography>
+            <TextField
+              type="date"
+              required
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              value={formData.sowingDate}
+              onChange={set('sowingDate')}
+              inputProps={{
+                min: "2025-01-01",
+                max: "2027-12-31"
+              }}
+              error={formData.sowingDate !== '' && (new Date(formData.sowingDate).getFullYear() < 2025 || new Date(formData.sowingDate).getFullYear() > 2027)}
+              helperText={formData.sowingDate !== '' && (new Date(formData.sowingDate).getFullYear() < 2025 || new Date(formData.sowingDate).getFullYear() > 2027) ? 'Date must be between 2025 and 2027' : ''}
+              InputProps={{ sx: inputSx }}
+            />
+          </Box>
 
-          {/* Submission Module */}
+          {/* Notes */}
+          <Box>
+            <Typography sx={{ fontSize: '13px', fontWeight: 700, color: '#555', textTransform: 'uppercase', letterSpacing: '0.5px', mb: '8px' }}>
+              Notes <Box component="span" sx={{ fontWeight: 400, fontSize: '12px', color: '#aaa' }}>(Optional)</Box>
+            </Typography>
+            <TextField
+              multiline
+              rows={2}
+              fullWidth
+              placeholder="e.g., Expecting early monsoon"
+              value={formData.notes}
+              onChange={set('notes')}
+              InputProps={{ sx: inputSx }}
+            />
+          </Box>
+
+          {/* Submit */}
           <Box sx={{ mt: '12px' }}>
-            <Button 
-              type="submit" 
-              variant="contained" 
-              className="add-btn"
-              sx={{ 
-                width: '100%', height: '56px', borderRadius: '16px', background: '#2e7d32', color: 'white', 
-                fontSize: '18px', fontWeight: 700, textTransform: 'none', boxShadow: '0 8px 24px rgba(46,125,50,0.2)',
-                '&:hover': { background: '#1b5e20', transform: 'translateY(-2px)' }, transition: 'all 0.2s ease',
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                width: '100%', height: '56px', borderRadius: '16px',
+                background: '#2e7d32', color: 'white',
+                fontSize: '18px', fontWeight: 700, textTransform: 'none',
+                boxShadow: '0 8px 24px rgba(46,125,50,0.2)',
+                '&:hover': { background: '#1b5e20', transform: 'translateY(-2px)' },
+                transition: 'all 0.2s ease',
                 display: 'flex', gap: 1
               }}
             >
