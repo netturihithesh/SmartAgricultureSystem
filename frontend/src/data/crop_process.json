@@ -1,0 +1,1757 @@
+[
+  {
+    "crop_name": "Paddy(Basmati)",
+    "total_duration_days": 140,
+    "stages": [
+      {
+        "stage_id": 1,
+        "title": "Land Preparation",
+        "duration_days": 10,
+        "substeps": [
+          "Deep ploughing of the land",
+          "Puddling and leveling the field",
+          "Incorporate well-decomposed farmyard manure"
+        ]
+      },
+      {
+        "stage_id": 2,
+        "title": "Seed Preparation & Nursery",
+        "duration_days": 21,
+        "substeps": [
+          "Select high-quality certified Basmati seeds",
+          "Treat seeds with fungicide (e.g., Carbendazim)",
+          "Soak and incubate seeds",
+          "Prepare wet nursery bed and sow"
+        ]
+      },
+      {
+        "stage_id": 3,
+        "title": "Transplantation",
+        "duration_days": 5,
+        "substeps": [
+          "Uproot seedlings carefully at 21 days",
+          "Maintain wider spacing (typically 20x15 cm) for tillering",
+          "Maintain a shallow water layer"
+        ]
+      },
+      {
+        "stage_id": 4,
+        "title": "Fertilizer Application",
+        "duration_days": 35,
+        "substeps": [
+          "Apply basal dose of NPK",
+          "Apply top dressing of Urea in splits",
+          "Apply Zinc sulfate to prevent Khaira disease"
+        ]
+      },
+      {
+        "stage_id": 5,
+        "title": "Water Management & Vegetative Growth",
+        "duration_days": 40,
+        "substeps": [
+          "Maintain 2-5 cm water level during tillering",
+          "Drain water briefly before panicle initiation",
+          "Keep soil moist during grain filling"
+        ]
+      },
+      {
+        "stage_id": 6,
+        "title": "Pest & Disease Control",
+        "duration_days": 20,
+        "substeps": [
+          "Monitor for yellow stem borer and leaf folder",
+          "Check for neck blast and bacterial leaf blight",
+          "Apply target-specific pesticides as needed"
+        ]
+      },
+      {
+        "stage_id": 7,
+        "title": "Harvesting",
+        "duration_days": 6,
+        "substeps": [
+          "Drain field 10 days before harvest",
+          "Harvest when panicles turn golden yellow",
+          "Thresh carefully to avoid grain breakage"
+        ]
+      },
+      {
+        "stage_id": 8,
+        "title": "Post Harvest & Storage",
+        "duration_days": 3,
+        "substeps": [
+          "Dry grains to 12-14% moisture content",
+          "Store in hermetic bags to preserve aroma",
+          "Grade and prepare for premium market selling"
+        ]
+      }
+    ]
+  },
+  {
+    "crop_name": "Paddy(Common)",
+    "total_duration_days": 120,
+    "stages": [
+      {
+        "stage_id": 1,
+        "title": "Land Preparation",
+        "duration_days": 7,
+        "substeps": [
+          "Plough the land",
+          "Level the field",
+          "Add farmyard manure"
+        ]
+      },
+      {
+        "stage_id": 2,
+        "title": "Seed Preparation & Nursery",
+        "duration_days": 15,
+        "substeps": [
+          "Select certified seeds",
+          "Seed treatment with fungicide",
+          "Soak seeds",
+          "Prepare nursery bed",
+          "Sow seeds in nursery"
+        ]
+      },
+      {
+        "stage_id": 3,
+        "title": "Transplantation",
+        "duration_days": 5,
+        "substeps": [
+          "Uproot seedlings",
+          "Maintain spacing",
+          "Flood the field lightly"
+        ]
+      },
+      {
+        "stage_id": 4,
+        "title": "Fertilizer Application",
+        "duration_days": 30,
+        "substeps": [
+          "Apply Urea",
+          "Apply DAP",
+          "Apply Potash",
+          "Check nitrogen deficiency"
+        ]
+      },
+      {
+        "stage_id": 5,
+        "title": "Water Management",
+        "duration_days": 40,
+        "substeps": [
+          "Maintain water level",
+          "Drain excess water",
+          "Monitor rainfall"
+        ]
+      },
+      {
+        "stage_id": 6,
+        "title": "Pest & Disease Control",
+        "duration_days": 20,
+        "substeps": [
+          "Check leaf blast",
+          "Monitor stem borer",
+          "Spray pesticide if needed"
+        ]
+      },
+      {
+        "stage_id": 7,
+        "title": "Harvesting",
+        "duration_days": 5,
+        "substeps": [
+          "Check grain maturity",
+          "Cut crop",
+          "Dry harvested crop"
+        ]
+      },
+      {
+        "stage_id": 8,
+        "title": "Post Harvest & Selling",
+        "duration_days": 3,
+        "substeps": [
+          "Store safely",
+          "Check market price",
+          "Sell in mandi"
+        ]
+      }
+    ]
+  },
+  {
+    "crop_name": "Bajra(Pearl Millet/Cumbu)",
+    "total_duration_days": 85,
+    "stages": [
+      {
+        "stage_id": 1,
+        "title": "Land Preparation",
+        "duration_days": 5,
+        "substeps": [
+          "Plough land 2-3 times to achieve fine tilth",
+          "Remove weeds and stubble",
+          "Apply organic manure and mix well"
+        ]
+      },
+      {
+        "stage_id": 2,
+        "title": "Seed Treatment & Sowing",
+        "duration_days": 5,
+        "substeps": [
+          "Treat seeds with bio-fungicides (Trichoderma)",
+          "Sow seeds using seed drill or broadcasting",
+          "Maintain depth of 2-3 cm"
+        ]
+      },
+      {
+        "stage_id": 3,
+        "title": "Thinning & Gap Filling",
+        "duration_days": 10,
+        "substeps": [
+          "Remove weak seedlings at 15 days",
+          "Fill gaps to maintain optimal plant population",
+          "Maintain intra-row spacing of 10-15 cm"
+        ]
+      },
+      {
+        "stage_id": 4,
+        "title": "Weeding & Hoeing",
+        "duration_days": 20,
+        "substeps": [
+          "Perform first inter-cultivation at 20 days",
+          "Hand weed to keep field clean",
+          "Apply pre-emergence herbicides if required"
+        ]
+      },
+      {
+        "stage_id": 5,
+        "title": "Fertilizer Application",
+        "duration_days": 15,
+        "substeps": [
+          "Apply basal dose of Nitrogen and Phosphorus",
+          "Top dress with remaining Nitrogen at tillering stage",
+          "Monitor for micronutrient deficiency"
+        ]
+      },
+      {
+        "stage_id": 6,
+        "title": "Pest & Disease Control",
+        "duration_days": 15,
+        "substeps": [
+          "Monitor for shoot fly and stem borer",
+          "Check for downy mildew and ergot diseases",
+          "Uproot and destroy infected plants"
+        ]
+      },
+      {
+        "stage_id": 7,
+        "title": "Harvesting",
+        "duration_days": 10,
+        "substeps": [
+          "Check if earheads are dry and grains are hard",
+          "Cut the earheads first (or cut entire plant)",
+          "Sun dry the harvested earheads"
+        ]
+      },
+      {
+        "stage_id": 8,
+        "title": "Threshing & Storage",
+        "duration_days": 5,
+        "substeps": [
+          "Thresh using mechanical thresher or manually",
+          "Winnow to separate grains from chaff",
+          "Dry to 10-12% moisture and store safely"
+        ]
+      }
+    ]
+  },
+  {
+    "crop_name": "Barley(Jau)",
+    "total_duration_days": 120,
+    "stages": [
+      {
+        "stage_id": 1,
+        "title": "Land Preparation",
+        "duration_days": 10,
+        "substeps": [
+          "Deep plough followed by harrowing",
+          "Level field to ensure even moisture distribution",
+          "Pre-sowing irrigation (rauni) if soil is dry"
+        ]
+      },
+      {
+        "stage_id": 2,
+        "title": "Seed Treatment & Sowing",
+        "duration_days": 10,
+        "substeps": [
+          "Select smut-resistant varieties",
+          "Treat seeds with Vitavax or Bavistin",
+          "Sow using seed drill at 22.5 cm row spacing"
+        ]
+      },
+      {
+        "stage_id": 3,
+        "title": "Crown Root Initiation & Irrigation",
+        "duration_days": 25,
+        "substeps": [
+          "Apply first crucial irrigation at CRI stage (25-30 days)",
+          "Monitor soil moisture levels",
+          "Ensure no waterlogging occurs"
+        ]
+      },
+      {
+        "stage_id": 4,
+        "title": "Fertilizer Application & Weeding",
+        "duration_days": 30,
+        "substeps": [
+          "Apply half Nitrogen and full Phosphorus at sowing",
+          "Top dress remaining Nitrogen after first irrigation",
+          "Apply broadleaf herbicides if weed density is high"
+        ]
+      },
+      {
+        "stage_id": 5,
+        "title": "Tillering & Booting Stage",
+        "duration_days": 25,
+        "substeps": [
+          "Apply second irrigation during active tillering",
+          "Monitor for nutrient deficiencies",
+          "Apply third irrigation at booting/heading stage"
+        ]
+      },
+      {
+        "stage_id": 6,
+        "title": "Pest & Disease Control",
+        "duration_days": 10,
+        "substeps": [
+          "Monitor for aphids and rusts (yellow/brown)",
+          "Check for loose smut and covered smut",
+          "Spray appropriate fungicides/insecticides"
+        ]
+      },
+      {
+        "stage_id": 7,
+        "title": "Harvesting",
+        "duration_days": 7,
+        "substeps": [
+          "Harvest when moisture is around 18-20%",
+          "Cut crop close to the ground",
+          "Allow crop to dry in the field for a few days"
+        ]
+      },
+      {
+        "stage_id": 8,
+        "title": "Threshing, Grading & Storage",
+        "duration_days": 3,
+        "substeps": [
+          "Thresh the dried crop",
+          "Grade grains based on plumpness (crucial for malting)",
+          "Store at 10-12% moisture in fumigated bins"
+        ]
+      }
+    ]
+  },
+  {
+    "crop_name": "Foxtail Millet(Navane)",
+    "total_duration_days": 85,
+    "stages": [
+      {
+        "stage_id": 1,
+        "title": "Land Preparation",
+        "duration_days": 5,
+        "substeps": [
+          "Plough field once or twice during summer",
+          "Harrow to create a fine, firm seedbed",
+          "Incorporate well-rotted FYM"
+        ]
+      },
+      {
+        "stage_id": 2,
+        "title": "Seed Selection & Sowing",
+        "duration_days": 5,
+        "substeps": [
+          "Treat seed with Azospirillum",
+          "Sow in rows with 25-30 cm spacing",
+          "Ensure sowing depth does not exceed 2-3 cm"
+        ]
+      },
+      {
+        "stage_id": 3,
+        "title": "Thinning & Weeding",
+        "duration_days": 20,
+        "substeps": [
+          "Thin plants to maintain 8-10 cm intra-row spacing at 15 days",
+          "Perform first hand weeding at 20 days",
+          "Perform inter-cultivation to manage soil aeration"
+        ]
+      },
+      {
+        "stage_id": 4,
+        "title": "Fertilizer Application",
+        "duration_days": 15,
+        "substeps": [
+          "Apply basal dose of NPK",
+          "Top dress with remaining Nitrogen at 30 days",
+          "Use bio-fertilizers for better yield"
+        ]
+      },
+      {
+        "stage_id": 5,
+        "title": "Irrigation & Maintenance",
+        "duration_days": 20,
+        "substeps": [
+          "Rely primarily on rainfall (rainfed crop)",
+          "Provide life-saving irrigation during tillering if dry spell occurs",
+          "Ensure field is well-drained"
+        ]
+      },
+      {
+        "stage_id": 6,
+        "title": "Pest & Disease Management",
+        "duration_days": 10,
+        "substeps": [
+          "Monitor for shoot fly and rust diseases",
+          "Check for grain smut",
+          "Apply botanical pesticides (e.g., Neem oil) if needed"
+        ]
+      },
+      {
+        "stage_id": 7,
+        "title": "Harvesting",
+        "duration_days": 7,
+        "substeps": [
+          "Harvest when panicles turn yellowish-brown",
+          "Cut earheads or harvest whole plants",
+          "Dry harvested material in the sun"
+        ]
+      },
+      {
+        "stage_id": 8,
+        "title": "Post Harvest & Processing",
+        "duration_days": 3,
+        "substeps": [
+          "Thresh using stone rollers or mechanical threshers",
+          "Dehusk the grains (processing is crucial for millets)",
+          "Store dried grains in gunny bags"
+        ]
+      }
+    ]
+  },
+  {
+    "crop_name": "Jowar(Sorghum)",
+    "total_duration_days": 110,
+    "stages": [
+      {
+        "stage_id": 1,
+        "title": "Land Preparation",
+        "duration_days": 10,
+        "substeps": [
+          "Deep summer ploughing to expose pests",
+          "Harrowing to break clods and level the soil",
+          "Apply farmyard manure and incorporate it well"
+        ]
+      },
+      {
+        "stage_id": 2,
+        "title": "Seed Treatment & Sowing",
+        "duration_days": 5,
+        "substeps": [
+          "Treat seeds with Thiram or Captan",
+          "Sow seeds at a depth of 3-4 cm",
+          "Maintain row spacing of 45 cm"
+        ]
+      },
+      {
+        "stage_id": 3,
+        "title": "Thinning & Weeding",
+        "duration_days": 20,
+        "substeps": [
+          "Thin out weak seedlings 15 days after sowing",
+          "Maintain plant-to-plant spacing of 15 cm",
+          "Perform inter-cultivation to control weeds (especially Striga)"
+        ]
+      },
+      {
+        "stage_id": 4,
+        "title": "Fertilizer Application",
+        "duration_days": 15,
+        "substeps": [
+          "Apply basal dose of NPK at sowing",
+          "Top dress with Nitrogen at 30 days",
+          "Apply micronutrients if soil is deficient"
+        ]
+      },
+      {
+        "stage_id": 5,
+        "title": "Water Management & Vegetative Growth",
+        "duration_days": 30,
+        "substeps": [
+          "Provide critical irrigation at seedling and boot stages",
+          "Ensure proper drainage to prevent waterlogging",
+          "Monitor drought stress during flowering"
+        ]
+      },
+      {
+        "stage_id": 6,
+        "title": "Pest & Disease Control",
+        "duration_days": 15,
+        "substeps": [
+          "Monitor for shoot fly and stem borer",
+          "Check for grain smut and rust",
+          "Apply recommended insecticides/fungicides"
+        ]
+      },
+      {
+        "stage_id": 7,
+        "title": "Harvesting",
+        "duration_days": 10,
+        "substeps": [
+          "Harvest when grains become hard and have less than 20% moisture",
+          "Cut the earheads separately or harvest the whole stalk",
+          "Sun dry the harvested crop"
+        ]
+      },
+      {
+        "stage_id": 8,
+        "title": "Post Harvest & Storage",
+        "duration_days": 5,
+        "substeps": [
+          "Thresh the earheads to separate grains",
+          "Clean and dry grains to 10-12% moisture",
+          "Store in pest-proof bins or gunny bags"
+        ]
+      }
+    ]
+  },
+  {
+    "crop_name": "Kodo Millet(Varagu)",
+    "total_duration_days": 100,
+    "stages": [
+      {
+        "stage_id": 1,
+        "title": "Land Preparation",
+        "duration_days": 7,
+        "substeps": [
+          "Plough the field 2-3 times to get a fine tilth",
+          "Remove previous crop debris",
+          "Apply compost or well-rotted FYM"
+        ]
+      },
+      {
+        "stage_id": 2,
+        "title": "Seed Treatment",
+        "duration_days": 3,
+        "substeps": [
+          "Select healthy, disease-free seeds",
+          "Treat seeds with Agrosan or bio-fertilizers like Azospirillum",
+          "Dry treated seeds in shade"
+        ]
+      },
+      {
+        "stage_id": 3,
+        "title": "Sowing & Thinning",
+        "duration_days": 15,
+        "substeps": [
+          "Line sow or broadcast seeds uniformly",
+          "Maintain row spacing of 22-25 cm",
+          "Thin out excess seedlings 15 days after emergence"
+        ]
+      },
+      {
+        "stage_id": 4,
+        "title": "Weeding",
+        "duration_days": 20,
+        "substeps": [
+          "First hand weeding at 20-25 days after sowing",
+          "Second weeding at 40 days if weed pressure is high",
+          "Use a hoe for inter-cultivation"
+        ]
+      },
+      {
+        "stage_id": 5,
+        "title": "Fertilizer Application",
+        "duration_days": 10,
+        "substeps": [
+          "Apply basal dose of Nitrogen and Phosphorus",
+          "Avoid excessive Nitrogen to prevent lodging",
+          "Top dress with remaining Nitrogen at tillering"
+        ]
+      },
+      {
+        "stage_id": 6,
+        "title": "Growth & Irrigation",
+        "duration_days": 25,
+        "substeps": [
+          "Rely mainly on rainfall (highly drought-tolerant)",
+          "Provide life-saving irrigation during prolonged dry spells",
+          "Ensure no standing water in the field"
+        ]
+      },
+      {
+        "stage_id": 7,
+        "title": "Pest & Disease Control",
+        "duration_days": 10,
+        "substeps": [
+          "Monitor for shoot fly and head bug",
+          "Check for head smut disease",
+          "Remove and destroy infected plants"
+        ]
+      },
+      {
+        "stage_id": 8,
+        "title": "Harvesting",
+        "duration_days": 7,
+        "substeps": [
+          "Harvest when panicles turn light brown and grains are hard",
+          "Cut the crop close to the ground",
+          "Leave in the field for 2-3 days for sun drying"
+        ]
+      },
+      {
+        "stage_id": 9,
+        "title": "Post Harvest",
+        "duration_days": 3,
+        "substeps": [
+          "Thresh under a stone roller, tractor tread, or mechanical thresher",
+          "Dehusk the grains carefully",
+          "Store dried grains in a cool, dry place"
+        ]
+      }
+    ]
+  },
+  {
+    "crop_name": "Maize",
+    "total_duration_days": 110,
+    "stages": [
+      {
+        "stage_id": 1,
+        "title": "Land Preparation",
+        "duration_days": 7,
+        "substeps": [
+          "Deep plough the field to 20-25 cm depth",
+          "Prepare ridges and furrows or a flat seedbed",
+          "Apply FYM evenly across the field"
+        ]
+      },
+      {
+        "stage_id": 2,
+        "title": "Seed Treatment & Sowing",
+        "duration_days": 7,
+        "substeps": [
+          "Treat seeds with fungicides (e.g., Thiram)",
+          "Sow seeds on the sides of ridges (dibbling method)",
+          "Maintain plant spacing of 60x20 cm"
+        ]
+      },
+      {
+        "stage_id": 3,
+        "title": "Weeding & Earthing Up",
+        "duration_days": 21,
+        "substeps": [
+          "Apply pre-emergence herbicide like Atrazine",
+          "Perform hand weeding 20 days after sowing",
+          "Earth up the base of plants at 30 days to provide support"
+        ]
+      },
+      {
+        "stage_id": 4,
+        "title": "Fertilizer Application",
+        "duration_days": 15,
+        "substeps": [
+          "Apply basal NPK and Zinc Sulphate",
+          "Top dress with Urea at knee-high stage (V8 stage)",
+          "Apply final Nitrogen dose at tasseling"
+        ]
+      },
+      {
+        "stage_id": 5,
+        "title": "Irrigation & Tasseling/Silking",
+        "duration_days": 35,
+        "substeps": [
+          "Irrigate immediately after sowing",
+          "Ensure strict moisture availability during tasseling and silking",
+          "Avoid waterlogging during early growth"
+        ]
+      },
+      {
+        "stage_id": 6,
+        "title": "Pest & Disease Management",
+        "duration_days": 15,
+        "substeps": [
+          "Scout vigorously for Fall Armyworm and stem borer",
+          "Apply recommended pesticides (e.g., Spinetoram) if threshold is crossed",
+          "Monitor for leaf blight and stalk rot"
+        ]
+      },
+      {
+        "stage_id": 7,
+        "title": "Harvesting",
+        "duration_days": 7,
+        "substeps": [
+          "Check for black layer formation at the base of the kernel",
+          "Harvest cobs when husks turn dry and brown",
+          "Sun dry the harvested cobs for 3-4 days"
+        ]
+      },
+      {
+        "stage_id": 8,
+        "title": "Post Harvest & Storage",
+        "duration_days": 3,
+        "substeps": [
+          "Shell the grains from the cobs mechanically or manually",
+          "Dry grains to 12-14% moisture",
+          "Fumigate and store in silos or airtight bags"
+        ]
+      }
+    ]
+  },
+  {
+    "crop_name": "Ragi(Finger Millet)",
+    "total_duration_days": 120,
+    "stages": [
+      {
+        "stage_id": 1,
+        "title": "Land Preparation",
+        "duration_days": 10,
+        "substeps": [
+          "Plough the main field 2-3 times",
+          "Level the land to conserve moisture",
+          "Incorporate organic manure thoroughly"
+        ]
+      },
+      {
+        "stage_id": 2,
+        "title": "Nursery Preparation & Sowing",
+        "duration_days": 15,
+        "substeps": [
+          "Prepare raised nursery beds",
+          "Treat seeds with Trichoderma viride",
+          "Sow seeds thinly in lines and cover with soil/compost",
+          "Water the nursery regularly"
+        ]
+      },
+      {
+        "stage_id": 3,
+        "title": "Transplanting & Thinning",
+        "duration_days": 10,
+        "substeps": [
+          "Pull out 21-25 day old robust seedlings",
+          "Transplant in the main field with 25x15 cm spacing",
+          "If direct sown, thin out excess seedlings"
+        ]
+      },
+      {
+        "stage_id": 4,
+        "title": "Weeding",
+        "duration_days": 20,
+        "substeps": [
+          "First hand weeding 15-20 days after transplanting",
+          "Use a wheel hoe for inter-cultivation",
+          "Second weeding at 35-40 days"
+        ]
+      },
+      {
+        "stage_id": 5,
+        "title": "Fertilizer Application",
+        "duration_days": 15,
+        "substeps": [
+          "Apply basal NPK formulation",
+          "Top dress with Nitrogen 30 days after transplanting",
+          "Ensure even distribution of fertilizers"
+        ]
+      },
+      {
+        "stage_id": 6,
+        "title": "Irrigation & Growth",
+        "duration_days": 30,
+        "substeps": [
+          "Irrigate the field at the time of transplanting",
+          "Provide life-saving irrigation at tillering and flowering stages",
+          "Monitor rainfall to adjust irrigation schedules"
+        ]
+      },
+      {
+        "stage_id": 7,
+        "title": "Pest & Disease Control",
+        "duration_days": 10,
+        "substeps": [
+          "Monitor strictly for Blast disease (leaf, neck, and finger blast)",
+          "Spray Tricyclazole if blast symptoms appear",
+          "Check for stem borer and aphids"
+        ]
+      },
+      {
+        "stage_id": 8,
+        "title": "Harvesting",
+        "duration_days": 7,
+        "substeps": [
+          "Harvest when earheads turn brown and grains are hard",
+          "Cut the earheads with sickles",
+          "Leave earheads on the threshing floor to dry"
+        ]
+      },
+      {
+        "stage_id": 9,
+        "title": "Post Harvest",
+        "duration_days": 3,
+        "substeps": [
+          "Thresh by beating with sticks or using a thresher",
+          "Winnow to clean the grains",
+          "Dry well to 10-12% moisture for long-term storage"
+        ]
+      }
+    ]
+  },
+  {
+    "crop_name": "Thinai(Italian Millet)",
+    "total_duration_days": 90,
+    "stages": [
+      {
+        "stage_id": 1,
+        "title": "Land Preparation",
+        "duration_days": 7,
+        "substeps": [
+          "Perform shallow ploughing in summer",
+          "Harrow to create a fine, firm seedbed",
+          "Clear field of previous crop roots and weeds"
+        ]
+      },
+      {
+        "stage_id": 2,
+        "title": "Seed Preparation",
+        "duration_days": 3,
+        "substeps": [
+          "Treat seeds with bio-fungicides or Agrosan",
+          "Ensure seeds are well dried before sowing",
+          "Mix seeds with sand if broadcasting to ensure even spread"
+        ]
+      },
+      {
+        "stage_id": 3,
+        "title": "Sowing & Thinning",
+        "duration_days": 15,
+        "substeps": [
+          "Sow in rows 25-30 cm apart using a seed drill",
+          "Sow at a shallow depth of 2-3 cm",
+          "Thin out weak plants at 15 days to maintain spacing"
+        ]
+      },
+      {
+        "stage_id": 4,
+        "title": "Weeding",
+        "duration_days": 15,
+        "substeps": [
+          "Keep the field weed-free for the first 30 days",
+          "Perform first inter-cultivation 20 days after sowing",
+          "Hand weed as necessary"
+        ]
+      },
+      {
+        "stage_id": 5,
+        "title": "Fertilizer Application",
+        "duration_days": 10,
+        "substeps": [
+          "Apply basal NPK according to soil test recommendations",
+          "Top dress with Urea at the vegetative stage",
+          "Use compost to improve soil moisture retention"
+        ]
+      },
+      {
+        "stage_id": 6,
+        "title": "Growth & Irrigation",
+        "duration_days": 25,
+        "substeps": [
+          "Primarily cultivated as a rainfed crop",
+          "Irrigate only during prolonged dry spells at critical stages (tillering, grain filling)",
+          "Prevent water stagnation at all costs"
+        ]
+      },
+      {
+        "stage_id": 7,
+        "title": "Pest & Disease Control",
+        "duration_days": 10,
+        "substeps": [
+          "Monitor for armyworms and shoot fly",
+          "Check for rust and smut diseases",
+          "Apply appropriate organic or chemical controls"
+        ]
+      },
+      {
+        "stage_id": 8,
+        "title": "Harvesting",
+        "duration_days": 3,
+        "substeps": [
+          "Harvest when panicles turn yellowish-brown",
+          "Cut the entire plant or just the earheads",
+          "Dry the harvested crop in the sun for 2-3 days"
+        ]
+      },
+      {
+        "stage_id": 9,
+        "title": "Post Harvest",
+        "duration_days": 2,
+        "substeps": [
+          "Thresh using conventional methods or mechanical threshers",
+          "Dehusk processing is required before consumption",
+          "Store the grains securely away from moisture"
+        ]
+      }
+    ]
+  },
+  {
+    "crop_name": "Wheat",
+    "total_duration_days": 130,
+    "stages": [
+      {
+        "stage_id": 1,
+        "title": "Land Preparation",
+        "duration_days": 10,
+        "substeps": [
+          "Plough the field using a disc or mouldboard plough",
+          "Harrow and level the field to ensure uniform irrigation",
+          "Apply pre-sowing irrigation (rauni) for optimal moisture"
+        ]
+      },
+      {
+        "stage_id": 2,
+        "title": "Seed Treatment & Sowing",
+        "duration_days": 5,
+        "substeps": [
+          "Treat seeds with Carboxin or Tebuconazole to prevent loose smut",
+          "Sow seeds using a seed drill at a depth of 5 cm",
+          "Maintain row-to-row spacing of 20-22.5 cm"
+        ]
+      },
+      {
+        "stage_id": 3,
+        "title": "Crown Root Initiation (CRI) & Weeding",
+        "duration_days": 25,
+        "substeps": [
+          "Apply first crucial irrigation at 21 days (CRI stage)",
+          "Apply post-emergence broadleaf herbicides if needed",
+          "Perform hand weeding to reduce early competition"
+        ]
+      },
+      {
+        "stage_id": 4,
+        "title": "Tillering & Fertilizer Application",
+        "duration_days": 30,
+        "substeps": [
+          "Apply second irrigation at late tillering stage",
+          "Top dress with Urea to support vigorous vegetative growth",
+          "Monitor plant population and tillering density"
+        ]
+      },
+      {
+        "stage_id": 5,
+        "title": "Jointing & Booting",
+        "duration_days": 20,
+        "substeps": [
+          "Apply third irrigation at the late jointing/booting stage",
+          "Monitor for symptoms of yellow or brown rust",
+          "Apply protective fungicides if disease pressure is high"
+        ]
+      },
+      {
+        "stage_id": 6,
+        "title": "Flowering & Milking",
+        "duration_days": 20,
+        "substeps": [
+          "Provide mild irrigation to prevent moisture stress during flowering",
+          "Monitor for aphid infestations on the earheads",
+          "Ensure crop is protected from sudden high temperatures (terminal heat)"
+        ]
+      },
+      {
+        "stage_id": 7,
+        "title": "Dough Stage & Maturity",
+        "duration_days": 15,
+        "substeps": [
+          "Stop irrigation to allow grains to harden",
+          "Leaves turn yellow and plant starts drying",
+          "Check grain moisture content regularly"
+        ]
+      },
+      {
+        "stage_id": 8,
+        "title": "Harvesting & Post Harvest",
+        "duration_days": 5,
+        "substeps": [
+          "Harvest using combine harvesters or manually with sickles",
+          "Sun dry the grains to bring moisture down to 10-12%",
+          "Store in gunny bags or silos treated with safe fumigants"
+        ]
+      }
+    ]
+  },
+  {
+    "crop_name": "Arhar(Tur/Red Gram)(Whole)",
+    "total_duration_days": 160,
+    "stages": [
+      {
+        "stage_id": 1,
+        "title": "Land Preparation",
+        "duration_days": 10,
+        "substeps": [
+          "Deep summer ploughing to eradicate deep-rooted weeds",
+          "Apply well-decomposed farmyard manure or compost",
+          "Prepare ridges and furrows for proper drainage"
+        ]
+      },
+      {
+        "stage_id": 2,
+        "title": "Seed Treatment & Sowing",
+        "duration_days": 5,
+        "substeps": [
+          "Treat seeds with Rhizobium culture and Trichoderma viride",
+          "Dibble seeds on ridges with 60-90 cm row spacing",
+          "Maintain plant-to-plant spacing of 20-30 cm"
+        ]
+      },
+      {
+        "stage_id": 3,
+        "title": "Early Vegetative Growth & Weeding",
+        "duration_days": 30,
+        "substeps": [
+          "Keep field weed-free for the first 45 days",
+          "Perform first hand weeding 25-30 days after sowing",
+          "Apply pre-emergence herbicides like Pendimethalin"
+        ]
+      },
+      {
+        "stage_id": 4,
+        "title": "Fertilizer Application",
+        "duration_days": 10,
+        "substeps": [
+          "Apply basal dose of Phosphorus and Sulphur",
+          "Apply Zinc Sulphate if soil is deficient",
+          "Ensure root nodulation is progressing well"
+        ]
+      },
+      {
+        "stage_id": 5,
+        "title": "Branching & Irrigation",
+        "duration_days": 40,
+        "substeps": [
+          "Provide life-saving irrigation during long dry spells",
+          "Ensure field is not waterlogged (highly sensitive to stagnation)",
+          "Perform nipping of apical buds to encourage lateral branching"
+        ]
+      },
+      {
+        "stage_id": 6,
+        "title": "Flowering & Pod Formation",
+        "duration_days": 40,
+        "substeps": [
+          "Provide critical irrigation at flowering stage",
+          "Monitor strictly for Gram Pod Borer (Helicoverpa armigera)",
+          "Install pheromone traps and spray appropriate insecticides"
+        ]
+      },
+      {
+        "stage_id": 7,
+        "title": "Pod Development & Maturity",
+        "duration_days": 15,
+        "substeps": [
+          "Check for pod fly and blister beetle damage",
+          "Observe leaves dropping and pods turning brown/dry",
+          "Stop irrigation completely"
+        ]
+      },
+      {
+        "stage_id": 8,
+        "title": "Harvesting & Post Harvest",
+        "duration_days": 10,
+        "substeps": [
+          "Cut plants from the base with sickles when 80% pods are mature",
+          "Sun dry the harvested plants on the threshing floor for a week",
+          "Thresh manually or mechanically, clean, and store at 10% moisture"
+        ]
+      }
+    ]
+  },
+  {
+    "crop_name": "Alasande Gram",
+    "total_duration_days": 90,
+    "stages": [
+      {
+        "stage_id": 1,
+        "title": "Land Preparation",
+        "duration_days": 7,
+        "substeps": [
+          "Plough the land 1-2 times to achieve fine tilth",
+          "Level the field to avoid water stagnation",
+          "Apply basal dose of FYM"
+        ]
+      },
+      {
+        "stage_id": 2,
+        "title": "Seed Treatment & Sowing",
+        "duration_days": 3,
+        "substeps": [
+          "Treat seeds with Rhizobium culture",
+          "Sow in rows with 30-45 cm spacing",
+          "Sow at a depth of 3-4 cm"
+        ]
+      },
+      {
+        "stage_id": 3,
+        "title": "Weeding & Early Growth",
+        "duration_days": 20,
+        "substeps": [
+          "Perform first hand weeding 20 days after sowing",
+          "Use a hoe for inter-cultivation to aerate the soil",
+          "Maintain optimal plant population"
+        ]
+      },
+      {
+        "stage_id": 4,
+        "title": "Fertilizer Application",
+        "duration_days": 10,
+        "substeps": [
+          "Apply basal NPK specifically formulated for pulses",
+          "Use foliar spray of 2% DAP if crop shows poor growth",
+          "Ensure adequate Phosphorus for root nodulation"
+        ]
+      },
+      {
+        "stage_id": 5,
+        "title": "Irrigation & Branching",
+        "duration_days": 20,
+        "substeps": [
+          "Irrigate before flowering if soil moisture is low",
+          "Ensure excellent drainage, as crop is sensitive to waterlogging",
+          "Monitor for early pest attacks"
+        ]
+      },
+      {
+        "stage_id": 6,
+        "title": "Flowering & Pod Formation",
+        "duration_days": 15,
+        "substeps": [
+          "Monitor for aphids, leafhoppers, and pod borers",
+          "Spray Neem seed kernel extract (NSKE) or appropriate pesticides",
+          "Ensure adequate moisture for grain filling"
+        ]
+      },
+      {
+        "stage_id": 7,
+        "title": "Harvesting",
+        "duration_days": 10,
+        "substeps": [
+          "Pick mature, dry pods periodically (multiple pickings)",
+          "Alternatively, harvest the whole plant when most pods turn yellow-brown",
+          "Avoid delayed harvesting to prevent pod shattering"
+        ]
+      },
+      {
+        "stage_id": 8,
+        "title": "Post Harvest",
+        "duration_days": 5,
+        "substeps": [
+          "Sun dry the harvested pods for 3-4 days",
+          "Beat gently with sticks to extract the grains",
+          "Clean, dry to 9-10% moisture, and store with dry neem leaves"
+        ]
+      }
+    ]
+  },
+  {
+    "crop_name": "Avare Dal",
+    "total_duration_days": 115,
+    "stages": [
+      {
+        "stage_id": 1,
+        "title": "Land Preparation",
+        "duration_days": 10,
+        "substeps": [
+          "Plough the land thoroughly to a good depth",
+          "Harrow to break clods and create a flat seedbed",
+          "Prepare ridges if sowing in a high-rainfall area"
+        ]
+      },
+      {
+        "stage_id": 2,
+        "title": "Seed Treatment & Sowing",
+        "duration_days": 5,
+        "substeps": [
+          "Select healthy seeds and treat with appropriate bio-fungicides",
+          "Sow seeds by dibbling method at 45x15 cm spacing",
+          "Ensure adequate soil moisture during sowing for germination"
+        ]
+      },
+      {
+        "stage_id": 3,
+        "title": "Vegetative Growth & Weeding",
+        "duration_days": 30,
+        "substeps": [
+          "Keep the field weed-free during the initial 30 days",
+          "Perform hand weeding or shallow inter-cultivation",
+          "Perform earthing up to provide support to the stem"
+        ]
+      },
+      {
+        "stage_id": 4,
+        "title": "Fertilizer Application",
+        "duration_days": 10,
+        "substeps": [
+          "Apply mainly Phosphorus and Potassium as basal dose",
+          "Apply minimal starter Nitrogen to boost initial growth",
+          "Utilize organic compost to improve soil texture"
+        ]
+      },
+      {
+        "stage_id": 5,
+        "title": "Flowering & Irrigation",
+        "duration_days": 25,
+        "substeps": [
+          "Provide irrigation at pre-flowering and flowering stages",
+          "Monitor for flower drop caused by environmental stress",
+          "Apply planar growth regulators if flower shedding is excessive"
+        ]
+      },
+      {
+        "stage_id": 6,
+        "title": "Pest Management",
+        "duration_days": 15,
+        "substeps": [
+          "Monitor closely for pod borers (Maruca vitrata) and stink bugs",
+          "Apply botanical pesticides or recommended chemical sprays",
+          "Remove severely infected plant parts manually"
+        ]
+      },
+      {
+        "stage_id": 7,
+        "title": "Pod Maturity & Harvesting",
+        "duration_days": 15,
+        "substeps": [
+          "Harvest pods when they turn dry and papery",
+          "Conduct multiple pickings as pods mature unevenly",
+          "Collect pods in baskets and transport to drying area"
+        ]
+      },
+      {
+        "stage_id": 8,
+        "title": "Post Harvest",
+        "duration_days": 5,
+        "substeps": [
+          "Dry the pods thoroughly under the sun",
+          "Extract seeds by threshing or beating with sticks",
+          "Grade the seeds and store in moisture-proof containers"
+        ]
+      }
+    ]
+  },
+  {
+    "crop_name": "Bengal Gram(Gram)(Whole)",
+    "total_duration_days": 120,
+    "stages": [
+      {
+        "stage_id": 1,
+        "title": "Land Preparation",
+        "duration_days": 10,
+        "substeps": [
+          "Conserve soil moisture from the preceding monsoon season",
+          "Perform rough seedbed preparation (avoids fine tilth to improve aeration)",
+          "Clear stubbles from the previous kharif crop"
+        ]
+      },
+      {
+        "stage_id": 2,
+        "title": "Seed Treatment & Sowing",
+        "duration_days": 5,
+        "substeps": [
+          "Treat seeds with Trichoderma to prevent wilt disease",
+          "Treat with Rhizobium culture specifically for chickpeas",
+          "Sow deep (8-10 cm) to ensure seeds reach the moisture zone"
+        ]
+      },
+      {
+        "stage_id": 3,
+        "title": "Early Growth & Nipping",
+        "duration_days": 25,
+        "substeps": [
+          "Monitor for early signs of collar rot or wilt",
+          "Perform nipping (plucking of apical buds) at 30-35 days",
+          "Nipping promotes extensive lateral branching and more flowers"
+        ]
+      },
+      {
+        "stage_id": 4,
+        "title": "Weeding",
+        "duration_days": 15,
+        "substeps": [
+          "First hand weeding at 25-30 days post-sowing",
+          "Apply pre-emergence herbicide like Pendimethalin if hand weeding is difficult",
+          "Maintain proper aeration around the root zone"
+        ]
+      },
+      {
+        "stage_id": 5,
+        "title": "Fertilizer Application",
+        "duration_days": 10,
+        "substeps": [
+          "Apply basal dose of Phosphorus and Sulphur via drill",
+          "Bengal gram is highly responsive to Phosphorus",
+          "Ensure fertilizer is placed below the seed layer"
+        ]
+      },
+      {
+        "stage_id": 6,
+        "title": "Flowering & Irrigation",
+        "duration_days": 25,
+        "substeps": [
+          "Apply irrigation at the pre-flowering stage if soil moisture is severely depleted",
+          "Strictly avoid irrigation during full bloom to prevent flower drop",
+          "Apply second irrigation during the pod development stage if needed"
+        ]
+      },
+      {
+        "stage_id": 7,
+        "title": "Pod Formation & Pest Control",
+        "duration_days": 20,
+        "substeps": [
+          "Monitor rigorously for Gram Pod Borer (Helicoverpa armigera)",
+          "Set up bird perches and pheromone traps in the field",
+          "Apply HaNPV (virus spray) or chemical insecticides at economic threshold levels"
+        ]
+      },
+      {
+        "stage_id": 8,
+        "title": "Harvesting & Post Harvest",
+        "duration_days": 10,
+        "substeps": [
+          "Harvest when leaves turn reddish-brown to yellow and start shedding",
+          "Cut the plants close to the ground using sickles",
+          "Sun dry on the threshing floor, thresh mechanically, and store at <10% moisture"
+        ]
+      }
+    ]
+  },
+  {
+    "crop_name": "Black Gram(Urd Beans)(Whole)",
+    "total_duration_days": 85,
+    "stages": [
+      {
+        "stage_id": 1,
+        "title": "Land Preparation",
+        "duration_days": 7,
+        "substeps": [
+          "Plough the field to achieve a fine tilth",
+          "Ensure proper leveling for uniform irrigation",
+          "Apply well-decomposed farmyard manure"
+        ]
+      },
+      {
+        "stage_id": 2,
+        "title": "Seed Treatment & Sowing",
+        "duration_days": 3,
+        "substeps": [
+          "Treat seeds with Rhizobium culture",
+          "Treat with Imidacloprid to protect against early sucking pests",
+          "Line sow at a depth of 3-4 cm with 30x10 cm spacing"
+        ]
+      },
+      {
+        "stage_id": 3,
+        "title": "Weeding",
+        "duration_days": 20,
+        "substeps": [
+          "Apply pre-emergence herbicide (e.g., Pendimethalin)",
+          "Perform hand weeding 20-25 days after sowing",
+          "Keep the field weed-free during the critical early growth stage"
+        ]
+      },
+      {
+        "stage_id": 4,
+        "title": "Fertilizer Application",
+        "duration_days": 5,
+        "substeps": [
+          "Apply basal dose of Nitrogen and Phosphorus",
+          "Apply Sulphur if the soil is deficient",
+          "Foliar spray of 2% DAP at pre-flowering stage if growth is poor"
+        ]
+      },
+      {
+        "stage_id": 5,
+        "title": "Irrigation & Growth",
+        "duration_days": 25,
+        "substeps": [
+          "Provide life-saving irrigation during prolonged dry spells",
+          "Irrigate at critical stages: pre-flowering and pod formation",
+          "Ensure excellent drainage to prevent waterlogging"
+        ]
+      },
+      {
+        "stage_id": 6,
+        "title": "Pest & Disease Control",
+        "duration_days": 15,
+        "substeps": [
+          "Monitor strictly for Whiteflies (vector for Yellow Mosaic Virus)",
+          "Uproot and destroy YMV infected plants immediately",
+          "Spray appropriate insecticides for pod borers"
+        ]
+      },
+      {
+        "stage_id": 7,
+        "title": "Harvesting",
+        "duration_days": 7,
+        "substeps": [
+          "Harvest when 80% of the pods turn black and dry",
+          "Cut the whole plant with sickles",
+          "Avoid delayed harvesting to prevent pod shattering"
+        ]
+      },
+      {
+        "stage_id": 8,
+        "title": "Post Harvest & Storage",
+        "duration_days": 3,
+        "substeps": [
+          "Sun dry the harvested crop for 3-4 days",
+          "Thresh manually or using a mechanical thresher",
+          "Dry grains to 9-10% moisture and store safely"
+        ]
+      }
+    ]
+  },
+  {
+    "crop_name": "Cowpea(Lobia/Karamani)",
+    "total_duration_days": 85,
+    "stages": [
+      {
+        "stage_id": 1,
+        "title": "Land Preparation",
+        "duration_days": 7,
+        "substeps": [
+          "Plough the land 1-2 times to loosen the soil",
+          "Prepare ridges and furrows for better drainage",
+          "Incorporate organic compost into the soil"
+        ]
+      },
+      {
+        "stage_id": 2,
+        "title": "Seed Treatment & Sowing",
+        "duration_days": 3,
+        "substeps": [
+          "Treat seeds with Trichoderma viride",
+          "Sow seeds at a spacing of 45x15 cm",
+          "Ensure adequate soil moisture at the time of sowing"
+        ]
+      },
+      {
+        "stage_id": 3,
+        "title": "Weeding & Hoeing",
+        "duration_days": 20,
+        "substeps": [
+          "First hand weeding at 20 days after sowing",
+          "Hoe the field to aerate the root zone",
+          "Maintain a weed-free environment up to 35 days"
+        ]
+      },
+      {
+        "stage_id": 4,
+        "title": "Fertilizer Application",
+        "duration_days": 5,
+        "substeps": [
+          "Apply basal dose of NPK",
+          "Ensure adequate Phosphorus for proper root nodulation",
+          "Apply micronutrients if symptoms of deficiency appear"
+        ]
+      },
+      {
+        "stage_id": 5,
+        "title": "Irrigation & Branching",
+        "duration_days": 25,
+        "substeps": [
+          "Irrigate only if the soil is excessively dry (highly drought-tolerant)",
+          "Provide irrigation during the flowering and pod development stages",
+          "Prevent water stagnation"
+        ]
+      },
+      {
+        "stage_id": 6,
+        "title": "Pest & Disease Management",
+        "duration_days": 15,
+        "substeps": [
+          "Monitor for aphids and leafhoppers",
+          "Check for symptoms of Cowpea Mosaic Virus",
+          "Apply Neem-based bio-pesticides or recommended chemicals"
+        ]
+      },
+      {
+        "stage_id": 7,
+        "title": "Harvesting",
+        "duration_days": 7,
+        "substeps": [
+          "For vegetable purpose, pick tender green pods regularly",
+          "For grains, harvest when pods turn yellow/brown and dry",
+          "Conduct multiple pickings if maturity is uneven"
+        ]
+      },
+      {
+        "stage_id": 8,
+        "title": "Post Harvest & Storage",
+        "duration_days": 3,
+        "substeps": [
+          "Dry the mature pods in the sun",
+          "Thresh by beating with pliable bamboo sticks",
+          "Clean and store seeds with neem leaves to prevent pulse beetles"
+        ]
+      }
+    ]
+  },
+  {
+    "crop_name": "Field Pea",
+    "total_duration_days": 120,
+    "stages": [
+      {
+        "stage_id": 1,
+        "title": "Land Preparation",
+        "duration_days": 10,
+        "substeps": [
+          "Deep ploughing followed by 1-2 harrowings",
+          "Level the field to ensure no water logging",
+          "Ensure fine seedbed preparation for uniform germination"
+        ]
+      },
+      {
+        "stage_id": 2,
+        "title": "Seed Treatment & Sowing",
+        "duration_days": 5,
+        "substeps": [
+          "Treat seeds with Rhizobium leguminosarum",
+          "Treat with fungicides (e.g., Thiram) to prevent soil-borne diseases",
+          "Sow using a seed drill with 30 cm row spacing"
+        ]
+      },
+      {
+        "stage_id": 3,
+        "title": "Weeding & Early Growth",
+        "duration_days": 25,
+        "substeps": [
+          "Apply pre-emergence herbicides to control early weeds",
+          "Perform one hand weeding at 30 days if required",
+          "Avoid disturbing the soil once flowering begins"
+        ]
+      },
+      {
+        "stage_id": 4,
+        "title": "Fertilizer Application",
+        "duration_days": 10,
+        "substeps": [
+          "Apply starter dose of Nitrogen",
+          "Apply full dose of Phosphorus and Potash at sowing time",
+          "Place fertilizers in bands 5 cm away from seeds"
+        ]
+      },
+      {
+        "stage_id": 5,
+        "title": "Irrigation Management",
+        "duration_days": 30,
+        "substeps": [
+          "Apply first irrigation at the pre-flowering stage (45 days)",
+          "Apply second irrigation at the pod-filling stage",
+          "Ensure light irrigation as peas are highly sensitive to excess water"
+        ]
+      },
+      {
+        "stage_id": 6,
+        "title": "Pest & Disease Control",
+        "duration_days": 20,
+        "substeps": [
+          "Monitor for powdery mildew, especially late in the season",
+          "Apply wettable sulphur if powdery mildew appears",
+          "Check for pea stem fly and aphids; spray Dimethoate if needed"
+        ]
+      },
+      {
+        "stage_id": 7,
+        "title": "Harvesting",
+        "duration_days": 15,
+        "substeps": [
+          "Harvest when plants turn yellow and pods are completely dry",
+          "Harvest early in the morning to prevent pod shattering",
+          "Cut the plants close to the ground"
+        ]
+      },
+      {
+        "stage_id": 8,
+        "title": "Post Harvest & Storage",
+        "duration_days": 5,
+        "substeps": [
+          "Dry the harvested crop in the field for a few days",
+          "Thresh using a mechanical thresher or under tractor wheels",
+          "Clean the grains, dry to 10% moisture, and store in cool conditions"
+        ]
+      }
+    ]
+  },
+  {
+    "crop_name": "Green Gram(Moong)(Whole)",
+    "total_duration_days": 75,
+    "stages": [
+      {
+        "stage_id": 1,
+        "title": "Land Preparation",
+        "duration_days": 5,
+        "substeps": [
+          "Plough the land quickly after the previous crop harvest",
+          "Prepare a fine tilth by harrowing",
+          "Level the field to retain optimal moisture"
+        ]
+      },
+      {
+        "stage_id": 2,
+        "title": "Seed Treatment & Sowing",
+        "duration_days": 3,
+        "substeps": [
+          "Treat seeds with appropriate Rhizobium culture",
+          "Sow in lines using seed drill at 30x10 cm spacing",
+          "Maintain a sowing depth of 3-4 cm"
+        ]
+      },
+      {
+        "stage_id": 3,
+        "title": "Weeding",
+        "duration_days": 17,
+        "substeps": [
+          "Apply pre-emergence herbicide like Pendimethalin",
+          "Hand weed at 20 days after sowing",
+          "Keep crop weed-free for the first 30 days"
+        ]
+      },
+      {
+        "stage_id": 4,
+        "title": "Fertilizer Application",
+        "duration_days": 5,
+        "substeps": [
+          "Apply basal NPK as recommended by soil test",
+          "Foliar spray of 2% Urea at flowering if plants look pale",
+          "Ensure Sulphur is applied if cultivating in deficient soils"
+        ]
+      },
+      {
+        "stage_id": 5,
+        "title": "Irrigation & Vegetative Growth",
+        "duration_days": 25,
+        "substeps": [
+          "Provide life-saving irrigation at branching stage if dry",
+          "Ensure adequate moisture during flowering and pod development",
+          "Strictly prevent water stagnation"
+        ]
+      },
+      {
+        "stage_id": 6,
+        "title": "Pest & Disease Control",
+        "duration_days": 10,
+        "substeps": [
+          "Monitor rigorously for Whiteflies and Yellow Mosaic Virus (YMV)",
+          "Check for thrips and pod borers during flowering",
+          "Apply recommended systemic insecticides if threshold is crossed"
+        ]
+      },
+      {
+        "stage_id": 7,
+        "title": "Harvesting",
+        "duration_days": 7,
+        "substeps": [
+          "Harvest when 85% of pods mature and turn black/brown",
+          "Pick pods manually in 2-3 intervals (if asynchronous maturity)",
+          "Or harvest whole plants if synchronized maturing variety is used"
+        ]
+      },
+      {
+        "stage_id": 8,
+        "title": "Post Harvest & Storage",
+        "duration_days": 3,
+        "substeps": [
+          "Sun dry the harvested pods/plants for 2-3 days",
+          "Thresh carefully to avoid splitting the delicate grains",
+          "Dry grains to 8-9% moisture and store in airtight containers"
+        ]
+      }
+    ]
+  },
+  {
+    "crop_name": "Green Peas",
+    "total_duration_days": 100,
+    "stages": [
+      {
+        "stage_id": 1,
+        "title": "Land Preparation",
+        "duration_days": 10,
+        "substeps": [
+          "Deep ploughing followed by harrowing",
+          "Create raised beds or ridges to avoid waterlogging",
+          "Incorporate well-rotted FYM uniformly"
+        ]
+      },
+      {
+        "stage_id": 2,
+        "title": "Seed Sowing & Support",
+        "duration_days": 10,
+        "substeps": [
+          "Select sweet, wrinkle-seeded varieties for green peas",
+          "Treat seeds with Captan or Thiram",
+          "Sow in rows; provide staking or trellis support for tall varieties"
+        ]
+      },
+      {
+        "stage_id": 3,
+        "title": "Weeding & Hoeing",
+        "duration_days": 20,
+        "substeps": [
+          "Perform shallow hoeing to control weeds and aerate soil",
+          "First weeding at 20-25 days after sowing",
+          "Avoid deep hoeing to protect the shallow root system"
+        ]
+      },
+      {
+        "stage_id": 4,
+        "title": "Fertilizer Application",
+        "duration_days": 10,
+        "substeps": [
+          "Apply basal dose of NPK (high Phosphorus requirement)",
+          "Apply Molybdenum or Boron if deficiency symptoms (e.g., hollow stem) appear",
+          "Top dress with Nitrogen just before flowering if needed"
+        ]
+      },
+      {
+        "stage_id": 5,
+        "title": "Irrigation Management",
+        "duration_days": 25,
+        "substeps": [
+          "Maintain steady soil moisture throughout the growth period",
+          "Irrigate immediately after sowing and again at pre-flowering",
+          "Ensure adequate moisture during pod swelling"
+        ]
+      },
+      {
+        "stage_id": 6,
+        "title": "Pest & Disease Control",
+        "duration_days": 15,
+        "substeps": [
+          "Monitor for pea leaf miner and aphids",
+          "Check for powdery mildew and rust",
+          "Apply fungicides like Dinocap for powdery mildew control"
+        ]
+      },
+      {
+        "stage_id": 7,
+        "title": "Harvesting",
+        "duration_days": 7,
+        "substeps": [
+          "Harvest green pods when they are well-filled and tender",
+          "Conduct multiple pickings (usually 3-4) at 7-10 day intervals",
+          "Harvest carefully to avoid damaging the vines"
+        ]
+      },
+      {
+        "stage_id": 8,
+        "title": "Post Harvest & Marketing",
+        "duration_days": 3,
+        "substeps": [
+          "Sort and grade the green pods",
+          "Pack in well-ventilated crates or gunny bags",
+          "Transport quickly to the market or processing unit to maintain sweetness"
+        ]
+      }
+    ]
+  }
+]
