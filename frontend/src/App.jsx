@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { ColorModeProvider, useColorMode } from './context/ThemeContext';
 import { getTheme } from './theme';
@@ -21,7 +21,7 @@ import AddCropPage from './pages/AddCropPage';
 import './index.css';
 
 const MainLayout = ({ children }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+  <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', width: '100%' }}>
     <Navbar />
     <main style={{ flex: 1 }}>{children}</main>
     <Footer />
@@ -37,18 +37,28 @@ function ThemedApp() {
       <CssBaseline />
       <Router>
         <Routes>
+          {/* Public Routes */}
           <Route path="/" element={<MainLayout><HomePage /></MainLayout>} />
           <Route path="/features" element={<MainLayout><FeaturesPage /></MainLayout>} />
           <Route path="/how-it-works" element={<MainLayout><HowItWorksPage /></MainLayout>} />
           <Route path="/contact" element={<MainLayout><ContactPage /></MainLayout>} />
           <Route path="/about" element={<MainLayout><AboutPage /></MainLayout>} />
+          
+          {/* Auth Routes */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          
+          {/* Private/Action Routes */}
           <Route path="/dashboard" element={<MainLayout><DashboardPage /></MainLayout>} />
           <Route path="/dashboard/calendar" element={<MainLayout><FarmCalendar /></MainLayout>} />
           <Route path="/dashboard/weather" element={<MainLayout><WeatherCenter /></MainLayout>} />
           <Route path="/dashboard/analytics" element={<MainLayout><FarmAnalytics /></MainLayout>} />
+          <Route path="/recommendation" element={<MainLayout><RecommendationPage /></MainLayout>} />
           <Route path="/add-crop" element={<MainLayout><AddCropPage /></MainLayout>} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+
+          
+          {/* Catch all */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
     </ThemeProvider>
@@ -57,24 +67,11 @@ function ThemedApp() {
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<MainLayout><HomePage /></MainLayout>} />
-        <Route path="/features" element={<MainLayout><FeaturesPage /></MainLayout>} />
-        <Route path="/how-it-works" element={<MainLayout><HowItWorksPage /></MainLayout>} />
-        <Route path="/contact" element={<MainLayout><ContactPage /></MainLayout>} />
-        <Route path="/about" element={<MainLayout><AboutPage /></MainLayout>} />
-        <Route path="/dashboard" element={<MainLayout><DashboardPage /></MainLayout>} />
-        <Route path="/dashboard/calendar" element={<MainLayout><FarmCalendar /></MainLayout>} />
-        <Route path="/dashboard/weather" element={<MainLayout><WeatherCenter /></MainLayout>} />
-        <Route path="/dashboard/analytics" element={<MainLayout><FarmAnalytics /></MainLayout>} />
-        <Route path="/add-crop" element={<MainLayout><AddCropPage /></MainLayout>} />
-        <Route path="/recommendation" element={<MainLayout><RecommendationPage /></MainLayout>} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-      </Routes>
-    </Router>
+    <ColorModeProvider>
+      <ThemedApp />
+    </ColorModeProvider>
   );
 }
 
 export default App;
+

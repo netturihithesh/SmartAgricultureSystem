@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Typography, Grid, Paper } from '@mui/material';
-import { AttachMoney, Grass, AccountBalance, TrendingUp } from '@mui/icons-material';
+import { AttachMoney, Grass, AccountBalance, TrendingUp, Timeline } from '@mui/icons-material';
+
 
 const FarmAnalytics = () => {
   return (

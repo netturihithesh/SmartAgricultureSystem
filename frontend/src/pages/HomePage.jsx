@@ -3,11 +3,9 @@ import { Box, CircularProgress } from '@mui/material';
 import { supabase } from '../supabase';
 import ActionHome from './ActionHome';
 import HeroSection from '../components/HeroSection';
-import ProblemSection from '../components/ProblemSection';
 import FeaturesSection from '../components/FeaturesSection';
-import StatsSection from '../components/StatsSection';
-import AboutSection from '../components/AboutSection';
-import CTASection from '../components/CTASection';
+import HowItWorks from '../components/HowItWorks';
+
 
 const HomePage = () => {
   const [session, setSession] = useState(null);
@@ -42,13 +40,11 @@ const HomePage = () => {
   return (
     <Box sx={{ mt: '70px', overflowX: 'hidden' }}>
       <HeroSection />
-      <ProblemSection />
       <FeaturesSection />
-      <StatsSection />
-      <AboutSection />
-      <CTASection />
+      <HowItWorks />
     </Box>
   );
 };
 
 export default HomePage;
+

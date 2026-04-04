@@ -1,57 +1,98 @@
 import React from 'react';
-import { Box, Typography, Container, useTheme } from '@mui/material';
+import { Box, Typography, Container, Stack, Card } from '@mui/material';
+import { 
+  Login, 
+  PlaylistAddCheck, 
+  Insights 
+} from '@mui/icons-material';
 
 const HowItWorks = () => {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
-  const bg = isDark ? '#1e2a24' : '#F9FCF9';
-  const textPrimary = theme.palette.text.primary;
-  const textSecondary = theme.palette.text.secondary;
-  const nodeCircleBg = isDark ? '#2a3830' : '#fff';
-
   const steps = [
-    { title: 'Enter Farm Details', desc: 'Input your soil type, land size, and season details into our system.' },
-    { title: 'AI Model Processes', desc: 'System analyzes huge multi-variable datasets and climate patterns.' },
-    { title: 'Recommendations', desc: 'Smart crop, irrigation, and precise fertilizer suggestions are generated.' },
-    { title: 'View Analytics', desc: 'Monitor beautiful graphs, robust insights, and clear profit trends.' }
+    { 
+      title: 'Step 1: Login', 
+      desc: 'Create an account or login to access your personalized farming dashboard.',
+      icon: <Login sx={{ fontSize: 40 }} />,
+      color: '#16a34a'
+    },
+    { 
+      title: 'Step 2: Select / Add Crop', 
+      desc: 'Use AI to predict the best crop or manually add your current cultivation.',
+      icon: <PlaylistAddCheck sx={{ fontSize: 40 }} />,
+      color: '#3b82f6'
+    },
+    { 
+      title: 'Step 3: Track & Grow', 
+      desc: 'Follow the crop process, track growth stages, and maximize your profit.',
+      icon: <Insights sx={{ fontSize: 40 }} />,
+      color: '#f59e0b'
+    }
   ];
 
   return (
-    <Box sx={{ py: { xs: '48px', md: '72px' }, backgroundColor: bg }}>
+    <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#f8fafc' }}>
       <Container maxWidth="lg">
-        <Typography variant="h2" sx={{ textAlign: 'center', color: '#1B5E20', mb: { xs: '32px', md: '48px' }, fontSize: '32px', fontWeight: 800 }}>
-          How It Works
+        <Typography 
+          variant="h2" 
+          sx={{ 
+            textAlign: 'center', 
+            fontWeight: 900, 
+            color: '#1e293b', 
+            mb: 8,
+            fontSize: { xs: '32px', md: '48px' } 
+          }}
+        >
+          Your Journey to <Box component="span" sx={{ color: '#16a34a' }}>Smart Farming</Box>
         </Typography>
-        <Box sx={{ position: 'relative', maxWidth: '800px', mx: 'auto' }}>
-          <Box sx={{ position: 'absolute', top: '20px', bottom: '20px', left: { xs: '30px', md: '50%' }, width: '4px', transform: { md: 'translateX(-50%)' }, background: 'linear-gradient(180deg, #66BB6A, #2E7D32)', borderRadius: '4px', zIndex: 1 }} />
+
+        <Box sx={{ 
+          display: 'grid', 
+          gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, 
+          gap: 6,
+          position: 'relative'
+        }}>
+          {/* Connector Line (Desktop) */}
+          <Box sx={{ 
+            display: { xs: 'none', md: 'block' },
+            position: 'absolute',
+            top: '40px',
+            left: '15%',
+            right: '15%',
+            height: '2px',
+            bgcolor: '#e2e8f0',
+            zIndex: 0,
+            backgroundImage: 'linear-gradient(to right, transparent, #cbd5e1 50%, transparent)',
+          }} />
 
           {steps.map((step, i) => (
-            <Box key={i} sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', mb: i === steps.length - 1 ? 0 : { xs: '24px', md: '32px' }, position: 'relative', zIndex: 2, minHeight: '80px' }}>
-              {/* Desktop Left */}
-              <Box sx={{ flex: 1, display: { xs: 'none', md: 'block' }, textAlign: 'right', pr: '48px', visibility: i % 2 === 0 ? 'visible' : 'hidden' }}>
-                <Typography sx={{ fontSize: '20px', color: '#1B5E20', mb: '8px', fontWeight: 800 }}>{step.title}</Typography>
-                <Typography sx={{ fontSize: '15px', color: textSecondary, lineHeight: 1.6 }}>{step.desc}</Typography>
-              </Box>
-
-              {/* Center Node */}
-              <Box sx={{
-                width: '64px', height: '64px', borderRadius: '50%', flexShrink: 0,
-                backgroundColor: nodeCircleBg, border: '3px solid #2E7D32',
-                color: '#2E7D32', display: 'flex', justifyContent: 'center', alignItems: 'center',
-                fontWeight: 800, fontSize: '24px',
-                boxShadow: isDark ? '0 8px 16px rgba(0,0,0,0.4)' : '0 8px 16px rgba(46, 125, 50, 0.15)',
-                position: 'relative', zIndex: 2,
-                '&::before': { content: '""', position: 'absolute', top: -8, left: -8, right: -8, bottom: -8, borderRadius: '50%', background: 'rgba(46, 125, 50, 0.1)', zIndex: -1, transition: 'all 0.25s ease' },
-                '&:hover::before': { transform: 'scale(1.2)', background: 'rgba(46, 125, 50, 0.2)' }
+            <Box key={i} sx={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+              <Box sx={{ 
+                width: 80, 
+                height: 80, 
+                borderRadius: '50%', 
+                bgcolor: '#fff', 
+                color: step.color, 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                mx: 'auto',
+                mb: 4,
+                boxShadow: '0 10px 25px rgba(0,0,0,0.05)',
+                border: '2px solid #f1f5f9'
               }}>
-                {i + 1}
+                {step.icon}
               </Box>
-
-              {/* Right Side */}
-              <Box sx={{ flex: 1, textAlign: 'left', pl: { xs: '24px', md: '48px' }, visibility: { xs: 'visible', md: i % 2 === 1 ? 'visible' : 'hidden' } }}>
-                <Typography sx={{ fontSize: '20px', color: '#1B5E20', mb: '8px', fontWeight: 800 }}>{step.title}</Typography>
-                <Typography sx={{ fontSize: '15px', color: textSecondary, lineHeight: 1.6 }}>{step.desc}</Typography>
-              </Box>
+              <Typography 
+                variant="h5" 
+                sx={{ color: '#1e293b', fontWeight: 800, mb: 2 }}
+              >
+                {step.title}
+              </Typography>
+              <Typography 
+                variant="body1" 
+                sx={{ color: '#64748b', fontWeight: 500, lineHeight: 1.6, px: 2 }}
+              >
+                {step.desc}
+              </Typography>
             </Box>
           ))}
         </Box>
@@ -61,3 +102,4 @@ const HowItWorks = () => {
 };
 
 export default HowItWorks;
+

@@ -1,53 +1,108 @@
 import React from 'react';
-import { Box, Typography, Container, Grid, Card, useTheme } from '@mui/material';
-import { Grass as GrassIcon, ShowChart as ShowChartIcon, CloudQueue as CloudQueueIcon, Biotech as BiotechIcon } from '@mui/icons-material';
+import { Box, Typography, Container, Card, Stack } from '@mui/material';
+import { 
+  AutoGraph, 
+  Timeline, 
+  Thunderstorm, 
+  AccountBalanceWallet 
+} from '@mui/icons-material';
 
 const FeaturesSection = () => {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
-  const bg = theme.palette.background.paper;
-  const textPrimary = theme.palette.text.primary;
-  const textSecondary = theme.palette.text.secondary;
-  const border = isDark ? '#333' : '#E0E0E0';
-  const iconBg = isDark ? '#334d3d' : '#E8F5E9';
-
   const features = [
-    { title: 'Crop Recommendation Engine', desc: 'Suggests best crop using soil & climate datasets to maximize your yield.', icon: <GrassIcon sx={{ fontSize: 24 }} /> },
-    { title: 'Yield & Profit Prediction', desc: 'AI estimates expected production and revenue accurately.', icon: <ShowChartIcon sx={{ fontSize: 24 }} /> },
-    { title: 'Climate Data Analysis', desc: 'Predictive modeling uses historical rainfall & temperature patterns.', icon: <CloudQueueIcon sx={{ fontSize: 24 }} /> },
-    { title: 'Fertilizer Optimization Model', desc: 'Smart AI logic recommends a nutrient plan based directly on soil data.', icon: <BiotechIcon sx={{ fontSize: 24 }} /> },
+    { 
+      title: 'Crop Prediction', 
+      desc: 'AI-based crop recommendation using soil, irrigation, season, and weather patterns.', 
+      icon: <AutoGraph sx={{ fontSize: 32 }} />,
+      color: '#16a34a',
+      bg: '#f0fdf4'
+    },
+    { 
+      title: 'Crop Workflow Tracking', 
+      desc: 'Track every farming stage from land preparation to harvest with real-time updates.', 
+      icon: <Timeline sx={{ fontSize: 32 }} />,
+      color: '#2563eb',
+      bg: '#eff6ff'
+    },
+    { 
+      title: 'Live Weather Advisory', 
+      desc: 'Stage-based farming alerts and weather insights to protect your crops from nature.', 
+      icon: <Thunderstorm sx={{ fontSize: 32 }} />,
+      color: '#d97706',
+      bg: '#fffbeb'
+    },
+    { 
+      title: 'Profit Estimation', 
+      desc: 'Expected yield, revenue, and monthly income estimation based on market rates.', 
+      icon: <AccountBalanceWallet sx={{ fontSize: 32 }} />,
+      color: '#7c3aed',
+      bg: '#f5f3ff'
+    },
   ];
 
   return (
-    <Box sx={{ py: { xs: '48px', md: '72px' }, backgroundColor: theme.palette.background.default }}>
+    <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#fff' }}>
       <Container maxWidth="lg">
-        <Typography variant="h2" sx={{ textAlign: 'center', color: '#1B5E20', mb: '32px', fontSize: '32px', fontWeight: 800 }}>
-          System Capabilities
-        </Typography>
+        <Stack spacing={2} sx={{ textAlign: 'center', mb: 8 }}>
+          <Typography 
+            variant="overline" 
+            sx={{ color: '#16a34a', fontWeight: 900, letterSpacing: 2 }}
+          >
+            SMART FEATURES
+          </Typography>
+          <Typography 
+            variant="h2" 
+            sx={{ fontWeight: 900, color: '#1e293b', fontSize: { xs: '32px', md: '48px' } }}
+          >
+            Everything you need for <Box component="span" sx={{ color: '#16a34a' }}>Precision Farming</Box>
+          </Typography>
+        </Stack>
+
         <Box sx={{
-          mt: '8px', mx: { xs: '-16px', sm: '-24px', md: 0 }, px: { xs: '16px', sm: '24px', md: 0 },
-          display: { xs: 'flex', md: 'grid' }, flexDirection: { xs: 'row', md: 'unset' },
-          overflowX: { xs: 'auto', md: 'visible' }, scrollSnapType: { xs: 'x mandatory', md: 'none' },
-          gridTemplateColumns: { md: 'repeat(4, 1fr)' }, gap: '24px', pb: { xs: '24px', md: 0 },
-          scrollbarWidth: 'thin', scrollbarColor: 'rgba(76, 175, 80, 0.4) transparent',
-          '&::-webkit-scrollbar': { height: '6px' },
-          '&::-webkit-scrollbar-track': { background: 'rgba(0,0,0,0.03)', borderRadius: '6px', margin: '0 20px' },
-          '&::-webkit-scrollbar-thumb': { background: 'rgba(76, 175, 80, 0.4)', borderRadius: '6px' },
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: 'repeat(4, 1fr)' },
+          gap: 4
         }}>
           {features.map((feature, i) => (
             <Card key={i} elevation={0} sx={{
-              flexShrink: { xs: 0, md: 1 }, width: { xs: '75vw', sm: '280px', md: 'auto' },
-              scrollSnapAlign: { xs: 'center', md: 'none' },
-              borderRadius: '16px', p: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
-              backgroundColor: bg, height: '100%', border: `1px solid ${border}`, borderTop: '4px solid #4CAF50',
-              transition: 'all 0.25s ease',
-              '&:hover': { transform: 'translateY(-8px)', boxShadow: isDark ? '0 16px 32px rgba(0,0,0,0.4)' : '0 16px 32px rgba(0,0,0,0.08)' }
+              p: 4,
+              borderRadius: '24px',
+              border: '1px solid #f1f5f9',
+              bgcolor: '#fff',
+              transition: 'all 0.3s ease',
+              '&:hover': { 
+                transform: 'translateY(-10px)', 
+                boxShadow: '0 20px 40px rgba(0,0,0,0.05)',
+                borderColor: feature.color + '40'
+              },
+              display: 'flex',
+              flexDirection: 'column',
+              height: '100%'
             }}>
-              <Box sx={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: iconBg, color: '#2E7D32', display: 'flex', justifyContent: 'center', alignItems: 'center', mb: '16px' }}>
+              <Box sx={{ 
+                width: 64, 
+                height: 64, 
+                borderRadius: '18px', 
+                bgcolor: feature.bg, 
+                color: feature.color, 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                mb: 3 
+              }}>
                 {feature.icon}
               </Box>
-              <Typography variant="h3" sx={{ color: '#1B5E20', fontSize: '18px', mb: '8px', fontWeight: 700 }}>{feature.title}</Typography>
-              <Typography sx={{ fontSize: '14px', color: textSecondary, lineHeight: 1.5 }}>{feature.desc}</Typography>
+              <Typography 
+                variant="h5" 
+                sx={{ color: '#1e293b', fontWeight: 800, mb: 1.5, fontSize: '20px' }}
+              >
+                {feature.title}
+              </Typography>
+              <Typography 
+                variant="body2" 
+                sx={{ color: '#64748b', lineHeight: 1.6, fontWeight: 500 }}
+              >
+                {feature.desc}
+              </Typography>
             </Card>
           ))}
         </Box>
@@ -57,3 +112,4 @@ const FeaturesSection = () => {
 };
 
 export default FeaturesSection;
+

@@ -5,17 +5,18 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Spa, Add } from '@mui/icons-material';
-import cropData from '../data/crop_data.json';
+import cropProcessData from '../data/crop_process.json';
 import { supabase } from '../supabase';
 
 // ─── Static Options ────────────────────────────────────────────────────────────
-const cropOptions = [...new Set(cropData.map(c => c.name))].sort();
+const cropOptions = cropProcessData.map(c => c.crop_name).sort();
 
-// Quick lookup: crop name → duration type
-const cropDurationMap = cropData.reduce((acc, c) => {
-  acc[c.name] = c.crop_duration_type;
+// Quick lookup: crop name → duration
+const cropDurationMap = cropProcessData.reduce((acc, c) => {
+  acc[c.crop_name] = c.total_duration_days;
   return acc;
 }, {});
+
 
 const waterOptions = [
   { label: 'High (Canal / Good Water)', value: 'Good Water Available' },
@@ -75,17 +76,39 @@ const AddCropPage = () => {
     load();
   }, []);
 
-  // ── When crop name changes, auto-fill duration from crop_data.json ──────────
+  // ── When crop name changes, auto-fill duration ─────────────────────────────
   const handleCropChange = (_, newVal) => {
-    const duration = newVal ? (cropDurationMap[newVal] || '') : '';
-    setFormData(prev => ({ ...prev, cropName: newVal, duration }));
+    const days = newVal ? (cropDurationMap[newVal] || 0) : 0;
+    let durationType = 'medium_term';
+    if (days < 90) durationType = 'short_term';
+    else if (days > 180) durationType = 'long_term';
+    
+    setFormData(prev => ({ ...prev, cropName: newVal, duration: durationType }));
   };
+
 
   const set = (key) => (e) => setFormData(prev => ({ ...prev, [key]: e.target.value }));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setTimeout(() => navigate('/dashboard'), 400);
+    if (formData.cropName && formData.sowingDate) {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const crops = JSON.parse(localStorage.getItem(`user_crops_${user.id}`) || '[]');
+        if (crops.length >= 2) {
+          alert('You can only manage a maximum of two crops simultaneously. Please delete a crop first.');
+          return;
+        }
+        crops.push({
+          id: Date.now(),
+          cropName: formData.cropName,
+          startDate: new Date(formData.sowingDate).toISOString(),
+        });
+        localStorage.setItem(`user_crops_${user.id}`, JSON.stringify(crops));
+        localStorage.setItem(`active_crop_index_${user.id}`, crops.length - 1);
+        navigate('/');
+      }
+    }
   };
 
   const inputSx = { borderRadius: '14px', backgroundColor: '#fafafa' };
