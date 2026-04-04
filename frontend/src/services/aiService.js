@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const GEMINI_API_KEY = "AIzaSyArs_bEpnWPuwA6kADmOGkid-BtIEyOx_4";
+// IMPORTANT: Do NOT hardcode API keys here! It will cause them to be revoked when pushed to GitHub.
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 export const getAiCompletion = async (messages) => {
