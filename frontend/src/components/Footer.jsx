@@ -39,7 +39,7 @@ const Footer = () => {
           <Grid item xs={6} md={2}>
             <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 3 }}>Product</Typography>
             <Stack spacing={2}>
-              {['Features', 'Crop Analysis', 'Weather advisory', 'Profit tools'].map((item) => (
+              {['Features', 'Crop Prediction', 'Weather advisory', 'Profit tools'].map((item) => (
                 <Link key={item} href="#" underline="none" sx={{ color: '#94a3b8', fontSize: '14px', '&:hover': { color: '#16a34a' } }}>{item}</Link>
               ))}
             </Stack>

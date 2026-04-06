@@ -11,7 +11,7 @@ import {
   InfoOutlined, MonetizationOn,
   AssignmentTurnedIn, LocalFlorist, Air, ExpandMore,
   NotificationsActive, AddBox, Thermostat, Opacity, WindPower, Grain,
-  Delete, Restore, DeleteSweep, SwapHoriz
+  Delete, Restore, DeleteSweep, SwapHoriz, Sync, CircleOutlined
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabase';
@@ -270,7 +270,7 @@ const ActionHome = ({ session }) => {
                   <Avatar sx={{ bgcolor: '#ecfdf5', width: 56, height: 56, mb: 3 }}>
                     <TrendingUp sx={{ color: '#10b981', fontSize: 28 }} />
                   </Avatar>
-                  <Typography variant="h5" sx={{ fontWeight: 900, mb: 1.5, color: '#111827' }}>Crop Analysis</Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 900, mb: 1.5, color: '#111827' }}>Crop Prediction</Typography>
                   <Typography sx={{ color: '#64748b', mb: 4, lineHeight: 1.6, flexGrow: 1, fontSize: '15px' }}>
                     Get AI-powered crop suggestions based on your soil type, irrigation, and weather patterns.
                   </Typography>
@@ -279,7 +279,7 @@ const ActionHome = ({ session }) => {
                     onClick={() => navigate('/recommendation')}
                     sx={{ bgcolor: '#10b981', py: 1.8, borderRadius: '14px', fontWeight: 800, textTransform: 'none', boxShadow: '0 8px 16px rgba(16, 185, 129, 0.15)', '&:hover': { bgcolor: '#059669' } }}
                   >
-                    Analyze Best Crops
+                    Predict Best Crops
                   </Button>
                 </Paper>
 
@@ -421,9 +421,10 @@ const ActionHome = ({ session }) => {
                 {[
                   { title: 'Farm Calendar', icon: <CalendarMonth />, color: '#7c3aed', path: '/dashboard/calendar', desc: 'Schedule & Tasks' },
                   { title: 'Weather Center', icon: <WbSunny />, color: '#f59e0b', path: '/dashboard/weather', desc: 'Forecast & Alerts' },
-                  { title: 'Analytics', icon: <TrendingUp />, color: '#10b981', path: '/dashboard/analytics', desc: 'Insights & ROI' }
+                  { title: 'Analytics', icon: <TrendingUp />, color: '#10b981', path: '/dashboard/analytics', desc: 'Insights & ROI' },
+                  { title: 'Crop Prediction', icon: <Agriculture />, color: '#3b82f6', path: '/recommendation', desc: 'AI Predictions' }
                 ].map((tile, i) => (
-                  <Grid item xs={12} sm={4} key={i}>
+                  <Grid item xs={12} sm={6} lg={3} key={i}>
                     <Paper 
                       onClick={() => navigate(tile.path)}
                       sx={{ 
@@ -481,72 +482,107 @@ const ActionHome = ({ session }) => {
                   </Box>
                 </Paper>
 
-                {/* CROP PROCESS TIMELINE */}
+                {/* =========================================
+                    CROP JOURNEY BOARD REDESIGN
+                    ========================================= */}
                 <Box>
-                  <Typography variant="h5" sx={{ fontWeight: 900, mb: 4, color: '#1e293b' }}>📜 Crop Process Timeline</Typography>
-                  {selectedCrop.stages.map((stage, idx) => {
-                    const status = getStageStatus(stage.stage_id);
-                    const isExpanded = expandedStage === stage.stage_id;
-                    
-                    return (
-                      <Box key={stage.stage_id} sx={{ display: 'flex', gap: 4, position: 'relative' }}>
-                        {/* Timeline Graphic */}
-                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                          <Box sx={{ 
-                            width: 32, height: 32, borderRadius: '50%', 
-                            bgcolor: status === 'completed' ? '#16a34a' : (status === 'current' ? '#f59e0b' : '#e2e8f0'),
-                            color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            zIndex: 2, boxShadow: '0 0 0 4px #fff'
-                          }}>
-                            {status === 'completed' ? <CheckCircle sx={{ fontSize: 20 }} /> : <Typography sx={{ fontSize: 14, fontWeight: 900 }}>{stage.stage_id}</Typography>}
-                          </Box>
-                          {idx < selectedCrop.stages.length - 1 && (
-                            <Box sx={{ 
-                              width: 3, flexGrow: 1, my: 1,
-                              background: status === 'completed' ? '#16a34a' : '#e2e8f0',
-                              position: 'relative'
-                            }}>
-                              <Box sx={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: 8, height: 8, borderRadius: '50%', bgcolor: '#cbd5e1' }} />
-                              <Box sx={{ position: 'absolute', top: '40%', left: '50%', transform: 'translateX(-50%)', width: 8, height: 8, borderRadius: '50%', bgcolor: '#cbd5e1' }} />
-                              <Box sx={{ position: 'absolute', top: '60%', left: '50%', transform: 'translateX(-50%)', width: 8, height: 8, borderRadius: '50%', bgcolor: '#cbd5e1' }} />
-                            </Box>
-                          )}
+                  {/* 🌟 SECTION 1: CURRENT ACTIVE STAGE (Premium Card) */}
+                  {currentStage && (
+                    <Box sx={{ mb: 5 }}>
+                      <Typography variant="h5" sx={{ fontWeight: 900, mb: 3, color: '#1e293b' }}>📍 Current Active Stage</Typography>
+                      <Paper sx={{ 
+                        p: { xs: 3, md: 4 }, borderRadius: '24px', 
+                        background: 'linear-gradient(135deg, #15803d 0%, #16a34a 100%)', 
+                        color: '#fff', boxShadow: '0 20px 40px -15px rgba(22,163,74,0.4)',
+                        position: 'relative', overflow: 'hidden'
+                      }}>
+                        <Box sx={{ position: 'absolute', right: -20, top: -20, opacity: 0.1 }}>
+                          <Sync sx={{ fontSize: 180 }} />
                         </Box>
+                        <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ sm: 'flex-start' }} spacing={3} sx={{ position: 'relative', zIndex: 2 }}>
+                          <Box>
+                            <Typography variant="h3" sx={{ fontWeight: 900, mb: 1.5, fontSize: { xs: '28px', md: '36px' } }}>{currentStage.title}</Typography>
+                            <Stack direction="row" spacing={2} sx={{ mb: 4, flexWrap: 'wrap', gap: 1 }}>
+                              <Chip label={`${currentStage.substeps.length} Tasks Required`} sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: '#fff', fontWeight: 800, backdropFilter: 'blur(10px)', border: 'none' }} />
+                              <Chip label={`Day ${currentStage.start_day} → Day ${currentStage.end_day}`} sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: '#fff', fontWeight: 800, backdropFilter: 'blur(10px)', border: 'none' }} />
+                            </Stack>
+                          </Box>
+                        </Stack>
+                        <Box sx={{ maxWidth: '80%', position: 'relative', zIndex: 2 }}>
+                          <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
+                            <Typography variant="body2" sx={{ fontWeight: 800 }}>Stage Completion</Typography>
+                            <Typography variant="body2" sx={{ fontWeight: 900 }}>{todayTaskCompleted ? '100%' : '25%'}</Typography>
+                          </Stack>
+                          <LinearProgress variant="determinate" value={todayTaskCompleted ? 100 : 25} sx={{ height: 10, borderRadius: 5, bgcolor: 'rgba(255,255,255,0.2)', '& .MuiLinearProgress-bar': { bgcolor: '#fff', borderRadius: 5 } }} />
+                        </Box>
+                      </Paper>
+                    </Box>
+                  )}
 
-                        {/* Accordion Card */}
-                        <Accordion
-                          expanded={isExpanded}
-                          onChange={() => setExpandedStage(isExpanded ? null : stage.stage_id)}
-                          sx={{ 
-                            flexGrow: 1, mb: 4, borderRadius: '20px !important', border: '1px solid #f1f5f9',
-                            boxShadow: isExpanded ? '0 15px 30px rgba(0,0,0,0.04)' : 'none',
-                            bgcolor: status === 'current' ? '#fff' : '#fafafa',
-                            '&:before': { display: 'none' }
-                          }}
-                        >
-                          <AccordionSummary expandIcon={<ExpandMore />}>
-                            <Stack direction="row" spacing={2} alignItems="center">
-                              <Typography variant="h6" sx={{ fontWeight: 800, color: status === 'pending' ? '#94a3b8' : '#1e293b' }}>
-                                {stage.title}
-                              </Typography>
-                              {status === 'current' && <Chip label="In Progress" size="small" sx={{ bgcolor: '#fff7ed', color: '#c2410c', fontWeight: 800, borderRadius: '6px' }} />}
-                            </Stack>
-                          </AccordionSummary>
-                          <AccordionDetails sx={{ pt: 0, pb: 3 }}>
-                            <Divider sx={{ mb: 3, opacity: 0.5 }} />
-                            <Stack spacing={1.5}>
-                              {stage.substeps.map((sub, i) => (
-                                <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 2, borderRadius: '12px', bgcolor: '#fff', border: '1px solid #f1f5f9' }}>
-                                  <Checkbox checked={status === 'completed' || (status === 'current' && i === 0 && todayTaskCompleted)} color="success" size="small" />
-                                  <Typography variant="body2" sx={{ fontWeight: 600 }}>{sub}</Typography>
+                  {/* 🌟 SECTION 2: HORIZONTAL CROP JOURNEY 🌟 */}
+                  <Typography variant="h5" sx={{ fontWeight: 900, mb: 3, color: '#1e293b' }}>🚀 Crop Journey</Typography>
+                  <Paper sx={{ p: 2.5, borderRadius: '20px', border: '1px solid #f1f5f9', mb: 3, overflowX: 'auto', bgcolor: '#fff', '&::-webkit-scrollbar': { height: '6px' }, '&::-webkit-scrollbar-thumb': { backgroundColor: '#cbd5e1', borderRadius: '10px' } }}>
+                    <Stack direction="row" spacing={1.5} alignItems="center" sx={{ minWidth: "max-content", py: 1 }}>
+                      {selectedCrop.stages.map((stage, idx) => {
+                        const status = getStageStatus(stage.stage_id);
+                        const isExpanded = expandedStage ? expandedStage === stage.stage_id : status === 'current';
+                        
+                        return (
+                          <React.Fragment key={stage.stage_id}>
+                            <Chip 
+                              onClick={() => setExpandedStage(stage.stage_id)}
+                              label={
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                  {status === 'completed' && <CheckCircle sx={{ fontSize: 16 }} />}
+                                  {status === 'current' && <Sync sx={{ fontSize: 16 }} />}
+                                  {status === 'pending' && <CircleOutlined sx={{ fontSize: 16 }} />}
+                                  <Typography sx={{ fontWeight: 800, fontSize: '14px' }}>{stage.title}</Typography>
                                 </Box>
-                              ))}
+                              }
+                              sx={{ 
+                                height: '40px', borderRadius: '12px', px: 1, cursor: 'pointer',
+                                transition: 'all 0.2s',
+                                bgcolor: isExpanded ? '#1e293b' : (status === 'completed' ? '#ecfdf5' : '#f8fafc'),
+                                color: isExpanded ? '#fff' : (status === 'completed' ? '#16a34a' : '#64748b'),
+                                border: '1px solid', borderColor: isExpanded ? '#1e293b' : (status === 'completed' ? '#a7f3d0' : '#e2e8f0'),
+                                '&:hover': { bgcolor: isExpanded ? '#0f172a' : (status === 'completed' ? '#d1fae5' : '#f1f5f9'), transform: 'translateY(-2px)' }
+                              }} 
+                            />
+                            {idx < selectedCrop.stages.length - 1 && <Typography sx={{ color: '#cbd5e1', fontWeight: 900 }}>→</Typography>}
+                          </React.Fragment>
+                        );
+                      })}
+                    </Stack>
+                  </Paper>
+
+                  {/* 🌟 SECTION 3: Task Details Panel 🌟 */}
+                  {(() => {
+                    const activePanelStage = selectedCrop.stages.find(s => s.stage_id === (expandedStage || currentStage?.stage_id)) || selectedCrop.stages[0];
+                    const status = getStageStatus(activePanelStage.stage_id);
+                    return (
+                      <Paper sx={{ p: 4, borderRadius: '24px', border: '1px solid #f1f5f9', bgcolor: '#fff', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
+                        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
+                          <Box>
+                            <Typography variant="h5" sx={{ fontWeight: 900, mb: 1, color: '#111827' }}>{activePanelStage.title}</Typography>
+                            <Stack direction="row" spacing={1.5} alignItems="center">
+                              <Chip size="small" label={status === 'completed' ? 'Completed' : (status === 'current' ? 'In Progress' : 'Upcoming Stage')} sx={{ fontWeight: 800, bgcolor: status === 'completed' ? '#ecfdf5' : (status === 'current' ? '#fff7ed' : '#f8fafc'), color: status === 'completed' ? '#16a34a' : (status === 'current' ? '#c2410c' : '#64748b') }} />
+                              <Typography variant="body2" sx={{ color: '#94a3b8', fontWeight: 700 }}>Day {activePanelStage.start_day} to {activePanelStage.end_day}</Typography>
                             </Stack>
-                          </AccordionDetails>
-                        </Accordion>
-                      </Box>
+                          </Box>
+                        </Stack>
+                        <Divider sx={{ mb: 3, opacity: 0.5 }} />
+                        <Typography variant="body2" sx={{ fontWeight: 800, color: '#64748b', mb: 2, textTransform: 'uppercase', letterSpacing: 1 }}>Subtasks To Complete</Typography>
+                        <Stack spacing={2}>
+                          {activePanelStage.substeps.map((sub, i) => (
+                            <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 2, borderRadius: '12px', bgcolor: status === 'completed' ? '#f8fafc' : '#fff', border: '1px solid', borderColor: status === 'completed' ? 'transparent' : '#e2e8f0' }}>
+                               <Checkbox checked={status === 'completed' || (status === 'current' && i === 0 && todayTaskCompleted)} color="success" size="small" />
+                               <Typography variant="body1" sx={{ fontWeight: 600, color: status === 'completed' ? '#94a3b8' : '#1e293b' }}>{sub}</Typography>
+                            </Box>
+                          ))}
+                        </Stack>
+                      </Paper>
                     );
-                  })}
+                  })()}
                 </Box>
               </Grid>
 

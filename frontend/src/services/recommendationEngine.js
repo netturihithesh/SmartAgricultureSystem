@@ -41,12 +41,17 @@ export const generateSmartRecommendation = async (profile, soilType, waterAvaila
                 }
             }
         } catch (e) {
-            console.warn(`Agmarknet failure for ${crop.name}`, e);
+            // data.gov.in frequently drops frontend CORS requests.
+            // Silently fallback to the offline algorithmic pricing model.
+            console.log(`[Agmarknet Subsystem] Live data unavailable, using offline fallback model for ${crop.name}.`);
         }
 
         if (!marketPrice || isNaN(marketPrice)) {
             const breakEven = crop.economics.cost_per_acre / crop.economics.avg_yield_per_acre;
-            marketPrice = Math.round((breakEven * (1.6 + Math.random() * 0.4)) / 100) * 100;
+            // Generate deterministic offline market price stable across reloads
+            const seed = crop.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+            const deterministicMargin = 1.4 + ((seed % 10) * 0.06); // Healthy realistic margin between 1.40x to 1.94x
+            marketPrice = Math.round((breakEven * deterministicMargin) / 10) * 10;
         }
 
         // 4. Detailed Economic Modeling

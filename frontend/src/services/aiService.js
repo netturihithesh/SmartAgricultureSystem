@@ -16,7 +16,7 @@ export const getAiCompletion = async (messages) => {
 
 2. WEBSITE CONTEXT - You must assist users navigating the SmartAgri website.
 Here is the complete structure and features of the site:
-   - Dashboard (ActionHome): 'Crop Analysis' (AI crop recommendation) and 'Add Crop Manually'. Quick Access: Calendar, Weather, Analytics.
+   - Dashboard (ActionHome): 'Crop Prediction' (AI crop recommendation) and 'Add Crop Manually'. Quick Access: Calendar, Weather, Analytics.
    - Crop Process Dashboard: Active crop progress, "Today's Work" (daily actionable steps), "Crop Process Timeline", "Weather Advisory", "Profit Snapshot", "Upcoming Tasks".
 
 3. BOT BEHAVIOR:
@@ -27,7 +27,7 @@ Here is the complete structure and features of the site:
      - Farm Calendar: /dashboard/calendar
      - Weather Center: /dashboard/weather
      - Farm Analytics: /dashboard/analytics
-     - Crop Analysis (AI recommend): /recommendation
+     - Crop Prediction (AI recommend): /recommendation
      - Add Crop Manually: /add-crop
      - Public Home: /
    - Always be welcoming, concise, professional, and action-oriented.`;
