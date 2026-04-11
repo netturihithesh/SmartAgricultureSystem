@@ -1,10 +1,12 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { ColorModeProvider, useColorMode } from './context/ThemeContext';
 import { getTheme } from './theme';
+import { supabase } from './supabase';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import PrivateRoute from './components/PrivateRoute';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -31,6 +33,13 @@ const MainLayout = ({ children }) => (
 function ThemedApp() {
   const { mode } = useColorMode();
   const theme = useMemo(() => getTheme(mode), [mode]);
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => setSession(session));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => setSession(session));
+    return () => subscription.unsubscribe();
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -48,15 +57,14 @@ function ThemedApp() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           
-          {/* Private/Action Routes */}
-          <Route path="/dashboard" element={<MainLayout><DashboardPage /></MainLayout>} />
-          <Route path="/dashboard/calendar" element={<MainLayout><FarmCalendar /></MainLayout>} />
-          <Route path="/dashboard/weather" element={<MainLayout><WeatherCenter /></MainLayout>} />
-          <Route path="/dashboard/analytics" element={<MainLayout><FarmAnalytics /></MainLayout>} />
-          <Route path="/recommendation" element={<MainLayout><RecommendationPage /></MainLayout>} />
-          <Route path="/add-crop" element={<MainLayout><AddCropPage /></MainLayout>} />
+          {/* Protected Routes */}
+          <Route path="/dashboard" element={<PrivateRoute session={session}><MainLayout><DashboardPage /></MainLayout></PrivateRoute>} />
+          <Route path="/dashboard/calendar" element={<PrivateRoute session={session}><MainLayout><FarmCalendar /></MainLayout></PrivateRoute>} />
+          <Route path="/dashboard/weather" element={<PrivateRoute session={session}><MainLayout><WeatherCenter /></MainLayout></PrivateRoute>} />
+          <Route path="/dashboard/analytics" element={<PrivateRoute session={session}><MainLayout><FarmAnalytics /></MainLayout></PrivateRoute>} />
+          <Route path="/recommendation" element={<PrivateRoute session={session}><MainLayout><RecommendationPage /></MainLayout></PrivateRoute>} />
+          <Route path="/add-crop" element={<PrivateRoute session={session}><MainLayout><AddCropPage /></MainLayout></PrivateRoute>} />
 
-          
           {/* Catch all */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

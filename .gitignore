@@ -32,3 +32,6 @@ Thumbs.db
 # Local Node Binaries
 node/
 node22/
+
+# Claude Code local settings (contains API keys)
+.claude/settings.local.json

@@ -15,9 +15,11 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabase';
-import cropDataRaw from '../data/crop_process.json';
+import cropProcessData from '../data/crop_process.json';
+import cropDataList from '../data/crop_data.json';
 import AgriBot from '../components/AgriBot';
-import { getDailyQuote } from '../services/aiService';
+import { getDailyQuote, generateStageSchedule } from '../services/aiService';
+import { calculateProfitSnapshot } from '../services/profitUtils';
 
 const ActionHome = ({ session }) => {
   const [profile, setProfile] = useState(null);
@@ -34,10 +36,30 @@ const ActionHome = ({ session }) => {
   const [selectedCrop, setSelectedCrop] = useState(null);
   const [cropStartDate, setCropStartDate] = useState(null);
   const [daysPassed, setDaysPassed] = useState(0);
+  const [cropEconomics, setCropEconomics] = useState(null);
+  const [upcomingTasks, setUpcomingTasks] = useState([]);
 
   const [expandedStage, setExpandedStage] = useState(null);
   const [substepStatus, setSubstepStatus] = useState({});
-  const [todayTaskCompleted, setTodayTaskCompleted] = useState(false);
+  const [dynamicSchedule, setDynamicSchedule] = useState(null);
+  const [isGeneratingSchedule, setIsGeneratingSchedule] = useState(false);
+
+  useEffect(() => {
+    if (session?.user?.id) {
+      setSubstepStatus(JSON.parse(localStorage.getItem(`substeps_${session.user.id}`) || '{}'));
+    }
+  }, [session]);
+
+  const toggleSubstep = (stageId, index) => {
+    setSubstepStatus(prev => {
+      const key = `${stageId}_${index}`;
+      const newStat = { ...prev, [key]: !prev[key] };
+      if (session?.user?.id) {
+        localStorage.setItem(`substeps_${session.user.id}`, JSON.stringify(newStat));
+      }
+      return newStat;
+    });
+  };
 
   const navigate = useNavigate();
 
@@ -101,19 +123,56 @@ const ActionHome = ({ session }) => {
   }, [session]);
 
   const loadCropView = (cropObj) => {
-    const crop = cropDataRaw.find(c => c.crop_name === cropObj.cropName);
+    const crop = cropProcessData.find(c => c.crop_name === cropObj.cropName);
     if (crop) {
       const start = new Date(cropObj.startDate);
       const today = new Date();
-      const diffTime = Math.abs(today - start);
+      const diffTime = today.getTime() - start.getTime();
       const diffDays = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
 
-      setSelectedCrop(crop);
+      let currentDay = 1;
+      const stagesWithDays = crop.stages.map(stage => {
+        const start_day = currentDay;
+        const end_day = currentDay + stage.duration_days - 1;
+        currentDay = end_day + 1;
+        return { ...stage, start_day, end_day };
+      });
+      const updatedCrop = { ...crop, stages: stagesWithDays };
+
+      setSelectedCrop(updatedCrop);
       setCropStartDate(start);
       setDaysPassed(diffDays);
 
-      const currentStage = calculateCurrentStage(crop.stages, diffDays);
+      const currentStage = calculateCurrentStage(stagesWithDays, diffDays);
       setExpandedStage(currentStage?.stage_id);
+
+      const cd = cropDataList.find(c => c.api_name === cropObj.cropName || c.name === cropObj.cropName);
+      if (cd && cd.economics) {
+        setCropEconomics(cd.economics);
+      } else {
+        setCropEconomics(null);
+      }
+
+      let tasks = [];
+      for (const stage of stagesWithDays) {
+        if (stage.start_day > diffDays) {
+          const daysFromNow = stage.start_day - diffDays;
+          let label = `Day ${stage.start_day}`;
+          if (daysFromNow === 1) label = 'Tomorrow';
+          else if (daysFromNow <= 7) label = `In ${daysFromNow} days`;
+          
+          tasks.push({
+            day: label,
+            task: `Start ${stage.title}`,
+            icon: <CalendarMonth />
+          });
+        }
+      }
+      // Add a default watering task if not enough tasks
+      if (tasks.length === 0 && updatedCrop.total_duration_days > diffDays) {
+        tasks.push({ day: 'Every 3 days', task: 'Check soil moisture', icon: <WaterDrop /> });
+      }
+      setUpcomingTasks(tasks.slice(0, 3));
     }
   };
 
@@ -203,6 +262,31 @@ const ActionHome = ({ session }) => {
     if (!selectedCrop) return null;
     return calculateCurrentStage(selectedCrop.stages, daysPassed);
   }, [selectedCrop, daysPassed]);
+
+  useEffect(() => {
+    const fetchSchedule = async () => {
+      if (!selectedCrop) return;
+      // Load schedule for whichever stage is currently expanded in the panel
+      const targetStage = selectedCrop.stages.find(s => s.stage_id === (expandedStage || currentStage?.stage_id)) || currentStage;
+      if (!targetStage) return;
+      const stageKey = `stage_schedule_v3_${selectedCrop.crop_name}_${targetStage.stage_id}`;
+      const cached = localStorage.getItem(stageKey);
+      if (cached) {
+        setDynamicSchedule(JSON.parse(cached));
+      } else {
+        setIsGeneratingSchedule(true);
+        const schedule = await generateStageSchedule(selectedCrop.crop_name, targetStage.title, targetStage.duration_days, targetStage.substeps);
+        if (schedule && Array.isArray(schedule)) {
+          localStorage.setItem(stageKey, JSON.stringify(schedule));
+          setDynamicSchedule(schedule);
+        } else {
+          setDynamicSchedule(null);
+        }
+        setIsGeneratingSchedule(false);
+      }
+    };
+    fetchSchedule();
+  }, [selectedCrop, expandedStage, currentStage]);
 
   const progressPercentage = useMemo(() => {
     if (!selectedCrop) return 0;
@@ -369,7 +453,7 @@ const ActionHome = ({ session }) => {
               <Box sx={{ position: 'absolute', right: -30, top: -30, width: 200, height: 200, borderRadius: '50%', background: 'rgba(255,255,255,0.05)', zIndex: 0 }} />
               
               <Grid container spacing={4} alignItems="center">
-                <Grid item xs={12} md={7}>
+                <Grid size={{ xs: 12, md: 8 }}>
                   <Typography variant="overline" sx={{ fontWeight: 900, letterSpacing: 2, opacity: 0.8 }}>ACTIVE CROP</Typography>
                   <Typography variant="h2" sx={{ fontWeight: 900, mb: 2, fontSize: { xs: '32px', md: '48px' } }}>{selectedCrop.crop_name}</Typography>
                   
@@ -392,7 +476,7 @@ const ActionHome = ({ session }) => {
                     <LinearProgress variant="determinate" value={progressPercentage} sx={{ height: 12, borderRadius: 6, bgcolor: 'rgba(255,255,255,0.1)', '& .MuiLinearProgress-bar': { bgcolor: '#22c55e', borderRadius: 6 } }} />
                   </Box>
                 </Grid>
-                <Grid item xs={12} md={5}>
+                <Grid size={{ xs: 12, md: 4 }}>
                   <Stack spacing={3} alignItems={{ md: 'flex-end' }}>
                     <Box sx={{ textAlign: { md: 'right' } }}>
                       <Typography variant="caption" sx={{ fontWeight: 700, opacity: 0.7, display: 'block' }}>EXPECTED HARVEST</Typography>
@@ -424,7 +508,7 @@ const ActionHome = ({ session }) => {
                   { title: 'Analytics', icon: <TrendingUp />, color: '#10b981', path: '/dashboard/analytics', desc: 'Insights & ROI' },
                   { title: 'Crop Prediction', icon: <Agriculture />, color: '#3b82f6', path: '/recommendation', desc: 'AI Predictions' }
                 ].map((tile, i) => (
-                  <Grid item xs={12} sm={6} lg={3} key={i}>
+                  <Grid size={{ xs: 12, sm: 6, lg: 3 }} key={i}>
                     <Paper 
                       onClick={() => navigate(tile.path)}
                       sx={{ 
@@ -448,7 +532,7 @@ const ActionHome = ({ session }) => {
 
             <Grid container spacing={4}>
               {/* LEFT COLUMN */}
-              <Grid item xs={12} md={8}>
+              <Grid size={{ xs: 12, md: 8 }}>
                 
                 {/* TODAY'S WORK CARD */}
                 <Paper sx={{ p: 4, borderRadius: '24px', border: '1px solid #f1f5f9', mb: 5, bgcolor: '#fff', position: 'relative' }}>
@@ -457,28 +541,67 @@ const ActionHome = ({ session }) => {
                   </Box>
                   <Typography variant="h5" sx={{ fontWeight: 900, mb: 4, color: '#1e293b' }}>📍 Today's Work</Typography>
                   <Box sx={{ p: 4, borderRadius: '24px', bgcolor: '#f8fafc', border: '1px solid #f1f5f9' }}>
-                    <Grid container spacing={4} alignItems="center">
-                      <Grid item xs={12} md={8}>
-                        <Typography variant="h4" sx={{ fontWeight: 900, mb: 2 }}>{currentStage?.substeps[0] || 'Observe Growth'}</Typography>
-                        <Stack spacing={2} sx={{ color: '#64748b', mb: 0 }}>
-                          <Box sx={{ display: 'flex', gap: 1 }}><Typography variant="body2" sx={{ fontWeight: 700 }}>Quantity:</Typography><Typography variant="body2">Based on land size ({profile?.land_size || 2.5} Acres)</Typography></Box>
-                          <Box sx={{ display: 'flex', gap: 1 }}><Typography variant="body2" sx={{ fontWeight: 700 }}>Best Time:</Typography><Typography variant="body2">Early Morning (6:00 AM - 9:00 AM)</Typography></Box>
-                        </Stack>
-                      </Grid>
-                      <Grid item xs={12} md={4}>
-                        <Button
-                          fullWidth variant="contained"
-                          onClick={() => setTodayTaskCompleted(!todayTaskCompleted)}
-                          sx={{ 
-                            py: 2, borderRadius: '16px', fontWeight: 900, textTransform: 'none',
-                            bgcolor: todayTaskCompleted ? '#16a34a' : '#1e1b4b',
-                            '&:hover': { bgcolor: todayTaskCompleted ? '#15803d' : '#000' }
-                          }}
-                        >
-                          {todayTaskCompleted ? '✅ Task Completed' : 'Mark as Completed'}
-                        </Button>
-                      </Grid>
-                    </Grid>
+                    {(() => {
+                      if (!currentStage) return null;
+                      const sortedSubsteps = currentStage.substeps.map((sub, i) => {
+                        let ai = null;
+                        if (dynamicSchedule && Array.isArray(dynamicSchedule)) ai = dynamicSchedule.find(s => s.task === sub);
+                        return { sub, i, ai, targetDay: ai ? ai.relative_day : i };
+                      }).sort((a, b) => a.targetDay - b.targetDay);
+                      
+                      const firstIncomplete = sortedSubsteps.find(s => !substepStatus[`${currentStage.stage_id}_${s.i}`]);
+                      const isAllDone = !firstIncomplete;
+                      const activeItem = isAllDone ? sortedSubsteps[sortedSubsteps.length - 1] : firstIncomplete;
+                      const displayIdx = activeItem.i;
+                      const currentTaskText = activeItem.sub;
+                      const aiRec = activeItem.ai;
+
+                      return (
+                        <Grid container spacing={4} alignItems="center">
+                          <Grid size={{ xs: 12, md: 8 }}>
+                            <Typography variant="h4" sx={{ fontWeight: 900, mb: 2 }}>{isAllDone ? 'Stage Tasks Completed.' : currentTaskText}</Typography>
+                            {!isAllDone && (
+                              <Stack spacing={2} sx={{ color: '#64748b', mb: 0 }}>
+                                {aiRec ? (
+                                  <Box sx={{ p: 2, borderRadius: '12px', bgcolor: '#f0fdf4', border: '1px solid #bbf7d0' }}>
+                                    <Stack direction="row" alignItems="top" spacing={1.5}>
+                                      <Box>
+                                        <Typography variant="caption" sx={{ fontWeight: 900, color: '#166534', display: 'block', mb: 0.5 }}>System Recommendation: Day {aiRec.relative_day} of Stage</Typography>
+                                        <Typography variant="body2" sx={{ fontWeight: 600, color: '#15803d', lineHeight: 1.4 }}>{aiRec.reason}</Typography>
+                                      </Box>
+                                    </Stack>
+                                  </Box>
+                                ) : (
+                                  <>
+                                    <Box sx={{ display: 'flex', gap: 1 }}><Typography variant="body2" sx={{ fontWeight: 700 }}>Quantity:</Typography><Typography variant="body2">Based on land size ({profile?.land_size || 2.5} Acres)</Typography></Box>
+                                    <Box sx={{ display: 'flex', gap: 1 }}><Typography variant="body2" sx={{ fontWeight: 700 }}>Best Time:</Typography><Typography variant="body2">Early Morning (6:00 AM - 9:00 AM)</Typography></Box>
+                                  </>
+                                )}
+                              </Stack>
+                            )}
+                            {isAllDone && (
+                              <Typography variant="body2" sx={{ fontWeight: 700, color: '#64748b' }}>
+                                You're doing great! The next stage will automatically unlock on Day {currentStage.end_day + 1}.
+                              </Typography>
+                            )}
+                          </Grid>
+                          <Grid size={{ xs: 12, md: 4 }}>
+                            <Button
+                              disabled={isAllDone}
+                              fullWidth variant="contained"
+                              onClick={() => toggleSubstep(currentStage.stage_id, displayIdx)}
+                              sx={{ 
+                                py: 2, borderRadius: '16px', fontWeight: 900, textTransform: 'none',
+                                bgcolor: isAllDone ? '#16a34a' : '#1e1b4b',
+                                '&:hover': { bgcolor: isAllDone ? '#16a34a' : '#000' }
+                              }}
+                            >
+                              {isAllDone ? 'Stage Done' : 'Mark as Completed'}
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      );
+                    })()}
                   </Box>
                 </Paper>
 
@@ -508,13 +631,19 @@ const ActionHome = ({ session }) => {
                             </Stack>
                           </Box>
                         </Stack>
-                        <Box sx={{ maxWidth: '80%', position: 'relative', zIndex: 2 }}>
-                          <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
-                            <Typography variant="body2" sx={{ fontWeight: 800 }}>Stage Completion</Typography>
-                            <Typography variant="body2" sx={{ fontWeight: 900 }}>{todayTaskCompleted ? '100%' : '25%'}</Typography>
-                          </Stack>
-                          <LinearProgress variant="determinate" value={todayTaskCompleted ? 100 : 25} sx={{ height: 10, borderRadius: 5, bgcolor: 'rgba(255,255,255,0.2)', '& .MuiLinearProgress-bar': { bgcolor: '#fff', borderRadius: 5 } }} />
-                        </Box>
+                        {(() => {
+                          const completedCount = currentStage.substeps.filter((_, i) => substepStatus[`${currentStage.stage_id}_${i}`]).length;
+                          const percentage = Math.round((completedCount / currentStage.substeps.length) * 100);
+                          return (
+                            <Box sx={{ maxWidth: '80%', position: 'relative', zIndex: 2 }}>
+                              <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
+                                <Typography variant="body2" sx={{ fontWeight: 800 }}>Stage Completion</Typography>
+                                <Typography variant="body2" sx={{ fontWeight: 900 }}>{percentage}%</Typography>
+                              </Stack>
+                              <LinearProgress variant="determinate" value={percentage} sx={{ height: 10, borderRadius: 5, bgcolor: 'rgba(255,255,255,0.2)', '& .MuiLinearProgress-bar': { bgcolor: '#fff', borderRadius: 5 } }} />
+                            </Box>
+                          );
+                        })()}
                       </Paper>
                     </Box>
                   )}
@@ -572,14 +701,49 @@ const ActionHome = ({ session }) => {
                         </Stack>
                         <Divider sx={{ mb: 3, opacity: 0.5 }} />
                         <Typography variant="body2" sx={{ fontWeight: 800, color: '#64748b', mb: 2, textTransform: 'uppercase', letterSpacing: 1 }}>Subtasks To Complete</Typography>
-                        <Stack spacing={2}>
-                          {activePanelStage.substeps.map((sub, i) => (
-                            <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 2, borderRadius: '12px', bgcolor: status === 'completed' ? '#f8fafc' : '#fff', border: '1px solid', borderColor: status === 'completed' ? 'transparent' : '#e2e8f0' }}>
-                               <Checkbox checked={status === 'completed' || (status === 'current' && i === 0 && todayTaskCompleted)} color="success" size="small" />
-                               <Typography variant="body1" sx={{ fontWeight: 600, color: status === 'completed' ? '#94a3b8' : '#1e293b' }}>{sub}</Typography>
-                            </Box>
-                          ))}
-                        </Stack>
+                        {isGeneratingSchedule && (
+                          <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, bgcolor: '#f8fafc', borderRadius: '16px', mb: 2 }}>
+                             <CircularProgress size={30} sx={{ color: '#10b981' }} />
+                             <Typography variant="body2" sx={{ fontWeight: 700, color: '#64748b' }}>Loading smart schedule...</Typography>
+                          </Box>
+                        )}
+                        {!isGeneratingSchedule && (
+                          <Stack spacing={2}>
+                            {activePanelStage.substeps.map((sub, i) => {
+                              let aiRec = null;
+                              if (dynamicSchedule && Array.isArray(dynamicSchedule) && status !== 'pending') {
+                                aiRec = dynamicSchedule.find(s => s.task === sub);
+                              }
+                              return { sub, originalIndex: i, aiRec, targetDay: aiRec ? aiRec.relative_day : i };
+                            }).sort((a, b) => a.targetDay - b.targetDay).map(({ sub, originalIndex: i, aiRec }, renderIdx) => {
+                              const isCompleted = status === 'completed' || substepStatus[`${activePanelStage.stage_id}_${i}`];
+                              const isLocked = status === 'pending';
+
+                              return (
+                                <Box key={renderIdx} sx={{ display: 'flex', flexDirection: 'column', p: 2, borderRadius: '12px', bgcolor: isCompleted ? '#f8fafc' : (isLocked ? '#f8fafc' : '#fff'), border: '1px solid', borderColor: isCompleted ? 'transparent' : (isLocked ? '#e2e8f0' : '#e2e8f0'), opacity: isLocked ? 0.6 : 1 }}>
+                                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                    <Checkbox 
+                                      checked={!!isCompleted} 
+                                      disabled={isLocked}
+                                      onChange={() => { if (status !== 'completed' && !isLocked) toggleSubstep(activePanelStage.stage_id, i) }}
+                                      color="success" size="small" 
+                                    />
+                                    <Typography variant="body1" sx={{ fontWeight: 600, color: isCompleted || isLocked ? '#94a3b8' : '#1e293b' }}>{sub}</Typography>
+                                    {isLocked && i === 0 && <Chip label="Locked (Wait for Stage)" size="small" sx={{ ml: 'auto', fontWeight: 800, fontSize: '10px', bgcolor: '#e2e8f0', color: '#64748b' }} />}
+                                  </Box>
+                                  {aiRec && !isCompleted && (
+                                    <Box sx={{ ml: 5, mt: 1, p: 1.5, borderRadius: '8px', bgcolor: '#f0fdf4', border: '1px solid #bbf7d0' }}>
+                                      <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 0.5 }}>
+                                          <Typography variant="caption" sx={{ fontWeight: 800, color: '#166534', textTransform: 'uppercase', letterSpacing: 0.5 }}>Optimal Schedule: Day {aiRec.relative_day} of {activePanelStage.duration_days}</Typography>
+                                      </Stack>
+                                      <Typography variant="caption" sx={{ color: '#15803d', fontWeight: 600, display: 'block', lineHeight: 1.4 }}>{aiRec.reason}</Typography>
+                                    </Box>
+                                  )}
+                                </Box>
+                              );
+                            })}
+                          </Stack>
+                        )}
                       </Paper>
                     );
                   })()}
@@ -587,7 +751,7 @@ const ActionHome = ({ session }) => {
               </Grid>
 
               {/* RIGHT COLUMN */}
-              <Grid item xs={12} md={4}>
+              <Grid size={{ xs: 12, md: 4 }}>
                 <Stack spacing={4}>
                   
                   {/* WEATHER + ADVISORY PANEL */}
@@ -600,7 +764,7 @@ const ActionHome = ({ session }) => {
                         { label: 'Wind', val: '12km/h', icon: <WindPower sx={{ color: '#10b981' }} /> },
                         { label: 'Rain', val: '10%', icon: <Grain sx={{ color: '#6366f1' }} /> }
                       ].map((stat, i) => (
-                        <Grid item xs={6} key={i}>
+                        <Grid size={{ xs: 6 }} key={i}>
                           <Box sx={{ py: 2.5, px: 2, borderRadius: '20px', bgcolor: '#f8fafc', textAlign: 'center', border: '1px solid #f1f5f9', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', '&:hover': { bgcolor: '#fff', boxShadow: '0 8px 24px rgba(0,0,0,0.06)', borderColor: '#e2e8f0', transform: 'translateY(-2px)' } }}>
                             <Box sx={{ mb: 1, p: 1, borderRadius: '12px', bgcolor: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', display: 'flex' }}>{stat.icon}</Box>
                             <Typography variant="caption" sx={{ display: 'block', color: '#64748b', fontWeight: 800, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.5px', mb: 0.5 }}>{stat.label}</Typography>
@@ -626,27 +790,36 @@ const ActionHome = ({ session }) => {
                     <Box sx={{ position: 'absolute', top: -20, right: -20, width: 120, height: 120, borderRadius: '50%', background: 'rgba(255,255,255,0.05)' }} />
                     <Typography variant="h6" sx={{ fontWeight: 900, mb: 4 }}>Profit Snapshot</Typography>
                     <Stack spacing={4}>
-                      <Box>
-                        <Typography variant="caption" sx={{ opacity: 0.6, fontWeight: 800, letterSpacing: 1 }}>EXPECTED PROFIT</Typography>
-                        <Stack direction="row" alignItems="baseline" spacing={1}>
-                          <Typography variant="h3" sx={{ fontWeight: 900, color: '#22c55e' }}>₹1,24,000</Typography>
-                        </Stack>
-                      </Box>
-                      <Divider sx={{ bgcolor: 'rgba(255,255,255,0.1)' }} />
-                      <Grid container spacing={2}>
-                        <Grid item xs={6}>
-                          <Typography variant="caption" sx={{ opacity: 0.6, fontWeight: 800 }}>EST. YIELD</Typography>
-                          <Typography variant="h6" sx={{ fontWeight: 800 }}>180 q</Typography>
-                        </Grid>
-                        <Grid item xs={6}>
-                          <Typography variant="caption" sx={{ opacity: 0.6, fontWeight: 800 }}>MKT PRICE</Typography>
-                          <Typography variant="h6" sx={{ fontWeight: 800 }}>₹2,300/q</Typography>
-                        </Grid>
-                      </Grid>
-                      <Box sx={{ p: 2, borderRadius: '12px', bgcolor: 'rgba(255,255,255,0.05)', textAlign: 'center' }}>
-                        <Typography variant="caption" sx={{ opacity: 0.6, fontWeight: 800 }}>MONTHLY INCOME EST.</Typography>
-                        <Typography variant="h5" sx={{ fontWeight: 900 }}>₹24,800</Typography>
-                      </Box>
+                      {(() => {
+                        const snap = calculateProfitSnapshot(cropEconomics, profile?.land_size, selectedCrop?.total_duration_days);
+                        return (
+                          <>
+                            <Box>
+                              <Typography variant="caption" sx={{ opacity: 0.6, fontWeight: 800, letterSpacing: 1 }}>EXPECTED PROFIT</Typography>
+                              <Stack direction="row" alignItems="baseline" spacing={1}>
+                                <Typography variant="h3" sx={{ fontWeight: 900, color: '#22c55e' }}>
+                                  ₹{snap.totalProfit.toLocaleString('en-IN')}
+                                </Typography>
+                              </Stack>
+                            </Box>
+                            <Divider sx={{ bgcolor: 'rgba(255,255,255,0.1)' }} />
+                            <Grid container spacing={2}>
+                              <Grid size={{ xs: 6 }}>
+                                <Typography variant="caption" sx={{ opacity: 0.6, fontWeight: 800 }}>EST. YIELD</Typography>
+                                <Typography variant="h6" sx={{ fontWeight: 800 }}>{snap.totalYield} q</Typography>
+                              </Grid>
+                              <Grid size={{ xs: 6 }}>
+                                <Typography variant="caption" sx={{ opacity: 0.6, fontWeight: 800 }}>MKT PRICE</Typography>
+                                <Typography variant="h6" sx={{ fontWeight: 800 }}>₹{snap.marketPricePerQ.toLocaleString('en-IN')}/q</Typography>
+                              </Grid>
+                            </Grid>
+                            <Box sx={{ p: 2, borderRadius: '12px', bgcolor: 'rgba(255,255,255,0.05)', textAlign: 'center' }}>
+                              <Typography variant="caption" sx={{ opacity: 0.6, fontWeight: 800 }}>MONTHLY INCOME EST.</Typography>
+                              <Typography variant="h5" sx={{ fontWeight: 900 }}>₹{snap.monthlyIncome.toLocaleString('en-IN')}</Typography>
+                            </Box>
+                          </>
+                        );
+                      })()}
                     </Stack>
                   </Paper>
 
@@ -654,11 +827,7 @@ const ActionHome = ({ session }) => {
                   <Paper sx={{ p: 4, borderRadius: '24px', border: '1px solid #f1f5f9' }}>
                     <Typography variant="h6" sx={{ fontWeight: 900, mb: 3 }}>Upcoming Tasks</Typography>
                     <Stack spacing={2}>
-                      {[
-                        { day: 'Tomorrow', task: 'Water field', icon: <WaterDrop /> },
-                        { day: 'Day 26', task: 'Apply Potash', icon: <LocalFlorist /> },
-                        { day: 'Day 30', task: 'Pest inspection', icon: <Air /> }
-                      ].map((item, i) => (
+                      {upcomingTasks.map((item, i) => (
                         <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 2, borderRadius: '12px', bgcolor: '#f8fafc', border: '1px solid #f1f5f9' }}>
                           <Box sx={{ color: '#16a34a' }}>{item.icon}</Box>
                           <Box>
@@ -667,6 +836,9 @@ const ActionHome = ({ session }) => {
                           </Box>
                         </Box>
                       ))}
+                      {upcomingTasks.length === 0 && (
+                        <Typography sx={{ color: '#64748b', fontStyle: 'italic', fontSize: '14px' }}>No upcoming tasks.</Typography>
+                      )}
                     </Stack>
                   </Paper>
 

@@ -54,7 +54,7 @@ const FarmCalendar = () => {
 
       <Grid container spacing={3}>
         {/* Main Calendar View (Left) */}
-        <Grid item xs={12} md={8}>
+        <Grid size={{ xs: 12, md: 8 }}>
           <Paper sx={{ p: { xs: '16px', sm: '24px' }, borderRadius: '24px', border: '1px solid #eaeaea', boxShadow: '0 8px 24px rgba(0,0,0,0.03)', minHeight: '600px' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
               <Typography variant="h5" sx={{ fontWeight: 900, color: '#1e293b' }}>{monthName} {currentYear}</Typography>
@@ -120,7 +120,7 @@ const FarmCalendar = () => {
         </Grid>
 
         {/* Sidebar Data Elements (Right) */}
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             
             <Paper sx={{ p: '24px', borderRadius: '24px', border: '1px solid #eaeaea', boxShadow: '0 8px 24px rgba(0,0,0,0.03)' }}>

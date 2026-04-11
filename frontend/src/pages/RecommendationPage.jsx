@@ -139,7 +139,7 @@ const RecommendationPage = () => {
       <Grid container spacing={{ xs: 2.5, md: 4 }}>
 
         {/* LEFT COLUMN: Premium Mobile Input Section */}
-        <Grid item xs={12} md={4} sx={{ position: { md: 'relative' } }}>
+        <Grid size={{ xs: 12, md: 4 }} sx={{ position: { md: 'relative' } }}>
           <Box sx={{ maxWidth: '420px', margin: '0 auto' }}>
             <Typography sx={{ fontSize: '28px', fontWeight: 800, color: '#222', mb: '22px', display: 'flex', alignItems: 'center', gap: 1.5 }}>
               <FilterList sx={{ color: '#2E7D32', fontSize: '32px' }} /> Farm Conditions
@@ -281,7 +281,7 @@ const RecommendationPage = () => {
         </Grid>
 
         {/* RIGHT COLUMN: Results Section */}
-        <Grid item xs={12} md={8} sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Grid size={{ xs: 12, md: 8 }} sx={{ display: 'flex', flexDirection: 'column' }}>
 
           {uiState === 'initial' && (
             <Box sx={{ 

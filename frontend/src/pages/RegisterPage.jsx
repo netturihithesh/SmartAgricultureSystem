@@ -397,35 +397,6 @@ const RegisterPage = () => {
               </Fade>
             )}
 
-            {activeStep === 1 && (
-              <Fade in={activeStep === 1}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                  <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: '16px' }}>
-                    <Autocomplete fullWidth options={indianStates} value={formData.state || null} onChange={(e, v) => setFormData({ ...formData, state: v || '', district: '' })}
-                      renderInput={(params) => <TextField {...params} placeholder="State" required InputProps={{ ...params.InputProps, sx: inputStyles, startAdornment: <><InputAdornment position="start" sx={{ pl: 1 }}><LocationOn sx={{ color: iconColor }} /></InputAdornment>{params.InputProps.startAdornment}</> }} />} />
-                    <Autocomplete fullWidth options={availableDistricts} value={formData.district || null} disabled={!formData.state} onChange={(e, v) => setFormData({ ...formData, district: v || '' })}
-                      renderInput={(params) => <TextField {...params} placeholder="District" required InputProps={{ ...params.InputProps, sx: inputStyles, startAdornment: <><InputAdornment position="start" sx={{ pl: 1 }}><ShareLocation sx={{ color: iconColor }} /></InputAdornment>{params.InputProps.startAdornment}</> }} />} />
-                  </Box>
-                  <TextField select fullWidth name="soilType" value={formData.soilType} onChange={handleChange} required InputProps={{ sx: inputStyles, startAdornment: <InputAdornment position="start"><Terrain sx={{ color: iconColor }} /></InputAdornment> }}>
-                    <MenuItem value="" disabled>Soil Type</MenuItem>
-                    {['Black Soil', 'Red Soil', 'Sandy Soil', 'Clay Soil'].map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
-                  </TextField>
-                  <TextField fullWidth type="number" name="landSize" value={formData.landSize} onChange={handleChange} required placeholder="Land Size (Acres)"
-                    error={formData.landSize !== '' && Number(formData.landSize) <= 0}
-                    helperText={formData.landSize !== '' && Number(formData.landSize) <= 0 ? 'Land size must be greater than 0' : ''}
-                    inputProps={{ min: '0.01', step: 'any' }}
-                    InputProps={{ sx: inputStyles, startAdornment: <InputAdornment position="start"><SquareFoot sx={{ color: iconColor }} /></InputAdornment>, endAdornment: <Typography sx={{ fontWeight: 600, color: textSecondary }}>Acres</Typography> }} />
-                  <TextField select fullWidth name="irrigation" value={formData.irrigation} onChange={handleChange} required InputProps={{ sx: inputStyles, startAdornment: <InputAdornment position="start"><WaterDrop sx={{ color: iconColor }} /></InputAdornment> }}>
-                    <MenuItem value="" disabled>Irrigation</MenuItem>
-                    {['Good Water Available', 'Limited Water', 'No Irrigation'].map(i => <MenuItem key={i} value={i}>{i}</MenuItem>)}
-                  </TextField>
-                  <TextField fullWidth variant="outlined" name="season" value={getSeason(formData.state)}
-                    InputProps={{ sx: { ...inputStyles, backgroundColor: isDark ? '#3a4840' : '#EEEEEE' }, startAdornment: <InputAdornment position="start"><WbSunny sx={{ color: iconColor }} /></InputAdornment>, readOnly: true }}
-                  />
-                </Box>
-              </Fade>
-            )}
-
             <Box sx={{ display: 'flex', gap: '16px', mt: 2 }}>
               {activeStep === 1 && <Button onClick={() => setActiveStep(0)} variant="outlined" sx={{ height: '56px', borderRadius: '12px', minWidth: '60px', color: textSecondary, borderColor: borderColor }}><ArrowBack /></Button>}
               <Button type="submit" variant="contained" fullWidth disabled={loading} sx={{ height: '56px', borderRadius: '12px', backgroundColor: '#2E7D32', fontWeight: 700, textTransform: 'none', boxShadow: 'none', '&:hover': { backgroundColor: '#1B5E20' } }}>
