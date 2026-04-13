@@ -1,8 +1,80 @@
 import axios from 'axios';
 
-// IMPORTANT: Do NOT hardcode API keys here! It will cause them to be revoked when pushed to GitHub.
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+const POLLINATIONS_API_URL = 'https://text.pollinations.ai/';
+
+const fetchWithFallback = async (formattedMessages) => {
+  const groqKey = import.meta.env.VITE_GROQ_API_KEY;
+  const geminiKey = import.meta.env.VITE_GEMINI_API_KEY;
+  const deepseekKey = import.meta.env.VITE_DEEPSEEK_API_KEY;
+
+  // 1. Try Groq (Ultra-fast Primary due to provided key)
+  if (groqKey) {
+    try {
+      const response = await axios.post(
+        'https://api.groq.com/openai/v1/chat/completions',
+        { model: 'llama-3.3-70b-versatile', messages: formattedMessages },
+        { headers: { 'Authorization': `Bearer ${groqKey}`, 'Content-Type': 'application/json' } }
+      );
+      if (response.data?.choices?.[0]?.message?.content) {
+         return response.data.choices[0].message.content;
+      }
+    } catch (e) {
+      console.warn('Groq failed, seamlessly falling back...', e.message);
+    }
+  }
+
+  // 2. Try Gemini (Backup 1)
+  if (geminiKey) {
+    try {
+      const response = await axios.post(
+        'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
+        { model: 'gemini-1.5-flash', messages: formattedMessages },
+        { headers: { 'Authorization': `Bearer ${geminiKey}`, 'Content-Type': 'application/json' } }
+      );
+      if (response.data?.choices?.[0]?.message?.content) {
+         return response.data.choices[0].message.content;
+      }
+    } catch (e) {
+      console.warn('Gemini failed, seamlessly falling back...', e.message);
+    }
+  }
+
+  // 2. Try DeepSeek (Backup 1)
+  if (deepseekKey) {
+    try {
+      const response = await axios.post(
+        'https://api.deepseek.com/chat/completions',
+        { model: 'deepseek-chat', messages: formattedMessages },
+        { headers: { 'Authorization': `Bearer ${deepseekKey}`, 'Content-Type': 'application/json' } }
+      );
+      if (response.data?.choices?.[0]?.message?.content) {
+         return response.data.choices[0].message.content;
+      }
+    } catch (e) {
+      console.warn('DeepSeek failed, seamlessly falling back...', e.message);
+    }
+  }
+
+  // 3. Fallback to Pollinations AI (Backup 2 - Free/No Key)
+  try {
+    const response = await axios.post(
+      POLLINATIONS_API_URL,
+      { messages: formattedMessages },
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+    
+    // Pollinations AI returns raw text usually
+    if (typeof response.data === 'string') {
+        return response.data;
+    } else if (response.data?.choices?.[0]?.message?.content) {
+        return response.data.choices[0].message.content;
+    }
+    return String(response.data);
+  } catch (e) {
+    console.error('All AI fallback providers failed.', e.message);
+    throw new Error('Our AI services are temporarily unavailable. Please try again in a few moments.');
+  }
+};
 
 export const getAiCompletion = async (messages) => {
   try {
@@ -22,7 +94,7 @@ Here is the complete structure and features of the site:
 3. BOT BEHAVIOR:
    - Provide direct answers to agricultural questions (diseases, fertilizers, etc.).
    - If asked about website features, guide them using the Website Context natively.
-   - WEBSITE NAVIGATION CAPABILITY: If the user asks you to take them to a page, open a section, or navigate, you can control their screen! To do this, include the exact tag [NAVIGATE:path] in your response. Replace 'path' with one of the following:
+   - WEBSITE NAVIGATION CAPABILITY: You have the ability to redirect the user's screen. If AND ONLY IF the user explicitly asks to "go to", "open", or "navigate" to a specific page or section, you should output the exact tag [NAVIGATE:path] in your response. 
      - Dashboard Home: /dashboard
      - Farm Calendar: /dashboard/calendar
      - Weather Center: /dashboard/weather
@@ -30,48 +102,30 @@ Here is the complete structure and features of the site:
      - Crop Prediction (AI recommend): /recommendation
      - Add Crop Manually: /add-crop
      - Public Home: /
+   - CRITICAL RULE: NEVER use the [NAVIGATE:path] tag unless the user explicitly requested a page change. Do NOT use it when answering farming questions.
    - Always be welcoming, concise, professional, and action-oriented.`;
     
-    // Map OpenAI chat format ('user', 'assistant') to Gemini format ('user', 'model')
-    const formattedMessages = messages.map(m => ({
-      role: m.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: m.content }]
-    }));
+    const formattedMessages = [
+      { role: 'system', content: systemInstruction },
+      ...messages.map(m => ({
+        role: m.role,
+        content: m.content
+      }))
+    ];
 
-    const response = await axios.post(
-      API_URL,
-      {
-        system_instruction: {
-          parts: { text: systemInstruction }
-        },
-        contents: formattedMessages
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-
-    return response.data.candidates[0].content.parts[0].text;
+    return await fetchWithFallback(formattedMessages);
   } catch (error) {
-    console.error('Gemini API Error:', error.response?.data || error.message);
-    throw new Error(error.response?.data?.error?.message || 'Failed to get response from AI.');
+    console.error('AI API Error:', error);
+    throw new Error(error.message || 'Failed to get response from AI.');
   }
 };
 
 export const getDailyQuote = async () => {
   try {
-    const response = await axios.post(
-      API_URL,
-      {
-        contents: [{ role: 'user', parts: [{ text: 'Generate a unique, short, inspiring, and insightful daily quote related to agriculture, farming, or nature. Do not wrap in quotes. Make it highly motivational and relatable for a farmer.' }] }]
-      },
-      { headers: { 'Content-Type': 'application/json' } }
-    );
-    return response.data.candidates[0].content.parts[0].text.trim();
+    const text = await fetchWithFallback([{ role: 'user', content: 'Generate a unique, short, inspiring, and insightful daily quote related to agriculture, farming, or nature. Do not wrap in quotes. Make it highly motivational and relatable for a farmer.' }]);
+    return text.trim();
   } catch (error) {
-    console.error('Gemini Quote API Error:', error);
+    console.error('AI Quote API Error:', error);
     return "The ultimate goal of farming is not the growing of crops, but the cultivation and perfection of human beings. - Masanobu Fukuoka";
   }
 };
@@ -90,19 +144,13 @@ Return ONLY a valid JSON array. Each element should be an object with:
 
 Do not wrap the response in markdown blocks. Return just the raw JSON array.`;
 
-    const response = await axios.post(
-      API_URL,
-      { contents: [{ role: 'user', parts: [{ text: prompt }] }] },
-      { headers: { 'Content-Type': 'application/json' } }
-    );
-    const text = response.data.candidates[0].content.parts[0].text;
+    const text = await fetchWithFallback([{ role: 'user', content: prompt }]);
     const cleanText = text.replace(/```json/gi, '').replace(/```/gi, '').trim();
     return JSON.parse(cleanText);
   } catch (error) {
-    console.warn('Gemini Stage Schedule API Error (Overloaded - 503). Using Simulated Intelligence Fallback.');
+    console.warn('AI Stage Schedule API Error. Using Simulated Intelligence Fallback.');
     
-    // Google Gemini 2.5 is returning 503 too often today. 
-    // This fallback programmatically simulates an AI response so the UI feature still shines!
+    // Fallback logic
     const simulatedSchedule = subtasks.map((task, index) => {
       let targetDay = 1;
       if (durationDays > 1) {

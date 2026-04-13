@@ -6,6 +6,7 @@ import {
 import { Chat as ChatIcon, Close, Send, SmartToy, Person, Mic, MicOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { getAiCompletion } from '../services/aiService';
+import { supabase } from '../supabase';
 
 const AgriBot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,6 +14,7 @@ const AgriBot = () => {
   const [messages, setMessages] = useState([
     { role: 'assistant', content: 'Hello! I am AgriBot, your AI farming assistant. How can I help you today?' }
   ]);
+  const [userId, setUserId] = useState(null);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
@@ -42,7 +44,52 @@ const AgriBot = () => {
         setIsListening(false);
       };
     }
+
+    // Attempt to scope chat history to specific user natively via Supabase
+    const fetchUser = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (data?.session?.user?.id) {
+        setUserId(data.session.user.id);
+      }
+    };
+    fetchUser();
+    
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+         setUserId(session?.user?.id || null);
+      }
+    );
+    
+    return () => {
+      if (authListener?.subscription) {
+         authListener.subscription.unsubscribe();
+      }
+    };
   }, []);
+
+  // Load cached chats locally upon user resolution
+  useEffect(() => {
+    const storageKey = userId ? `agribot_history_${userId}` : 'agribot_history_guest';
+    const cachedHistory = localStorage.getItem(storageKey);
+    if (cachedHistory) {
+      try {
+        setMessages(JSON.parse(cachedHistory));
+      } catch (e) {
+        console.error('Failed to parse cached chat history', e);
+      }
+    } else {
+      setMessages([{ role: 'assistant', content: 'Hello! I am AgriBot, your AI farming assistant. How can I help you today?' }]);
+    }
+  }, [userId]);
+
+  // Persist chat updates dynamically
+  useEffect(() => {
+    // We only preserve context if there's actual discussion rather than just the intro wrapper natively
+    if (messages.length > 1) {
+       const storageKey = userId ? `agribot_history_${userId}` : 'agribot_history_guest';
+       localStorage.setItem(storageKey, JSON.stringify(messages));
+    }
+  }, [messages, userId]);
 
   const toggleListening = () => {
     if (isListening) {
@@ -133,9 +180,10 @@ const AgriBot = () => {
 
       {/* Floating Action Button area */}
       {!isOpen && (
-        <Box sx={{ position: 'fixed', bottom: 30, right: 30, zIndex: 1000, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 1.5 }}>
+        <Box sx={{ position: 'fixed', bottom: { xs: 20, lg: 40 }, right: { xs: 16, lg: 40 }, zIndex: 1000, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 1.5 }}>
           <Fade in={!isOpen} timeout={1000}>
             <Box sx={{
+              display: { xs: 'none', sm: 'block' },
               bgcolor: '#fff', px: 2, py: 1.2, borderRadius: '16px 16px 4px 16px',
               boxShadow: '0 6px 18px rgba(0,0,0,0.08)', border: '1px solid #f1f5f9',
               animation: 'float-anim 3.5s ease-in-out infinite'
@@ -146,17 +194,19 @@ const AgriBot = () => {
             </Box>
           </Fade>
           
-          <Button
+            <Button
             className="chatbot-fab"
             onClick={() => setIsOpen(true)}
             sx={{
               background: 'linear-gradient(135deg, #16a34a, #22c55e)',
               color: 'white',
-              px: { xs: 2.5, sm: 3 }, py: { xs: 1.2, sm: 1.5 }, borderRadius: '999px',
+              px: { xs: 2, lg: 3 }, py: { xs: 1, lg: 1.5 }, borderRadius: '999px',
               fontWeight: 800, fontSize: '15px',
               textTransform: 'none',
+              transition: 'all 0.25s ease',
               boxShadow: '0 10px 30px rgba(34,197,94,0.35)',
-              '&:hover': { background: 'linear-gradient(135deg, #15803d, #16a34a)' }
+              '&:hover': { background: 'linear-gradient(135deg, #15803d, #16a34a)', transform: 'scale(0.98)' },
+              '&:active': { transform: 'scale(0.95)' }
             }}
             startIcon={<Typography sx={{ fontSize: 22, lineHeight: 1 }}>🤖</Typography>}
           >
@@ -171,10 +221,12 @@ const AgriBot = () => {
           elevation={16}
           sx={{
             position: 'fixed',
-            bottom: 40,
-            right: 40,
-            width: { xs: 'calc(100% - 80px)', sm: 380 },
-            height: 520,
+            bottom: { xs: 80, lg: 40 },
+            right: { xs: 'auto', lg: 40 },
+            left: { xs: '50%', lg: 'auto' },
+            transform: { xs: 'translateX(-50%)', lg: 'none' },
+            width: { xs: 'calc(100% - 32px)', lg: 380 },
+            height: { xs: '70vh', lg: '520px' },
             borderRadius: '24px',
             display: 'flex',
             flexDirection: 'column',
@@ -312,9 +364,6 @@ const AgriBot = () => {
                 <Send fontSize="small" />
               </IconButton>
             </Box>
-            <Typography variant="caption" sx={{ color: '#94a3b8', mt: 1, display: 'block', textAlign: 'center', fontSize: '10px' }}>
-              Powered by Google Gemini AI Assistant
-            </Typography>
           </Box>
         </Paper>
       </Fade>

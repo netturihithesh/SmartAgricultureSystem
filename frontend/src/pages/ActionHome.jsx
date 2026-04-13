@@ -302,8 +302,8 @@ const ActionHome = ({ session }) => {
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', pb: 10, background: '#f8fafc', pt: { xs: 10, md: 12 } }}>
-      <Container maxWidth="lg">
+    <Box sx={{ minHeight: '100vh', pb: '80px', background: '#f8fafc', pt: { xs: '80px', lg: '96px' } }}>
+      <Container maxWidth={false} sx={{ maxWidth: '1200px', mx: 'auto' }}>
         
         {!selectedCrop ? (
           /* ==================================================
@@ -312,7 +312,7 @@ const ActionHome = ({ session }) => {
           <Box sx={{ py: 4, px: { xs: 2, md: 4 } }}>
             {/* 1. Header Section */}
             <Box sx={{ mb: 6 }}>
-              <Typography variant="h3" sx={{ fontWeight: 900, color: '#1e293b', mb: 1, fontSize: { xs: '28px', md: '36px' }, letterSpacing: '-0.5px' }}>
+              <Typography variant="h3" sx={{ fontWeight: 900, color: '#1e293b', mb: '24px', fontSize: 'clamp(24px, 5vw, 36px)', letterSpacing: '-0.5px' }}>
                 Hi, {profile?.full_name || 'Farmer'}! 👋
               </Typography>
               <Stack direction="row" spacing={3} sx={{ color: '#64748b', mb: 4 }}>
@@ -428,13 +428,18 @@ const ActionHome = ({ session }) => {
              ================================================== */
           <Box>
             {/* 1. Header Section */}
-            <Typography variant="h3" sx={{ fontWeight: 900, color: '#1e293b', mb: 4, fontSize: { xs: '28px', md: '36px' }, letterSpacing: '-0.5px' }}>
+            <Typography variant="h3" sx={{ fontWeight: 900, color: '#1e293b', mb: '24px', fontSize: 'clamp(24px, 5vw, 36px)', letterSpacing: '-0.5px' }}>
               Hi, {profile?.full_name || 'Farmer'}! 👋
             </Typography>
 
             {/* DAILY QUOTE BANNER */}
             {dailyQuote && (
-              <Paper elevation={0} sx={{ mb: 4, p: 2.5, borderRadius: '20px', background: 'linear-gradient(135deg, #fffbeb, #fef3c7)', display: 'flex', alignItems: 'flex-start', gap: 2, border: '1px solid #fde68a' }}>
+              <Paper elevation={0} sx={{ 
+                mb: 4, p: '20px', borderRadius: '20px', 
+                background: 'linear-gradient(135deg, #fffbeb, #fef3c7)', border: '1px solid #fde68a',
+                display: 'flex', flexDirection: { xs: 'column', md: 'row' }, 
+                alignItems: { xs: 'center', md: 'flex-start' }, textAlign: { xs: 'center', md: 'left' }, gap: 2 
+              }}>
                 <Typography sx={{ fontSize: 28, lineHeight: 1 }}>🌾</Typography>
                 <Box>
                   <Typography variant="caption" sx={{ fontWeight: 800, color: '#d97706', letterSpacing: 1, textTransform: 'uppercase', mb: 0.5, display: 'block' }}>Daily Word</Typography>
@@ -450,7 +455,7 @@ const ActionHome = ({ session }) => {
               color: '#fff', boxShadow: '0 25px 50px -12px rgba(22, 101, 52, 0.25)',
               position: 'relative', overflow: 'hidden'
             }}>
-              <Box sx={{ position: 'absolute', right: -30, top: -30, width: 200, height: 200, borderRadius: '50%', background: 'rgba(255,255,255,0.05)', zIndex: 0 }} />
+              <Box sx={{ position: 'absolute', right: -30, top: -30, width: { xs: 160, md: 200 }, height: { xs: 160, md: 200 }, borderRadius: '50%', background: 'rgba(255,255,255,0.05)', zIndex: 0 }} />
               
               <Grid container spacing={4} alignItems="center">
                 <Grid size={{ xs: 12, md: 8 }}>
@@ -484,14 +489,14 @@ const ActionHome = ({ session }) => {
                         {new Date(new Date(cropStartDate).getTime() + selectedCrop.total_duration_days * 86400000).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
                       </Typography>
                     </Box>
-                    <Stack direction="row" spacing={1.5} justifyContent={{ md: 'flex-end' }} flexWrap="wrap">
+                    <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 1, md: 1.5 }} sx={{ width: '100%', justifyContent: { md: 'flex-end' }, alignItems: 'stretch' }}>
                       {userCrops.length === 2 ? (
-                        <Button variant="contained" onClick={handleSwapCrop} sx={{ bgcolor: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)', color: '#fff', fontWeight: 700, px: 2, py: 1, borderRadius: '10px', '&:hover': { bgcolor: 'rgba(255,255,255,0.2)' }, border: '1px solid rgba(255,255,255,0.2)' }} startIcon={<SwapHoriz />}>Swap Crop</Button>
+                        <Button variant="contained" fullWidth={false} onClick={handleSwapCrop} sx={{ width: { xs: '100%', md: 'auto' }, bgcolor: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)', color: '#fff', fontWeight: 700, borderRadius: '10px', transition: 'all 0.25s', '&:hover': { bgcolor: 'rgba(255,255,255,0.2)', transform: 'scale(0.98)' }, '&:active': { transform: 'scale(0.95)' }, border: '1px solid rgba(255,255,255,0.2)' }} startIcon={<SwapHoriz />}>Swap Crop</Button>
                       ) : (
-                        <Button variant="contained" onClick={() => navigate('/add-crop')} sx={{ bgcolor: '#3b82f6', color: '#fff', fontWeight: 700, px: 2, py: 1, borderRadius: '10px', '&:hover': { bgcolor: '#2563eb' } }} startIcon={<AddBox />}>Add 2nd Crop</Button>
+                        <Button variant="contained" fullWidth={false} onClick={() => navigate('/add-crop')} sx={{ width: { xs: '100%', md: 'auto' }, bgcolor: '#3b82f6', color: '#fff', fontWeight: 700, borderRadius: '10px', transition: 'all 0.25s', '&:hover': { bgcolor: '#2563eb', transform: 'scale(0.98)' }, '&:active': { transform: 'scale(0.95)' } }} startIcon={<AddBox />}>Add 2nd Crop</Button>
                       )}
-                      <Button variant="contained" onClick={() => setBinModalOpen(true)} sx={{ bgcolor: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)', color: '#fff', fontWeight: 700, px: 2, py: 1, borderRadius: '10px', '&:hover': { bgcolor: 'rgba(255,255,255,0.2)' }, border: '1px solid rgba(255,255,255,0.2)' }} startIcon={<Restore />}>Bin</Button>
-                      <Button variant="contained" onClick={requestDelete} sx={{ bgcolor: '#ef4444', color: '#fff', fontWeight: 700, px: 2, py: 1, borderRadius: '10px', '&:hover': { bgcolor: '#dc2626' } }} startIcon={<Delete />}>Delete</Button>
+                      <Button variant="contained" fullWidth={false} onClick={() => setBinModalOpen(true)} sx={{ width: { xs: '100%', md: 'auto' }, bgcolor: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)', color: '#fff', fontWeight: 700, borderRadius: '10px', transition: 'all 0.25s', '&:hover': { bgcolor: 'rgba(255,255,255,0.2)', transform: 'scale(0.98)' }, '&:active': { transform: 'scale(0.95)' }, border: '1px solid rgba(255,255,255,0.2)' }} startIcon={<Restore />}>Bin</Button>
+                      <Button variant="contained" fullWidth={false} onClick={requestDelete} sx={{ width: { xs: '100%', md: 'auto' }, bgcolor: '#ef4444', color: '#fff', fontWeight: 700, borderRadius: '10px', transition: 'all 0.25s', '&:hover': { bgcolor: '#dc2626', transform: 'scale(0.98)' }, '&:active': { transform: 'scale(0.95)' } }} startIcon={<Delete />}>Delete</Button>
                     </Stack>
                   </Stack>
                 </Grid>
@@ -508,7 +513,7 @@ const ActionHome = ({ session }) => {
                   { title: 'Analytics', icon: <TrendingUp />, color: '#10b981', path: '/dashboard/analytics', desc: 'Insights & ROI' },
                   { title: 'Crop Prediction', icon: <Agriculture />, color: '#3b82f6', path: '/recommendation', desc: 'AI Predictions' }
                 ].map((tile, i) => (
-                  <Grid size={{ xs: 12, sm: 6, lg: 3 }} key={i}>
+                  <Grid size={{ xs: 6, sm: 6, lg: 3 }} key={i}>
                     <Paper 
                       onClick={() => navigate(tile.path)}
                       sx={{ 
@@ -530,17 +535,20 @@ const ActionHome = ({ session }) => {
               </Grid>
             </Box>
 
-            <Grid container spacing={4}>
+            <Grid container spacing={{ xs: 3, md: 4 }}>
               {/* LEFT COLUMN */}
-              <Grid size={{ xs: 12, md: 8 }}>
+              <Grid size={{ xs: 12, sm: 8 }}>
                 
                 {/* TODAY'S WORK CARD */}
-                <Paper sx={{ p: 4, borderRadius: '24px', border: '1px solid #f1f5f9', mb: 5, bgcolor: '#fff', position: 'relative' }}>
-                  <Box sx={{ position: 'absolute', top: 20, right: 20 }}>
-                    <Chip label="High Priority" size="small" bg="#fef2f2" color="error" sx={{ fontWeight: 800 }} />
+                <Paper sx={{ p: { xs: 3, md: 4 }, borderRadius: '24px', border: '1px solid #f1f5f9', mb: 5, bgcolor: '#fff', position: 'relative' }}>
+                  <Box sx={{ display: { xs: 'inline-block', md: 'none' }, mb: 2 }}>
+                    <Chip label="High Priority" size="small" sx={{ fontWeight: 800, bgcolor: '#fef2f2', color: '#ef4444' }} />
                   </Box>
-                  <Typography variant="h5" sx={{ fontWeight: 900, mb: 4, color: '#1e293b' }}>📍 Today's Work</Typography>
-                  <Box sx={{ p: 4, borderRadius: '24px', bgcolor: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                  <Box sx={{ position: 'absolute', top: 32, right: 32, display: { xs: 'none', md: 'block' } }}>
+                    <Chip label="High Priority" size="small" sx={{ fontWeight: 800, bgcolor: '#fef2f2', color: '#ef4444' }} />
+                  </Box>
+                  <Typography variant="h5" sx={{ fontWeight: 900, mb: 4, color: '#1e293b', fontSize: 'clamp(28px, 5vw, 40px)' }}>📍 Today's Work</Typography>
+                  <Box sx={{ p: { xs: 2.5, md: 4 }, borderRadius: '24px', bgcolor: '#f8fafc', border: '1px solid #f1f5f9' }}>
                     {(() => {
                       if (!currentStage) return null;
                       const sortedSubsteps = currentStage.substeps.map((sub, i) => {
@@ -592,8 +600,11 @@ const ActionHome = ({ session }) => {
                               onClick={() => toggleSubstep(currentStage.stage_id, displayIdx)}
                               sx={{ 
                                 py: 2, borderRadius: '16px', fontWeight: 900, textTransform: 'none',
+                                minWidth: '140px', whiteSpace: 'nowrap',
                                 bgcolor: isAllDone ? '#16a34a' : '#1e1b4b',
-                                '&:hover': { bgcolor: isAllDone ? '#16a34a' : '#000' }
+                                transition: 'all 0.2s',
+                                '&:hover': { bgcolor: isAllDone ? '#16a34a' : '#000', transform: 'scale(0.98)' },
+                                '&:active': { transform: 'scale(0.95)' }
                               }}
                             >
                               {isAllDone ? 'Stage Done' : 'Mark as Completed'}
@@ -650,8 +661,8 @@ const ActionHome = ({ session }) => {
 
                   {/* 🌟 SECTION 2: HORIZONTAL CROP JOURNEY 🌟 */}
                   <Typography variant="h5" sx={{ fontWeight: 900, mb: 3, color: '#1e293b' }}>🚀 Crop Journey</Typography>
-                  <Paper sx={{ p: 2.5, borderRadius: '20px', border: '1px solid #f1f5f9', mb: 3, overflowX: 'auto', bgcolor: '#fff', '&::-webkit-scrollbar': { height: '6px' }, '&::-webkit-scrollbar-thumb': { backgroundColor: '#cbd5e1', borderRadius: '10px' } }}>
-                    <Stack direction="row" spacing={1.5} alignItems="center" sx={{ minWidth: "max-content", py: 1 }}>
+                  <Paper sx={{ p: 2.5, pb: '8px', borderRadius: '20px', border: '1px solid #f1f5f9', mb: 3, overflowX: 'auto', WebkitOverflowScrolling: 'touch', bgcolor: '#fff', '&::-webkit-scrollbar': { height: '6px', display: { xs: 'none', sm: 'block' } }, '&::-webkit-scrollbar-thumb': { backgroundColor: '#cbd5e1', borderRadius: '10px' } }}>
+                    <Stack direction="row" spacing={1} alignItems="center" sx={{ minWidth: "max-content", py: 1 }}>
                       {selectedCrop.stages.map((stage, idx) => {
                         const status = getStageStatus(stage.stage_id);
                         const isExpanded = expandedStage ? expandedStage === stage.stage_id : status === 'current';
@@ -732,7 +743,7 @@ const ActionHome = ({ session }) => {
                                     {isLocked && i === 0 && <Chip label="Locked (Wait for Stage)" size="small" sx={{ ml: 'auto', fontWeight: 800, fontSize: '10px', bgcolor: '#e2e8f0', color: '#64748b' }} />}
                                   </Box>
                                   {aiRec && !isCompleted && (
-                                    <Box sx={{ ml: 5, mt: 1, p: 1.5, borderRadius: '8px', bgcolor: '#f0fdf4', border: '1px solid #bbf7d0' }}>
+                                    <Box sx={{ ml: { xs: 3, md: 5 }, mt: 1, p: 1.5, borderRadius: '8px', bgcolor: '#f0fdf4', border: '1px solid #bbf7d0', borderLeft: '3px solid #16a34a' }}>
                                       <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 0.5 }}>
                                           <Typography variant="caption" sx={{ fontWeight: 800, color: '#166534', textTransform: 'uppercase', letterSpacing: 0.5 }}>Optimal Schedule: Day {aiRec.relative_day} of {activePanelStage.duration_days}</Typography>
                                       </Stack>
@@ -751,7 +762,7 @@ const ActionHome = ({ session }) => {
               </Grid>
 
               {/* RIGHT COLUMN */}
-              <Grid size={{ xs: 12, md: 4 }}>
+              <Grid size={{ xs: 12, sm: 4 }}>
                 <Stack spacing={4}>
                   
                   {/* WEATHER + ADVISORY PANEL */}
@@ -797,7 +808,7 @@ const ActionHome = ({ session }) => {
                             <Box>
                               <Typography variant="caption" sx={{ opacity: 0.6, fontWeight: 800, letterSpacing: 1 }}>EXPECTED PROFIT</Typography>
                               <Stack direction="row" alignItems="baseline" spacing={1}>
-                                <Typography variant="h3" sx={{ fontWeight: 900, color: '#22c55e' }}>
+                                <Typography variant="h3" sx={{ fontWeight: 900, color: '#22c55e', fontSize: 'clamp(28px, 4vw, 42px)' }}>
                                   ₹{snap.totalProfit.toLocaleString('en-IN')}
                                 </Typography>
                               </Stack>

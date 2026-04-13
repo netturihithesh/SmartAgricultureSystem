@@ -78,13 +78,14 @@ const Navbar = () => {
           boxShadow: isDark
             ? '0 0px 8px rgba(0,0,0,0.4)'
             : '0 0px 8px rgba(0,0,0,0.08)',
-          height: 70,
+          height: '70px',
           justifyContent: 'center',
           transition: 'background-color 0.3s ease',
+          zIndex: theme.zIndex.drawer + 2
         }}
       >
-        <Container maxWidth="lg">
-          <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Container maxWidth={false} sx={{ maxWidth: '1200px', px: { xs: '24px', lg: '48px' } }}>
+          <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '70px' }}>
 
             {/* Logo */}
             <Box component={RouterLink} to="/" sx={{ display: 'flex', alignItems: 'center', gap: 1, textDecoration: 'none' }}>
@@ -94,8 +95,11 @@ const Navbar = () => {
               </Typography>
             </Box>
 
-            {/* Desktop Menu Links */}
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 3, alignItems: 'center' }}>
+            {/* Desktop Menu Links - Centered */}
+            <Box sx={{ 
+              position: 'absolute', left: '50%', transform: 'translateX(-50%)', 
+              display: { xs: 'none', lg: 'flex' }, gap: 4, alignItems: 'center' 
+            }}>
               {menuItems.map((item) => (
                 <Button
                   key={item.name}
@@ -105,8 +109,10 @@ const Navbar = () => {
                   sx={{
                     color: textColor,
                     fontSize: '15px',
+                    fontWeight: 600,
                     textTransform: 'none',
-                    '&:hover': { color: '#2E7D32', backgroundColor: 'transparent' }
+                    transition: 'all 0.2s ease',
+                    '&:hover': { color: '#2E7D32', backgroundColor: 'transparent', transform: 'translateY(-2px)' }
                   }}
                 >
                   {item.name}
@@ -151,7 +157,7 @@ const Navbar = () => {
               {/* Mobile Hamburger */}
               <IconButton
                 onClick={() => setDrawerOpen(true)}
-                sx={{ display: { xs: 'flex', md: 'none' }, color: '#2E7D32' }}
+                sx={{ display: { xs: 'flex', lg: 'none' }, color: '#2E7D32' }}
                 aria-label="Open menu"
               >
                 <MenuIcon fontSize="large" />
@@ -164,10 +170,10 @@ const Navbar = () => {
 
       {/* Mobile Drawer */}
       <Drawer
-        anchor="right"
+        anchor="left"
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
-        PaperProps={{ sx: { width: 260, backgroundColor: drawerBg, transition: 'background-color 0.3s ease' } }}
+        PaperProps={{ sx: { width: '100%', backgroundColor: drawerBg, transition: 'background-color 0.3s ease' } }}
       >
         {/* Drawer Header */}
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, py: 2, borderBottom: `1px solid ${dividerColor}` }}>
@@ -186,11 +192,11 @@ const Navbar = () => {
             <ListItem key={item.name} disablePadding>
               <ListItemButton
                 onClick={() => handleNavClick(item.path)}
-                sx={{ px: 3, py: 1.5, '&:hover': { backgroundColor: hoverBg, color: '#2E7D32' } }}
+                sx={{ px: 3, py: 2, minHeight: '48px', '&:hover': { backgroundColor: hoverBg, color: '#2E7D32' } }}
               >
                 <ListItemText
                   primary={item.name}
-                  primaryTypographyProps={{ fontSize: '16px', fontWeight: 500, color: textColor }}
+                  primaryTypographyProps={{ fontSize: '18px', fontWeight: 600, color: textColor, textAlign: 'center' }}
                 />
               </ListItemButton>
             </ListItem>
