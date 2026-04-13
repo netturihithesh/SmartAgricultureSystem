@@ -22,6 +22,14 @@ const LoginPage = () => {
   const textPrimary = theme.palette.text.primary;
   const textSecondary = theme.palette.text.secondary;
 
+  React.useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        navigate('/dashboard'); // User is not allowed to go to login page unless logged out
+      }
+    });
+  }, [navigate]);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrorMsg(null);

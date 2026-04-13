@@ -34,12 +34,23 @@ function ThemedApp() {
   const { mode } = useColorMode();
   const theme = useMemo(() => getTheme(mode), [mode]);
   const [session, setSession] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => setSession(session));
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => setSession(session));
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setIsLoading(false);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      setIsLoading(false);
+    });
     return () => subscription.unsubscribe();
   }, []);
+
+  if (isLoading) {
+    return <div style={{ display: 'flex', height: '100vh', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f0ebe0', color: '#2d5a1b', fontFamily: 'sans-serif' }}>Loading SmartAgri...</div>;
+  }
 
   return (
     <ThemeProvider theme={theme}>

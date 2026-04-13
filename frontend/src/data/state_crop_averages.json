@@ -1,0 +1,6622 @@
+[
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Cabbage",
+        "average_price": 4500.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Papaya(Raw)",
+        "average_price": 2000.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Pumpkin",
+        "average_price": 3500.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Sweet Potato",
+        "average_price": 4500.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Guava",
+        "average_price": 6000.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Knool Khol",
+        "average_price": 4500.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Ashgourd",
+        "average_price": 3000.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Brinjal",
+        "average_price": 3500.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "French Beans(Frasbean)",
+        "average_price": 6000.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Snakeguard",
+        "average_price": 3000.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Green Gram(Moong)(Whole)",
+        "average_price": 9500.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Mango(Raw-Ripe)",
+        "average_price": 2000.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Bottle gourd",
+        "average_price": 3000.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Cowpea(Veg)",
+        "average_price": 4500.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Banana - Green",
+        "average_price": 2000.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Colacasia",
+        "average_price": 4500.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 4500.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Pointed gourd(Parval)",
+        "average_price": 12000.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Amaranthus",
+        "average_price": 2000.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Cauliflower",
+        "average_price": 6000.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Bhindi(Ladies Finger)",
+        "average_price": 3000.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Drumstick",
+        "average_price": 7000.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Tapioca",
+        "average_price": 3500.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Tomato",
+        "average_price": 3500.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Black Gram(Urd Beans)(Whole)",
+        "average_price": 9500.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Bitter gourd",
+        "average_price": 6000.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Green Chilli",
+        "average_price": 15000.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Little gourd(Kundru)",
+        "average_price": 4500.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Ridgeguard(Tori)",
+        "average_price": 3000.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Raddish",
+        "average_price": 2000.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Papaya",
+        "average_price": 4500.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Banana",
+        "average_price": 4500.0
+    },
+    {
+        "state": "Andaman and Nicobar",
+        "commodity": "Water Melon",
+        "average_price": 3500.0
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Orange",
+        "average_price": 8083.33
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Papaya",
+        "average_price": 3833.33
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Field Pea",
+        "average_price": 4000.0
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Potato",
+        "average_price": 812.5
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Pineapple",
+        "average_price": 4783.33
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Cauliflower",
+        "average_price": 2783.33
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Garlic",
+        "average_price": 11000.0
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Ginger(Green)",
+        "average_price": 6250.0
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Green Chilli",
+        "average_price": 4250.0
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Grapes",
+        "average_price": 11000.0
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Banana",
+        "average_price": 4087.5
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Water Melon",
+        "average_price": 1550.0
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Pomegranate",
+        "average_price": 12250.0
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Bhindi(Ladies Finger)",
+        "average_price": 5262.5
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Indian Beans(Seam)",
+        "average_price": 4250.0
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Onion",
+        "average_price": 1800.0
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Carrot",
+        "average_price": 2500.0
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Capsicum",
+        "average_price": 3166.67
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 2083.33
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Mousambi(Sweet Lime)",
+        "average_price": 5866.67
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Mango",
+        "average_price": 11000.0
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Tomato",
+        "average_price": 2012.5
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "French Beans(Frasbean)",
+        "average_price": 3700.0
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Brinjal",
+        "average_price": 2466.67
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Bitter gourd",
+        "average_price": 5750.0
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Apple",
+        "average_price": 9916.67
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Cabbage",
+        "average_price": 633.33
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Raddish",
+        "average_price": 1225.0
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Knool Khol",
+        "average_price": 1375.0
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Karbuja(Musk Melon)",
+        "average_price": 3500.0
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Guava",
+        "average_price": 6250.0
+    },
+    {
+        "state": "Jammu and Kashmir",
+        "commodity": "Lemon",
+        "average_price": 13000.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Banana",
+        "average_price": 2454.29
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Mousambi(Sweet Lime)",
+        "average_price": 1600.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Tamarind Fruit",
+        "average_price": 12000.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Gur(Jaggery)",
+        "average_price": 4050.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Ajwan",
+        "average_price": 18166.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Groundnut",
+        "average_price": 6234.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Tomato",
+        "average_price": 1322.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Dry Chillies",
+        "average_price": 17774.75
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Sunflower Seed",
+        "average_price": 5409.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Arhar(Tur/Red Gram)(Whole)",
+        "average_price": 6663.5
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Castor Seed",
+        "average_price": 5870.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Paddy(Common)",
+        "average_price": 2396.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Brinjal",
+        "average_price": 2200.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Cabbage",
+        "average_price": 1000.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Bengal Gram(Gram)(Whole)",
+        "average_price": 5270.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Black Gram(Urd Beans)(Whole)",
+        "average_price": 6500.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Soyabean",
+        "average_price": 5009.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Lemon",
+        "average_price": 11033.33
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Maize",
+        "average_price": 1529.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Onion",
+        "average_price": 689.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Foxtail Millet(Navane)",
+        "average_price": 2869.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Cluster beans",
+        "average_price": 4500.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Green Chilli",
+        "average_price": 4500.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Ridgeguard(Tori)",
+        "average_price": 1800.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Cauliflower",
+        "average_price": 1200.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Potato",
+        "average_price": 1200.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Chili Red",
+        "average_price": 17500.0
+    },
+    {
+        "state": "Andhra Pradesh",
+        "commodity": "Lime",
+        "average_price": 9700.0
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Papaya",
+        "average_price": 4143.75
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Spinach",
+        "average_price": 2185.0
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Garlic",
+        "average_price": 10816.67
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Banana",
+        "average_price": 3597.22
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Capsicum",
+        "average_price": 2780.0
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Kinnow",
+        "average_price": 6918.75
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Brinjal",
+        "average_price": 2580.0
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Lemon",
+        "average_price": 16714.29
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Cauliflower",
+        "average_price": 2905.0
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "French Beans(Frasbean)",
+        "average_price": 4587.5
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Peas Wet",
+        "average_price": 5550.0
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Green Chilli",
+        "average_price": 5232.35
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Mashrooms",
+        "average_price": 15300.0
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Potato",
+        "average_price": 961.9
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Tomato",
+        "average_price": 2121.43
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Guava",
+        "average_price": 7553.33
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Bottle gourd",
+        "average_price": 2308.82
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Pomegranate",
+        "average_price": 13690.0
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 1522.22
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Grapes",
+        "average_price": 11356.25
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Karbuja(Musk Melon)",
+        "average_price": 3712.5
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Apple",
+        "average_price": 13882.35
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Mango",
+        "average_price": 11633.33
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Beetroot",
+        "average_price": 2733.33
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Cabbage",
+        "average_price": 1073.81
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Ginger(Green)",
+        "average_price": 7788.24
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Coriander(Leaves)",
+        "average_price": 3991.67
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Water Melon",
+        "average_price": 2085.71
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Pumpkin",
+        "average_price": 1926.67
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Raddish",
+        "average_price": 1808.33
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Carrot",
+        "average_price": 2353.85
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Mousambi(Sweet Lime)",
+        "average_price": 5375.0
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Squash(Chappal Kadoo)",
+        "average_price": 2208.33
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Chikoos(Sapota)",
+        "average_price": 3666.67
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Bhindi(Ladies Finger)",
+        "average_price": 6239.29
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Onion",
+        "average_price": 1904.76
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Orange",
+        "average_price": 10244.44
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Colacasia",
+        "average_price": 4414.29
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Tinda",
+        "average_price": 4587.5
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Onion Green",
+        "average_price": 2125.0
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Bitter gourd",
+        "average_price": 5610.71
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Pineapple",
+        "average_price": 5128.57
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Methi(Leaves)",
+        "average_price": 3200.0
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Sponge gourd",
+        "average_price": 4316.67
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Kiwi Fruit",
+        "average_price": 32000.0
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Pea Pod/Pea Cod/\u0939\u0930\u0940 \u092e\u091f\u0930",
+        "average_price": 6612.5
+    },
+    {
+        "state": "Himachal Pradesh",
+        "commodity": "Snow Mountain Garlic",
+        "average_price": 9000.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Wheat",
+        "average_price": 2411.16
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Potato",
+        "average_price": 574.42
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Bhindi(Ladies Finger)",
+        "average_price": 2581.07
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Pumpkin",
+        "average_price": 1113.33
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Firewood",
+        "average_price": 407.34
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Paddy(Common)",
+        "average_price": 2361.23
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Masur Dal",
+        "average_price": 7293.86
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Brinjal",
+        "average_price": 1376.19
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Cabbage",
+        "average_price": 1104.29
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Green Chilli",
+        "average_price": 3002.56
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Rice",
+        "average_price": 2842.14
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Wood",
+        "average_price": 528.42
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Soanf",
+        "average_price": 12800.99
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Groundnut",
+        "average_price": 7009.39
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Bottle gourd",
+        "average_price": 1258.67
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Ginger(Green)",
+        "average_price": 4620.3
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Papaya(Raw)",
+        "average_price": 1825.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Onion",
+        "average_price": 1175.25
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Cauliflower",
+        "average_price": 1501.18
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Rab/Liquid Jaggery/Molasses",
+        "average_price": 2868.84
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Arhar Dal(Tur Dal)",
+        "average_price": 10380.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 1006.25
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Garlic",
+        "average_price": 5628.01
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Raddish",
+        "average_price": 1135.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Tomato",
+        "average_price": 1197.44
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Gur(Jaggery)",
+        "average_price": 3698.39
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Pegeon Pea(Arhar Fali)",
+        "average_price": 6225.34
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Bitter gourd",
+        "average_price": 3146.36
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Barley(Jau)",
+        "average_price": 2094.67
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Jowar(Sorghum)",
+        "average_price": 2200.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Mustard",
+        "average_price": 6143.05
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Mentha Oil",
+        "average_price": 106377.65
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Peas(Dry)",
+        "average_price": 4079.59
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Bajra(Pearl Millet/Cumbu)",
+        "average_price": 1802.04
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Pointed gourd(Parval)",
+        "average_price": 4075.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Apple",
+        "average_price": 8790.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Pea Pod/Pea Cod/\u0939\u0930\u0940 \u092e\u091f\u0930",
+        "average_price": 5050.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Papaya",
+        "average_price": 2256.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Lemon",
+        "average_price": 5018.57
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Chili Red",
+        "average_price": 11054.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Makhana(Foxnut)",
+        "average_price": 39447.16
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Banana - Green",
+        "average_price": 1605.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Grapes",
+        "average_price": 7032.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Methi Seeds",
+        "average_price": 5000.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Capsicum",
+        "average_price": 2041.15
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Tobacco",
+        "average_price": 3324.91
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Sweet Saag",
+        "average_price": 16800.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Water Melon",
+        "average_price": 1382.5
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Banana",
+        "average_price": 2176.67
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Sugar",
+        "average_price": 5050.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Chicory(Chikori/Kasni)",
+        "average_price": 2507.5
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Maize",
+        "average_price": 1878.5
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Colacasia",
+        "average_price": 3225.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Khandsari(Desi Khand)",
+        "average_price": 4265.56
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Cowpea(Lobia/Karamani)",
+        "average_price": 7500.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Green Gram Dal(Moong Dal)",
+        "average_price": 9806.89
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Ridgeguard(Tori)",
+        "average_price": 1900.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Arecanut(Betelnut/Supari)",
+        "average_price": 32982.39
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Turmeric",
+        "average_price": 12552.39
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Spinach",
+        "average_price": 1300.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Sesamum(Sesame,Gingelly,Til)",
+        "average_price": 8100.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Bengal Gram(Gram)(Whole)",
+        "average_price": 5835.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Black Gram Dal(Urd Dal)",
+        "average_price": 8771.6
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Carrot",
+        "average_price": 1761.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Mousambi(Sweet Lime)",
+        "average_price": 3365.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Bengal Gram Dal(Chana Dal)",
+        "average_price": 6725.99
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Green Gram(Moong)(Whole)",
+        "average_price": 9050.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Lentil(Masur)(Whole)",
+        "average_price": 6350.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Cotton",
+        "average_price": 12007.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Guava",
+        "average_price": 4566.67
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Pomegranate",
+        "average_price": 8125.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Karbuja(Musk Melon)",
+        "average_price": 2183.33
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Sanai/Sunhemp",
+        "average_price": 9000.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Chikoos(Sapota)",
+        "average_price": 2000.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Black Gram(Urd Beans)(Whole)",
+        "average_price": 7325.0
+    },
+    {
+        "state": "Uttar Pradesh",
+        "commodity": "Paddy(Basmati)",
+        "average_price": 2610.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 1113.64
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Lentil(Masur)(Whole)",
+        "average_price": 6552.05
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Soyabean",
+        "average_price": 5330.95
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Arhar(Tur/Red Gram)(Whole)",
+        "average_price": 6849.03
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Green Peas",
+        "average_price": 3534.92
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Mustard",
+        "average_price": 6462.71
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Garlic",
+        "average_price": 3559.06
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Maize",
+        "average_price": 1644.78
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Wheat",
+        "average_price": 2307.88
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Kabuli Chana(Chickpeas-White)",
+        "average_price": 6888.88
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Isabgul(Psyllium)",
+        "average_price": 11882.75
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Linseed",
+        "average_price": 7343.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Methi Seeds",
+        "average_price": 5810.6
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "buttery",
+        "average_price": 3628.92
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Lak(Teora)",
+        "average_price": 2905.05
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Bengal Gram(Gram)(Whole)",
+        "average_price": 5263.44
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Green Gram(Moong)(Whole)",
+        "average_price": 6747.43
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Asgand",
+        "average_price": 7289.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Asalia",
+        "average_price": 5893.67
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Paddy(Common)",
+        "average_price": 3014.98
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Coriander(Leaves)",
+        "average_price": 11154.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Cotton",
+        "average_price": 7495.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Groundnut",
+        "average_price": 6823.44
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "poppy seeds",
+        "average_price": 130866.67
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Onion",
+        "average_price": 890.29
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Tamarind Fruit",
+        "average_price": 4814.55
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Barley(Jau)",
+        "average_price": 2125.68
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "nigella",
+        "average_price": 16150.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Mahua",
+        "average_price": 3330.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Kodo Millet(Varagu)",
+        "average_price": 2203.57
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Harrah",
+        "average_price": 1750.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Soanf",
+        "average_price": 13500.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Bajra(Pearl Millet/Cumbu)",
+        "average_price": 1768.33
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Sesamum(Sesame,Gingelly,Til)",
+        "average_price": 8023.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Jowar(Sorghum)",
+        "average_price": 3110.59
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Banana",
+        "average_price": 1350.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Orange",
+        "average_price": 5000.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Pomegranate",
+        "average_price": 6000.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Capsicum",
+        "average_price": 1628.2
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Ginger(Green)",
+        "average_price": 3389.2
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Raddish",
+        "average_price": 600.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Bhindi(Ladies Finger)",
+        "average_price": 1935.64
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Bitter gourd",
+        "average_price": 1818.67
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Bottle gourd",
+        "average_price": 1095.75
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Water Melon",
+        "average_price": 850.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Cabbage",
+        "average_price": 808.77
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Tomato",
+        "average_price": 855.69
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Pumpkin",
+        "average_price": 1014.29
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Spinach",
+        "average_price": 862.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Brinjal",
+        "average_price": 1098.53
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Cauliflower",
+        "average_price": 1267.92
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Mousambi(Sweet Lime)",
+        "average_price": 2500.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Potato",
+        "average_price": 768.91
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Green Chilli",
+        "average_price": 2938.17
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "dhawai flowers",
+        "average_price": 4500.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Chili Red",
+        "average_price": 23155.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Black Gram(Urd Beans)(Whole)",
+        "average_price": 7183.91
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Rayee",
+        "average_price": 8482.93
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Absinthe",
+        "average_price": 8900.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Gur(Jaggery)",
+        "average_price": 3645.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "basil",
+        "average_price": 17441.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Flax seeds",
+        "average_price": 11500.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Kutki",
+        "average_price": 4344.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Pineapple",
+        "average_price": 3000.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Mango",
+        "average_price": 7750.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Sponge gourd",
+        "average_price": 2049.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Drumstick",
+        "average_price": 2500.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Amaranthus",
+        "average_price": 2250.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Other green and fresh vegetables",
+        "average_price": 1400.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Karbuja(Musk Melon)",
+        "average_price": 1166.67
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Grapes",
+        "average_price": 6000.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Tinda",
+        "average_price": 1945.67
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Apple",
+        "average_price": 8000.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Chikoos(Sapota)",
+        "average_price": 2900.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Methi(Leaves)",
+        "average_price": 1145.8
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Mango(Raw-Ripe)",
+        "average_price": 2666.67
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Ridgeguard(Tori)",
+        "average_price": 3600.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Ashwagandha",
+        "average_price": 25900.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Lemon",
+        "average_price": 9750.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "nigella seeds",
+        "average_price": 14470.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Ajwan",
+        "average_price": 13712.5
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Cummin Seed(Jeera)",
+        "average_price": 24559.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Papaya",
+        "average_price": 1200.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Carrot",
+        "average_price": 1500.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Colacasia",
+        "average_price": 2300.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Turmeric",
+        "average_price": 19666.67
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Guar",
+        "average_price": 4000.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Beetroot",
+        "average_price": 2000.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Giloy",
+        "average_price": 3400.0
+    },
+    {
+        "state": "Madhya Pradesh",
+        "commodity": "Palash flowers",
+        "average_price": 2800.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 2250.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Green Peas",
+        "average_price": 6466.67
+    },
+    {
+        "state": "Assam",
+        "commodity": "Potato",
+        "average_price": 1233.33
+    },
+    {
+        "state": "Assam",
+        "commodity": "Ridgeguard(Tori)",
+        "average_price": 6000.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Beetroot",
+        "average_price": 2000.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Green Gram Dal(Moong Dal)",
+        "average_price": 8283.33
+    },
+    {
+        "state": "Assam",
+        "commodity": "Dry Chillies",
+        "average_price": 31000.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Green Chilli",
+        "average_price": 3080.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Cabbage",
+        "average_price": 1240.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Cauliflower",
+        "average_price": 1790.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Tomato",
+        "average_price": 1730.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Carrot",
+        "average_price": 2500.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Bitter gourd",
+        "average_price": 2612.5
+    },
+    {
+        "state": "Assam",
+        "commodity": "Bhindi(Ladies Finger)",
+        "average_price": 3200.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Onion",
+        "average_price": 1800.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Raddish",
+        "average_price": 1700.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Pointed gourd(Parval)",
+        "average_price": 6000.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Brinjal",
+        "average_price": 1983.33
+    },
+    {
+        "state": "Assam",
+        "commodity": "Lentil(Masur)(Whole)",
+        "average_price": 9433.33
+    },
+    {
+        "state": "Assam",
+        "commodity": "Maida Atta",
+        "average_price": 7600.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Beaten Rice",
+        "average_price": 27000.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Pumpkin",
+        "average_price": 1090.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Sugar",
+        "average_price": 4500.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Rice",
+        "average_price": 7433.33
+    },
+    {
+        "state": "Assam",
+        "commodity": "Wheat Atta",
+        "average_price": 7600.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Beans",
+        "average_price": 5200.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Papaya(Raw)",
+        "average_price": 2000.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Drumstick",
+        "average_price": 4500.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Corriander seed",
+        "average_price": 6500.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Knool Khol",
+        "average_price": 1200.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Squash(Chappal Kadoo)",
+        "average_price": 2500.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Taro (Arvi) Stem",
+        "average_price": 3500.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Cowpea(Veg)",
+        "average_price": 5000.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Arhar Dal(Tur Dal)",
+        "average_price": 11550.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Mustard Oil",
+        "average_price": 18000.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Cummin Seed(Jeera)",
+        "average_price": 30200.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Turmeric(raw)",
+        "average_price": 17000.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Bottle gourd",
+        "average_price": 3000.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Capsicum",
+        "average_price": 5250.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Garlic",
+        "average_price": 8500.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Ginger(Green)",
+        "average_price": 6500.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Sponge gourd",
+        "average_price": 4000.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Spinach",
+        "average_price": 3000.0
+    },
+    {
+        "state": "Assam",
+        "commodity": "Ashgourd",
+        "average_price": 2500.0
+    },
+    {
+        "state": "Chandigarh",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 1500.0
+    },
+    {
+        "state": "Chandigarh",
+        "commodity": "Bottle gourd",
+        "average_price": 1000.0
+    },
+    {
+        "state": "Chandigarh",
+        "commodity": "Brinjal",
+        "average_price": 1800.0
+    },
+    {
+        "state": "Chandigarh",
+        "commodity": "Cabbage",
+        "average_price": 400.0
+    },
+    {
+        "state": "Chandigarh",
+        "commodity": "Tomato",
+        "average_price": 1200.0
+    },
+    {
+        "state": "Chandigarh",
+        "commodity": "Potato",
+        "average_price": 300.0
+    },
+    {
+        "state": "Chandigarh",
+        "commodity": "Bhindi(Ladies Finger)",
+        "average_price": 5000.0
+    },
+    {
+        "state": "Chandigarh",
+        "commodity": "Bitter gourd",
+        "average_price": 3500.0
+    },
+    {
+        "state": "Chandigarh",
+        "commodity": "Ginger(Green)",
+        "average_price": 5000.0
+    },
+    {
+        "state": "Chandigarh",
+        "commodity": "Green Chilli",
+        "average_price": 3000.0
+    },
+    {
+        "state": "Chandigarh",
+        "commodity": "Lemon",
+        "average_price": 9000.0
+    },
+    {
+        "state": "Chandigarh",
+        "commodity": "Pumpkin",
+        "average_price": 1000.0
+    },
+    {
+        "state": "Chandigarh",
+        "commodity": "Capsicum",
+        "average_price": 1800.0
+    },
+    {
+        "state": "Chandigarh",
+        "commodity": "Carrot",
+        "average_price": 1500.0
+    },
+    {
+        "state": "Chandigarh",
+        "commodity": "Onion",
+        "average_price": 1200.0
+    },
+    {
+        "state": "Chandigarh",
+        "commodity": "Cauliflower",
+        "average_price": 1600.0
+    },
+    {
+        "state": "Chandigarh",
+        "commodity": "Peas Wet",
+        "average_price": 5000.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Fish",
+        "average_price": 18500.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Little gourd(Kundru)",
+        "average_price": 4200.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Turmeric(raw)",
+        "average_price": 2000.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Sweet Pumpkin",
+        "average_price": 1300.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Persimon(Japani Fal)",
+        "average_price": 13333.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Jamun(Narale Hannu)",
+        "average_price": 42500.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Mango",
+        "average_price": 10206.33
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Green Chilli",
+        "average_price": 2500.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Onion Green",
+        "average_price": 1700.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Pineapple",
+        "average_price": 4075.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Water Melon",
+        "average_price": 1425.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Tube Rose(Double)",
+        "average_price": 150.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Jarbara",
+        "average_price": 20.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Tube Rose(Single)",
+        "average_price": 70.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Cauliflower",
+        "average_price": 2400.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Raddish",
+        "average_price": 1000.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Spinach",
+        "average_price": 1850.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Potato",
+        "average_price": 542.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Brinjal",
+        "average_price": 2425.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Ginger(Green)",
+        "average_price": 5100.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Apple",
+        "average_price": 11722.33
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Grapes",
+        "average_price": 8333.33
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Banana",
+        "average_price": 2450.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Beetroot",
+        "average_price": 700.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Peas Wet",
+        "average_price": 4450.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Pumpkin",
+        "average_price": 1275.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Anthorium",
+        "average_price": 25.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Carnation",
+        "average_price": 70.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Marget",
+        "average_price": 2000.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Papaya",
+        "average_price": 2937.5
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Capsicum",
+        "average_price": 2700.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 1508.5
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Coriander(Leaves)",
+        "average_price": 1850.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Tinda",
+        "average_price": 2750.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Cock",
+        "average_price": 9800.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Indian Beans(Seam)",
+        "average_price": 3100.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Mint(Pudina)",
+        "average_price": 2600.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Jack Fruit(Ripe)",
+        "average_price": 2400.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Bottle gourd",
+        "average_price": 1850.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Chikoos(Sapota)",
+        "average_price": 950.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Mousambi(Sweet Lime)",
+        "average_price": 2500.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Bhindi(Ladies Finger)",
+        "average_price": 5050.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Onion",
+        "average_price": 1262.5
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Tomato",
+        "average_price": 1110.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Raibel",
+        "average_price": 25000.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Orange",
+        "average_price": 8175.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Bitter gourd",
+        "average_price": 3750.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Carrot",
+        "average_price": 1750.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Guar",
+        "average_price": 3750.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Lotus Sticks",
+        "average_price": 4500.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Amla(Nelli Kai)",
+        "average_price": 3700.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Garlic",
+        "average_price": 7000.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Tender Coconut",
+        "average_price": 1750.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Tulip",
+        "average_price": 130000.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Chrysanthemum",
+        "average_price": 25.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Rose(Loose))",
+        "average_price": 5000.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Karbuja(Musk Melon)",
+        "average_price": 2625.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Cabbage",
+        "average_price": 1000.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Hen",
+        "average_price": 3600.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Lemon",
+        "average_price": 8000.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Methi(Leaves)",
+        "average_price": 1800.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Mango(Raw-Ripe)",
+        "average_price": 6500.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Sweet Potato",
+        "average_price": 1750.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Guava",
+        "average_price": 7500.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Pomegranate",
+        "average_price": 7200.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Banana - Green",
+        "average_price": 2700.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Mashrooms",
+        "average_price": 12500.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Pointed gourd(Parval)",
+        "average_price": 4200.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Orchid",
+        "average_price": 210.0
+    },
+    {
+        "state": "NCT of Delhi",
+        "commodity": "Lilly",
+        "average_price": 400.0
+    },
+    {
+        "state": "Goa",
+        "commodity": "Arecanut(Betelnut/Supari)",
+        "average_price": 39566.67
+    },
+    {
+        "state": "Goa",
+        "commodity": "Potato",
+        "average_price": 1200.0
+    },
+    {
+        "state": "Goa",
+        "commodity": "Mango",
+        "average_price": 5500.0
+    },
+    {
+        "state": "Goa",
+        "commodity": "Orange",
+        "average_price": 5500.0
+    },
+    {
+        "state": "Goa",
+        "commodity": "Apple",
+        "average_price": 12500.0
+    },
+    {
+        "state": "Goa",
+        "commodity": "Marigold(loose)",
+        "average_price": 5000.0
+    },
+    {
+        "state": "Goa",
+        "commodity": "Cashewnuts",
+        "average_price": 17000.0
+    },
+    {
+        "state": "Goa",
+        "commodity": "Water Melon",
+        "average_price": 2250.0
+    },
+    {
+        "state": "Goa",
+        "commodity": "Chikoos(Sapota)",
+        "average_price": 5000.0
+    },
+    {
+        "state": "Goa",
+        "commodity": "Green Chilli",
+        "average_price": 6500.0
+    },
+    {
+        "state": "Goa",
+        "commodity": "Brinjal",
+        "average_price": 2800.0
+    },
+    {
+        "state": "Goa",
+        "commodity": "Grapes",
+        "average_price": 5000.0
+    },
+    {
+        "state": "Goa",
+        "commodity": "Banana",
+        "average_price": 3250.0
+    },
+    {
+        "state": "Goa",
+        "commodity": "Onion",
+        "average_price": 1000.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Castor Seed",
+        "average_price": 6149.97
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Mustard",
+        "average_price": 6195.4
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Cummin Seed(Jeera)",
+        "average_price": 19232.9
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Soanf",
+        "average_price": 10867.69
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Bajra(Pearl Millet/Cumbu)",
+        "average_price": 2179.81
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Barley(Jau)",
+        "average_price": 2337.5
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Methi Seeds",
+        "average_price": 6000.62
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Maize",
+        "average_price": 1875.67
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Paddy(Common)",
+        "average_price": 2006.23
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Arhar(Tur/Red Gram)(Whole)",
+        "average_price": 6720.07
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Potato",
+        "average_price": 1062.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Cotton",
+        "average_price": 7630.33
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Guar Seed(Cluster Beans Seed)",
+        "average_price": 5039.75
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Red Gram",
+        "average_price": 5029.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Onion",
+        "average_price": 1091.65
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Wheat",
+        "average_price": 2377.35
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Brinjal",
+        "average_price": 1312.86
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Ginger(Green)",
+        "average_price": 4982.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Green Chilli",
+        "average_price": 2900.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Tomato",
+        "average_price": 979.76
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Pegeon Pea(Arhar Fali)",
+        "average_price": 7937.5
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Coriander(Leaves)",
+        "average_price": 1911.5
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Apple",
+        "average_price": 11833.33
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Isabgul(Psyllium)",
+        "average_price": 10132.5
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Guar",
+        "average_price": 3979.17
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Cauliflower",
+        "average_price": 1804.41
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Pointed gourd(Parval)",
+        "average_price": 4185.71
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Rajgir",
+        "average_price": 8343.5
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Lemon",
+        "average_price": 9256.79
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Methi(Leaves)",
+        "average_price": 2616.67
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Bottle gourd",
+        "average_price": 1224.67
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Bhindi(Ladies Finger)",
+        "average_price": 2913.25
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Foxtail Millet(Navane)",
+        "average_price": 2600.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Groundnut(Split)",
+        "average_price": 8096.67
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Sesamum(Sesame,Gingelly,Til)",
+        "average_price": 11354.29
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Bengal Gram(Gram)(Whole)",
+        "average_price": 5450.23
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Corriander seed",
+        "average_price": 11389.06
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Millets",
+        "average_price": 2505.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Groundnut",
+        "average_price": 6832.86
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Cabbage",
+        "average_price": 931.58
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Kabuli Chana(Chickpeas-White)",
+        "average_price": 5480.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Black Gram(Urd Beans)(Whole)",
+        "average_price": 6750.94
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Dry Chillies",
+        "average_price": 18751.67
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 1750.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Kulthi(Horse Gram)",
+        "average_price": 5091.25
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Soyabean",
+        "average_price": 5013.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Grapes",
+        "average_price": 8625.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Banana",
+        "average_price": 1795.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Mango",
+        "average_price": 8000.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Sunflower",
+        "average_price": 5200.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Suva(Dill Seed)",
+        "average_price": 8772.44
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Pumpkin",
+        "average_price": 1012.5
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Sponge gourd",
+        "average_price": 2166.67
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Sweet Potato",
+        "average_price": 1675.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Turmeric(raw)",
+        "average_price": 3500.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Ajwan",
+        "average_price": 13746.88
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Mango(Raw-Ripe)",
+        "average_price": 3300.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Cotton Seed",
+        "average_price": 8825.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Bitter gourd",
+        "average_price": 2217.5
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Onion Green",
+        "average_price": 1333.33
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Papaya(Raw)",
+        "average_price": 750.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Tobacco",
+        "average_price": 9400.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Green Gram(Moong)(Whole)",
+        "average_price": 7550.6
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Garlic",
+        "average_price": 7218.33
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Arhar Dal(Tur Dal)",
+        "average_price": 6350.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Other Pulses",
+        "average_price": 4850.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Jowar(Sorghum)",
+        "average_price": 3801.79
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Ground Nut Seed",
+        "average_price": 8391.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Beans",
+        "average_price": 5703.75
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Water Melon",
+        "average_price": 987.5
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Guava",
+        "average_price": 3125.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Banana - Green",
+        "average_price": 1012.5
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Indian Beans(Seam)",
+        "average_price": 3250.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Surat Beans(Papadi)",
+        "average_price": 6000.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Long Melon(Kakri)",
+        "average_price": 1225.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Mousambi(Sweet Lime)",
+        "average_price": 3500.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Mint(Pudina)",
+        "average_price": 1875.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Cowpea(Veg)",
+        "average_price": 4250.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Drumstick",
+        "average_price": 2137.5
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Pea Pod/Pea Cod/\u0939\u0930\u0940 \u092e\u091f\u0930",
+        "average_price": 5900.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Tinda",
+        "average_price": 3408.33
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Cluster beans",
+        "average_price": 3781.25
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Carrot",
+        "average_price": 1783.33
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Leafy Vegetable",
+        "average_price": 1750.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Chili Red",
+        "average_price": 29636.67
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Pomegranate",
+        "average_price": 7000.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Raddish",
+        "average_price": 1500.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Chikoos(Sapota)",
+        "average_price": 1606.25
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Orange",
+        "average_price": 6375.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Little gourd(Kundru)",
+        "average_price": 3593.75
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Beetroot",
+        "average_price": 1216.67
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Elephant Yam(Suran)/Amorphophallus",
+        "average_price": 2600.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Yam(Ratalu)",
+        "average_price": 5000.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Ridgeguard(Tori)",
+        "average_price": 2300.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "French Beans(Frasbean)",
+        "average_price": 3500.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Peas Wet",
+        "average_price": 7500.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Papaya",
+        "average_price": 1875.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Spinach",
+        "average_price": 1316.67
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Lime",
+        "average_price": 3900.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Capsicum",
+        "average_price": 2333.33
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Groundnut pods(raw)",
+        "average_price": 4750.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Big Gram",
+        "average_price": 7025.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Snakeguard",
+        "average_price": 2000.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Taramira",
+        "average_price": 4750.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Rice",
+        "average_price": 5500.0
+    },
+    {
+        "state": "Gujarat",
+        "commodity": "Colacasia",
+        "average_price": 3900.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Coriander(Leaves)",
+        "average_price": 1175.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Pumpkin",
+        "average_price": 1062.5
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Brinjal",
+        "average_price": 1664.58
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Potato",
+        "average_price": 665.48
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Capsicum",
+        "average_price": 2083.33
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Lemon",
+        "average_price": 11080.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Garlic",
+        "average_price": 7300.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Water Melon",
+        "average_price": 1322.61
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Mousambi(Sweet Lime)",
+        "average_price": 3763.08
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Bitter gourd",
+        "average_price": 3240.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Karbuja(Musk Melon)",
+        "average_price": 1961.54
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Onion",
+        "average_price": 1340.24
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Tomato",
+        "average_price": 1484.52
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 1182.76
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Peas Wet",
+        "average_price": 3800.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Sponge gourd",
+        "average_price": 3375.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Tinda",
+        "average_price": 2380.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Mustard",
+        "average_price": 6199.33
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Cabbage",
+        "average_price": 758.89
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Orange",
+        "average_price": 6466.67
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Long Melon(Kakri)",
+        "average_price": 1233.33
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Cauliflower",
+        "average_price": 1609.62
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Spinach",
+        "average_price": 1288.89
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Apple",
+        "average_price": 11018.18
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Bottle gourd",
+        "average_price": 1344.44
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Black Gram(Urd Beans)(Whole)",
+        "average_price": 5051.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Grapes",
+        "average_price": 7723.53
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Banana",
+        "average_price": 2656.6
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Mango",
+        "average_price": 8900.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Carrot",
+        "average_price": 2122.22
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Chikoos(Sapota)",
+        "average_price": 3185.29
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Bhindi(Ladies Finger)",
+        "average_price": 4985.71
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Green Chilli",
+        "average_price": 3668.75
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Ginger(Green)",
+        "average_price": 5911.11
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Raddish",
+        "average_price": 1133.33
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Ginger(Dry)",
+        "average_price": 6500.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Pineapple",
+        "average_price": 4000.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Squash(Chappal Kadoo)",
+        "average_price": 900.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Guava",
+        "average_price": 4900.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Pomegranate",
+        "average_price": 11480.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Barley(Jau)",
+        "average_price": 2000.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Wheat",
+        "average_price": 2585.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Tender Coconut",
+        "average_price": 5000.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Onion Green",
+        "average_price": 1500.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Leafy Vegetable",
+        "average_price": 900.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Cluster beans",
+        "average_price": 5000.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Peas(Dry)",
+        "average_price": 7000.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Papaya",
+        "average_price": 3500.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Kinnow",
+        "average_price": 3900.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Mango(Raw-Ripe)",
+        "average_price": 4400.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Colacasia",
+        "average_price": 1800.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Mashrooms",
+        "average_price": 7500.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Methi(Leaves)",
+        "average_price": 2000.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Indian Beans(Seam)",
+        "average_price": 1800.0
+    },
+    {
+        "state": "Haryana",
+        "commodity": "Yam(Ratalu)",
+        "average_price": 4500.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Gur(Jaggery)",
+        "average_price": 4291.83
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Paddy(Common)",
+        "average_price": 2409.88
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Maize",
+        "average_price": 1825.3
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Tomato",
+        "average_price": 1277.83
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Green Avare(W)",
+        "average_price": 1800.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Drumstick",
+        "average_price": 3041.67
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Seemebadnekai",
+        "average_price": 1750.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Knool Khol",
+        "average_price": 1720.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Suvarna Gadde",
+        "average_price": 2900.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Grapes",
+        "average_price": 5125.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Ladies Finger",
+        "average_price": 2854.27
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Ridgeguard(Tori)",
+        "average_price": 2320.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Safflower",
+        "average_price": 5283.75
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Mataki",
+        "average_price": 6297.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Same/Savi",
+        "average_price": 4236.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Mustard",
+        "average_price": 6426.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Green Chilli",
+        "average_price": 3782.93
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Pineapple",
+        "average_price": 3333.33
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Cauliflower",
+        "average_price": 1674.11
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Sweet Potato",
+        "average_price": 1625.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Guava",
+        "average_price": 7000.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Jowar(Sorghum)",
+        "average_price": 3025.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Sunflower",
+        "average_price": 6052.3
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Potato",
+        "average_price": 1543.83
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Beans",
+        "average_price": 4881.54
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Thondekai",
+        "average_price": 2616.67
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Lime",
+        "average_price": 6125.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Arecanut(Betelnut/Supari)",
+        "average_price": 33858.66
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Turmeric",
+        "average_price": 12750.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Green Gram(Moong)(Whole)",
+        "average_price": 6580.71
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Arhar(Tur/Red Gram)(Whole)",
+        "average_price": 6825.31
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Bengal Gram(Gram)(Whole)",
+        "average_price": 5300.75
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Black pepper",
+        "average_price": 52887.17
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Groundnut",
+        "average_price": 6017.92
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Tamarind Fruit",
+        "average_price": 7300.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Wheat",
+        "average_price": 2755.25
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Carrot",
+        "average_price": 1916.43
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Capsicum",
+        "average_price": 3050.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 1411.53
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Brinjal",
+        "average_price": 1964.12
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Bitter gourd",
+        "average_price": 2416.5
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Ginger(Green)",
+        "average_price": 3371.43
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Cabbage",
+        "average_price": 790.91
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Raddish",
+        "average_price": 1765.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Green Gram Dal(Moong Dal)",
+        "average_price": 10000.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Bajra(Pearl Millet/Cumbu)",
+        "average_price": 2212.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Beetroot",
+        "average_price": 1575.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Apple",
+        "average_price": 12666.67
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Bottle gourd",
+        "average_price": 1320.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Black Gram(Urd Beans)(Whole)",
+        "average_price": 7823.25
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Papaya",
+        "average_price": 1533.33
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Pomegranate",
+        "average_price": 11500.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Karbuja(Musk Melon)",
+        "average_price": 1966.67
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Copra",
+        "average_price": 19000.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Elephant Yam(Suran)/Amorphophallus",
+        "average_price": 3100.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Coconut",
+        "average_price": 22000.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Banana",
+        "average_price": 2108.57
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Kulthi(Horse Gram)",
+        "average_price": 3524.75
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Cotton",
+        "average_price": 8256.75
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Ragi(Finger Millet)",
+        "average_price": 3303.86
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Avare Dal",
+        "average_price": 2709.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Alasande Gram",
+        "average_price": 4763.67
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Chilly Capsicum",
+        "average_price": 1500.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Garlic",
+        "average_price": 8266.67
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Bunch Beans",
+        "average_price": 3266.67
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Sweet Pumpkin",
+        "average_price": 983.33
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Onion",
+        "average_price": 1272.86
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Orange",
+        "average_price": 6250.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Chikoos(Sapota)",
+        "average_price": 3200.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Mousambi(Sweet Lime)",
+        "average_price": 3900.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Banana - Green",
+        "average_price": 1900.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Chapparad Avare",
+        "average_price": 3042.75
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Dry Grapes",
+        "average_price": 35750.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Rice",
+        "average_price": 3197.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Soyabean",
+        "average_price": 5310.33
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Tender Coconut",
+        "average_price": 19000.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Snakeguard",
+        "average_price": 2666.67
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "White Pumpkin",
+        "average_price": 1300.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Alsandikai",
+        "average_price": 2600.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Peas Wet",
+        "average_price": 6000.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Cashewnuts",
+        "average_price": 15450.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Water Melon",
+        "average_price": 1566.67
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Black Gram Dal(Urd Dal)",
+        "average_price": 14600.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Cowpea(Lobia/Karamani)",
+        "average_price": 5781.5
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Sesamum(Sesame,Gingelly,Til)",
+        "average_price": 4428.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Methi(Leaves)",
+        "average_price": 7059.0
+    },
+    {
+        "state": "Karnataka",
+        "commodity": "Ashgourd",
+        "average_price": 1004.5
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 2859.46
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Bhindi(Ladies Finger)",
+        "average_price": 4573.14
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Snakeguard",
+        "average_price": 3491.43
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Elephant Yam(Suran)/Amorphophallus",
+        "average_price": 3616.67
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Little gourd(Kundru)",
+        "average_price": 3506.25
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Tomato",
+        "average_price": 2973.91
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Banana - Green",
+        "average_price": 3323.68
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Coconut Seed",
+        "average_price": 5600.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Black pepper",
+        "average_price": 68828.57
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Coconut",
+        "average_price": 5462.5
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Banana",
+        "average_price": 3521.17
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Coconut Oil",
+        "average_price": 32933.33
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Copra",
+        "average_price": 14350.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Amaranthus",
+        "average_price": 3392.31
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Brinjal",
+        "average_price": 3741.38
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Cabbage",
+        "average_price": 2864.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Pumpkin",
+        "average_price": 2123.81
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Ginger(Green)",
+        "average_price": 7500.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Cowpea(Veg)",
+        "average_price": 4736.05
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Tapioca",
+        "average_price": 2695.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Bitter gourd",
+        "average_price": 4891.67
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Onion",
+        "average_price": 2739.66
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Sweet Potato",
+        "average_price": 2780.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Mango(Raw-Ripe)",
+        "average_price": 3536.36
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Ashgourd",
+        "average_price": 2129.41
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Drumstick",
+        "average_price": 4278.95
+    },
+    {
+        "state": "Kerala",
+        "commodity": "French Beans(Frasbean)",
+        "average_price": 7050.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Mango",
+        "average_price": 5633.33
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Lemon",
+        "average_price": 12270.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Rubber",
+        "average_price": 19300.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Carrot",
+        "average_price": 4365.22
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Garlic",
+        "average_price": 14660.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Green Chilli",
+        "average_price": 4873.91
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Bottle gourd",
+        "average_price": 2658.82
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Capsicum",
+        "average_price": 6241.67
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Cauliflower",
+        "average_price": 3973.68
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Beetroot",
+        "average_price": 3865.22
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Colacasia",
+        "average_price": 4775.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Potato",
+        "average_price": 2957.89
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Indian Beans(Seam)",
+        "average_price": 4925.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Field Pea",
+        "average_price": 5800.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Green Avare(W)",
+        "average_price": 4766.67
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Orange",
+        "average_price": 14000.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Arecanut(Betelnut/Supari)",
+        "average_price": 44000.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Kabuli Chana(Chickpeas-White)",
+        "average_price": 11100.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Cowpea(Lobia/Karamani)",
+        "average_price": 9300.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Green Gram(Moong)(Whole)",
+        "average_price": 12650.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Chili Red",
+        "average_price": 25100.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Coffee",
+        "average_price": 20466.67
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Ridgeguard(Tori)",
+        "average_price": 5800.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Cluster beans",
+        "average_price": 4890.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Coriander(Leaves)",
+        "average_price": 8600.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Amla(Nelli Kai)",
+        "average_price": 5500.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Papaya(Raw)",
+        "average_price": 3350.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Pineapple",
+        "average_price": 4940.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Arhar(Tur/Red Gram)(Whole)",
+        "average_price": 13300.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Long Melon(Kakri)",
+        "average_price": 3600.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Paddy(Common)",
+        "average_price": 3210.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Raddish",
+        "average_price": 3000.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Chikoos(Sapota)",
+        "average_price": 3500.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Alsandikai",
+        "average_price": 3800.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Amranthas Red",
+        "average_price": 2750.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Galgal(Lemon)",
+        "average_price": 7000.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Beans",
+        "average_price": 5800.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Papaya",
+        "average_price": 3250.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Lime",
+        "average_price": 9600.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Green Peas",
+        "average_price": 9300.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Bengal Gram(Gram)(Whole)",
+        "average_price": 8600.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Jack Fruit(Ripe)",
+        "average_price": 3600.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Apple",
+        "average_price": 22500.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Black Gram(Urd Beans)(Whole)",
+        "average_price": 12200.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Mint(Pudina)",
+        "average_price": 7800.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Seemebadnekai",
+        "average_price": 2500.0
+    },
+    {
+        "state": "Kerala",
+        "commodity": "Grapes",
+        "average_price": 11500.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Arhar(Tur/Red Gram)(Whole)",
+        "average_price": 7200.46
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Rice",
+        "average_price": 4395.83
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Soyabean",
+        "average_price": 5215.81
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Guar",
+        "average_price": 4874.55
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Onion Green",
+        "average_price": 506.56
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Papaya",
+        "average_price": 1593.75
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Beans",
+        "average_price": 3817.86
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Bitter gourd",
+        "average_price": 2513.32
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Tomato",
+        "average_price": 1023.77
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Peas Wet",
+        "average_price": 5620.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Bajra(Pearl Millet/Cumbu)",
+        "average_price": 2472.53
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Onion",
+        "average_price": 962.73
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Mango",
+        "average_price": 10990.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Karbuja(Musk Melon)",
+        "average_price": 1743.2
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Potato",
+        "average_price": 1100.48
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Bottle gourd",
+        "average_price": 1315.62
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Cabbage",
+        "average_price": 631.32
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Methi(Leaves)",
+        "average_price": 1208.86
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Drumstick",
+        "average_price": 2390.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Chili Red",
+        "average_price": 19750.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Cotton",
+        "average_price": 7881.67
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Bengal Gram(Gram)(Whole)",
+        "average_price": 5379.61
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Ginger(Green)",
+        "average_price": 4175.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Pumpkin",
+        "average_price": 1170.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Coriander(Leaves)",
+        "average_price": 954.44
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Wheat",
+        "average_price": 2446.25
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Jowar(Sorghum)",
+        "average_price": 3025.55
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Bhindi(Ladies Finger)",
+        "average_price": 2752.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Raddish",
+        "average_price": 701.83
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Maize",
+        "average_price": 1766.26
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Lime",
+        "average_price": 8421.67
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Beetroot",
+        "average_price": 1195.83
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Sweet Pumpkin",
+        "average_price": 1030.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Cauliflower",
+        "average_price": 1074.26
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 1320.04
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Ridgeguard(Tori)",
+        "average_price": 2565.53
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Black Gram(Urd Beans)(Whole)",
+        "average_price": 6475.7
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Safflower",
+        "average_price": 5584.5
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Pomegranate",
+        "average_price": 8786.36
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Cowpea(Lobia/Karamani)",
+        "average_price": 9600.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Black Gram Dal(Urd Dal)",
+        "average_price": 10250.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Green Peas",
+        "average_price": 6900.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Gur(Jaggery)",
+        "average_price": 4528.83
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Sweet Potato",
+        "average_price": 2533.33
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Little gourd(Kundru)",
+        "average_price": 2591.67
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Methi Seeds",
+        "average_price": 6800.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Arecanut(Betelnut/Supari)",
+        "average_price": 58000.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Spinach",
+        "average_price": 631.72
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Jack Fruit(Ripe)",
+        "average_price": 2500.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Pineapple",
+        "average_price": 3656.25
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Brinjal",
+        "average_price": 1399.25
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Water Melon",
+        "average_price": 912.5
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Carrot",
+        "average_price": 1726.47
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Pear(Marasebu)",
+        "average_price": 6700.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Apple",
+        "average_price": 9416.67
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Corriander seed",
+        "average_price": 11583.33
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Rajgir",
+        "average_price": 5.5
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Mango(Raw-Ripe)",
+        "average_price": 2864.29
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Green Chilli",
+        "average_price": 3717.87
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Guava",
+        "average_price": 2916.67
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Paddy(Common)",
+        "average_price": 2683.08
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Chikoos(Sapota)",
+        "average_price": 3106.25
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Garlic",
+        "average_price": 7253.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Chilly Capsicum",
+        "average_price": 3093.42
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Kulthi(Horse Gram)",
+        "average_price": 3975.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Green Gram(Moong)(Whole)",
+        "average_price": 7212.5
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Ground Nut Seed",
+        "average_price": 12600.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Banana",
+        "average_price": 1622.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Grapes",
+        "average_price": 6208.33
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Mousambi(Sweet Lime)",
+        "average_price": 3620.83
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Tender Coconut",
+        "average_price": 3300.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Snakeguard",
+        "average_price": 2500.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Mint(Pudina)",
+        "average_price": 90.25
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Amla(Nelli Kai)",
+        "average_price": 4250.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Orange",
+        "average_price": 6665.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Tamarind Fruit",
+        "average_price": 11900.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Tamarind Seed",
+        "average_price": 2850.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Mustard",
+        "average_price": 5862.5
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Ajwan",
+        "average_price": 9030.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Sunflower",
+        "average_price": 5900.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Sabu Dan",
+        "average_price": 5150.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Bengal Gram Dal(Chana Dal)",
+        "average_price": 7150.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Lentil(Masur)(Whole)",
+        "average_price": 8075.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Arhar Dal(Tur Dal)",
+        "average_price": 10000.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Soanf",
+        "average_price": 18500.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Coconut",
+        "average_price": 5200.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Cummin Seed(Jeera)",
+        "average_price": 27000.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Cashewnuts",
+        "average_price": 113000.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Cardamom",
+        "average_price": 260000.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Black pepper",
+        "average_price": 72500.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Cinamon(Dalchini)",
+        "average_price": 60000.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Turmeric",
+        "average_price": 14757.17
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Sesamum(Sesame,Gingelly,Til)",
+        "average_price": 10375.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Groundnut",
+        "average_price": 7225.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Green Gram Dal(Moong Dal)",
+        "average_price": 10800.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Sugar",
+        "average_price": 4425.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "French Beans(Frasbean)",
+        "average_price": 3600.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Banana - Green",
+        "average_price": 2500.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Ghee",
+        "average_price": 67500.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Almond(Badam)",
+        "average_price": 98000.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Pointed gourd(Parval)",
+        "average_price": 2500.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Elephant Yam(Suran)/Amorphophallus",
+        "average_price": 3000.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Masur Dal",
+        "average_price": 7500.0
+    },
+    {
+        "state": "Maharashtra",
+        "commodity": "Ragi(Finger Millet)",
+        "average_price": 5300.0
+    },
+    {
+        "state": "Meghalaya",
+        "commodity": "Arecanut(Betelnut/Supari)",
+        "average_price": 21000.0
+    },
+    {
+        "state": "Meghalaya",
+        "commodity": "Banana",
+        "average_price": 4000.0
+    },
+    {
+        "state": "Meghalaya",
+        "commodity": "Pumpkin",
+        "average_price": 2800.0
+    },
+    {
+        "state": "Meghalaya",
+        "commodity": "Betal Leaves",
+        "average_price": 35000.0
+    },
+    {
+        "state": "Nagaland",
+        "commodity": "Cabbage",
+        "average_price": 3000.0
+    },
+    {
+        "state": "Nagaland",
+        "commodity": "Bottle gourd",
+        "average_price": 2700.0
+    },
+    {
+        "state": "Nagaland",
+        "commodity": "Tomato",
+        "average_price": 3000.0
+    },
+    {
+        "state": "Nagaland",
+        "commodity": "Indian Beans(Seam)",
+        "average_price": 3700.0
+    },
+    {
+        "state": "Nagaland",
+        "commodity": "Pumpkin",
+        "average_price": 3700.0
+    },
+    {
+        "state": "Nagaland",
+        "commodity": "Potato",
+        "average_price": 2000.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 3176.39
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Tomato",
+        "average_price": 1328.57
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Pumpkin",
+        "average_price": 1368.42
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Cabbage",
+        "average_price": 1926.92
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Bhindi(Ladies Finger)",
+        "average_price": 4200.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Water Melon",
+        "average_price": 1218.57
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Cauliflower",
+        "average_price": 2673.08
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Banana - Green",
+        "average_price": 1933.33
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Capsicum",
+        "average_price": 5100.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Pointed gourd(Parval)",
+        "average_price": 6836.36
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Brinjal",
+        "average_price": 2580.88
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Bottle gourd",
+        "average_price": 1966.67
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Potato",
+        "average_price": 1454.55
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Bitter gourd",
+        "average_price": 4487.5
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Ginger(Dry)",
+        "average_price": 8000.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Chili Red",
+        "average_price": 25000.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Garlic",
+        "average_price": 10000.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Green Chilli",
+        "average_price": 6778.57
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Fish",
+        "average_price": 20000.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Mahua",
+        "average_price": 2500.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Cashewnuts",
+        "average_price": 13500.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Carrot",
+        "average_price": 3533.33
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Onion",
+        "average_price": 1980.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Drumstick",
+        "average_price": 7500.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Ridgeguard(Tori)",
+        "average_price": 4000.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Papaya(Raw)",
+        "average_price": 2200.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Ginger(Green)",
+        "average_price": 4600.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Sweet Potato",
+        "average_price": 1050.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Little gourd(Kundru)",
+        "average_price": 2850.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Snakeguard",
+        "average_price": 2300.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Ladies Finger",
+        "average_price": 2200.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Maize",
+        "average_price": 1600.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Paddy(Common)",
+        "average_price": 2369.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Rice",
+        "average_price": 3600.0
+    },
+    {
+        "state": "Odisha",
+        "commodity": "Beetroot",
+        "average_price": 2700.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Papaya(Raw)",
+        "average_price": 4000.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Carrot",
+        "average_price": 1712.19
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Capsicum",
+        "average_price": 2181.25
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Brinjal",
+        "average_price": 1770.9
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Onion",
+        "average_price": 1443.61
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Peas Wet",
+        "average_price": 2416.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Potato",
+        "average_price": 511.51
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Bottle gourd",
+        "average_price": 1801.33
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 1286.74
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Bhindi(Ladies Finger)",
+        "average_price": 4393.75
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Grapes",
+        "average_price": 7762.5
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Green Chilli",
+        "average_price": 3651.11
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Papaya",
+        "average_price": 2550.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Apple",
+        "average_price": 9345.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Mousambi(Sweet Lime)",
+        "average_price": 3580.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Bitter gourd",
+        "average_price": 4192.31
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Banana",
+        "average_price": 2791.18
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Chikoos(Sapota)",
+        "average_price": 2866.67
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Cauliflower",
+        "average_price": 1577.57
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Mango",
+        "average_price": 10737.5
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Pomegranate",
+        "average_price": 9970.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Orange",
+        "average_price": 5000.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Raddish",
+        "average_price": 922.5
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Pumpkin",
+        "average_price": 1316.67
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Long Melon(Kakri)",
+        "average_price": 2800.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Karbuja(Musk Melon)",
+        "average_price": 2422.22
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Ginger(Green)",
+        "average_price": 5954.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Ber(Zizyphus/Borehannu)",
+        "average_price": 3016.67
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Tomato",
+        "average_price": 1668.57
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Coriander(Leaves)",
+        "average_price": 1662.5
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Pineapple",
+        "average_price": 4600.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Wheat",
+        "average_price": 3015.83
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Methi(Leaves)",
+        "average_price": 2000.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "French Beans(Frasbean)",
+        "average_price": 3633.33
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Water Melon",
+        "average_price": 1631.25
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Squash(Chappal Kadoo)",
+        "average_price": 1161.11
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Cabbage",
+        "average_price": 646.88
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Spinach",
+        "average_price": 1375.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Guava",
+        "average_price": 3455.56
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Lemon",
+        "average_price": 8310.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Sweet Pumpkin",
+        "average_price": 1133.33
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Garlic",
+        "average_price": 6007.69
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Ashgourd",
+        "average_price": 1033.33
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Tinda",
+        "average_price": 1880.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Onion Green",
+        "average_price": 1050.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Mashrooms",
+        "average_price": 7100.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Kinnow",
+        "average_price": 3200.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Chilly Capsicum",
+        "average_price": 2500.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Ginger(Dry)",
+        "average_price": 8750.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Turnip",
+        "average_price": 1500.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Sweet Potato",
+        "average_price": 2500.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Field Pea",
+        "average_price": 4333.33
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Colacasia",
+        "average_price": 5250.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Beetroot",
+        "average_price": 1025.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Banana - Green",
+        "average_price": 1750.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Mint(Pudina)",
+        "average_price": 1600.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Ridgeguard(Tori)",
+        "average_price": 4050.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Gram Raw(Chholia)",
+        "average_price": 1400.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Tender Coconut",
+        "average_price": 2200.0
+    },
+    {
+        "state": "Punjab",
+        "commodity": "Pea Pod/Pea Cod/\u0939\u0930\u0940 \u092e\u091f\u0930",
+        "average_price": 2900.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Barley(Jau)",
+        "average_price": 2175.76
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Mango",
+        "average_price": 7814.29
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Onion",
+        "average_price": 1065.38
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Tomato",
+        "average_price": 1162.5
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Banana",
+        "average_price": 2008.33
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Water Melon",
+        "average_price": 985.71
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Tender Coconut",
+        "average_price": 3916.67
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Cabbage",
+        "average_price": 900.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Carrot",
+        "average_price": 1316.67
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Cluster beans",
+        "average_price": 3662.5
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Green Chilli",
+        "average_price": 2058.33
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Potato",
+        "average_price": 850.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Garlic",
+        "average_price": 7347.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Mousambi(Sweet Lime)",
+        "average_price": 3457.14
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Bottle gourd",
+        "average_price": 970.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Bitter gourd",
+        "average_price": 2750.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Ginger(Green)",
+        "average_price": 4960.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Mint(Pudina)",
+        "average_price": 1700.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Rose(Loose))",
+        "average_price": 4000.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Bengal Gram(Gram)(Whole)",
+        "average_price": 5056.19
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Wheat",
+        "average_price": 2381.19
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Brinjal",
+        "average_price": 1407.14
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Bhindi(Ladies Finger)",
+        "average_price": 3471.43
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Maize",
+        "average_price": 1654.9
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Methi Seeds",
+        "average_price": 5873.5
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Mustard",
+        "average_price": 6421.17
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Mango(Raw-Ripe)",
+        "average_price": 3141.67
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Ginger(Dry)",
+        "average_price": 5050.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Spinach",
+        "average_price": 1216.67
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Guar Seed(Cluster Beans Seed)",
+        "average_price": 5137.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Moath Dal",
+        "average_price": 4150.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Isabgul(Psyllium)",
+        "average_price": 11033.33
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Sesamum(Sesame,Gingelly,Til)",
+        "average_price": 8800.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Ghee",
+        "average_price": 60700.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Corriander seed",
+        "average_price": 11939.8
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Coriander(Leaves)",
+        "average_price": 2475.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Taramira",
+        "average_price": 5160.5
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Soyabean",
+        "average_price": 5312.12
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Bajra(Pearl Millet/Cumbu)",
+        "average_price": 1914.33
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Groundnut",
+        "average_price": 7075.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Big Gram",
+        "average_price": 5060.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Lentil(Masur)(Whole)",
+        "average_price": 6794.67
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Pomegranate",
+        "average_price": 9542.86
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Beetroot",
+        "average_price": 1630.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Grapes",
+        "average_price": 6585.71
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Papaya",
+        "average_price": 2057.14
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Marigold(loose)",
+        "average_price": 5500.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Round gourd",
+        "average_price": 1000.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Karbuja(Musk Melon)",
+        "average_price": 1928.57
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Pineapple",
+        "average_price": 3450.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Guava",
+        "average_price": 4983.33
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 1131.25
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Green Gram(Moong)(Whole)",
+        "average_price": 6100.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Orange",
+        "average_price": 7250.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Plum",
+        "average_price": 11000.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Cauliflower",
+        "average_price": 1664.29
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Mahedi",
+        "average_price": 13750.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Apple",
+        "average_price": 9600.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Lemon",
+        "average_price": 7850.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Linseed",
+        "average_price": 7339.5
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Chikoos(Sapota)",
+        "average_price": 2675.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Gur(Jaggery)",
+        "average_price": 4530.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Soanf",
+        "average_price": 8400.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Pumpkin",
+        "average_price": 1050.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Capsicum",
+        "average_price": 2350.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Cummin Seed(Jeera)",
+        "average_price": 19766.67
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Sugar",
+        "average_price": 4477.5
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Tinda",
+        "average_price": 2550.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Guar",
+        "average_price": 5655.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Black Gram(Urd Beans)(Whole)",
+        "average_price": 5266.67
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Onion Green",
+        "average_price": 1525.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Pointed gourd(Parval)",
+        "average_price": 2800.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Colacasia",
+        "average_price": 4100.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Sponge gourd",
+        "average_price": 5500.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Long Melon(Kakri)",
+        "average_price": 1550.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Ridgeguard(Tori)",
+        "average_price": 2050.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Red Gram",
+        "average_price": 5130.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Pea Pod/Pea Cod/\u0939\u0930\u0940 \u092e\u091f\u0930",
+        "average_price": 3750.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Paddy(Common)",
+        "average_price": 4240.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Ajwan",
+        "average_price": 13200.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Peas Wet",
+        "average_price": 6500.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Raddish",
+        "average_price": 2200.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Chili Red",
+        "average_price": 11700.0
+    },
+    {
+        "state": "Rajasthan",
+        "commodity": "Mahua",
+        "average_price": 2720.0
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Turmeric",
+        "average_price": 12396.5
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Tomato",
+        "average_price": 1815.03
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Bitter gourd",
+        "average_price": 3848.84
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Bhindi(Ladies Finger)",
+        "average_price": 4123.89
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Potato",
+        "average_price": 2925.32
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Cauliflower",
+        "average_price": 3060.0
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Drumstick",
+        "average_price": 3862.58
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Yam(Ratalu)",
+        "average_price": 5211.17
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Lemon",
+        "average_price": 12175.0
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Amla(Nelli Kai)",
+        "average_price": 7532.5
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Onion Green",
+        "average_price": 3831.14
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Bajra(Pearl Millet/Cumbu)",
+        "average_price": 3735.12
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Bottle gourd",
+        "average_price": 1886.19
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Beans",
+        "average_price": 6668.49
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Carrot",
+        "average_price": 3837.33
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Snakeguard",
+        "average_price": 3106.82
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Green Avare(W)",
+        "average_price": 6116.86
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Mango(Raw-Ripe)",
+        "average_price": 3452.82
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Paddy(Common)",
+        "average_price": 1988.53
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Banana",
+        "average_price": 4724.71
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Cluster beans",
+        "average_price": 3717.68
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Papaya",
+        "average_price": 3267.47
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Ridgeguard(Tori)",
+        "average_price": 4050.0
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Amaranthus",
+        "average_price": 2677.12
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Coconut",
+        "average_price": 5143.89
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Onion",
+        "average_price": 2539.66
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Chikoos(Sapota)",
+        "average_price": 4016.67
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Chow Chow",
+        "average_price": 2997.37
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Indian Beans(Seam)",
+        "average_price": 5770.73
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Pumpkin",
+        "average_price": 1847.01
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Sweet Potato",
+        "average_price": 3457.35
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Cabbage",
+        "average_price": 2192.76
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Beetroot",
+        "average_price": 3785.86
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Ashgourd",
+        "average_price": 1812.89
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Sweet Corn ",
+        "average_price": 3102.94
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Brinjal",
+        "average_price": 3213.11
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Green Chilli",
+        "average_price": 3808.71
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Tapioca",
+        "average_price": 3006.02
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Mango",
+        "average_price": 9613.89
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Banana - Green",
+        "average_price": 3030.45
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Green Peas",
+        "average_price": 10752.04
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Raddish",
+        "average_price": 2466.29
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Groundnut",
+        "average_price": 6735.96
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Guava",
+        "average_price": 5552.73
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Pomegranate",
+        "average_price": 20735.29
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Tender Coconut",
+        "average_price": 3268.84
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Kakada",
+        "average_price": 57200.0
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Water Melon",
+        "average_price": 1887.5
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Elephant Yam(Suran)/Amorphophallus",
+        "average_price": 3740.0
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Cowpea(Veg)",
+        "average_price": 3447.5
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Ginger(Green)",
+        "average_price": 7492.18
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Coriander(Leaves)",
+        "average_price": 4623.94
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Mint(Pudina)",
+        "average_price": 3452.5
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Knool Khol",
+        "average_price": 3382.1
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Lime",
+        "average_price": 7839.36
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Colacasia",
+        "average_price": 4660.45
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Thondekai",
+        "average_price": 3729.26
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Capsicum",
+        "average_price": 5251.33
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Karbuja(Musk Melon)",
+        "average_price": 2690.91
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Betal Leaves",
+        "average_price": 14823.53
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 4053.19
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Jack Fruit(Ripe)",
+        "average_price": 4640.0
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Marigold(Calcutta)",
+        "average_price": 15230.0
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Rose(Local)",
+        "average_price": 11843.75
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Apple",
+        "average_price": 21580.65
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Pineapple",
+        "average_price": 6060.0
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Tamarind Fruit",
+        "average_price": 13966.67
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Mousambi(Sweet Lime)",
+        "average_price": 5503.45
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Baby Corn",
+        "average_price": 2763.64
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Grapes",
+        "average_price": 10883.93
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Mashrooms",
+        "average_price": 21393.33
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Ragi(Finger Millet)",
+        "average_price": 3613.33
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Garlic",
+        "average_price": 15718.45
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Turnip",
+        "average_price": 3718.75
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Arhar(Tur/Red Gram)(Whole)",
+        "average_price": 6583.33
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Jasmine",
+        "average_price": 37307.69
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Orange",
+        "average_price": 11086.96
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Soyabean",
+        "average_price": 9833.33
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Chili Red",
+        "average_price": 20833.33
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Maize",
+        "average_price": 1840.0
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Tube Rose(Loose)",
+        "average_price": 5125.0
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Custard Apple(Sharifa)",
+        "average_price": 3750.0
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Tube Flower",
+        "average_price": 50833.33
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Jowar(Sorghum)",
+        "average_price": 2509.5
+    },
+    {
+        "state": "Tamil Nadu",
+        "commodity": "Fig(Anjura/Anjeer)",
+        "average_price": 9750.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Mousambi(Sweet Lime)",
+        "average_price": 1400.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Capsicum",
+        "average_price": 3190.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Drumstick",
+        "average_price": 2375.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Apple",
+        "average_price": 9000.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Karbuja(Musk Melon)",
+        "average_price": 600.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Mango",
+        "average_price": 4960.35
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Bhindi(Ladies Finger)",
+        "average_price": 1681.25
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Bitter gourd",
+        "average_price": 2125.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Cluster beans",
+        "average_price": 2478.57
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Bottle gourd",
+        "average_price": 733.33
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Cabbage",
+        "average_price": 961.11
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Potato",
+        "average_price": 1295.71
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 1091.67
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Arhar(Tur/Red Gram)(Whole)",
+        "average_price": 7172.33
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Grapes",
+        "average_price": 5125.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Water Melon",
+        "average_price": 700.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Brinjal",
+        "average_price": 1125.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Cauliflower",
+        "average_price": 1690.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "French Beans(Frasbean)",
+        "average_price": 4510.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Dry Chillies",
+        "average_price": 21583.33
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Cotton",
+        "average_price": 7157.6
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Groundnut",
+        "average_price": 6136.5
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Turmeric",
+        "average_price": 12200.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Bullar",
+        "average_price": 4105.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Paddy(Common)",
+        "average_price": 2270.41
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Onion",
+        "average_price": 1075.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Carrot",
+        "average_price": 1407.14
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Onion Green",
+        "average_price": 2000.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Snakeguard",
+        "average_price": 1025.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Yam(Ratalu)",
+        "average_price": 2500.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Cowpea(Lobia/Karamani)",
+        "average_price": 5742.33
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Tomato",
+        "average_price": 922.22
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Pumpkin",
+        "average_price": 850.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Beetroot",
+        "average_price": 1141.67
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Guava",
+        "average_price": 2000.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Green Chilli",
+        "average_price": 2686.36
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Ridgeguard(Tori)",
+        "average_price": 2308.33
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Maize",
+        "average_price": 1919.36
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Sanai/Sunhemp",
+        "average_price": 11862.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Colacasia",
+        "average_price": 2225.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Sweet Potato",
+        "average_price": 1200.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Bengal Gram(Gram)(Whole)",
+        "average_price": 5206.5
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Green Gram(Moong)(Whole)",
+        "average_price": 7070.33
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Safflower",
+        "average_price": 5600.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Wheat",
+        "average_price": 2310.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Field Pea",
+        "average_price": 3190.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Black Gram(Urd Beans)(Whole)",
+        "average_price": 6416.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Castor Seed",
+        "average_price": 7200.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Plum",
+        "average_price": 7500.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Papaya",
+        "average_price": 900.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Chikoos(Sapota)",
+        "average_price": 1600.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Soyabean",
+        "average_price": 5600.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Indian Beans(Seam)",
+        "average_price": 6000.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Orange",
+        "average_price": 10000.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Avocado",
+        "average_price": 17500.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Raddish",
+        "average_price": 350.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Tamarind Seed",
+        "average_price": 2821.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Tamarind Fruit",
+        "average_price": 7900.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Ragi(Finger Millet)",
+        "average_price": 3011.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Pomegranate",
+        "average_price": 6800.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Banana - Green",
+        "average_price": 1800.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Jowar(Sorghum)",
+        "average_price": 5500.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Groundnut pods(raw)",
+        "average_price": 3000.0
+    },
+    {
+        "state": "Telangana",
+        "commodity": "Mango(Raw-Ripe)",
+        "average_price": 2000.0
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Brinjal",
+        "average_price": 3161.11
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Ridgeguard(Tori)",
+        "average_price": 5920.0
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 4138.89
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Tomato",
+        "average_price": 2206.25
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Onion",
+        "average_price": 2220.0
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Potato",
+        "average_price": 1605.0
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Ginger(Green)",
+        "average_price": 9316.67
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Kartali(Kantola)",
+        "average_price": 20000.0
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Green Chilli",
+        "average_price": 7620.0
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Bitter gourd",
+        "average_price": 4725.0
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Cabbage",
+        "average_price": 1250.0
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Bhindi(Ladies Finger)",
+        "average_price": 3921.43
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Pointed gourd(Parval)",
+        "average_price": 7962.5
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Carrot",
+        "average_price": 3087.5
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Rice",
+        "average_price": 3983.33
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Cowpea(Veg)",
+        "average_price": 4000.0
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Sweet Pumpkin",
+        "average_price": 2500.0
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Papaya(Raw)",
+        "average_price": 1500.0
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Banana",
+        "average_price": 2500.0
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Cauliflower",
+        "average_price": 2800.0
+    },
+    {
+        "state": "Tripura",
+        "commodity": "Fish",
+        "average_price": 32500.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Bitter gourd",
+        "average_price": 1725.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Banana",
+        "average_price": 1438.89
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Bhindi(Ladies Finger)",
+        "average_price": 1980.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Potato",
+        "average_price": 608.33
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Carrot",
+        "average_price": 1230.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Kinnow",
+        "average_price": 4100.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Orange",
+        "average_price": 3512.5
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Onion",
+        "average_price": 1537.5
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Karbuja(Musk Melon)",
+        "average_price": 1983.33
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Cauliflower",
+        "average_price": 938.92
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Cabbage",
+        "average_price": 785.71
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Raddish",
+        "average_price": 750.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Mousambi(Sweet Lime)",
+        "average_price": 3130.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Green Chilli",
+        "average_price": 3291.67
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Wheat",
+        "average_price": 2505.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Rice",
+        "average_price": 3105.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Banana - Green",
+        "average_price": 950.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Pumpkin",
+        "average_price": 880.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 704.55
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Bottle gourd",
+        "average_price": 787.15
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Chikoos(Sapota)",
+        "average_price": 1750.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Pomegranate",
+        "average_price": 7140.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Tomato",
+        "average_price": 1013.64
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Brinjal",
+        "average_price": 1053.12
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Apple",
+        "average_price": 6700.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Grapes",
+        "average_price": 5500.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Water Melon",
+        "average_price": 956.25
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "French Beans(Frasbean)",
+        "average_price": 2116.67
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Papaya",
+        "average_price": 2360.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Mango",
+        "average_price": 5000.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Field Pea",
+        "average_price": 2050.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Jack Fruit(Ripe)",
+        "average_price": 1250.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Lemon",
+        "average_price": 15000.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Pointed gourd(Parval)",
+        "average_price": 8000.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Lime",
+        "average_price": 4500.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Peas Wet",
+        "average_price": 400.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Capsicum",
+        "average_price": 1925.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Ridgeguard(Tori)",
+        "average_price": 1950.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Garlic",
+        "average_price": 10000.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Ginger(Green)",
+        "average_price": 5750.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Pineapple",
+        "average_price": 2050.0
+    },
+    {
+        "state": "Uttarakhand",
+        "commodity": "Fish",
+        "average_price": 4500.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Potato",
+        "average_price": 674.4
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Onion",
+        "average_price": 1466.86
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Wheat",
+        "average_price": 2782.14
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Arhar Dal(Tur Dal)",
+        "average_price": 11825.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Carrot",
+        "average_price": 2525.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Green Gram Dal(Moong Dal)",
+        "average_price": 10916.67
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Pomegranate",
+        "average_price": 11500.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Tomato",
+        "average_price": 1263.89
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Cabbage",
+        "average_price": 1818.18
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Pumpkin",
+        "average_price": 1750.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Masur Dal",
+        "average_price": 10218.24
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Ginger(Green)",
+        "average_price": 6225.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Green Chilli",
+        "average_price": 5182.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Ridgeguard(Tori)",
+        "average_price": 3871.43
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Jute",
+        "average_price": 10891.67
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Mustard",
+        "average_price": 6397.5
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Rice",
+        "average_price": 4020.5
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Sweet Pumpkin",
+        "average_price": 1867.65
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Bitter gourd",
+        "average_price": 4510.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Brinjal",
+        "average_price": 3523.71
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Bhindi(Ladies Finger)",
+        "average_price": 3610.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Paddy(Common)",
+        "average_price": 2374.8
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Black Gram Dal(Urd Dal)",
+        "average_price": 10000.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Cauliflower",
+        "average_price": 2666.67
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Mustard Oil",
+        "average_price": 16508.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Squash(Chappal Kadoo)",
+        "average_price": 2000.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Pointed gourd(Parval)",
+        "average_price": 4425.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Tube Rose(Loose)",
+        "average_price": 6500.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Cucumbar(Kheera)",
+        "average_price": 3312.5
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Bottle gourd",
+        "average_price": 1550.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Ginger(Dry)",
+        "average_price": 5800.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Garlic",
+        "average_price": 7500.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Marigold(loose)",
+        "average_price": 2500.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Sweet Potato",
+        "average_price": 4000.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Papaya(Raw)",
+        "average_price": 2100.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Raddish",
+        "average_price": 2500.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Maize",
+        "average_price": 2300.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Fish",
+        "average_price": 15200.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Lentil(Masur)(Whole)",
+        "average_price": 8500.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Apple",
+        "average_price": 17000.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Mousambi(Sweet Lime)",
+        "average_price": 8800.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Betal Leaves",
+        "average_price": 21000.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Capsicum",
+        "average_price": 4500.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Peas(Dry)",
+        "average_price": 6750.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Rose(Local)",
+        "average_price": 39000.0
+    },
+    {
+        "state": "West Bengal",
+        "commodity": "Banana",
+        "average_price": 2100.0
+    }
+]

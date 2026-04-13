@@ -1,10 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Paper, Button, CircularProgress, Select, MenuItem, Grid, Divider, Avatar, Chip } from '@mui/material';
-import { Spa, TrendingUp, FilterList, BarChart, Warning, WbCloudy, Verified, ArrowForward, DeviceThermostat, GridOn, Opacity, LocationOn, DateRange, FiberManualRecord } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabase';
 import { fetchWeatherAndAlerts } from '../services/weatherService';
 import { generateSmartRecommendation } from '../services/recommendationEngine';
+
+// Colors mapped to match the wider SmartAgri MUI theme but retaining the premium earthly color grade
+const theme = {
+  soil: '#25211e', // Rich dark brown-black instead of flat gray
+  leaf: '#2E7D32',
+  leafMid: '#256628',
+  leafBright: '#4CAF50',
+  leafGlow: '#66BB6A',
+  gold: '#c8902a', // Restored premium dark gold
+  goldLight: '#e5b95c', // Premium light gold
+  cream: '#fcfbfa', // Very subtle warm white
+  creamDark: '#f0ebe0', // Earthy muted cream
+  earth: '#8b6914', // Earthy brown/gold accent
+  sky: '#E3F2FD',
+  muted: '#7a7060', // Warm muted gray/brown
+  cardBg: '#FFFFFF',
+  pageBg: '#faf9f7', // Warm page background instead of stark white
+  border: '#E8E4DF', // Warm border color
+  shadowGreen: '0 4px 20px rgba(46,125,50,0.12)',
+  shadowCard: '0 8px 30px rgba(0,0,0,0.06)',
+  fontAccent: '"Inter", sans-serif',
+  fontBody: '"Inter", sans-serif',
+};
 
 const getCropEmoji = (name) => {
   const n = name.toLowerCase();
@@ -20,7 +41,12 @@ const getCropEmoji = (name) => {
   if (n.includes('tomato')) return '🍅';
   if (n.includes('potato')) return '🥔';
   if (n.includes('onion')) return '🧅';
+  if (n.includes('papaya')) return '🌿';
   return '🌱';
+};
+
+const formatCurrency = (val) => {
+  return '₹' + val.toLocaleString('en-IN');
 };
 
 const RecommendationPage = () => {
@@ -28,40 +54,40 @@ const RecommendationPage = () => {
   const [profile, setProfile] = useState(null);
   const [uiState, setUiState] = useState('initial'); // 'initial', 'loading', 'success', 'error'
 
-  // Inputs
   const [soilType, setSoilType] = useState('');
   const [waterAvailability, setWaterAvailability] = useState('');
-  const [cropDurationType, setCropDurationType] = useState('');
+  const [cropDurationType, setCropDurationType] = useState('short_term');
+  const [landSize, setLandSize] = useState('5');
 
-  // Real-time Context API
   const [weatherSummary, setWeatherSummary] = useState(null);
   const [temperature, setTemperature] = useState(null);
 
-  // Output State
   const [topCrops, setTopCrops] = useState([]);
   const [maxProfit, setMaxProfit] = useState(1);
 
   useEffect(() => {
+    // Keep it minimal, rely on App.jsx CSS Baseline
     const fetchProfileAndWeather = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return navigate('/login');
 
-      // 1. Get Profile
       const { data: profileData, error } = await supabase.from('profiles').select('*').eq('id', session.user.id).single();
 
       if (!error && profileData) {
         setProfile(profileData);
         setSoilType(profileData.soil_type || 'Black Soil');
         setWaterAvailability(profileData.irrigation?.includes('Good') ? 'more_water' : (profileData.irrigation?.includes('Limited') ? 'moderate_water' : 'less_water'));
-        setCropDurationType('short_term'); // default
+        if (profileData.land_size) {
+          const rawNum = profileData.land_size.toString().replace(/[^0-9.]/g, '');
+          setLandSize(rawNum || '5');
+        }
 
-        // 2. Pre-fetch Weather quietly for Temperature UI injection
         const rawWeather = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
         setWeatherSummary(rawWeather);
         if (rawWeather && rawWeather.weather) {
           setTemperature(Math.round(rawWeather.weather.main.temp));
         } else {
-          setTemperature(30); // fallback
+          setTemperature(30); 
         }
       }
     };
@@ -70,398 +96,295 @@ const RecommendationPage = () => {
 
   const handleRecommendation = async () => {
     if (!waterAvailability || !soilType || !cropDurationType) return;
+    
+    // Ensure land size is never 0 or negative
+    let safeLandSize = parseFloat(landSize);
+    if (isNaN(safeLandSize) || safeLandSize <= 0) {
+      safeLandSize = 0.1;
+      setLandSize('0.1');
+    }
+
     setUiState('loading');
 
     try {
-      // Execute Heavy Modular Engine Call
-      const VITE_AGMARKNET_API_KEY = import.meta.env.VITE_AGMARKNET_API_KEY || ''; // Pass key if exists
+      const rawKeys = import.meta.env.VITE_AGMARKNET_API_KEYS || import.meta.env.VITE_AGMARKNET_API_KEY || '';
+      const agmarknetKeysArray = rawKeys.split(',').map(k => k.trim()).filter(k => k);
 
+      const modifiedProfile = { ...profile, land_size: safeLandSize };
+      
       const winners = await generateSmartRecommendation(
-        profile,
+        modifiedProfile,
         soilType,
         waterAvailability,
         cropDurationType,
-        VITE_AGMARKNET_API_KEY
+        agmarknetKeysArray
       );
 
-      // Update Chart maximum for relativistic scaling
-      const maxP = Math.max(...winners.map(w => w.estimatedProfit));
+      const maxP = Math.max(...winners.map(w => w.estimatedProfit), 1);
       setMaxProfit(maxP);
 
       setTopCrops(winners);
       setUiState('success');
-
     } catch (err) {
       console.error(err);
       setUiState('error');
     }
   };
 
-  const getMedalColor = (idx) => {
-    if (idx === 0) return '#FFD700'; // Gold
-    if (idx === 1) return '#C0C0C0'; // Silver
-    if (idx === 2) return '#CD7F32'; // Bronze
-    return '#E0E0E0'; // Honorable mentions
-  };
-
   if (!profile) return null;
 
   return (
-    <Box sx={{ 
-      p: { xs: 1.5, md: 4 }, 
-      pt: { xs: '85px', md: '100px' },
-      minHeight: '100vh', 
-      pb: { xs: 12, md: 4 },
-      backgroundImage: 'radial-gradient(rgba(46,125,50,0.03) 1px, transparent 1px)',
-      backgroundSize: '20px 20px'
+    <div style={{
+      fontFamily: theme.fontBody,
+      backgroundColor: theme.pageBg,
+      color: theme.soil,
+      minHeight: '100vh',
+      paddingBottom: '80px',
+      position: 'relative'
     }}>
-      <Box sx={{ maxWidth: '1200px', margin: '0 auto' }}>
+      {/* Background radial textures */}
+      <div style={{
+        position: 'fixed', inset: 0,
+        background: `radial-gradient(ellipse 80% 60% at 10% 0%, rgba(82,168,50,0.08) 0%, transparent 60%), radial-gradient(ellipse 60% 80% at 90% 100%, rgba(200,144,42,0.07) 0%, transparent 60%)`,
+        pointerEvents: 'none', zIndex: 0
+      }} />
 
-      {/* HERO SECTION CRAZY GOOD */}
-      <Box sx={{ 
-        mb: { xs: 3, md: 5 }, 
-        textAlign: { xs: 'left', md: 'center' }, 
-        px: { xs: 2.5, md: 3 },
-        py: { xs: 3, md: 4 },
-        background: 'linear-gradient(135deg, #eafaf1, #ffffff)',
-        border: '1px solid #d7f0df',
-        borderRadius: '22px',
-        boxShadow: '0 8px 24px rgba(34, 139, 34, 0.08)'
+      {/* Page Header */}
+      <div style={{ padding: '100px 24px 0', maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <h1 style={{ fontFamily: theme.fontAccent, fontWeight: 800, fontSize: 'clamp(26px, 5vw, 40px)', lineHeight: 1.1, color: theme.leaf, letterSpacing: '-1px', margin: 0 }}>
+          Crop <span style={{ color: theme.gold }}>Prediction</span>
+        </h1>
+        <p style={{ fontSize: '14px', color: theme.muted, marginTop: '6px', fontWeight: 400, margin: 0 }}>
+          Based on your soil, water & season — AI-ranked for maximum profit
+        </p>
+      </div>
+
+      {/* Main Grid */}
+      <div style={{
+        maxWidth: '1100px', margin: '24px auto 0', padding: '0 24px 48px',
+        display: 'grid', gridTemplateColumns: 'minmax(280px, 300px) 1fr', gap: '24px', alignItems: 'start', position: 'relative', zIndex: 1
       }}>
-        <Typography variant="h3" sx={{ fontWeight: 800, color: '#1B5E20', mb: 1.5, fontSize: { xs: '26px', sm: '38px' }, letterSpacing: '-0.5px' }}>
-          Smart Crop Match
-        </Typography>
-        <Typography sx={{ color: '#555', fontSize: { xs: '15px', md: '17px' }, fontWeight: 500, lineHeight: 1.5, maxWidth: '600px', mx: 'auto' }}>
-          Find the absolute best crops for your farm combining your local soil and live market economics.
-        </Typography>
-      </Box>
+        {/* Left Column: Filter Panel */}
+        <aside style={{
+          background: theme.cardBg, borderRadius: '20px', padding: '24px',
+          boxShadow: theme.shadowCard, border: `1px solid ${theme.border}`,
+          position: 'sticky', top: '90px'
+        }}>
+          <div style={{ fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '.08em', color: theme.muted, marginBottom: '16px' }}>
+            Farm Profile
+          </div>
 
-      <Grid container spacing={{ xs: 2.5, md: 4 }}>
-
-        {/* LEFT COLUMN: Premium Mobile Input Section */}
-        <Grid size={{ xs: 12, md: 4 }} sx={{ position: { md: 'relative' } }}>
-          <Box sx={{ maxWidth: '420px', margin: '0 auto' }}>
-            <Typography sx={{ fontSize: '28px', fontWeight: 800, color: '#222', mb: '22px', display: 'flex', alignItems: 'center', gap: 1.5 }}>
-              <FilterList sx={{ color: '#2E7D32', fontSize: '32px' }} /> Farm Conditions
-            </Typography>
-
-            <Paper
-              elevation={0}
-              sx={{
-                padding: '24px 20px',
-                borderRadius: '24px',
-                backgroundColor: '#ffffff',
-                border: '1px solid #e8e8e8',
-                boxShadow: '0 8px 24px rgba(0,0,0,0.04)',
-                position: { md: 'sticky' },
-                top: '100px',
-              }}
+          {/* Soil */}
+          <div style={{ marginBottom: '20px' }}>
+            <div style={{ fontSize: '12px', fontWeight: 600, color: theme.muted, marginBottom: '8px' }}>Soil Type</div>
+            <select 
+              value={soilType} onChange={(e) => setSoilType(e.target.value)}
+              style={{ width: '100%', appearance: 'none', background: theme.cream, border: `1.5px solid ${theme.border}`, borderRadius: '12px', padding: '11px 14px', fontFamily: theme.fontBody, fontSize: '14px', fontWeight: 500, color: theme.soil, outline: 'none', cursor: 'pointer' }}
             >
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+              <option value="Black Soil">Black Soil</option>
+              <option value="Red Soil">Red Soil</option>
+              <option value="Alluvial Soil">Alluvial Soil</option>
+              <option value="Sandy Soil">Sandy Soil</option>
+              <option value="Clay Soil">Clay Soil</option>
+              <option value="Loamy Soil">Loamy Soil</option>
+              <option value="Laterite Soil">Laterite Soil</option>
+            </select>
+          </div>
 
-                {/* Editable Field 1 */}
-                <Box>
-                  <Typography sx={{ fontSize: '15px', fontWeight: 700, color: '#555', mb: '8px', display: 'flex', alignItems: 'center', gap: 0.8 }}>
-                    <GridOn fontSize="small" sx={{ color: '#795548' }} /> Soil
-                  </Typography>
-                  <Select
-                    value={soilType}
-                    onChange={(e) => setSoilType(e.target.value)}
-                    fullWidth
-                    sx={{
-                      height: '54px', borderRadius: '14px', backgroundColor: '#fff', fontSize: '16px', fontWeight: 600, color: '#222',
-                      '& .MuiOutlinedInput-notchedOutline': { borderColor: '#d9d9d9' },
-                      '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#b0b0b0' },
-                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#2e7d32', borderWidth: '1px' },
-                      '&.Mui-focused': { boxShadow: '0 0 0 4px rgba(46,125,50,0.08)' }
-                    }}
-                  >
-                    <MenuItem value="Alluvial Soil">Alluvial</MenuItem>
-                    <MenuItem value="Black Soil">Black</MenuItem>
-                    <MenuItem value="Red Soil">Red</MenuItem>
-                    <MenuItem value="Laterite Soil">Laterite</MenuItem>
-                    <MenuItem value="Sandy Soil">Sandy</MenuItem>
-                    <MenuItem value="Clay Soil">Clay</MenuItem>
-                    <MenuItem value="Loamy Soil">Loamy Soil</MenuItem>
-                  </Select>
-                </Box>
+          {/* Water */}
+          <div style={{ marginBottom: '20px' }}>
+            <div style={{ fontSize: '12px', fontWeight: 600, color: theme.muted, marginBottom: '8px' }}>Water Source</div>
+            <select 
+              value={waterAvailability} onChange={(e) => setWaterAvailability(e.target.value)}
+              style={{ width: '100%', appearance: 'none', background: theme.cream, border: `1.5px solid ${theme.border}`, borderRadius: '12px', padding: '11px 14px', fontFamily: theme.fontBody, fontSize: '14px', fontWeight: 500, color: theme.soil, outline: 'none', cursor: 'pointer' }}
+            >
+              <option value="more_water">High (Canal)</option>
+              <option value="moderate_water">Medium (Borewell)</option>
+              <option value="less_water">Low (Rainfed)</option>
+            </select>
+          </div>
 
-                {/* Editable Field 2 */}
-                <Box>
-                  <Typography sx={{ fontSize: '15px', fontWeight: 700, color: '#555', mb: '8px', display: 'flex', alignItems: 'center', gap: 0.8 }}>
-                    <Opacity fontSize="small" sx={{ color: '#1976D2' }} /> Water
-                  </Typography>
-                  <Select
-                    value={waterAvailability}
-                    onChange={(e) => setWaterAvailability(e.target.value)}
-                    fullWidth
-                    sx={{
-                      height: '54px', borderRadius: '14px', backgroundColor: '#fff', fontSize: '16px', fontWeight: 600, color: '#222',
-                      '& .MuiOutlinedInput-notchedOutline': { borderColor: '#d9d9d9' },
-                      '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#b0b0b0' },
-                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#2e7d32', borderWidth: '1px' },
-                      '&.Mui-focused': { boxShadow: '0 0 0 4px rgba(46,125,50,0.08)' }
-                    }}
-                  >
-                    <MenuItem value="more_water">High (Canal)</MenuItem>
-                    <MenuItem value="moderate_water">Med (Borewell)</MenuItem>
-                    <MenuItem value="less_water">Low (Rainfed)</MenuItem>
-                  </Select>
-                </Box>
+          {/* Duration */}
+          <div style={{ marginBottom: '20px' }}>
+            <div style={{ fontSize: '12px', fontWeight: 600, color: theme.muted, marginBottom: '8px' }}>Duration Plan</div>
+            <select 
+              value={cropDurationType} onChange={(e) => setCropDurationType(e.target.value)}
+              style={{ width: '100%', appearance: 'none', background: theme.cream, border: `1.5px solid ${theme.border}`, borderRadius: '12px', padding: '11px 14px', fontFamily: theme.fontBody, fontSize: '14px', fontWeight: 500, color: theme.soil, outline: 'none', cursor: 'pointer' }}
+            >
+              <option value="short_term">Short-Term</option>
+              <option value="long_term">Long-Term</option>
+              <option value="perennial">Perennial</option>
+            </select>
+          </div>
 
-                {/* Editable Field 3 */}
-                <Box>
-                  <Typography sx={{ fontSize: '15px', fontWeight: 700, color: '#555', mb: '8px', display: 'flex', alignItems: 'center', gap: 0.8 }}>
-                    <DateRange fontSize="small" sx={{ color: '#F57F17' }} /> Duration Plan
-                  </Typography>
-                  <Select
-                    value={cropDurationType}
-                    onChange={(e) => setCropDurationType(e.target.value)}
-                    fullWidth
-                    sx={{
-                      height: '54px', borderRadius: '14px', backgroundColor: '#fff', fontSize: '16px', fontWeight: 600, color: '#222',
-                      '& .MuiOutlinedInput-notchedOutline': { borderColor: '#d9d9d9' },
-                      '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#b0b0b0' },
-                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#2e7d32', borderWidth: '1px' },
-                      '&.Mui-focused': { boxShadow: '0 0 0 4px rgba(46,125,50,0.08)' }
-                    }}
-                  >
-                    <MenuItem value="short_term">Short Term {'(< 120 Days)'}</MenuItem>
-                    <MenuItem value="long_term">Long Term {'(> 120 Days)'}</MenuItem>
-                    <MenuItem value="perennial">Perennial {'(Years)'}</MenuItem>
-                  </Select>
-                </Box>
+          {/* Land */}
+          <div style={{ marginBottom: '20px' }}>
+            <div style={{ fontSize: '12px', fontWeight: 600, color: theme.muted, marginBottom: '8px' }}>Land (Acres)</div>
+            <input 
+              type="number"
+              min="0.1"
+              step="0.1"
+              value={landSize} 
+              onChange={(e) => setLandSize(e.target.value)}
+              style={{ width: '100%', background: theme.cream, border: `1.5px solid ${theme.border}`, borderRadius: '12px', padding: '11px 14px', fontFamily: theme.fontBody, fontSize: '14px', fontWeight: 500, color: theme.soil, outline: 'none' }}
+            />
+          </div>
 
-              </Box>
+          {/* Weather Chip */}
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '10px', background: 'linear-gradient(135deg, #fff8e8, #fef3d3)',
+            border: '1.5px solid rgba(200,144,42,0.25)', borderRadius: '12px', padding: '12px 16px', marginBottom: '20px'
+          }}>
+            <div style={{ fontSize: '28px' }}>☀️</div>
+            <div>
+              <div style={{ fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '22px', color: theme.gold }}>{temperature !== null ? `${temperature}°C` : '--°C'}</div>
+              <div style={{ fontSize: '12px', color: theme.earth, fontWeight: 500 }}>{profile.season} · {profile.location?.split(',')[0]}</div>
+            </div>
+          </div>
 
-              {/* ACTION PANEL (Grouped Weather + CTA) */}
-              <Box sx={{ 
-                background: '#fafafa', 
-                borderRadius: '20px', 
-                padding: '18px', 
-                mt: '22px',
-                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.7)'
-              }}>
-                {/* Weather Strip */}
-                <Box sx={{ 
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '14px', padding: '14px 18px', mb: '16px',
-                  borderRadius: '16px', background: '#fffdf5', border: '1px solid #f2d27a',
-                }}>
-                  <Typography sx={{ fontWeight: 800, color: '#D84315', fontSize: '18px', display: 'flex', alignItems: 'center', lineHeight: 1 }}>
-                    ☀️ {temperature !== null ? `${temperature}°C` : '...'}
-                  </Typography>
-                  <Box sx={{ width: '1.5px', height: '16px', backgroundColor: '#e0c07c', borderRadius: '1px', opacity: 0.8 }} />
-                  <Typography sx={{ fontWeight: 700, color: '#444', fontSize: '18px', display: 'flex', alignItems: 'center', lineHeight: 1 }}>
-                    {profile.season}
-                  </Typography>
-                </Box>
+          <button 
+            onClick={handleRecommendation}
+            disabled={uiState === 'loading'}
+            style={{
+              width: '100%', background: theme.leaf, color: '#fff', border: 'none', borderRadius: '14px',
+              padding: '15px', fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '15px',
+              cursor: uiState === 'loading' ? 'wait' : 'pointer', transition: 'background .2s', boxShadow: '0 4px 16px rgba(45,90,27,0.3)',
+              opacity: uiState === 'loading' ? 0.7 : 1
+            }}
+          >
+            {uiState === 'loading' ? 'Predicting...' : 'Predict Now'}
+          </button>
+        </aside>
 
-                {/* Analyze Button */}
-                <Button
-                  variant="contained"
-                  onClick={handleRecommendation}
-                  disabled={uiState === 'loading'}
-                  endIcon={uiState === 'loading' ? null : <ArrowForward />}
-                  sx={{
-                    width: '100%', height: '56px', borderRadius: '16px',
-                    backgroundColor: '#2e7d32',
-                    color: 'white', fontSize: '20px', fontWeight: 800, letterSpacing: '0.4px',
-                    boxShadow: '0 8px 18px rgba(46,125,50,0.18)',
-                    transition: 'all 0.2s ease', textTransform: 'uppercase',
-                    '&:hover': { backgroundColor: '#1b5e20', boxShadow: '0 10px 22px rgba(46,125,50,0.25)' },
-                    '&:active': { transform: 'scale(0.98)' }
-                  }}
-                >
-                  {uiState === 'loading' ? <CircularProgress size={24} sx={{ color: '#fff' }} /> : 'Analyze Best Crops'}
-                </Button>
-              </Box>
-
-            </Paper>
-          </Box>
-        </Grid>
-
-        {/* RIGHT COLUMN: Results Section */}
-        <Grid size={{ xs: 12, md: 8 }} sx={{ display: 'flex', flexDirection: 'column' }}>
+        {/* Right Column: Results */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
           {uiState === 'initial' && (
-            <Box sx={{ 
-              flex: 1,
-              width: '100%', 
-              minHeight: { xs: '300px', md: 'calc(100vh - 140px)' },
-              borderRadius: '24px',
-              background: 'linear-gradient(90deg, #f2f2f2 25%, #f8f8f8 50%, #f2f2f2 75%)',
-              backgroundSize: '200% 100%',
-              animation: 'shimmer 1.5s infinite',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-              border: '1px solid #eee'
-            }}>
-              <Spa sx={{ fontSize: '48px', color: '#e0e0e0', mb: 2 }} />
-              <Typography sx={{ color: '#aaa', fontWeight: 600, fontSize: '16px' }}>Configure farm settings to view recommendations</Typography>
-            </Box>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '300px', backgroundColor: theme.cream, borderRadius: '20px', border: `1px dashed ${theme.border}`}}>
+              <div style={{ fontSize: '40px', filter: 'grayscale(1)', opacity: 0.3 }}>🌱</div>
+              <p style={{ color: theme.muted, fontWeight: 500, marginTop: '10px' }}>Adjust farm profile to see prediction</p>
+            </div>
           )}
 
           {uiState === 'loading' && (
-            <Box sx={{ 
-              flex: 1,
-              width: '100%', 
-              minHeight: { xs: '300px', md: 'calc(100vh - 140px)' }, 
-              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', 
-              borderRadius: '24px', backgroundColor: '#f0f5f1', p: 4 
-            }}>
-              <CircularProgress size={50} sx={{ color: '#2E7D32', mb: 3 }} />
-              <Typography variant="h6" sx={{ fontWeight: 800, color: '#2E7D32', mb: 1 }}>Strict Multi-Filtering...</Typography>
-              <Typography sx={{ color: '#666', fontWeight: 600, fontSize: '14px', textAlign: 'center' }}>Fetching Live Agmarknet Prices for survivors.</Typography>
-            </Box>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '300px', backgroundColor: theme.cream, borderRadius: '20px', padding: '30px' }}>
+              <h3 style={{ fontFamily: theme.fontAccent, color: theme.leaf }}>We are predicting the best crop for you...</h3>
+              <p style={{ color: theme.muted, fontSize: '14px', marginTop: '8px' }}>Analyzing live market data and your soil profile to find the perfect match.</p>
+            </div>
           )}
 
           {uiState === 'success' && topCrops.length > 0 && (
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 3, md: 4 }, animation: 'fadeIn 0.4s ease-in' }}>
+            <>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+                <span style={{ fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '14px', color: theme.leaf, background: 'rgba(82,168,50,0.1)', borderRadius: '20px', padding: '4px 12px' }}>
+                  {topCrops.length} crops matched
+                </span>
+              </div>
 
-              <Box>
-                <Typography variant="h6" sx={{ fontWeight: 800, color: '#222', mb: 2, display: 'inline-block' }}>Top 5 Recommendations</Typography>
+              {/* Map Crops */}
+              {topCrops.map((crop, idx) => {
+                const isFirst = idx === 0;
+                
+                let suitBadgeStyle = { background: 'rgba(82,168,50,0.13)', color: '#2d6e10' };
+                let fillBarColor = `linear-gradient(90deg, ${theme.leafMid}, ${theme.leafGlow})`;
+                if (crop.finalScore < 60) {
+                   suitBadgeStyle = { background: 'rgba(180,60,40,0.10)', color: '#8b3020' };
+                   fillBarColor = `linear-gradient(90deg, #c0504d, #e07070)`;
+                } else if (crop.finalScore < 80) {
+                   suitBadgeStyle = { background: 'rgba(200,144,42,0.13)', color: '#8b5a10' };
+                   fillBarColor = `linear-gradient(90deg, ${theme.gold}, ${theme.goldLight})`;
+                }
 
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  {topCrops.map((crop, idx) => (
-                    <Paper key={crop.name} sx={{
-                      p: { xs: 2.5, sm: 3 },
-                      borderRadius: '20px',
-                      background: idx === 0 ? 'linear-gradient(135deg, #f8fff5, #ffffff)' : '#fff',
-                      borderLeft: '5px solid #2E7D32',
-                      borderTop: idx === 0 ? '1px solid #d7f0df' : '1px solid #eee',
-                      borderBottom: idx === 0 ? '1px solid #d7f0df' : '1px solid #eee',
-                      borderRight: idx === 0 ? '1px solid #d7f0df' : '1px solid #eee',
-                      boxShadow: idx === 0 ? '0 14px 34px rgba(46,125,50,0.18)' : '0 10px 30px rgba(0,0,0,0.08)',
-                      transform: idx === 0 ? 'scale(1.02)' : 'none',
-                      position: 'relative',
-                      overflow: 'hidden',
-                      transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                      mb: idx === 0 ? 3 : 2,
-                      '&:hover': { transform: idx === 0 ? 'scale(1.02) translateY(-2px)' : 'translateY(-2px)', boxShadow: '0 15px 35px rgba(0,0,0,0.12)' }
-                    }}>
-                      {/* Faded Background Medal */}
-                      <Box sx={{ position: 'absolute', top: 0, right: 0, width: '60px', height: '60px', backgroundColor: getMedalColor(idx), opacity: idx === 0 ? 0.15 : 0.05, borderBottomLeftRadius: '100%' }} />
+                return (
+                  <div key={crop.name} style={{
+                    background: theme.cardBg, borderRadius: '20px', border: `1.5px solid ${isFirst ? 'rgba(200,144,42,0.35)' : theme.border}`,
+                    boxShadow: theme.shadowCard, overflow: 'hidden', position: 'relative'
+                  }}>
+                    {isFirst && (
+                       <div style={{ background: `linear-gradient(90deg, ${theme.gold}, ${theme.goldLight})`, color: '#fff', fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '11px', letterSpacing: '.08em', textAlign: 'center', padding: '5px' }}>
+                         # 1 Best Match
+                       </div>
+                    )}
+                    <div style={{ padding: '20px' }}>
+                      
+                      {/* Top Header */}
+                      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '14px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div style={{ width: '48px', height: '48px', background: theme.cream, borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px', border: `1.5px solid ${theme.creamDark}` }}>
+                            {getCropEmoji(crop.name)}
+                          </div>
+                          <div>
+                            <div style={{ fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '19px', color: theme.soil }}>{crop.name}</div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '5px', flexWrap: 'wrap' }}>
+                               <span style={{ ...suitBadgeStyle, borderRadius: '6px', padding: '3px 8px', fontSize: '12px', fontWeight: 600, fontFamily: theme.fontAccent, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                 <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor' }} /> {crop.finalScore}% Suitability
+                               </span>
+                               <span style={{ fontSize: '12px', color: theme.muted, fontWeight: 400 }}>Market: <strong style={{ color: theme.leaf, fontWeight: 600 }}>₹{crop.marketPrice}/qtl</strong></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 
-                      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: { xs: 2, sm: 3 }, alignItems: { xs: 'flex-start', sm: 'center' } }}>
+                      {/* Suitability Fill */}
+                      <div style={{ marginBottom: '14px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: theme.muted, marginBottom: '5px' }}>
+                          <span>Suitability score</span><span>{crop.finalScore}%</span>
+                        </div>
+                        <div style={{ height: '6px', background: theme.creamDark, borderRadius: '99px', overflow: 'hidden' }}>
+                          <div style={{ height: '100%', background: fillBarColor, width: `${crop.finalScore}%` }} />
+                        </div>
+                      </div>
 
-                        {/* Title & Emojis */}
-                        <Box sx={{ flex: 1 }}>
-                          <Typography variant="h5" sx={{ fontWeight: 900, color: '#1B5E20', mb: 0.5, fontSize: { xs: '20px', sm: '24px' }, display: 'flex', alignItems: 'center', gap: 1 }}>
-                            {getCropEmoji(crop.name)} {crop.name}
-                          </Typography>
+                      {/* Metrics Strip */}
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: theme.border, borderRadius: '12px', overflow: 'hidden', marginBottom: '14px', border: `1px solid ${theme.border}` }}>
+                        <div style={{ background: theme.cream, padding: '12px 10px', textAlign: 'center' }}>
+                          <div style={{ fontSize: '10px', fontWeight: 500, color: theme.muted, textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: '3px' }}>Total Profit</div>
+                          <div style={{ fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '15px', color: theme.leaf }}>{formatCurrency(crop.totalProfit)}</div>
+                        </div>
+                        <div style={{ background: theme.cream, padding: '12px 10px', textAlign: 'center' }}>
+                          <div style={{ fontSize: '10px', fontWeight: 500, color: theme.muted, textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: '3px' }}>Monthly Income</div>
+                          <div style={{ fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '15px', color: theme.gold }}>{formatCurrency(crop.monthlyIncome)}</div>
+                        </div>
+                        <div style={{ background: theme.cream, padding: '12px 10px', textAlign: 'center' }}>
+                          <div style={{ fontSize: '10px', fontWeight: 500, color: theme.muted, textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: '3px' }}>Per Acre</div>
+                          <div style={{ fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '15px', color: theme.soil }}>{formatCurrency(crop.profitPerAcre)}</div>
+                        </div>
+                      </div>
 
-                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1.5 }}>
-                            <Chip size="small" label={`Suitability: ${crop.finalScore}%`} sx={{ backgroundColor: '#2E7D32', color: '#fff', fontWeight: 700 }} />
-                            <Chip size="small" label={`Market: ₹${crop.marketPrice}/qtl`} sx={{ backgroundColor: '#FFF3E0', color: '#E65100', fontWeight: 700 }} />
-                          </Box>
+                      {/* Tags */}
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '14px' }}>
+                        {crop.reasons?.map((rsn, idx) => (
+                           <span key={idx} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'rgba(82,168,50,0.08)', border: '1px solid rgba(82,168,50,0.15)', color: theme.leaf, borderRadius: '20px', padding: '3px 10px', fontSize: '12px' }}>
+                             {rsn}
+                           </span>
+                        ))}
+                      </div>
 
-                          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                            {crop.reasons.slice(0, 2).map((rsn, i) => (
-                              <Typography key={i} sx={{ fontWeight: 600, color: '#555', fontSize: '13px', display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                                <Verified sx={{ color: '#4CAF50', fontSize: '14px' }} /> {rsn}
-                              </Typography>
-                            ))}
-                          </Box>
-                        </Box>
+                      {/* Actions */}
+                      <div style={{ display: 'flex', gap: '10px' }}>
+                         <button style={{ flex: 1, background: theme.leaf, color: '#fff', border: 'none', borderRadius: '12px', padding: '12px 18px', fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
+                           View Cultivation Plan →
+                         </button>
+                      </div>
 
-                        {/* LIVE PROFIT WIDGET */}
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, width: { xs: '100%', sm: 'auto' }, pt: { xs: 2, sm: 0 }, borderTop: { xs: '1px solid #EEE', sm: 'none' } }}>
-                          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' }, gap: '10px' }}>
-                            <Box sx={{ display: 'flex', flexDirection: 'column', p: 1.2, borderRadius: '12px', backgroundColor: '#F0FDF4', border: '1px solid #DCFCE7', alignItems: 'flex-start', minWidth: '100px' }}>
-                              <Typography sx={{ fontSize: '11px', fontWeight: 700, color: '#166534', mb: 0.5 }}>💰 Total Profit</Typography>
-                              <Typography sx={{ fontSize: '14px', fontWeight: 800, color: '#166534' }}>₹{crop.totalProfit.toLocaleString()}</Typography>
-                            </Box>
-                            <Box sx={{ display: 'flex', flexDirection: 'column', p: 1.2, borderRadius: '12px', backgroundColor: '#FFFBEB', border: '1px solid #FEF3C7', alignItems: 'flex-start', minWidth: '110px' }}>
-                              <Typography sx={{ fontSize: '11px', fontWeight: 800, color: '#B45309', mb: 0.5 }}>📅 Monthly Income</Typography>
-                              <Typography sx={{ fontSize: '15px', fontWeight: 900, color: '#D97706' }}>₹{crop.monthlyIncome.toLocaleString()}</Typography>
-                            </Box>
-                            <Box sx={{ display: 'flex', flexDirection: 'column', p: 1.2, borderRadius: '12px', backgroundColor: '#F9FAFB', border: '1px solid #F3F4F6', alignItems: 'flex-start', minWidth: '100px' }}>
-                              <Typography sx={{ fontSize: '11px', fontWeight: 700, color: '#6B7280', mb: 0.5 }}>🌾 Per Acre</Typography>
-                              <Typography sx={{ fontSize: '14px', fontWeight: 800, color: '#374151' }}>₹{crop.profitPerAcre.toLocaleString()}</Typography>
-                            </Box>
-                          </Box>
-
-                          <Button size="small" variant={idx === 0 ? "contained" : "outlined"} fullWidth sx={{ borderRadius: '10px', fontWeight: 700, textTransform: 'none', backgroundColor: idx === 0 ? '#2E7D32' : 'transparent', color: idx === 0 ? '#fff' : '#2E7D32', borderColor: '#2E7D32', mt: 0.5, py: 0.8 }}>
-                            Cultivation Plan
-                          </Button>
-                        </Box>
-
-                      </Box>
-                    </Paper>
-                  ))}
-                </Box>
-              </Box>
-
-              {/* Premium Animated Profit Chart */}
-              <Paper sx={{ p: { xs: 2.5, md: 4 }, borderRadius: '20px', backgroundColor: '#fff', border: '1px solid #E0E0E0', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
-                <Typography variant="h6" sx={{ fontWeight: 800, color: '#333', mb: 3, display: 'flex', alignItems: 'center', gap: 1, fontSize: '16px' }}>
-                  <BarChart sx={{ color: '#F57F17' }} /> Farm Income Estimation (Monthly)
-                </Typography>
-
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-                  {topCrops.map((crop, idx) => {
-                    const barWidth = `${(crop.estimatedProfit / maxProfit) * 100}%`;
-                    return (
-                      <Box key={crop.name} sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <Typography sx={{ fontWeight: 700, color: '#444', fontSize: '13px' }}>{getCropEmoji(crop.name)} {crop.name}</Typography>
-                          <Typography sx={{ fontWeight: 800, color: idx === 0 ? '#1B5E20' : '#555', fontSize: '13px' }}>
-                            ₹{crop.estimatedProfit > 1000 ? (Math.round(crop.estimatedProfit / 1000) + 'k') : crop.estimatedProfit}
-                          </Typography>
-                        </Box>
-                        <Box sx={{ width: '100%', height: '12px', backgroundColor: '#F5F5F5', borderRadius: '6px', overflow: 'hidden' }}>
-                          <Box sx={{ width: barWidth, height: '100%', backgroundColor: idx === 0 ? '#4CAF50' : '#A5D6A7', transition: 'width 1.5s cubic-bezier(0.4, 0, 0.2, 1)', borderRadius: '6px' }} />
-                        </Box>
-                      </Box>
-                    );
-                  })}
-                </Box>
-              </Paper>
-
-              {/* Pulsing Smart Alerts */}
-              <Box>
-                <Typography variant="h6" sx={{ fontWeight: 800, color: '#333', mb: 1.5, fontSize: '16px' }}>Live Connection Status</Typography>
-                <Paper sx={{ p: 2, borderRadius: '16px', border: `1px solid ${weatherSummary?.alert ? weatherSummary.alert.iconColor : '#90CAF9'}40`, backgroundColor: weatherSummary?.alert ? weatherSummary.alert.bgColor : '#E3F2FD', boxShadow: 'none' }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-
-                    {/* Pulse Animation Wrapper */}
-                    <Box sx={{ position: 'relative', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Box sx={{ position: 'absolute', width: '100%', height: '100%', borderRadius: '50%', backgroundColor: weatherSummary?.alert ? weatherSummary.alert.iconColor : '#2196F3', opacity: 0.2, animation: 'pulse 1.5s infinite' }} />
-                      <FiberManualRecord sx={{ color: weatherSummary?.alert ? weatherSummary.alert.iconColor : '#1976D2', fontSize: '20px', zIndex: 1 }} />
-                    </Box>
-
-                    <Box>
-                      <Typography sx={{ fontWeight: 800, color: weatherSummary?.alert ? weatherSummary.alert.iconColor : '#1565C0', fontSize: '14px' }}>
-                        System Synchronized
-                      </Typography>
-                      <Typography sx={{ color: '#555', fontSize: '13px', fontWeight: 500, lineHeight: 1.3 }}>
-                        {weatherSummary?.alert ? weatherSummary.alert.message : weatherSummary?.weather ? `Agmarknet Online. Area Weather: ${weatherSummary.weather.weather[0].description}.` : 'Servers online.'}
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Paper>
-              </Box>
-
-            </Box>
+                    </div>
+                  </div>
+                )
+              })}
+            </>
           )}
-        </Grid>
-      </Grid>
 
-
-
+        </div>
+      </div>
+      
+      {/* Mobile Responsiveness override logic */}
       <style>{`
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulse {
-          0% { transform: scale(1); opacity: 0.5; }
-          50% { transform: scale(1.5); opacity: 0; }
-          100% { transform: scale(1); opacity: 0; }
-        }
-        @keyframes shimmer {
-          0% { background-position: 200% 0; }
-          100% { background-position: -200% 0; }
+        @media (max-width: 768px) {
+           .app > div:nth-child(3) { grid-template-columns: 1fr !important; padding: 0 16px 48px !important; }
+           aside { position: static !important; }
         }
       `}</style>
-      </Box>
-    </Box>
+    </div>
   );
 };
 

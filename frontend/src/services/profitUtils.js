@@ -12,7 +12,13 @@ export const calculateProfitSnapshot = (cropEconomics, landSize, totalDurationDa
   const revenue = totalYield * marketPricePerQ;
   const totalProfit = revenue - totalCost;
 
-  const durationMonths = Math.max(1, totalDurationDays / 30);
+  // Real-world farm economic logic: A short-term crop occupies the land for a full 6-month cycle 
+  // (including prep, harvest, and rest) because farmers typically only run 2 seasons per year.
+  let durationMonths = Math.max(1, totalDurationDays / 30);
+  if (durationMonths <= 6) {
+    durationMonths = 6;
+  }
+
   const monthlyIncome = Math.round(totalProfit / durationMonths);
 
   return {

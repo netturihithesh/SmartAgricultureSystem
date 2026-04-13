@@ -20,7 +20,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 18,
-      "cost_per_acre": 22000
+      "cost_per_acre": 26000
     }
   },
   {
@@ -46,7 +46,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 25,
-      "cost_per_acre": 18000
+      "cost_per_acre": 24000
     }
   },
   {
@@ -68,7 +68,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 10,
-      "cost_per_acre": 7000
+      "cost_per_acre": 9100
     }
   },
   {
@@ -89,7 +89,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 15,
-      "cost_per_acre": 10000
+      "cost_per_acre": 13000
     }
   },
   {
@@ -111,7 +111,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 8,
-      "cost_per_acre": 6000
+      "cost_per_acre": 7800
     }
   },
   {
@@ -134,7 +134,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 10,
-      "cost_per_acre": 8000
+      "cost_per_acre": 10400
     }
   },
   {
@@ -156,7 +156,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 6,
-      "cost_per_acre": 5500
+      "cost_per_acre": 7200
     }
   },
   {
@@ -179,7 +179,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 22,
-      "cost_per_acre": 12000
+      "cost_per_acre": 15600
     }
   },
   {
@@ -201,7 +201,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 12,
-      "cost_per_acre": 9000
+      "cost_per_acre": 11700
     }
   },
   {
@@ -222,7 +222,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 7,
-      "cost_per_acre": 6000
+      "cost_per_acre": 7800
     }
   },
   {
@@ -243,13 +243,13 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 18,
-      "cost_per_acre": 14000
+      "cost_per_acre": 18200
     }
   },
   {
     "name": "Arhar",
     "api_name": "Arhar(Tur/Red Gram)(Whole)",
-    "crop_duration_type": "short_term",
+    "crop_duration_type": "long_term",
     "conditions": {
       "soil_types": [
         "Black Soil",
@@ -265,7 +265,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 6,
-      "cost_per_acre": 15000
+      "cost_per_acre": 19500
     }
   },
   {
@@ -287,7 +287,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 5,
-      "cost_per_acre": 9000
+      "cost_per_acre": 11700
     }
   },
   {
@@ -309,7 +309,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 7,
-      "cost_per_acre": 11000
+      "cost_per_acre": 14300
     }
   },
   {
@@ -330,7 +330,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 8,
-      "cost_per_acre": 12000
+      "cost_per_acre": 15600
     }
   },
   {
@@ -352,7 +352,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 5,
-      "cost_per_acre": 10000
+      "cost_per_acre": 13000
     }
   },
   {
@@ -375,7 +375,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 6,
-      "cost_per_acre": 9000
+      "cost_per_acre": 11700
     }
   },
   {
@@ -396,7 +396,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 8,
-      "cost_per_acre": 11000
+      "cost_per_acre": 14300
     }
   },
   {
@@ -419,7 +419,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 5,
-      "cost_per_acre": 9500
+      "cost_per_acre": 12400
     }
   },
   {
@@ -439,7 +439,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 35,
-      "cost_per_acre": 18000
+      "cost_per_acre": 23400
     }
   },
   {
@@ -462,7 +462,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 10,
-      "cost_per_acre": 17000
+      "cost_per_acre": 22100
     }
   },
   {
@@ -484,7 +484,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 6,
-      "cost_per_acre": 12000
+      "cost_per_acre": 15600
     }
   },
   {
@@ -505,7 +505,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 7,
-      "cost_per_acre": 14000
+      "cost_per_acre": 18200
     }
   },
   {
@@ -528,7 +528,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 4,
-      "cost_per_acre": 6000
+      "cost_per_acre": 7800
     }
   },
   {
@@ -549,13 +549,13 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 6,
-      "cost_per_acre": 11000
+      "cost_per_acre": 14300
     }
   },
   {
     "name": "Pegeon Pea",
     "api_name": "Pegeon Pea(Arhar Fali)",
-    "crop_duration_type": "short_term",
+    "crop_duration_type": "long_term",
     "conditions": {
       "soil_types": [
         "Black Soil",
@@ -571,7 +571,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 7,
-      "cost_per_acre": 16000
+      "cost_per_acre": 20800
     }
   },
   {
@@ -591,7 +591,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 10,
-      "cost_per_acre": 15000
+      "cost_per_acre": 19500
     }
   },
   {
@@ -615,7 +615,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 40,
-      "cost_per_acre": 8500
+      "cost_per_acre": 11100
     }
   },
   {
@@ -637,7 +637,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 120,
-      "cost_per_acre": 15000
+      "cost_per_acre": 19500
     }
   },
   {
@@ -658,7 +658,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 100,
-      "cost_per_acre": 18000
+      "cost_per_acre": 23400
     }
   },
   {
@@ -681,7 +681,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 45,
-      "cost_per_acre": 20000
+      "cost_per_acre": 26000
     }
   },
   {
@@ -704,7 +704,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 40,
-      "cost_per_acre": 18000
+      "cost_per_acre": 23400
     }
   },
   {
@@ -727,7 +727,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 70,
-      "cost_per_acre": 16000
+      "cost_per_acre": 20800
     }
   },
   {
@@ -752,7 +752,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 120,
-      "cost_per_acre": 25000
+      "cost_per_acre": 32500
     }
   },
   {
@@ -773,7 +773,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 150,
-      "cost_per_acre": 22000
+      "cost_per_acre": 28600
     }
   },
   {
@@ -795,7 +795,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 50,
-      "cost_per_acre": 40000
+      "cost_per_acre": 52000
     }
   },
   {
@@ -815,7 +815,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 120,
-      "cost_per_acre": 18000
+      "cost_per_acre": 23400
     }
   },
   {
@@ -835,7 +835,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 100,
-      "cost_per_acre": 25000
+      "cost_per_acre": 32500
     }
   },
   {
@@ -858,13 +858,13 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 35,
-      "cost_per_acre": 12000
+      "cost_per_acre": 15600
     }
   },
   {
     "name": "Colacasia",
     "api_name": "Colacasia",
-    "crop_duration_type": "short_term",
+    "crop_duration_type": "long_term",
     "conditions": {
       "soil_types": [
         "Alluvial Soil",
@@ -879,7 +879,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 150,
-      "cost_per_acre": 45000
+      "cost_per_acre": 58500
     }
   },
   {
@@ -901,13 +901,13 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 40,
-      "cost_per_acre": 15000
+      "cost_per_acre": 19500
     }
   },
   {
     "name": "Drumstick",
     "api_name": "Drumstick",
-    "crop_duration_type": "short_term",
+    "crop_duration_type": "perennial",
     "conditions": {
       "soil_types": [
         "Red Soil",
@@ -926,7 +926,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 150,
-      "cost_per_acre": 12000
+      "cost_per_acre": 15600
     }
   },
   {
@@ -948,7 +948,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 180,
-      "cost_per_acre": 50000
+      "cost_per_acre": 65000
     }
   },
   {
@@ -968,7 +968,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 80,
-      "cost_per_acre": 18000
+      "cost_per_acre": 23400
     }
   },
   {
@@ -992,7 +992,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 50,
-      "cost_per_acre": 20000
+      "cost_per_acre": 26000
     }
   },
   {
@@ -1012,7 +1012,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 35,
-      "cost_per_acre": 10000
+      "cost_per_acre": 13000
     }
   },
   {
@@ -1036,12 +1036,12 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 100,
-      "cost_per_acre": 28000
+      "cost_per_acre": 36400
     }
   },
   {
     "name": "Pea Pod",
-    "api_name": "Pea Pod/Pea Cod/हरी मटर",
+    "api_name": "Pea Pod/Pea Cod/\u00e0\u00a4\u00b9\u00e0\u00a4\u00b0\u00e0\u00a5\u20ac \u00e0\u00a4\u00ae\u00e0\u00a4\u0178\u00e0\u00a4\u00b0",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -1057,13 +1057,13 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 35,
-      "cost_per_acre": 18000
+      "cost_per_acre": 23400
     }
   },
   {
     "name": "Pointed gourd",
     "api_name": "Pointed gourd(Parval)",
-    "crop_duration_type": "short_term",
+    "crop_duration_type": "perennial",
     "conditions": {
       "soil_types": [
         "Alluvial Soil",
@@ -1078,7 +1078,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 60,
-      "cost_per_acre": 25000
+      "cost_per_acre": 32500
     }
   },
   {
@@ -1099,7 +1099,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 100,
-      "cost_per_acre": 40000
+      "cost_per_acre": 52000
     }
   },
   {
@@ -1122,7 +1122,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 100,
-      "cost_per_acre": 15000
+      "cost_per_acre": 19500
     }
   },
   {
@@ -1145,7 +1145,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 80,
-      "cost_per_acre": 12000
+      "cost_per_acre": 15600
     }
   },
   {
@@ -1167,7 +1167,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 50,
-      "cost_per_acre": 15000
+      "cost_per_acre": 19500
     }
   },
   {
@@ -1188,7 +1188,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 40,
-      "cost_per_acre": 12000
+      "cost_per_acre": 15600
     }
   },
   {
@@ -1211,7 +1211,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 60,
-      "cost_per_acre": 18000
+      "cost_per_acre": 23400
     }
   },
   {
@@ -1235,7 +1235,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 60,
-      "cost_per_acre": 10000
+      "cost_per_acre": 13000
     }
   },
   {
@@ -1257,7 +1257,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 45,
-      "cost_per_acre": 14000
+      "cost_per_acre": 18200
     }
   },
   {
@@ -1280,7 +1280,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 80,
-      "cost_per_acre": 18000
+      "cost_per_acre": 23400
     }
   },
   {
@@ -1304,7 +1304,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 120,
-      "cost_per_acre": 35000
+      "cost_per_acre": 45500
     }
   },
   {
@@ -1324,7 +1324,7 @@
     "water_need": "less_water",
     "economics": {
       "avg_yield_per_acre": 100,
-      "cost_per_acre": 15000
+      "cost_per_acre": 19500
     }
   },
   {
@@ -1346,7 +1346,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 160,
-      "cost_per_acre": 45000
+      "cost_per_acre": 58500
     }
   },
   {
@@ -1369,7 +1369,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 40,
-      "cost_per_acre": 20000
+      "cost_per_acre": 26000
     }
   },
   {
@@ -1388,7 +1388,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 60,
-      "cost_per_acre": 80000
+      "cost_per_acre": 104000
     }
   },
   {
@@ -1408,13 +1408,13 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 30,
-      "cost_per_acre": 50000
+      "cost_per_acre": 65000
     }
   },
   {
     "name": "Banana",
     "api_name": "Banana",
-    "crop_duration_type": "short_term",
+    "crop_duration_type": "perennial",
     "conditions": {
       "soil_types": [
         "Alluvial Soil",
@@ -1430,7 +1430,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 200,
-      "cost_per_acre": 60000
+      "cost_per_acre": 78000
     }
   },
   {
@@ -1452,7 +1452,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 50,
-      "cost_per_acre": 15000
+      "cost_per_acre": 19500
     }
   },
   {
@@ -1475,7 +1475,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 80,
-      "cost_per_acre": 30000
+      "cost_per_acre": 39000
     }
   },
   {
@@ -1498,7 +1498,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 30,
-      "cost_per_acre": 25000
+      "cost_per_acre": 32500
     }
   },
   {
@@ -1520,7 +1520,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 40,
-      "cost_per_acre": 35000
+      "cost_per_acre": 45500
     }
   },
   {
@@ -1542,7 +1542,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 100,
-      "cost_per_acre": 120000
+      "cost_per_acre": 156000
     }
   },
   {
@@ -1565,7 +1565,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 120,
-      "cost_per_acre": 30000
+      "cost_per_acre": 39000
     }
   },
   {
@@ -1587,7 +1587,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 200,
-      "cost_per_acre": 15000
+      "cost_per_acre": 19500
     }
   },
   {
@@ -1609,7 +1609,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 80,
-      "cost_per_acre": 12000
+      "cost_per_acre": 15600
     }
   },
   {
@@ -1629,7 +1629,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 150,
-      "cost_per_acre": 50000
+      "cost_per_acre": 65000
     }
   },
   {
@@ -1652,7 +1652,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 80,
-      "cost_per_acre": 35000
+      "cost_per_acre": 45500
     }
   },
   {
@@ -1672,7 +1672,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 40,
-      "cost_per_acre": 60000
+      "cost_per_acre": 78000
     }
   },
   {
@@ -1694,7 +1694,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 60,
-      "cost_per_acre": 40000
+      "cost_per_acre": 52000
     }
   },
   {
@@ -1715,7 +1715,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 120,
-      "cost_per_acre": 50000
+      "cost_per_acre": 65000
     }
   },
   {
@@ -1736,13 +1736,13 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 100,
-      "cost_per_acre": 55000
+      "cost_per_acre": 71500
     }
   },
   {
     "name": "Papaya",
     "api_name": "Papaya",
-    "crop_duration_type": "short_term",
+    "crop_duration_type": "perennial",
     "conditions": {
       "soil_types": [
         "Alluvial Soil",
@@ -1757,7 +1757,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 250,
-      "cost_per_acre": 45000
+      "cost_per_acre": 58500
     }
   },
   {
@@ -1777,7 +1777,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 30,
-      "cost_per_acre": 60000
+      "cost_per_acre": 78000
     }
   },
   {
@@ -1796,7 +1796,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 50,
-      "cost_per_acre": 55000
+      "cost_per_acre": 71500
     }
   },
   {
@@ -1817,7 +1817,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 150,
-      "cost_per_acre": 70000
+      "cost_per_acre": 91000
     }
   },
   {
@@ -1837,7 +1837,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 30,
-      "cost_per_acre": 55000
+      "cost_per_acre": 71500
     }
   },
   {
@@ -1860,7 +1860,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 60,
-      "cost_per_acre": 50000
+      "cost_per_acre": 65000
     }
   },
   {
@@ -1880,7 +1880,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 150,
-      "cost_per_acre": 20000
+      "cost_per_acre": 26000
     }
   },
   {
@@ -1901,7 +1901,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 10,
-      "cost_per_acre": 60000
+      "cost_per_acre": 78000
     }
   },
   {
@@ -1922,7 +1922,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 5,
-      "cost_per_acre": 40000
+      "cost_per_acre": 52000
     }
   },
   {
@@ -1942,7 +1942,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 3,
-      "cost_per_acre": 80000
+      "cost_per_acre": 104000
     }
   },
   {
@@ -1963,7 +1963,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 8,
-      "cost_per_acre": 25000
+      "cost_per_acre": 32500
     }
   },
   {
@@ -1986,7 +1986,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 7,
-      "cost_per_acre": 12000
+      "cost_per_acre": 15600
     }
   },
   {
@@ -2008,7 +2008,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 15,
-      "cost_per_acre": 35000
+      "cost_per_acre": 45500
     }
   },
   {
@@ -2028,7 +2028,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 2,
-      "cost_per_acre": 50000
+      "cost_per_acre": 65000
     }
   },
   {
@@ -2048,7 +2048,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 4,
-      "cost_per_acre": 80000
+      "cost_per_acre": 104000
     }
   },
   {
@@ -2069,7 +2069,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 6,
-      "cost_per_acre": 12000
+      "cost_per_acre": 15600
     }
   },
   {
@@ -2090,7 +2090,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 15,
-      "cost_per_acre": 22000
+      "cost_per_acre": 28600
     }
   },
   {
@@ -2110,7 +2110,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 40,
-      "cost_per_acre": 35000
+      "cost_per_acre": 45500
     }
   },
   {
@@ -2131,7 +2131,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 80,
-      "cost_per_acre": 60000
+      "cost_per_acre": 78000
     }
   },
   {
@@ -2151,7 +2151,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 12,
-      "cost_per_acre": 18000
+      "cost_per_acre": 23400
     }
   },
   {
@@ -2171,7 +2171,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 7,
-      "cost_per_acre": 12000
+      "cost_per_acre": 15600
     }
   },
   {
@@ -2191,7 +2191,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 8,
-      "cost_per_acre": 90000
+      "cost_per_acre": 117000
     }
   },
   {
@@ -2212,7 +2212,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 350,
-      "cost_per_acre": 50000
+      "cost_per_acre": 65000
     }
   },
   {
@@ -2232,7 +2232,7 @@
     "water_need": "more_water",
     "economics": {
       "avg_yield_per_acre": 10,
-      "cost_per_acre": 120000
+      "cost_per_acre": 156000
     }
   },
   {
@@ -2254,7 +2254,7 @@
     "water_need": "moderate_water",
     "economics": {
       "avg_yield_per_acre": 8,
-      "cost_per_acre": 25000
+      "cost_per_acre": 32500
     }
   },
   {
@@ -2274,8 +2274,8 @@
     },
     "water_need": "more_water",
     "economics": {
-      "avg_yield_per_acre": 100,
-      "cost_per_acre": 55000
+      "avg_yield_per_acre": 25,
+      "cost_per_acre": 71500
     }
   }
 ]
