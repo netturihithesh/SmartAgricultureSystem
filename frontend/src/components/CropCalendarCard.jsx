@@ -69,7 +69,7 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
   };
 
   return (
-    <Paper className="neo-card" sx={{ p: 0, overflow: 'hidden', bgcolor: 'var(--card-bg)', borderColor: 'var(--card-border)', mb: '24px' }}>
+    <Paper className="neo-card" sx={{ width: '100%', maxWidth: '100%', p: 0, overflow: 'hidden', bgcolor: 'var(--card-bg)', borderColor: 'var(--card-border)', mb: '24px' }}>
       <Box sx={{ p: '20px 24px', borderBottom: '1px solid var(--card-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Box sx={{ p: 1, bgcolor: 'rgba(57, 255, 106, 0.1)', borderRadius: '10px', display: 'flex', border: '1px solid rgba(57, 255, 106, 0.2)' }}>
@@ -87,7 +87,7 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
       </Box>
 
       {/* Calendar Scroll Area */}
-      <Box sx={{ position: 'relative', borderBottom: '1px solid var(--card-border)', bgcolor: 'rgba(255,255,255,0.01)' }}>
+      <Box sx={{ position: 'relative', borderBottom: '1px solid var(--card-border)', bgcolor: 'rgba(255,255,255,0.01)', width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
         <IconButton 
           onClick={() => handleScroll(-1)} 
           sx={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', zIndex: 2, bgcolor: 'var(--card-bg)', border: '1px solid var(--card-border)', '&:hover': { bgcolor: 'var(--card-border)' } }} 
@@ -104,7 +104,8 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
             p: '24px 48px', 
             gap: 2, 
             scrollbarWidth: 'none', 
-            '&::-webkit-scrollbar': { display: 'none' } 
+            '&::-webkit-scrollbar': { display: 'none' },
+            width: '100%'
           }}
         >
           {daysArray.map(dayNum => {
