@@ -4,7 +4,6 @@ import { supabase } from '../supabase';
 import ActionHome from './ActionHome';
 import HeroSection from '../components/HeroSection';
 import FeaturesSection from '../components/FeaturesSection';
-import HowItWorks from '../components/HowItWorks';
 
 
 const HomePage = () => {
@@ -41,7 +40,6 @@ const HomePage = () => {
     <Box sx={{ mt: '70px', overflowX: 'hidden' }}>
       <HeroSection />
       <FeaturesSection />
-      <HowItWorks />
     </Box>
   );
 };

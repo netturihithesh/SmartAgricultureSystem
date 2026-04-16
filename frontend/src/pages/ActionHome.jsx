@@ -4,6 +4,7 @@ import { supabase } from '../supabase';
 import cropProcessData from '../data/crop_process.json';
 import cropDataList from '../data/crop_data.json';
 import AgriBot from '../components/AgriBot';
+import PestDetectionCard from '../components/PestDetectionCard';
 import { getDailyQuote, generateStageSchedule } from '../services/aiService';
 import './ActionHome.css';
 
@@ -436,6 +437,9 @@ const ActionHome = ({ session }) => {
               </div>
             </div>
           )}
+
+          {/* PEST DETECTION CARD */}
+          {selectedCrop && <PestDetectionCard />}
 
           {/* CROP JOURNEY */}
           {selectedCrop && (

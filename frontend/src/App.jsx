@@ -11,7 +11,6 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import FeaturesPage from './pages/FeaturesPage';
-import HowItWorksPage from './pages/HowItWorksPage';
 import ContactPage from './pages/ContactPage';
 import AboutPage from './pages/AboutPage';
 import DashboardPage from './pages/DashboardPage';
@@ -60,7 +59,6 @@ function ThemedApp() {
           {/* Public Routes */}
           <Route path="/" element={<MainLayout><HomePage /></MainLayout>} />
           <Route path="/features" element={<MainLayout><FeaturesPage /></MainLayout>} />
-          <Route path="/how-it-works" element={<MainLayout><HowItWorksPage /></MainLayout>} />
           <Route path="/contact" element={<MainLayout><ContactPage /></MainLayout>} />
           <Route path="/about" element={<MainLayout><AboutPage /></MainLayout>} />
           
