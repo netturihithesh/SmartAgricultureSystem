@@ -6,6 +6,7 @@ import {
 import { Visibility, VisibilityOff, Google, Agriculture as EcoIcon } from '@mui/icons-material';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { supabase } from '../supabase';
+import { useColorMode } from '../context/ThemeContext';
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,13 +15,13 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
+  const { mode } = useColorMode();
+  const isDark = mode === 'dark';
 
-  const bgDefault = theme.palette.background.default;
-  const bgPaper = theme.palette.background.paper;
-  const textPrimary = theme.palette.text.primary;
-  const textSecondary = theme.palette.text.secondary;
+  const bgPaper = isDark ? 'rgba(255,255,255,0.02)' : '#ffffff';
+  const textPrimary = isDark ? '#e2e8f0' : '#1e293b';
+  const textSecondary = isDark ? '#94a3b8' : '#475569';
+  const accentColor = isDark ? '#39FF6A' : '#2E7D32';
 
   React.useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -65,7 +66,7 @@ const LoginPage = () => {
     <Box sx={{
       minHeight: '100vh',
       background: isDark
-        ? 'linear-gradient(180deg, #1e2a24, #2a3830)'
+        ? '#0A0D0B'
         : 'linear-gradient(180deg, #f4f7f6, #eef3f1)',
       display: 'flex', flexDirection: 'column', alignItems: 'center',
       justifyContent: 'center', padding: { xs: '16px', md: '48px 24px' },
@@ -94,9 +95,10 @@ const LoginPage = () => {
       {/* Login Card */}
       <Box sx={{
         width: '100%', maxWidth: '400px', backgroundColor: bgPaper,
+        backdropFilter: isDark ? 'blur(10px)' : 'none',
         borderRadius: '18px', p: { xs: '32px 24px', sm: '38px' },
-        boxShadow: isDark ? '0 30px 70px rgba(0,0,0,0.4)' : '0 30px 70px rgba(0,0,0,0.08)',
-        border: `1px solid ${isDark ? '#333' : 'transparent'}`,
+        boxShadow: isDark ? '0 10px 40px rgba(0,0,0,0.6)' : '0 30px 70px rgba(0,0,0,0.08)',
+        border: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'transparent'}`,
         zIndex: 1
       }}>
         <Typography variant="h2" sx={{ fontSize: '24px', fontWeight: 700, color: textPrimary, mb: '8px', textAlign: 'center' }}>
@@ -151,16 +153,16 @@ const LoginPage = () => {
           </Box>
 
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: '24px' }}>
-            <Link href="#" underline="hover" sx={{ fontSize: '13px', color: '#2E7D32', fontWeight: 600 }}>Forgot Password?</Link>
+            <Link href="#" underline="hover" sx={{ fontSize: '13px', color: accentColor, fontWeight: 600 }}>Forgot Password?</Link>
           </Box>
 
           <Button type="submit" variant="contained" fullWidth disabled={loading} sx={{
-            height: '50px', borderRadius: '12px', backgroundColor: '#2e7d32', color: '#fff',
+            height: '50px', borderRadius: '12px', backgroundColor: accentColor, color: isDark ? '#000' : '#fff',
             fontSize: '15px', fontWeight: 600, textTransform: 'none', boxShadow: 'none',
-            '&:hover': { backgroundColor: '#256628', transform: 'translateY(-1px)', boxShadow: '0 8px 16px rgba(46, 125, 50, 0.15)' },
-            '&:disabled': { backgroundColor: '#A5D6A7', color: '#fff' }
+            '&:hover': { backgroundColor: isDark ? '#2fe058' : '#256628', transform: 'translateY(-1px)', boxShadow: isDark ? '0 8px 16px rgba(57,255,106,0.3)' : '0 8px 16px rgba(46, 125, 50, 0.15)' },
+            '&:disabled': { backgroundColor: isDark ? '#4CAF50' : '#A5D6A7', color: isDark ? '#000' : '#fff' }
           }}>
-            {loading ? <CircularProgress size={24} sx={{ color: '#fff' }} /> : 'Login to Dashboard'}
+            {loading ? <CircularProgress size={24} sx={{ color: isDark ? '#000' : '#fff' }} /> : 'Login to Dashboard'}
           </Button>
         </form>
 
@@ -172,17 +174,17 @@ const LoginPage = () => {
 
         <Button variant="outlined" fullWidth startIcon={<Google sx={{ color: '#DB4437' }} />} sx={{
           height: '50px', borderRadius: '10px',
-          borderColor: isDark ? '#444' : '#e5e7eb',
+          borderColor: isDark ? 'rgba(255,255,255,0.1)' : '#e5e7eb',
           color: textPrimary, fontSize: '14px', fontWeight: 600, textTransform: 'none',
-          backgroundColor: isDark ? '#334d3d' : '#fafafa',
-          '&:hover': { backgroundColor: isDark ? '#333' : '#ffffff', borderColor: isDark ? '#666' : '#ccc' }
+          backgroundColor: isDark ? 'rgba(255,255,255,0.02)' : '#fafafa',
+          '&:hover': { backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : '#ffffff', borderColor: isDark ? 'rgba(255,255,255,0.3)' : '#ccc' }
         }}>
           Continue with Google
         </Button>
 
         <Typography sx={{ textAlign: 'center', mt: '32px', fontSize: '14px', color: textSecondary }}>
           New to SmartAgri?{' '}
-          <Link component={RouterLink} to="/register" sx={{ color: '#2E7D32', fontWeight: 700, textDecoration: 'none', transition: 'all 0.2s ease', '&:hover': { textDecoration: 'underline', color: '#1B5E20' } }}>
+          <Link component={RouterLink} to="/register" sx={{ color: accentColor, fontWeight: 700, textDecoration: 'none', transition: 'all 0.2s ease', '&:hover': { textDecoration: 'underline', color: isDark ? '#2fe058' : '#1B5E20' } }}>
             Create Account
           </Link>
         </Typography>

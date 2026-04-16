@@ -1,24 +1,26 @@
 import React from 'react';
 import {
-  Box, Container, Typography, Grid, TextField, Button, Paper, Stack, useTheme
+  Box, Container, Typography, Grid, TextField, Button, Paper, Stack
 } from '@mui/material';
 import {
   LocationOn as LocationIcon, Email as EmailIcon,
   AccessTime as AccessTimeIcon, ArrowForward as ArrowForwardIcon
 } from '@mui/icons-material';
+import { useColorMode } from '../context/ThemeContext';
 
 const ContactPage = () => {
   const [isSent, setIsSent] = React.useState(false);
-  const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
+  const { mode } = useColorMode();
+  const isDark = mode === 'dark';
 
-  const bgDefault = theme.palette.background.default;
-  const bgPaper = theme.palette.background.paper;
-  const textPrimary = theme.palette.text.primary;
-  const textSecondary = theme.palette.text.secondary;
-  const borderColor = isDark ? '#333' : '#e8ecea';
-  const altBg = isDark ? '#243028' : '#f7faf8';
-  const iconBg = isDark ? '#334d3d' : '#e8f5e9';
+  const bgDefault = isDark ? '#0A0D0B' : '#ffffff';
+  const bgPaper = isDark ? '#0A0D0B' : '#ffffff';
+  const textPrimary = isDark ? '#e2e8f0' : '#1e293b';
+  const textSecondary = isDark ? '#94a3b8' : '#475569';
+  const borderColor = isDark ? 'rgba(255,255,255,0.1)' : '#e8ecea';
+  const altBg = isDark ? '#0A0D0B' : '#f7faf8';
+  const iconBg = isDark ? 'rgba(57,255,106,0.1)' : '#e8f5e9';
+  const accentColor = isDark ? '#39FF6A' : '#2e7d32';
 
   return (
     <Box sx={{ mt: '70px', width: '100%', pb: 8, backgroundColor: bgDefault }}>
@@ -59,9 +61,9 @@ const ContactPage = () => {
                     sx={{ '& .MuiInputBase-root': { minHeight: '120px', alignItems: 'flex-start', borderRadius: '8px' } }} />
                   <Button type="submit" variant="contained" sx={{
                     mt: 1, height: '48px', borderRadius: '10px',
-                    backgroundColor: '#2e7d32', color: 'white', fontWeight: 600,
+                    backgroundColor: accentColor, color: isDark ? '#000' : 'white', fontWeight: 600,
                     textTransform: 'none', fontSize: '16px',
-                    '&:hover': { backgroundColor: '#1b5e20' }
+                    '&:hover': { backgroundColor: isDark ? '#2fe058' : '#1b5e20' }
                   }}>
                     {isSent ? 'Sent ✓' : 'Send Message'}
                   </Button>
@@ -85,7 +87,7 @@ const ContactPage = () => {
                   { icon: <AccessTimeIcon />, label: 'Support Hours', value: 'Mon – Sat : 9AM – 6PM' },
                 ].map(({ icon, label, value }) => (
                   <Box key={label} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Box sx={{ display: 'flex', p: 1.2, backgroundColor: iconBg, borderRadius: '10px', color: '#2e7d32' }}>
+                    <Box sx={{ display: 'flex', p: 1.2, backgroundColor: iconBg, borderRadius: '10px', color: accentColor }}>
                       {icon}
                     </Box>
                     <Box sx={{ flex: 1 }}>
@@ -101,7 +103,7 @@ const ContactPage = () => {
                           rel="noopener noreferrer"
                           sx={{
                             textDecoration: 'none',
-                            '&:hover': { color: '#2e7d32', textDecoration: 'underline' },
+                            '&:hover': { color: accentColor, textDecoration: 'underline' },
                             cursor: 'pointer',
                             display: 'block'
                           }}
@@ -145,9 +147,9 @@ const ContactPage = () => {
           Ready to start smart crop planning?
         </Typography>
         <Button variant="outlined" endIcon={<ArrowForwardIcon />} sx={{
-          color: '#2e7d32', borderColor: '#2e7d32', borderRadius: '8px',
+          color: accentColor, borderColor: accentColor, borderRadius: '8px',
           textTransform: 'none', fontWeight: 600, px: 3, py: 1,
-          '&:hover': { backgroundColor: isDark ? '#334d3d' : '#f1f8e9', borderColor: '#1b5e20' }
+          '&:hover': { backgroundColor: isDark ? 'rgba(57,255,106,0.1)' : '#f1f8e9', borderColor: isDark ? '#39FF6A' : '#1b5e20' }
         }}>
           Get Recommendation
         </Button>

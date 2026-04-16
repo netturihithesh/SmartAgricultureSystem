@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Box, Container, Typography, Grid, Paper, Stack, useTheme
+  Box, Container, Typography, Grid, Paper, Stack
 } from '@mui/material';
 import {
   Lightbulb as SolutionIcon,
@@ -10,18 +10,20 @@ import {
   EmojiObjects as ProblemIcon,
   TipsAndUpdates as IdeasIcon,
 } from '@mui/icons-material';
+import { useColorMode } from '../context/ThemeContext';
 
 const AboutPage = () => {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
+  const { mode } = useColorMode();
+  const isDark = mode === 'dark';
 
-  const bgDefault = theme.palette.background.default;
-  const bgPaper = theme.palette.background.paper;
-  const textPrimary = theme.palette.text.primary;
-  const textSecondary = theme.palette.text.secondary;
-  const borderColor = isDark ? '#333' : '#e8ecea';
-  const altBg = isDark ? '#243028' : '#f7faf8';
-  const iconBg = isDark ? '#334d3d' : '#e8f5e9';
+  const bgDefault = isDark ? '#0A0D0B' : '#ffffff';
+  const bgPaper = isDark ? '#0A0D0B' : '#ffffff';
+  const textPrimary = isDark ? '#e2e8f0' : '#1e293b';
+  const textSecondary = isDark ? '#94a3b8' : '#475569';
+  const borderColor = isDark ? 'rgba(255,255,255,0.1)' : '#e8ecea';
+  const altBg = isDark ? '#0A0D0B' : '#f7faf8';
+  const iconBg = isDark ? 'rgba(57,255,106,0.1)' : '#e8f5e9';
+  const accentColor = isDark ? '#39FF6A' : '#2e7d32';
 
   return (
     <Box sx={{ mt: '70px', width: '100%', pb: 0, backgroundColor: bgDefault }}>
@@ -53,7 +55,7 @@ const AboutPage = () => {
                 <Stack spacing={2.5}>
                   {['Climate uncertainty', 'Wrong crop selection', 'Poor fertilizer planning', 'Lack of digital guidance'].map((item) => (
                     <Typography key={item} variant="body1" sx={{ color: textSecondary, display: 'flex', alignItems: 'center', gap: 2 }}>
-                      <Box component="span" sx={{ minWidth: 8, height: 8, borderRadius: '50%', backgroundColor: '#2e7d32' }} />
+                      <Box component="span" sx={{ minWidth: 8, height: 8, borderRadius: '50%', backgroundColor: accentColor }} />
                       {item}
                     </Typography>
                   ))}
@@ -79,7 +81,7 @@ const AboutPage = () => {
           <Grid container spacing={8} alignItems="center" direction={{ xs: 'column-reverse', md: 'row' }} justifyContent="center">
             <Grid item xs={12} md={6}>
               <Box sx={{ height: '320px', borderRadius: '16px', backgroundColor: iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <IdeasIcon sx={{ fontSize: 100, color: '#2e7d32', opacity: 0.8 }} />
+                <IdeasIcon sx={{ fontSize: 100, color: accentColor, opacity: 0.8 }} />
               </Box>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -91,7 +93,7 @@ const AboutPage = () => {
                 <Grid container spacing={2}>
                   {['AI crop recommendation', 'Cultivation guidance', 'Weather-based alerts', 'Smart farming calendar', 'Analytics dashboard'].map((item) => (
                     <Grid item xs={12} sm={6} key={item}>
-                      <Typography variant="body2" sx={{ fontWeight: 600, color: '#2e7d32', display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Typography variant="body2" sx={{ fontWeight: 600, color: accentColor, display: 'flex', alignItems: 'center', gap: 1 }}>
                         ✓ {item}
                       </Typography>
                     </Grid>
@@ -117,9 +119,10 @@ const AboutPage = () => {
                 <Paper elevation={0} sx={{
                   p: '22px', borderRadius: '14px', border: `1px solid ${borderColor}`,
                   backgroundColor: bgPaper, display: 'flex', flexDirection: 'column',
+                  backdropFilter: isDark ? 'blur(10px)' : 'none',
                   alignItems: 'center', textAlign: 'center', justifyContent: 'center', height: '100%'
                 }}>
-                  <Box sx={{ p: 1.5, borderRadius: '12px', backgroundColor: iconBg, color: '#2e7d32', mb: 2, display: 'inline-flex' }}>
+                  <Box sx={{ p: 1.5, borderRadius: '12px', backgroundColor: iconBg, color: accentColor, mb: 2, display: 'inline-flex' }}>
                     {feature.icon}
                   </Box>
                   <Typography variant="subtitle1" sx={{ fontWeight: 700, color: textPrimary, mb: 1 }}>{feature.title}</Typography>

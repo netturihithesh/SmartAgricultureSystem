@@ -11,6 +11,7 @@ import {
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { supabase } from '../supabase';
 import statesData from '../data/statesDistricts.json';
+import { useColorMode } from '../context/ThemeContext';
 
 const RegisterPage = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -20,13 +21,14 @@ const RegisterPage = () => {
   const [successMsg, setSuccessMsg] = useState(null);
   const [language, setLanguage] = useState('en');
   const navigate = useNavigate();
-  const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
+  const { mode } = useColorMode();
+  const isDark = mode === 'dark';
 
-  const bgPaper = theme.palette.background.paper;
-  const textPrimary = theme.palette.text.primary;
-  const textSecondary = theme.palette.text.secondary;
-  const borderColor = isDark ? '#444' : '#e0e0e0';
+  const bgPaper = isDark ? 'rgba(255,255,255,0.02)' : '#ffffff';
+  const textPrimary = isDark ? '#e2e8f0' : '#1e293b';
+  const textSecondary = isDark ? '#94a3b8' : '#475569';
+  const borderColor = isDark ? 'rgba(255,255,255,0.1)' : '#e0e0e0';
+  const accentColor = isDark ? '#39FF6A' : '#2E7D32';
 
   // Form states
   const [formData, setFormData] = useState({
@@ -122,12 +124,12 @@ const RegisterPage = () => {
     height: '56px',
     borderRadius: '12px',
     fontSize: '16px',
-    backgroundColor: isDark ? '#2a3830' : '#FAFAFA',
+    backgroundColor: isDark ? 'rgba(0,0,0,0.3)' : '#FAFAFA',
     color: textPrimary,
     '& fieldset': { borderColor: borderColor, borderWidth: '1.5px', borderRadius: '12px' },
-    '&:hover fieldset': { borderColor: isDark ? '#666' : '#BDBDBD !important' },
-    '&.Mui-focused fieldset': { borderColor: '#2E7D32 !important', borderWidth: '2px !important' },
-    '&.Mui-focused': { backgroundColor: bgPaper, boxShadow: '0 4px 12px rgba(46,125,50,0.08)' },
+    '&:hover fieldset': { borderColor: isDark ? 'rgba(255,255,255,0.3)' : '#BDBDBD !important' },
+    '&.Mui-focused fieldset': { borderColor: `${accentColor} !important`, borderWidth: '2px !important' },
+    '&.Mui-focused': { backgroundColor: isDark ? 'rgba(0,0,0,0.5)' : bgPaper, boxShadow: isDark ? `0 4px 12px rgba(57,255,106,0.15)` : '0 4px 12px rgba(46,125,50,0.08)' },
     transition: 'all 0.2s ease-in-out'
   };
 
@@ -138,7 +140,7 @@ const RegisterPage = () => {
   return (
     <Box sx={{
       minHeight: '100vh',
-      background: isDark ? 'linear-gradient(135deg, #1e2a24 0%, #2a3830 100%)' : 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)',
+      background: isDark ? '#0A0D0B' : 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -174,8 +176,8 @@ const RegisterPage = () => {
       {/* Branding */}
       <Box sx={{ textAlign: 'center', mb: '24px', mt: { xs: '40px', md: '0' }, zIndex: 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1, mb: 1 }}>
-          <EcoIcon sx={{ fontSize: 42, color: '#2E7D32', filter: isDark ? 'none' : 'drop-shadow(0px 4px 8px rgba(46, 125, 50, 0.3))' }} />
-          <Typography sx={{ fontSize: '32px', fontWeight: 800, color: isDark ? '#A5D6A7' : '#1B5E20', letterSpacing: '-0.5px' }}>SmartAgri</Typography>
+          <EcoIcon sx={{ fontSize: 42, color: accentColor, filter: isDark ? 'drop-shadow(0px 0px 8px rgba(57,255,106,0.3))' : 'drop-shadow(0px 4px 8px rgba(46, 125, 50, 0.3))' }} />
+          <Typography sx={{ fontSize: '32px', fontWeight: 800, color: isDark ? '#e2e8f0' : '#1B5E20', letterSpacing: '-0.5px' }}>SmartAgri</Typography>
         </Box>
       </Box>
 
@@ -184,13 +186,13 @@ const RegisterPage = () => {
         sx={{
           width: '100%',
           maxWidth: '520px',
-          backgroundColor: isDark ? 'rgba(30, 42, 36, 0.95)' : 'rgba(255, 255, 255, 0.95)',
-          backdropFilter: 'blur(20px)',
+          backgroundColor: bgPaper,
+          backdropFilter: isDark ? 'blur(10px)' : 'blur(20px)',
           borderRadius: '24px',
           p: { xs: '24px 20px', sm: '40px' },
-          boxShadow: isDark ? '0 24px 60px rgba(0,0,0,0.4)' : '0 24px 60px rgba(0,0,0,0.08)',
+          boxShadow: isDark ? '0 10px 40px rgba(0,0,0,0.6)' : '0 24px 60px rgba(0,0,0,0.08)',
           zIndex: 1,
-          border: isDark ? '1px solid #333' : 'none'
+          border: `1px solid ${borderColor}`
         }}
       >
         <Typography variant="h2" sx={{ fontSize: { xs: '22px', sm: '26px' }, fontWeight: 800, color: textPrimary, mb: '12px', textAlign: 'center' }}>
@@ -200,7 +202,7 @@ const RegisterPage = () => {
           {activeStep === 0 ? 'Start making data-driven crop decisions.' : 'Enter your farm metrics for AI calibration.'}
         </Typography>
 
-        <Stepper activeStep={activeStep} alternativeLabel sx={{ mb: 4, '& .MuiStepIcon-root.Mui-active': { color: '#2E7D32' }, '& .MuiStepIcon-root.Mui-completed': { color: '#4CAF50' } }}>
+        <Stepper activeStep={activeStep} alternativeLabel sx={{ mb: 4, '& .MuiStepIcon-root.Mui-active': { color: accentColor }, '& .MuiStepIcon-root.Mui-completed': { color: isDark ? '#2fe058' : '#4CAF50' } }}>
           {steps.map((label) => (
             <Step key={label}>
               <StepLabel>
@@ -399,15 +401,15 @@ const RegisterPage = () => {
 
             <Box sx={{ display: 'flex', gap: '16px', mt: 2 }}>
               {activeStep === 1 && <Button onClick={() => setActiveStep(0)} variant="outlined" sx={{ height: '56px', borderRadius: '12px', minWidth: '60px', color: textSecondary, borderColor: borderColor }}><ArrowBack /></Button>}
-              <Button type="submit" variant="contained" fullWidth disabled={loading} sx={{ height: '56px', borderRadius: '12px', backgroundColor: '#2E7D32', fontWeight: 700, textTransform: 'none', boxShadow: 'none', '&:hover': { backgroundColor: '#1B5E20' } }}>
-                {loading ? <CircularProgress size={24} sx={{ color: '#fff' }} /> : (activeStep === 0 ? 'Next Step' : 'Create Account 🌾')}
+              <Button type="submit" variant="contained" fullWidth disabled={loading} sx={{ height: '56px', borderRadius: '12px', backgroundColor: accentColor, color: isDark ? '#000' : '#fff', fontWeight: 700, textTransform: 'none', boxShadow: 'none', '&:hover': { backgroundColor: isDark ? '#2fe058' : '#1B5E20' }, '&:disabled': { backgroundColor: isDark ? '#4CAF50' : '#A5D6A7', color: isDark ? '#000' : '#fff' } }}>
+                {loading ? <CircularProgress size={24} sx={{ color: isDark ? '#000' : '#fff' }} /> : (activeStep === 0 ? 'Next Step' : 'Create Account 🌾')}
               </Button>
             </Box>
           </Box>
         </form>
 
         <Typography sx={{ textAlign: 'center', mt: 4, color: textSecondary }}>
-          Already have an account? <Link component={RouterLink} to="/login" sx={{ color: '#2E7D32', fontWeight: 700, textDecoration: 'none' }}>Sign In</Link>
+          Already have an account? <Link component={RouterLink} to="/login" sx={{ color: accentColor, fontWeight: 700, textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}>Sign In</Link>
         </Typography>
       </Box>
     </Box>

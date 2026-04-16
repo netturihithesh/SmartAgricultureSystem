@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Container, Card, useTheme } from '@mui/material';
+import { Box, Typography, Container, Card } from '@mui/material';
 import {
   Sensors as DataIcon, Psychology as MLIcon,
   Memory as PredictIcon, Dashboard as InsightsIcon
 } from '@mui/icons-material';
+import { useColorMode } from '../context/ThemeContext';
 
 const HowItWorksPage = () => {
   const [animate, setAnimate] = useState(false);
-  const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
+  const { mode } = useColorMode();
+  const isDark = mode === 'dark';
 
   useEffect(() => { setAnimate(true); }, []);
 
-  const bgDefault = theme.palette.background.default;
-  const bgPaper = theme.palette.background.paper;
-  const textPrimary = theme.palette.text.primary;
-  const textSecondary = theme.palette.text.secondary;
-  const borderColor = isDark ? '#333' : '#e8ecea';
-  const altBg = isDark ? '#243028' : '#f8fbf9';
-  const connectorBg = isDark ? '#334d3d' : '#e8ecea';
+  const bgDefault = isDark ? '#0A0D0B' : '#ffffff';
+  const bgPaper = isDark ? '#0A0D0B' : '#ffffff';
+  const textPrimary = isDark ? '#e2e8f0' : '#1e293b';
+  const textSecondary = isDark ? '#94a3b8' : '#475569';
+  const borderColor = isDark ? 'rgba(255,255,255,0.1)' : '#e8ecea';
+  const altBg = isDark ? '#0A0D0B' : '#f8fbf9';
+  const connectorBg = isDark ? 'rgba(255,255,255,0.1)' : '#e8ecea';
 
   const steps = [
     { title: 'Farm Data Input', description: 'User provides soil type, location, climate parameters and land details.', icon: <DataIcon sx={{ fontSize: 32, color: '#fff' }} />, gradient: 'linear-gradient(135deg, #66bb6a, #43a047)' },
@@ -83,8 +84,9 @@ const HowItWorksPage = () => {
                 <Card elevation={0} sx={{
                   p: '24px', borderRadius: '18px', backgroundColor: bgPaper,
                   border: `1px solid ${borderColor}`, textAlign: 'center', height: '100%', width: '100%',
+                  backdropFilter: isDark ? 'blur(10px)' : 'none',
                   transition: 'all 0.3s ease',
-                  '&:hover': { transform: 'translateY(-6px)', boxShadow: isDark ? '0 24px 48px rgba(0,0,0,0.4)' : '0 24px 48px rgba(0,0,0,0.08)' }
+                  '&:hover': { transform: 'translateY(-6px)', boxShadow: isDark ? '0 24px 48px rgba(0,0,0,0.6)' : '0 24px 48px rgba(0,0,0,0.08)' }
                 }}>
                   <Typography variant="overline" sx={{ color: textSecondary, fontWeight: 800, letterSpacing: '1px', mb: '6px', display: 'block' }}>STEP {i + 1}</Typography>
                   <Typography variant="h3" sx={{ fontSize: '18px', fontWeight: 700, color: textPrimary, mb: '12px' }}>{step.title}</Typography>

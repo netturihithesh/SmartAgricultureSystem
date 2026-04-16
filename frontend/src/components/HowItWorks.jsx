@@ -5,43 +5,51 @@ import {
   PlaylistAddCheck, 
   Insights 
 } from '@mui/icons-material';
+import { useColorMode } from '../context/ThemeContext';
 
 const HowItWorks = () => {
+  const { mode } = useColorMode();
+  const isDark = mode === 'dark';
+
+  const sectionBg = isDark ? '#0A0D0B' : '#f8fafc';
+  const textColor = isDark ? '#e2e8f0' : '#1e293b';
+  const subTextColor = isDark ? '#94a3b8' : '#64748b';
+  const accentColor = isDark ? '#39FF6A' : '#16a34a';
   const steps = [
     { 
       title: 'Step 1: Login', 
       desc: 'Create an account or login to access your personalized farming dashboard.',
       icon: <Login sx={{ fontSize: 40 }} />,
-      color: '#16a34a'
+      color: isDark ? accentColor : '#16a34a'
     },
     { 
       title: 'Step 2: Select / Add Crop', 
       desc: 'Use AI to predict the best crop or manually add your current cultivation.',
       icon: <PlaylistAddCheck sx={{ fontSize: 40 }} />,
-      color: '#3b82f6'
+      color: isDark ? accentColor : '#3b82f6'
     },
     { 
       title: 'Step 3: Track & Grow', 
       desc: 'Follow the crop process, track growth stages, and maximize your profit.',
       icon: <Insights sx={{ fontSize: 40 }} />,
-      color: '#f59e0b'
+      color: isDark ? accentColor : '#f59e0b'
     }
   ];
 
   return (
-    <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#f8fafc' }}>
+    <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: sectionBg }}>
       <Container maxWidth="lg">
         <Typography 
           variant="h2" 
           sx={{ 
             textAlign: 'center', 
             fontWeight: 900, 
-            color: '#1e293b', 
+            color: textColor, 
             mb: 8,
             fontSize: { xs: '32px', md: '48px' } 
           }}
         >
-          Your Journey to <Box component="span" sx={{ color: '#16a34a' }}>Smart Farming</Box>
+          Your Journey to <Box component="span" sx={{ color: accentColor }}>Smart Farming</Box>
         </Typography>
 
         <Box sx={{ 
@@ -58,9 +66,9 @@ const HowItWorks = () => {
             left: '15%',
             right: '15%',
             height: '2px',
-            bgcolor: '#e2e8f0',
+            bgcolor: isDark ? 'rgba(255,255,255,0.1)' : '#e2e8f0',
             zIndex: 0,
-            backgroundImage: 'linear-gradient(to right, transparent, #cbd5e1 50%, transparent)',
+            backgroundImage: isDark ? 'linear-gradient(to right, transparent, rgba(255,255,255,0.2) 50%, transparent)' : 'linear-gradient(to right, transparent, #cbd5e1 50%, transparent)',
           }} />
 
           {steps.map((step, i) => (
@@ -69,27 +77,27 @@ const HowItWorks = () => {
                 width: 80, 
                 height: 80, 
                 borderRadius: '50%', 
-                bgcolor: '#fff', 
+                bgcolor: isDark ? '#0A0D0B' : '#fff', 
                 color: step.color, 
                 display: 'flex', 
                 alignItems: 'center', 
                 justifyContent: 'center', 
                 mx: 'auto',
                 mb: 4,
-                boxShadow: '0 10px 25px rgba(0,0,0,0.05)',
-                border: '2px solid #f1f5f9'
+                boxShadow: isDark ? '0 10px 25px rgba(0,0,0,0.5)' : '0 10px 25px rgba(0,0,0,0.05)',
+                border: isDark ? '2px solid rgba(255,255,255,0.1)' : '2px solid #f1f5f9'
               }}>
                 {step.icon}
               </Box>
               <Typography 
                 variant="h5" 
-                sx={{ color: '#1e293b', fontWeight: 800, mb: 2 }}
+                sx={{ color: textColor, fontWeight: 800, mb: 2 }}
               >
                 {step.title}
               </Typography>
               <Typography 
                 variant="body1" 
-                sx={{ color: '#64748b', fontWeight: 500, lineHeight: 1.6, px: 2 }}
+                sx={{ color: subTextColor, fontWeight: 500, lineHeight: 1.6, px: 2 }}
               >
                 {step.desc}
               </Typography>

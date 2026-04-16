@@ -1,25 +1,11 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import {
-  Box, Typography, Paper, Button, Grid, Avatar, CircularProgress, Chip, LinearProgress,
-  Divider, Checkbox, IconButton, Alert, Stack, Accordion, AccordionSummary, AccordionDetails, Container,
-  Dialog, DialogTitle, DialogContent, DialogActions
-} from '@mui/material';
-
-import {
-  LocationOn, WbSunny, CalendarMonth, TrendingUp,
-  Agriculture, CheckCircle, Schedule, WaterDrop,
-  InfoOutlined, MonetizationOn,
-  AssignmentTurnedIn, LocalFlorist, Air, ExpandMore,
-  NotificationsActive, AddBox, Thermostat, Opacity, WindPower, Grain,
-  Delete, Restore, DeleteSweep, SwapHoriz, Sync, CircleOutlined
-} from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabase';
 import cropProcessData from '../data/crop_process.json';
 import cropDataList from '../data/crop_data.json';
 import AgriBot from '../components/AgriBot';
 import { getDailyQuote, generateStageSchedule } from '../services/aiService';
-import { calculateProfitSnapshot } from '../services/profitUtils';
+import './ActionHome.css';
 
 const ActionHome = ({ session }) => {
   const [profile, setProfile] = useState(null);
@@ -28,8 +14,6 @@ const ActionHome = ({ session }) => {
   // NEW MULTI-CROP STATE
   const [userCrops, setUserCrops] = useState([]);
   const [activeCropIndex, setActiveCropIndex] = useState(0);
-  const [binModalOpen, setBinModalOpen] = useState(false);
-  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [dailyQuote, setDailyQuote] = useState('');
 
   // REAL-TIME CROP DATA STATE
@@ -43,6 +27,9 @@ const ActionHome = ({ session }) => {
   const [substepStatus, setSubstepStatus] = useState({});
   const [dynamicSchedule, setDynamicSchedule] = useState(null);
   const [isGeneratingSchedule, setIsGeneratingSchedule] = useState(false);
+  const [binModalOpen, setBinModalOpen] = useState(false);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [alertConfig, setAlertConfig] = useState({ open: false, message: '', type: 'info' });
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -80,17 +67,6 @@ const ActionHome = ({ session }) => {
           // 2. Fetch User's Active Crops
           let crops = JSON.parse(localStorage.getItem(`user_crops_${session.user.id}`) || '[]');
           
-          // Legacy migration
-          const legacyName = localStorage.getItem(`active_crop_${session.user.id}`);
-          const legacyDate = localStorage.getItem(`crop_start_date_${session.user.id}`);
-          if (crops.length === 0 && legacyName && legacyDate) {
-             crops = [{ id: Date.now(), cropName: legacyName, startDate: legacyDate }];
-             localStorage.setItem(`user_crops_${session.user.id}`, JSON.stringify(crops));
-             localStorage.setItem(`active_crop_index_${session.user.id}`, '0');
-             localStorage.removeItem(`active_crop_${session.user.id}`);
-             localStorage.removeItem(`crop_start_date_${session.user.id}`);
-          }
-
           if (crops.length > 0) {
             let index = parseInt(localStorage.getItem(`active_crop_index_${session.user.id}`) || '0');
             if (index >= crops.length) index = 0;
@@ -155,22 +131,23 @@ const ActionHome = ({ session }) => {
 
       let tasks = [];
       for (const stage of stagesWithDays) {
-        if (stage.start_day > diffDays) {
-          const daysFromNow = stage.start_day - diffDays;
-          let label = `Day ${stage.start_day}`;
-          if (daysFromNow === 1) label = 'Tomorrow';
-          else if (daysFromNow <= 7) label = `In ${daysFromNow} days`;
-          
-          tasks.push({
-            day: label,
-            task: `Start ${stage.title}`,
-            icon: <CalendarMonth />
-          });
+        if (stage.end_day >= diffDays) {
+          const stepInterval = Math.max(1, Math.floor(stage.duration_days / Math.max(1, stage.substeps.length)));
+          for (let i = 0; i < stage.substeps.length; i++) {
+             let targetAbsoluteDay = stage.start_day + (i * stepInterval);
+             if (targetAbsoluteDay > diffDays) {
+                 let daysFromNow = targetAbsoluteDay - diffDays;
+                 let label = `Day ${targetAbsoluteDay}`;
+                 if (daysFromNow === 1) label = 'Tomorrow';
+                 else if (daysFromNow <= 7) label = `In ${daysFromNow} days`;
+                 
+                 tasks.push({ day: label, task: stage.substeps[i] });
+             }
+          }
         }
       }
-      // Add a default watering task if not enough tasks
       if (tasks.length === 0 && updatedCrop.total_duration_days > diffDays) {
-        tasks.push({ day: 'Every 3 days', task: 'Check soil moisture', icon: <WaterDrop /> });
+        tasks.push({ day: 'Regular', task: 'Monitor soil health and water needs' });
       }
       setUpcomingTasks(tasks.slice(0, 3));
     }
@@ -185,15 +162,6 @@ const ActionHome = ({ session }) => {
     return stages[stages.length - 1];
   };
 
-  const getStageStatus = (stageId) => {
-    if (!selectedCrop) return 'pending';
-    const currentStage = calculateCurrentStage(selectedCrop.stages, daysPassed);
-    if (stageId < currentStage.stage_id) return 'completed';
-    if (stageId === currentStage.stage_id) return 'current';
-    return 'pending';
-  };
-
-  // HANDLERS
   const handleSwapCrop = () => {
     if (userCrops.length > 1) {
       const nextIndex = activeCropIndex === 0 ? 1 : 0;
@@ -228,7 +196,7 @@ const ActionHome = ({ session }) => {
 
   const handleRestoreFromBin = (binnedId) => {
     if (userCrops.length >= 2) {
-      alert('You cannot restore this crop. You already have the maximum of two active crops.');
+      setAlertConfig({ open: true, message: 'You cannot restore this crop. You already have the maximum of two active crops.', type: 'warning' });
       return;
     }
     const bin = JSON.parse(localStorage.getItem(`binned_crops_${session.user.id}`) || '[]');
@@ -238,7 +206,7 @@ const ActionHome = ({ session }) => {
     const deletedDate = new Date(cropToRestore.deletedAt);
     const daysInBin = (new Date() - deletedDate) / (1000 * 60 * 60 * 24);
     if (daysInBin > 3) {
-      alert('This crop has been in the bin for more than 3 days and cannot be restored.');
+      setAlertConfig({ open: true, message: 'This crop has been in the bin for more than 3 days and cannot be restored.', type: 'error' });
       const cleanedBin = bin.filter(c => c.id !== binnedId);
       localStorage.setItem(`binned_crops_${session.user.id}`, JSON.stringify(cleanedBin));
       return;
@@ -266,7 +234,6 @@ const ActionHome = ({ session }) => {
   useEffect(() => {
     const fetchSchedule = async () => {
       if (!selectedCrop) return;
-      // Load schedule for whichever stage is currently expanded in the panel
       const targetStage = selectedCrop.stages.find(s => s.stage_id === (expandedStage || currentStage?.stage_id)) || currentStage;
       if (!targetStage) return;
       const stageKey = `stage_schedule_v3_${selectedCrop.crop_name}_${targetStage.stage_id}`;
@@ -294,617 +261,462 @@ const ActionHome = ({ session }) => {
   }, [selectedCrop, daysPassed]);
 
   if (loading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
-        <CircularProgress sx={{ color: '#16a34a' }} thickness={5} />
-      </Box>
-    );
+    return <div style={{display:'flex', height:'100vh', justifyContent:'center', alignItems:'center', background:'#0A0D0B', color:'#39FF6A'}}>Loading Dashboard...</div>;
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', pb: '80px', background: '#f8fafc', pt: { xs: '80px', lg: '96px' } }}>
-      <Container maxWidth={false} sx={{ maxWidth: '1200px', mx: 'auto' }}>
+    <div className="antigravity-dashboard">
+      <div className="neo-card daily-word-card" style={{ marginBottom: '24px', padding: '24px', display: 'flex', alignItems: 'center', gap: '16px', border: '1px solid var(--neon-green-dim)' }}>
+        <div style={{ padding: '12px', background: 'var(--neon-green-dim)', borderRadius: '12px', color: 'var(--neon-green)', display: 'flex' }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div>
+          <div style={{ fontSize: '12px', fontWeight: 800, color: 'var(--neon-green)', letterSpacing: '1px', marginBottom: '4px' }}>DAILY WORD</div>
+          <div style={{ fontSize: '15px', color: 'var(--text-main)', lineHeight: 1.5, fontWeight: 500 }}>
+            {dailyQuote || 'The ultimate goal of farming is not the growing of crops, but the cultivation and perfection of human beings.'}
+          </div>
+        </div>
+      </div>
+
+      <div className="dashboard-grid">
         
-        {!selectedCrop ? (
-          /* ==================================================
-             PHASE 2: AFTER LOGIN DASHBOARD
-             ================================================== */
-          <Box sx={{ py: 4, px: { xs: 2, md: 4 } }}>
-            {/* 1. Header Section */}
-            <Box sx={{ mb: 6 }}>
-              <Typography variant="h3" sx={{ fontWeight: 900, color: '#1e293b', mb: '24px', fontSize: 'clamp(24px, 5vw, 36px)', letterSpacing: '-0.5px' }}>
-                Hi, {profile?.full_name || 'Farmer'}! 👋
-              </Typography>
-              <Stack direction="row" spacing={3} sx={{ color: '#64748b', mb: 4 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <LocationOn sx={{ fontSize: 20, color: '#16a34a' }} />
-                  <Typography variant="body1" sx={{ fontWeight: 600 }}>{profile?.location || 'Sangli, Maharashtra'}</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <CalendarMonth sx={{ fontSize: 20, color: '#16a34a' }} />
-                  <Typography variant="body1" sx={{ fontWeight: 600 }}>Kharif Season</Typography>
-                </Box>
-              </Stack>
-              
-              {dailyQuote && (
-                <Paper elevation={0} sx={{ p: 2.5, borderRadius: '20px', background: 'linear-gradient(135deg, #fffbeb, #fef3c7)', border: '1px solid #fde68a', display: 'flex', alignItems: 'flex-start', gap: 2 }}>
-                  <Typography sx={{ fontSize: 26, lineHeight: 1 }}>✨</Typography>
-                  <Box>
-                    <Typography variant="caption" sx={{ fontWeight: 800, color: '#d97706', letterSpacing: 1, textTransform: 'uppercase', mb: 0.5, display: 'block' }}>Daily Inspiration</Typography>
-                    <Typography sx={{ color: '#92400e', fontWeight: 600, fontStyle: 'italic', fontSize: '15px', lineHeight: 1.5 }}>"{dailyQuote}"</Typography>
-                  </Box>
-                </Paper>
-              )}
-            </Box>
-
-            {/* 2. Primary Actions Row (Side by Side) */}
-            <Box sx={{ mb: 6 }}>
-              <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-                <Typography variant="h5" sx={{ fontWeight: 900, color: '#1e293b' }}>Primary Actions</Typography>
-                <Button variant="outlined" onClick={() => setBinModalOpen(true)} startIcon={<Restore />} sx={{ borderRadius: '10px', fontWeight: 700, textTransform: 'none' }}>Recycle Bin</Button>
-              </Stack>
-              <Stack direction="row" spacing={3} sx={{ alignItems: 'stretch' }}>
-                <Paper sx={{ 
-                  flex: 1,
-                  p: 4, borderRadius: '24px', border: '1px solid #e2e8f0', bgcolor: '#fff',
-                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', 
-                  '&:hover': { transform: 'translateY(-8px)', boxShadow: '0 20px 40px rgba(0,0,0,0.06)' },
-                  display: 'flex', flexDirection: 'column', minHeight: '300px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)'
-                }}>
-                  <Avatar sx={{ bgcolor: '#ecfdf5', width: 56, height: 56, mb: 3 }}>
-                    <TrendingUp sx={{ color: '#10b981', fontSize: 28 }} />
-                  </Avatar>
-                  <Typography variant="h5" sx={{ fontWeight: 900, mb: 1.5, color: '#111827' }}>Crop Prediction</Typography>
-                  <Typography sx={{ color: '#64748b', mb: 4, lineHeight: 1.6, flexGrow: 1, fontSize: '15px' }}>
-                    Get AI-powered crop suggestions based on your soil type, irrigation, and weather patterns.
-                  </Typography>
-                  <Button
-                    variant="contained" size="large"
-                    onClick={() => navigate('/recommendation')}
-                    sx={{ bgcolor: '#10b981', py: 1.8, borderRadius: '14px', fontWeight: 800, textTransform: 'none', boxShadow: '0 8px 16px rgba(16, 185, 129, 0.15)', '&:hover': { bgcolor: '#059669' } }}
-                  >
-                    Predict Best Crops
-                  </Button>
-                </Paper>
-
-                <Paper sx={{ 
-                  flex: 1,
-                  p: 4, borderRadius: '24px', border: '1px solid #e2e8f0', bgcolor: '#fff',
-                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', 
-                  '&:hover': { transform: 'translateY(-8px)', boxShadow: '0 20px 40px rgba(0,0,0,0.06)' },
-                  display: 'flex', flexDirection: 'column', minHeight: '300px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)'
-                }}>
-                  <Avatar sx={{ bgcolor: '#eff6ff', width: 56, height: 56, mb: 3 }}>
-                    <AddBox sx={{ color: '#3b82f6', fontSize: 28 }} />
-                  </Avatar>
-                  <Typography variant="h5" sx={{ fontWeight: 900, mb: 1.5, color: '#111827' }}>Add Crop Manually</Typography>
-                  <Typography sx={{ color: '#64748b', mb: 4, lineHeight: 1.6, flexGrow: 1, fontSize: '15px' }}>
-                    Already decided what to cultivate? Directly add your crop and start tracking the farming process.
-                  </Typography>
-                  <Button
-                    variant="outlined" size="large"
-                    onClick={() => navigate('/add-crop')}
-                    sx={{ color: '#3b82f6', borderColor: '#3b82f6', borderWidth: '2.5px', py: 1.8, borderRadius: '14px', fontWeight: 800, textTransform: 'none', '&:hover': { border: '2.5px solid #2563eb', bgcolor: 'rgba(59, 130, 246, 0.04)' } }}
-                  >
-                    Add Crop
-                  </Button>
-                </Paper>
-              </Stack>
-            </Box>
-
-            {/* 3. Quick Access Section (3 Cards Below) */}
-            <Box sx={{ mt: 4 }}>
-              <Typography variant="h5" sx={{ fontWeight: 900, mb: 3, color: '#1e293b' }}>Quick Access</Typography>
-              <Stack direction="row" spacing={3}>
-                {[
-                  { title: 'Calendar', icon: <CalendarMonth />, color: '#7c3aed', path: '/dashboard/calendar' },
-                  { title: 'Weather', icon: <WbSunny />, color: '#f59e0b', path: '/dashboard/weather' },
-                  { title: 'Analytics', icon: <TrendingUp />, color: '#10b981', path: '/dashboard/analytics' }
-                ].map((tile, i) => (
-                  <Paper 
-                    key={i}
-                    onClick={() => navigate(tile.path)}
-                    sx={{ 
-                      flex: 1,
-                      p: 3, borderRadius: '20px', border: '1px solid #f1f5f9', bgcolor: '#fff',
-                      display: 'flex', alignItems: 'center', gap: 2.5, cursor: 'pointer', 
-                      height: '92px', 
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)',
-                      '&:hover': { bgcolor: '#f8fafc', transform: 'translateY(-5px)', boxShadow: '0 12px 30px rgba(0,0,0,0.06)', borderColor: tile.color + '40' } 
-                    }}
-                  >
-                    <Box sx={{ p: 1.5, borderRadius: '16px', bgcolor: tile.color + '10', color: tile.color, display: 'flex' }}>{tile.icon}</Box>
-                    <Typography sx={{ fontWeight: 800, color: '#1e293b', fontSize: '17px' }}>{tile.title}</Typography>
-                  </Paper>
-                ))}
-              </Stack>
-            </Box>
-          </Box>
-        ) : (
-
-          /* ==================================================
-             PHASE 3: AFTER CROP SELECTION (CROP PROCESS DASHBOARD)
-             ================================================== */
-          <Box>
-            {/* 1. Header Section */}
-            <Typography variant="h3" sx={{ fontWeight: 900, color: '#1e293b', mb: '24px', fontSize: 'clamp(24px, 5vw, 36px)', letterSpacing: '-0.5px' }}>
-              Hi, {profile?.full_name || 'Farmer'}! 👋
-            </Typography>
-
-            {/* DAILY QUOTE BANNER */}
-            {dailyQuote && (
-              <Paper elevation={0} sx={{ 
-                mb: 4, p: '20px', borderRadius: '20px', 
-                background: 'linear-gradient(135deg, #fffbeb, #fef3c7)', border: '1px solid #fde68a',
-                display: 'flex', flexDirection: { xs: 'column', md: 'row' }, 
-                alignItems: { xs: 'center', md: 'flex-start' }, textAlign: { xs: 'center', md: 'left' }, gap: 2 
-              }}>
-                <Typography sx={{ fontSize: 28, lineHeight: 1 }}>🌾</Typography>
-                <Box>
-                  <Typography variant="caption" sx={{ fontWeight: 800, color: '#d97706', letterSpacing: 1, textTransform: 'uppercase', mb: 0.5, display: 'block' }}>Daily Word</Typography>
-                  <Typography sx={{ color: '#92400e', fontWeight: 600, fontStyle: 'italic', fontSize: '16px', lineHeight: 1.5 }}>"{dailyQuote}"</Typography>
-                </Box>
-              </Paper>
+        {/* LEFT COLUMN */}
+        <div className="left-column">
+          
+          {/* HERO CARD */}
+          <div className="neo-card hero-card">
+            <div className="hero-glow"></div>
+            <div className="hero-header">
+              <h1>Hi, {profile?.full_name || 'Hitheshsena'}</h1>
+              <svg className="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2L2 22l10-4 10 4L12 2z"/></svg>
+            </div>
+            <div className="hero-sub">ACTIVE FARMER</div>
+            <h2 className="hero-crop-title">{selectedCrop ? selectedCrop.crop_name : 'No Active Crop'}</h2>
+            
+            {selectedCrop && (
+              <div className="hero-pill">{currentStage?.title || 'Initialization'}</div>
             )}
-
-            {/* TOP HERO CARD */}
-            <Paper elevation={0} sx={{
-              p: 5, mb: 6, borderRadius: '32px',
-              background: 'linear-gradient(135deg, #14532d 0%, #166534 100%)',
-              color: '#fff', boxShadow: '0 25px 50px -12px rgba(22, 101, 52, 0.25)',
-              position: 'relative', overflow: 'hidden'
-            }}>
-              <Box sx={{ position: 'absolute', right: -30, top: -30, width: { xs: 160, md: 200 }, height: { xs: 160, md: 200 }, borderRadius: '50%', background: 'rgba(255,255,255,0.05)', zIndex: 0 }} />
-              
-              <Grid container spacing={4} alignItems="center">
-                <Grid size={{ xs: 12, md: 8 }}>
-                  <Typography variant="overline" sx={{ fontWeight: 900, letterSpacing: 2, opacity: 0.8 }}>ACTIVE CROP</Typography>
-                  <Typography variant="h2" sx={{ fontWeight: 900, mb: 2, fontSize: { xs: '32px', md: '48px' } }}>{selectedCrop.crop_name}</Typography>
-                  
-                  <Stack direction="row" spacing={4} sx={{ mb: 4 }}>
-                    <Box>
-                      <Typography variant="caption" sx={{ fontWeight: 700, opacity: 0.7, display: 'block' }}>DAY PROGRESS</Typography>
-                      <Typography variant="h5" sx={{ fontWeight: 800 }}>Day {daysPassed} / {selectedCrop.total_duration_days}</Typography>
-                    </Box>
-                    <Box>
-                      <Typography variant="caption" sx={{ fontWeight: 700, opacity: 0.7, display: 'block' }}>CURRENT STAGE</Typography>
-                      <Typography variant="h5" sx={{ fontWeight: 800 }}>{currentStage?.title}</Typography>
-                    </Box>
-                  </Stack>
-
-                  <Box sx={{ maxWidth: '90%' }}>
-                    <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
-                      <Typography variant="body2" sx={{ fontWeight: 700 }}>Overall Progress</Typography>
-                      <Typography variant="body2" sx={{ fontWeight: 900 }}>{progressPercentage}%</Typography>
-                    </Stack>
-                    <LinearProgress variant="determinate" value={progressPercentage} sx={{ height: 12, borderRadius: 6, bgcolor: 'rgba(255,255,255,0.1)', '& .MuiLinearProgress-bar': { bgcolor: '#22c55e', borderRadius: 6 } }} />
-                  </Box>
-                </Grid>
-                <Grid size={{ xs: 12, md: 4 }}>
-                  <Stack spacing={3} alignItems={{ md: 'flex-end' }}>
-                    <Box sx={{ textAlign: { md: 'right' } }}>
-                      <Typography variant="caption" sx={{ fontWeight: 700, opacity: 0.7, display: 'block' }}>EXPECTED HARVEST</Typography>
-                      <Typography variant="h5" sx={{ fontWeight: 800 }}>
-                        {new Date(new Date(cropStartDate).getTime() + selectedCrop.total_duration_days * 86400000).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
-                      </Typography>
-                    </Box>
-                    <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 1, md: 1.5 }} sx={{ width: '100%', justifyContent: { md: 'flex-end' }, alignItems: 'stretch' }}>
-                      {userCrops.length === 2 ? (
-                        <Button variant="contained" fullWidth={false} onClick={handleSwapCrop} sx={{ width: { xs: '100%', md: 'auto' }, bgcolor: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)', color: '#fff', fontWeight: 700, borderRadius: '10px', transition: 'all 0.25s', '&:hover': { bgcolor: 'rgba(255,255,255,0.2)', transform: 'scale(0.98)' }, '&:active': { transform: 'scale(0.95)' }, border: '1px solid rgba(255,255,255,0.2)' }} startIcon={<SwapHoriz />}>Swap Crop</Button>
-                      ) : (
-                        <Button variant="contained" fullWidth={false} onClick={() => navigate('/add-crop')} sx={{ width: { xs: '100%', md: 'auto' }, bgcolor: '#3b82f6', color: '#fff', fontWeight: 700, borderRadius: '10px', transition: 'all 0.25s', '&:hover': { bgcolor: '#2563eb', transform: 'scale(0.98)' }, '&:active': { transform: 'scale(0.95)' } }} startIcon={<AddBox />}>Add 2nd Crop</Button>
-                      )}
-                      <Button variant="contained" fullWidth={false} onClick={() => setBinModalOpen(true)} sx={{ width: { xs: '100%', md: 'auto' }, bgcolor: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)', color: '#fff', fontWeight: 700, borderRadius: '10px', transition: 'all 0.25s', '&:hover': { bgcolor: 'rgba(255,255,255,0.2)', transform: 'scale(0.98)' }, '&:active': { transform: 'scale(0.95)' }, border: '1px solid rgba(255,255,255,0.2)' }} startIcon={<Restore />}>Bin</Button>
-                      <Button variant="contained" fullWidth={false} onClick={requestDelete} sx={{ width: { xs: '100%', md: 'auto' }, bgcolor: '#ef4444', color: '#fff', fontWeight: 700, borderRadius: '10px', transition: 'all 0.25s', '&:hover': { bgcolor: '#dc2626', transform: 'scale(0.98)' }, '&:active': { transform: 'scale(0.95)' } }} startIcon={<Delete />}>Delete</Button>
-                    </Stack>
-                  </Stack>
-                </Grid>
-              </Grid>
-            </Paper>
-
-            {/* QUICK ACCESS (PHASE 3) */}
-            <Box sx={{ mb: 6 }}>
-              <Typography variant="h6" sx={{ fontWeight: 900, mb: 3, color: '#1e293b' }}>Tools & Analysis</Typography>
-              <Grid container spacing={3}>
-                {[
-                  { title: 'Farm Calendar', icon: <CalendarMonth />, color: '#7c3aed', path: '/dashboard/calendar', desc: 'Schedule & Tasks' },
-                  { title: 'Weather Center', icon: <WbSunny />, color: '#f59e0b', path: '/dashboard/weather', desc: 'Forecast & Alerts' },
-                  { title: 'Analytics', icon: <TrendingUp />, color: '#10b981', path: '/dashboard/analytics', desc: 'Insights & ROI' },
-                  { title: 'Crop Prediction', icon: <Agriculture />, color: '#3b82f6', path: '/recommendation', desc: 'AI Predictions' }
-                ].map((tile, i) => (
-                  <Grid size={{ xs: 6, sm: 6, lg: 3 }} key={i}>
-                    <Paper 
-                      onClick={() => navigate(tile.path)}
-                      sx={{ 
-                        p: 2.5, borderRadius: '20px', border: '1px solid #f1f5f9', bgcolor: '#fff',
-                        display: 'flex', alignItems: 'center', gap: 2, cursor: 'pointer', 
-                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                        boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)',
-                        '&:hover': { bgcolor: '#f8fafc', transform: 'translateY(-4px)', boxShadow: '0 12px 30px rgba(0,0,0,0.06)', borderColor: tile.color + '40' } 
-                      }}
-                    >
-                      <Box sx={{ p: 1.5, borderRadius: '14px', bgcolor: tile.color + '10', color: tile.color, display: 'flex' }}>{tile.icon}</Box>
-                      <Box>
-                        <Typography sx={{ fontWeight: 800, color: '#1e293b', fontSize: '16px' }}>{tile.title}</Typography>
-                        <Typography variant="caption" sx={{ color: '#64748b', fontWeight: 600 }}>{tile.desc}</Typography>
-                      </Box>
-                    </Paper>
-                  </Grid>
-                ))}
-              </Grid>
-            </Box>
-
-            <Grid container spacing={{ xs: 3, md: 4 }}>
-              {/* LEFT COLUMN */}
-              <Grid size={{ xs: 12, sm: 8 }}>
-                
-                {/* TODAY'S WORK CARD */}
-                <Paper sx={{ p: { xs: 3, md: 4 }, borderRadius: '24px', border: '1px solid #f1f5f9', mb: 5, bgcolor: '#fff', position: 'relative' }}>
-                  <Box sx={{ display: { xs: 'inline-block', md: 'none' }, mb: 2 }}>
-                    <Chip label="High Priority" size="small" sx={{ fontWeight: 800, bgcolor: '#fef2f2', color: '#ef4444' }} />
-                  </Box>
-                  <Box sx={{ position: 'absolute', top: 32, right: 32, display: { xs: 'none', md: 'block' } }}>
-                    <Chip label="High Priority" size="small" sx={{ fontWeight: 800, bgcolor: '#fef2f2', color: '#ef4444' }} />
-                  </Box>
-                  <Typography variant="h5" sx={{ fontWeight: 900, mb: 4, color: '#1e293b', fontSize: 'clamp(28px, 5vw, 40px)' }}>📍 Today's Work</Typography>
-                  <Box sx={{ p: { xs: 2.5, md: 4 }, borderRadius: '24px', bgcolor: '#f8fafc', border: '1px solid #f1f5f9' }}>
-                    {(() => {
-                      if (!currentStage) return null;
-                      const sortedSubsteps = currentStage.substeps.map((sub, i) => {
-                        let ai = null;
-                        if (dynamicSchedule && Array.isArray(dynamicSchedule)) ai = dynamicSchedule.find(s => s.task === sub);
-                        return { sub, i, ai, targetDay: ai ? ai.relative_day : i };
-                      }).sort((a, b) => a.targetDay - b.targetDay);
-                      
-                      const firstIncomplete = sortedSubsteps.find(s => !substepStatus[`${currentStage.stage_id}_${s.i}`]);
-                      const isAllDone = !firstIncomplete;
-                      const activeItem = isAllDone ? sortedSubsteps[sortedSubsteps.length - 1] : firstIncomplete;
-                      const displayIdx = activeItem.i;
-                      const currentTaskText = activeItem.sub;
-                      const aiRec = activeItem.ai;
-
-                      return (
-                        <Grid container spacing={4} alignItems="center">
-                          <Grid size={{ xs: 12, md: 8 }}>
-                            <Typography variant="h4" sx={{ fontWeight: 900, mb: 2 }}>{isAllDone ? 'Stage Tasks Completed.' : currentTaskText}</Typography>
-                            {!isAllDone && (
-                              <Stack spacing={2} sx={{ color: '#64748b', mb: 0 }}>
-                                {aiRec ? (
-                                  <Box sx={{ p: 2, borderRadius: '12px', bgcolor: '#f0fdf4', border: '1px solid #bbf7d0' }}>
-                                    <Stack direction="row" alignItems="top" spacing={1.5}>
-                                      <Box>
-                                        <Typography variant="caption" sx={{ fontWeight: 900, color: '#166534', display: 'block', mb: 0.5 }}>System Recommendation: Day {aiRec.relative_day} of Stage</Typography>
-                                        <Typography variant="body2" sx={{ fontWeight: 600, color: '#15803d', lineHeight: 1.4 }}>{aiRec.reason}</Typography>
-                                      </Box>
-                                    </Stack>
-                                  </Box>
-                                ) : (
-                                  <>
-                                    <Box sx={{ display: 'flex', gap: 1 }}><Typography variant="body2" sx={{ fontWeight: 700 }}>Quantity:</Typography><Typography variant="body2">Based on land size ({profile?.land_size || 2.5} Acres)</Typography></Box>
-                                    <Box sx={{ display: 'flex', gap: 1 }}><Typography variant="body2" sx={{ fontWeight: 700 }}>Best Time:</Typography><Typography variant="body2">Early Morning (6:00 AM - 9:00 AM)</Typography></Box>
-                                  </>
-                                )}
-                              </Stack>
-                            )}
-                            {isAllDone && (
-                              <Typography variant="body2" sx={{ fontWeight: 700, color: '#64748b' }}>
-                                You're doing great! The next stage will automatically unlock on Day {currentStage.end_day + 1}.
-                              </Typography>
-                            )}
-                          </Grid>
-                          <Grid size={{ xs: 12, md: 4 }}>
-                            <Button
-                              disabled={isAllDone}
-                              fullWidth variant="contained"
-                              onClick={() => toggleSubstep(currentStage.stage_id, displayIdx)}
-                              sx={{ 
-                                py: 2, borderRadius: '16px', fontWeight: 900, textTransform: 'none',
-                                minWidth: '140px', whiteSpace: 'nowrap',
-                                bgcolor: isAllDone ? '#16a34a' : '#1e1b4b',
-                                transition: 'all 0.2s',
-                                '&:hover': { bgcolor: isAllDone ? '#16a34a' : '#000', transform: 'scale(0.98)' },
-                                '&:active': { transform: 'scale(0.95)' }
-                              }}
-                            >
-                              {isAllDone ? 'Stage Done' : 'Mark as Completed'}
-                            </Button>
-                          </Grid>
-                        </Grid>
-                      );
-                    })()}
-                  </Box>
-                </Paper>
-
-                {/* =========================================
-                    CROP JOURNEY BOARD REDESIGN
-                    ========================================= */}
-                <Box>
-                  {/* 🌟 SECTION 1: CURRENT ACTIVE STAGE (Premium Card) */}
-                  {currentStage && (
-                    <Box sx={{ mb: 5 }}>
-                      <Typography variant="h5" sx={{ fontWeight: 900, mb: 3, color: '#1e293b' }}>📍 Current Active Stage</Typography>
-                      <Paper sx={{ 
-                        p: { xs: 3, md: 4 }, borderRadius: '24px', 
-                        background: 'linear-gradient(135deg, #15803d 0%, #16a34a 100%)', 
-                        color: '#fff', boxShadow: '0 20px 40px -15px rgba(22,163,74,0.4)',
-                        position: 'relative', overflow: 'hidden'
-                      }}>
-                        <Box sx={{ position: 'absolute', right: -20, top: -20, opacity: 0.1 }}>
-                          <Sync sx={{ fontSize: 180 }} />
-                        </Box>
-                        <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ sm: 'flex-start' }} spacing={3} sx={{ position: 'relative', zIndex: 2 }}>
-                          <Box>
-                            <Typography variant="h3" sx={{ fontWeight: 900, mb: 1.5, fontSize: { xs: '28px', md: '36px' } }}>{currentStage.title}</Typography>
-                            <Stack direction="row" spacing={2} sx={{ mb: 4, flexWrap: 'wrap', gap: 1 }}>
-                              <Chip label={`${currentStage.substeps.length} Tasks Required`} sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: '#fff', fontWeight: 800, backdropFilter: 'blur(10px)', border: 'none' }} />
-                              <Chip label={`Day ${currentStage.start_day} → Day ${currentStage.end_day}`} sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: '#fff', fontWeight: 800, backdropFilter: 'blur(10px)', border: 'none' }} />
-                            </Stack>
-                          </Box>
-                        </Stack>
-                        {(() => {
-                          const completedCount = currentStage.substeps.filter((_, i) => substepStatus[`${currentStage.stage_id}_${i}`]).length;
-                          const percentage = Math.round((completedCount / currentStage.substeps.length) * 100);
-                          return (
-                            <Box sx={{ maxWidth: '80%', position: 'relative', zIndex: 2 }}>
-                              <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
-                                <Typography variant="body2" sx={{ fontWeight: 800 }}>Stage Completion</Typography>
-                                <Typography variant="body2" sx={{ fontWeight: 900 }}>{percentage}%</Typography>
-                              </Stack>
-                              <LinearProgress variant="determinate" value={percentage} sx={{ height: 10, borderRadius: 5, bgcolor: 'rgba(255,255,255,0.2)', '& .MuiLinearProgress-bar': { bgcolor: '#fff', borderRadius: 5 } }} />
-                            </Box>
-                          );
-                        })()}
-                      </Paper>
-                    </Box>
+            
+            {selectedCrop && (
+              <div className="hero-stats-grid">
+                <div>
+                  <div className="stat-label">EXPECTED HARVEST</div>
+                  <div className="stat-value">{new Date(new Date(cropStartDate).getTime() + selectedCrop.total_duration_days * 86400000).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+                </div>
+                <div>
+                  <div className="stat-label">CURRENT STAGE</div>
+                  <div className="stat-value">{currentStage?.stage_id || 1} of {selectedCrop.stages.length} Stages</div>
+                </div>
+                <div>
+                  <div className="stat-label">TOTAL DAYS</div>
+                  <div className="stat-value">Day {daysPassed} / {selectedCrop.total_duration_days}</div>
+                </div>
+              </div>
+            )}
+            
+            <div className="hero-actions">
+              {selectedCrop ? (
+                <>
+                  <button className="btn-outline" onClick={() => navigate('/dashboard/calendar')}>View Full Journey</button>
+                  {userCrops.length === 2 ? (
+                     <button className="btn-filled" onClick={handleSwapCrop}>Swap Crop</button>
+                  ) : (
+                     <button className="btn-filled" onClick={() => navigate('/add-crop')}>+ Add 2nd Crop</button>
                   )}
+                  <button className="btn-outline" onClick={requestDelete} style={{borderColor: 'var(--danger-red)', color: 'var(--danger-red)', padding: '10px'}} title="Move to Trash">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                  </button>
+                </>
+              ) : (
+                <button className="btn-filled" onClick={() => navigate('/add-crop')}>+ Add Crop</button>
+              )}
+            </div>
 
-                  {/* 🌟 SECTION 2: HORIZONTAL CROP JOURNEY 🌟 */}
-                  <Typography variant="h5" sx={{ fontWeight: 900, mb: 3, color: '#1e293b' }}>🚀 Crop Journey</Typography>
-                  <Paper sx={{ p: 2.5, pb: '8px', borderRadius: '20px', border: '1px solid #f1f5f9', mb: 3, overflowX: 'auto', WebkitOverflowScrolling: 'touch', bgcolor: '#fff', '&::-webkit-scrollbar': { height: '6px', display: { xs: 'none', sm: 'block' } }, '&::-webkit-scrollbar-thumb': { backgroundColor: '#cbd5e1', borderRadius: '10px' } }}>
-                    <Stack direction="row" spacing={1} alignItems="center" sx={{ minWidth: "max-content", py: 1 }}>
-                      {selectedCrop.stages.map((stage, idx) => {
-                        const status = getStageStatus(stage.stage_id);
-                        const isExpanded = expandedStage ? expandedStage === stage.stage_id : status === 'current';
-                        
-                        return (
-                          <React.Fragment key={stage.stage_id}>
-                            <Chip 
-                              onClick={() => setExpandedStage(stage.stage_id)}
-                              label={
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                  {status === 'completed' && <CheckCircle sx={{ fontSize: 16 }} />}
-                                  {status === 'current' && <Sync sx={{ fontSize: 16 }} />}
-                                  {status === 'pending' && <CircleOutlined sx={{ fontSize: 16 }} />}
-                                  <Typography sx={{ fontWeight: 800, fontSize: '14px' }}>{stage.title}</Typography>
-                                </Box>
-                              }
-                              sx={{ 
-                                height: '40px', borderRadius: '12px', px: 1, cursor: 'pointer',
-                                transition: 'all 0.2s',
-                                bgcolor: isExpanded ? '#1e293b' : (status === 'completed' ? '#ecfdf5' : '#f8fafc'),
-                                color: isExpanded ? '#fff' : (status === 'completed' ? '#16a34a' : '#64748b'),
-                                border: '1px solid', borderColor: isExpanded ? '#1e293b' : (status === 'completed' ? '#a7f3d0' : '#e2e8f0'),
-                                '&:hover': { bgcolor: isExpanded ? '#0f172a' : (status === 'completed' ? '#d1fae5' : '#f1f5f9'), transform: 'translateY(-2px)' }
-                              }} 
-                            />
-                            {idx < selectedCrop.stages.length - 1 && <Typography sx={{ color: '#cbd5e1', fontWeight: 900 }}>→</Typography>}
-                          </React.Fragment>
-                        );
-                      })}
-                    </Stack>
-                  </Paper>
+            {selectedCrop && (
+              <div className="progress-container">
+                <svg className="progress-ring" width="140" height="140" viewBox="0 0 140 140">
+                  <circle className="progress-bg" cx="70" cy="70" r="60"></circle>
+                  <circle className="progress-fill" cx="70" cy="70" r="60" style={{strokeDasharray: 377, strokeDashoffset: 377 * (1 - progressPercentage / 100)}}></circle>
+                </svg>
+                <div className="progress-text">
+                  <div className="progress-value" style={{color: 'var(--neon-green)'}}>{progressPercentage}%</div>
+                  <div className="progress-sub">Day {daysPassed}/{selectedCrop.total_duration_days}</div>
+                </div>
+              </div>
+            )}
+            
+            {/* IN-CARD RECYCLE BIN */}
+            <button 
+               onClick={() => setBinModalOpen(true)}
+               style={{ position: 'absolute', bottom: '24px', right: '24px', display: 'flex', alignItems: 'center', gap: '8px', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--text-sub)', padding: '10px 16px', borderRadius: '12px', cursor: 'pointer', transition: 'all 0.2s ease', fontSize: '13px', fontWeight: 600, zIndex: 10 }}
+               onMouseOver={(e) => { e.currentTarget.style.color = 'var(--text-main)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; e.currentTarget.style.background = 'rgba(255,255,255,0.02)'; }}
+               onMouseOut={(e) => { e.currentTarget.style.color = 'var(--text-sub)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.background = 'transparent'; }}
+               title="Open Recycle Bin to restore deleted crops"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+              Recycle Bin
+            </button>
+          </div>
 
-                  {/* 🌟 SECTION 3: Task Details Panel 🌟 */}
-                  {(() => {
-                    const activePanelStage = selectedCrop.stages.find(s => s.stage_id === (expandedStage || currentStage?.stage_id)) || selectedCrop.stages[0];
-                    const status = getStageStatus(activePanelStage.stage_id);
-                    return (
-                      <Paper sx={{ p: 4, borderRadius: '24px', border: '1px solid #f1f5f9', bgcolor: '#fff', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
-                        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-                          <Box>
-                            <Typography variant="h5" sx={{ fontWeight: 900, mb: 1, color: '#111827' }}>{activePanelStage.title}</Typography>
-                            <Stack direction="row" spacing={1.5} alignItems="center">
-                              <Chip size="small" label={status === 'completed' ? 'Completed' : (status === 'current' ? 'In Progress' : 'Upcoming Stage')} sx={{ fontWeight: 800, bgcolor: status === 'completed' ? '#ecfdf5' : (status === 'current' ? '#fff7ed' : '#f8fafc'), color: status === 'completed' ? '#16a34a' : (status === 'current' ? '#c2410c' : '#64748b') }} />
-                              <Typography variant="body2" sx={{ color: '#94a3b8', fontWeight: 700 }}>Day {activePanelStage.start_day} to {activePanelStage.end_day}</Typography>
-                            </Stack>
-                          </Box>
-                        </Stack>
-                        <Divider sx={{ mb: 3, opacity: 0.5 }} />
-                        <Typography variant="body2" sx={{ fontWeight: 800, color: '#64748b', mb: 2, textTransform: 'uppercase', letterSpacing: 1 }}>Subtasks To Complete</Typography>
-                        {isGeneratingSchedule && (
-                          <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, bgcolor: '#f8fafc', borderRadius: '16px', mb: 2 }}>
-                             <CircularProgress size={30} sx={{ color: '#10b981' }} />
-                             <Typography variant="body2" sx={{ fontWeight: 700, color: '#64748b' }}>Loading smart schedule...</Typography>
-                          </Box>
-                        )}
-                        {!isGeneratingSchedule && (
-                          <Stack spacing={2}>
-                            {activePanelStage.substeps.map((sub, i) => {
-                              let aiRec = null;
-                              if (dynamicSchedule && Array.isArray(dynamicSchedule) && status !== 'pending') {
-                                aiRec = dynamicSchedule.find(s => s.task === sub);
-                              }
-                              return { sub, originalIndex: i, aiRec, targetDay: aiRec ? aiRec.relative_day : i };
-                            }).sort((a, b) => a.targetDay - b.targetDay).map(({ sub, originalIndex: i, aiRec }, renderIdx) => {
-                              const isCompleted = status === 'completed' || substepStatus[`${activePanelStage.stage_id}_${i}`];
-                              const isLocked = status === 'pending';
-
-                              return (
-                                <Box key={renderIdx} sx={{ display: 'flex', flexDirection: 'column', p: 2, borderRadius: '12px', bgcolor: isCompleted ? '#f8fafc' : (isLocked ? '#f8fafc' : '#fff'), border: '1px solid', borderColor: isCompleted ? 'transparent' : (isLocked ? '#e2e8f0' : '#e2e8f0'), opacity: isLocked ? 0.6 : 1 }}>
-                                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                    <Checkbox 
-                                      checked={!!isCompleted} 
-                                      disabled={isLocked}
-                                      onChange={() => { if (status !== 'completed' && !isLocked) toggleSubstep(activePanelStage.stage_id, i) }}
-                                      color="success" size="small" 
-                                    />
-                                    <Typography variant="body1" sx={{ fontWeight: 600, color: isCompleted || isLocked ? '#94a3b8' : '#1e293b' }}>{sub}</Typography>
-                                    {isLocked && i === 0 && <Chip label="Locked (Wait for Stage)" size="small" sx={{ ml: 'auto', fontWeight: 800, fontSize: '10px', bgcolor: '#e2e8f0', color: '#64748b' }} />}
-                                  </Box>
-                                  {aiRec && !isCompleted && (
-                                    <Box sx={{ ml: { xs: 3, md: 5 }, mt: 1, p: 1.5, borderRadius: '8px', bgcolor: '#f0fdf4', border: '1px solid #bbf7d0', borderLeft: '3px solid #16a34a' }}>
-                                      <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 0.5 }}>
-                                          <Typography variant="caption" sx={{ fontWeight: 800, color: '#166534', textTransform: 'uppercase', letterSpacing: 0.5 }}>Optimal Schedule: Day {aiRec.relative_day} of {activePanelStage.duration_days}</Typography>
-                                      </Stack>
-                                      <Typography variant="caption" sx={{ color: '#15803d', fontWeight: 600, display: 'block', lineHeight: 1.4 }}>{aiRec.reason}</Typography>
-                                    </Box>
-                                  )}
-                                </Box>
-                              );
-                            })}
-                          </Stack>
-                        )}
-                      </Paper>
-                    );
-                  })()}
-                </Box>
-              </Grid>
-
-              {/* RIGHT COLUMN */}
-              <Grid size={{ xs: 12, sm: 4 }}>
-                <Stack spacing={4}>
+          {/* TODAY'S WORK CARD */}
+          {selectedCrop && currentStage && (
+            <div className="neo-card" style={{padding: 0}}>
+              <div style={{padding: '24px'}}>
+                <div className="section-title-wrap">
+                  <div>
+                    <h3 className="section-title">Today's Work</h3>
+                    <div className="section-sub">{new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</div>
+                  </div>
+                  <div className="day-pill">Day {daysPassed}</div>
+                </div>
+              </div>
+              
+              <div className="task-list">
+                {(() => {
+                  const stepInterval = Math.max(1, Math.floor(currentStage.duration_days / Math.max(1, currentStage.substeps.length)));
+                  const relativeDayInStage = daysPassed - currentStage.start_day + 1;
                   
-                  {/* WEATHER + ADVISORY PANEL */}
-                  <Paper sx={{ p: 4, borderRadius: '24px', border: '1px solid #f1f5f9' }}>
-                    <Typography variant="h6" sx={{ fontWeight: 900, mb: 3 }}>Weather Advisory</Typography>
-                    <Grid container spacing={3} sx={{ mb: 4 }}>
-                      {[
-                        { label: 'Temp', val: '28°C', icon: <Thermostat sx={{ color: '#ef4444' }} /> },
-                        { label: 'Humid', val: '72%', icon: <Opacity sx={{ color: '#3b82f6' }} /> },
-                        { label: 'Wind', val: '12km/h', icon: <WindPower sx={{ color: '#10b981' }} /> },
-                        { label: 'Rain', val: '10%', icon: <Grain sx={{ color: '#6366f1' }} /> }
-                      ].map((stat, i) => (
-                        <Grid size={{ xs: 6 }} key={i}>
-                          <Box sx={{ py: 2.5, px: 2, borderRadius: '20px', bgcolor: '#f8fafc', textAlign: 'center', border: '1px solid #f1f5f9', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', '&:hover': { bgcolor: '#fff', boxShadow: '0 8px 24px rgba(0,0,0,0.06)', borderColor: '#e2e8f0', transform: 'translateY(-2px)' } }}>
-                            <Box sx={{ mb: 1, p: 1, borderRadius: '12px', bgcolor: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', display: 'flex' }}>{stat.icon}</Box>
-                            <Typography variant="caption" sx={{ display: 'block', color: '#64748b', fontWeight: 800, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.5px', mb: 0.5 }}>{stat.label}</Typography>
-                            <Typography variant="subtitle1" sx={{ fontWeight: 900, color: '#1e293b' }}>{stat.val}</Typography>
-                          </Box>
-                        </Grid>
-                      ))}
-                    </Grid>
+                  const sortedSubsteps = currentStage.substeps.map((sub, i) => {
+                    let ai = null;
+                    if (dynamicSchedule && Array.isArray(dynamicSchedule)) ai = dynamicSchedule.find(s => s.task === sub);
+                    return { sub, i, ai, targetDay: ai ? ai.relative_day : (i * stepInterval) + 1 };
+                  }).sort((a, b) => a.targetDay - b.targetDay);
+                  
+                  // Filter to only show tasks scheduled for today, or past-due tasks not yet checked off
+                  const todaysTasks = sortedSubsteps.filter(item => {
+                    const isChecked = substepStatus[`${currentStage.stage_id}_${item.i}`];
+                    return item.targetDay === relativeDayInStage || (item.targetDay < relativeDayInStage && !isChecked);
+                  });
 
-                    <Box sx={{ p: 3, borderRadius: '16px', bgcolor: '#fffbeb', border: '1px solid #fef3c7' }}>
-                      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1 }}>
-                        <NotificationsActive sx={{ color: '#d97706', fontSize: 18 }} />
-                        <Typography variant="subtitle2" sx={{ fontWeight: 900, color: '#92400e' }}>AI Advisory</Typography>
-                      </Stack>
-                      <Typography variant="body2" sx={{ color: '#b45309', fontWeight: 600, lineHeight: 1.6 }}>
-                        Avoid fertilizer application in afternoon. High sun intensity may reduce effectiveness. Increase irrigation today.
-                      </Typography>
-                    </Box>
-                  </Paper>
+                  if (todaysTasks.length === 0) {
+                     return (
+                       <div style={{padding: '32px 24px', textAlign: 'center', color: 'var(--text-sub)'}}>
+                          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{marginBottom:'12px', color:'var(--neon-green)'}}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                          <div style={{fontSize: '15px', fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px'}}>No Special Tasks Scheduled For Today</div>
+                          <div style={{fontSize: '13px'}}>Keep up with your regular crop maintenance and standard watering schedule!</div>
+                       </div>
+                     );
+                  }
+                  
+                  return todaysTasks.map((item, idx) => {
+                    const isChecked = substepStatus[`${currentStage.stage_id}_${item.i}`];
+                    const isActive = !isChecked && idx === 0; // Top uncompleted task is active focus
+                    
+                    return (
+                      <div key={idx} className={`task-item ${isActive ? 'active' : ''}`} style={{opacity: isChecked ? 0.4 : 1}}>
+                        <div className="task-left">
+                          <div className={`task-checkbox ${isChecked ? 'checked' : ''}`} onClick={() => toggleSubstep(currentStage.stage_id, item.i)}>
+                             {isChecked && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0A0D0B" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>}
+                          </div>
+                          <div className="task-content">
+                            <h4 style={{textDecoration: isChecked ? 'line-through' : 'none'}}>
+                              {item.sub} 
+                              {isActive && <span className="high-badge">URGENT</span>}
+                            </h4>
+                            {isActive && item.ai && (
+                              <>
+                                <div className="task-desc">{item.ai.reason}</div>
+                                <div className="sys-rec">
+                                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>
+                                  System Recommendation
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                        <div className="task-right">
+                          <div className="task-day">Day {item.targetDay} of {currentStage.duration_days}</div>
+                          {isActive && <div className="task-timing">Optimal timing</div>}
+                          {item.targetDay < relativeDayInStage && !isChecked && <div className="task-timing" style={{color: 'var(--danger-red)'}}>Past Due</div>}
+                        </div>
+                      </div>
+                    );
+                  });
+                })()}
+              </div>
+            </div>
+          )}
 
-                  {/* PROFIT SNAPSHOT */}
-                  <Paper sx={{ p: 4, borderRadius: '24px', background: '#1e1b4b', color: '#fff', position: 'relative', overflow: 'hidden' }}>
-                    <Box sx={{ position: 'absolute', top: -20, right: -20, width: 120, height: 120, borderRadius: '50%', background: 'rgba(255,255,255,0.05)' }} />
-                    <Typography variant="h6" sx={{ fontWeight: 900, mb: 4 }}>Profit Snapshot</Typography>
-                    <Stack spacing={4}>
-                      {(() => {
-                        const snap = calculateProfitSnapshot(cropEconomics, profile?.land_size, selectedCrop?.total_duration_days);
-                        return (
-                          <>
-                            <Box>
-                              <Typography variant="caption" sx={{ opacity: 0.6, fontWeight: 800, letterSpacing: 1 }}>EXPECTED PROFIT</Typography>
-                              <Stack direction="row" alignItems="baseline" spacing={1}>
-                                <Typography variant="h3" sx={{ fontWeight: 900, color: '#22c55e', fontSize: 'clamp(28px, 4vw, 42px)' }}>
-                                  ₹{snap.totalProfit.toLocaleString('en-IN')}
-                                </Typography>
-                              </Stack>
-                            </Box>
-                            <Divider sx={{ bgcolor: 'rgba(255,255,255,0.1)' }} />
-                            <Grid container spacing={2}>
-                              <Grid size={{ xs: 6 }}>
-                                <Typography variant="caption" sx={{ opacity: 0.6, fontWeight: 800 }}>EST. YIELD</Typography>
-                                <Typography variant="h6" sx={{ fontWeight: 800 }}>{snap.totalYield} q</Typography>
-                              </Grid>
-                              <Grid size={{ xs: 6 }}>
-                                <Typography variant="caption" sx={{ opacity: 0.6, fontWeight: 800 }}>MKT PRICE</Typography>
-                                <Typography variant="h6" sx={{ fontWeight: 800 }}>₹{snap.marketPricePerQ.toLocaleString('en-IN')}/q</Typography>
-                              </Grid>
-                            </Grid>
-                            <Box sx={{ p: 2, borderRadius: '12px', bgcolor: 'rgba(255,255,255,0.05)', textAlign: 'center' }}>
-                              <Typography variant="caption" sx={{ opacity: 0.6, fontWeight: 800 }}>MONTHLY INCOME EST.</Typography>
-                              <Typography variant="h5" sx={{ fontWeight: 900 }}>₹{snap.monthlyIncome.toLocaleString('en-IN')}</Typography>
-                            </Box>
-                          </>
-                        );
-                      })()}
-                    </Stack>
-                  </Paper>
+          {/* CROP JOURNEY */}
+          {selectedCrop && (
+            <div className="neo-card">
+               <h3 className="section-title" style={{marginBottom: '32px'}}>Crop Journey</h3>
+               
+               <div className="pipeline-wrap">
+                 <div className="pipeline-line"></div>
+                 {selectedCrop.stages.map((stage, idx) => {
+                    const status = stage.stage_id < currentStage?.stage_id ? 'done' : (stage.stage_id === currentStage?.stage_id ? 'active' : 'pending');
+                    return (
+                      <div key={idx} className="pipeline-node-wrap" onClick={() => setExpandedStage(stage.stage_id)} style={{cursor: 'pointer'}}>
+                        <div className={`p-node ${status}`}>
+                          {status === 'done' ? (
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                          ) : stage.stage_id}
+                        </div>
+                        <div className="p-label" style={{maxWidth: '60px', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: status==='active'?'var(--neon-green)':''}}>{stage.title}</div>
+                      </div>
+                    )
+                 })}
+               </div>
 
-                  {/* UPCOMING TASKS */}
-                  <Paper sx={{ p: 4, borderRadius: '24px', border: '1px solid #f1f5f9' }}>
-                    <Typography variant="h6" sx={{ fontWeight: 900, mb: 3 }}>Upcoming Tasks</Typography>
-                    <Stack spacing={2}>
-                      {upcomingTasks.map((item, i) => (
-                        <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 2, borderRadius: '12px', bgcolor: '#f8fafc', border: '1px solid #f1f5f9' }}>
-                          <Box sx={{ color: '#16a34a' }}>{item.icon}</Box>
-                          <Box>
-                            <Typography variant="caption" sx={{ color: '#64748b', fontWeight: 800 }}>{item.day}</Typography>
-                            <Typography variant="body2" sx={{ fontWeight: 700 }}>{item.task}</Typography>
-                          </Box>
-                        </Box>
-                      ))}
-                      {upcomingTasks.length === 0 && (
-                        <Typography sx={{ color: '#64748b', fontStyle: 'italic', fontSize: '14px' }}>No upcoming tasks.</Typography>
-                      )}
-                    </Stack>
-                  </Paper>
+               {(() => {
+                 const activePanelStage = selectedCrop.stages.find(s => s.stage_id === (expandedStage || currentStage?.stage_id)) || currentStage;
+                 if (!activePanelStage) return null;
+                 const sStatus = activePanelStage.stage_id < currentStage?.stage_id ? 'completed' : (activePanelStage.stage_id === currentStage?.stage_id ? 'active' : 'upcoming');
+                 const sDays = (sStatus === 'active') ? Math.min(daysPassed - activePanelStage.start_day + 1, activePanelStage.duration_days) : (sStatus === 'completed' ? activePanelStage.duration_days : 0);
+                 let sPercent = Math.round((sDays / activePanelStage.duration_days) * 100);
+                 if (activePanelStage.duration_days === 0) sPercent = 100;
 
-                </Stack>
-              </Grid>
-            </Grid>
-          </Box>
-        )}
-      </Container>
-      
-      {/* DIALOGS */}
-      <Dialog open={deleteConfirmOpen} onClose={() => setDeleteConfirmOpen(false)} PaperProps={{ sx: { borderRadius: '24px', p: 1 } }}>
-        <DialogTitle sx={{ fontWeight: 900 }}>Delete Crop?</DialogTitle>
-        <DialogContent>
-          <Typography sx={{ color: '#64748b' }}>
-            Are you sure you want to delete {selectedCrop?.crop_name}? It will be moved to the bin and can be restored within 3 days.
-          </Typography>
-        </DialogContent>
-        <DialogActions sx={{ pb: 2, pr: 2 }}>
-          <Button onClick={() => setDeleteConfirmOpen(false)} sx={{ fontWeight: 700, color: '#64748b' }}>Cancel</Button>
-          <Button onClick={handleConfirmDelete} variant="contained" color="error" sx={{ fontWeight: 700, borderRadius: '10px' }}>Delete</Button>
-        </DialogActions>
-      </Dialog>
+                 return (
+                   <div className="stage-active-box">
+                     <div className="stage-active-header">
+                       <h3>{activePanelStage.title} {sStatus === 'active' ? '— In Progress' : ''}</h3>
+                       <span>Day {activePanelStage.start_day} → Day {activePanelStage.end_day}</span>
+                     </div>
+                     <div className="stage-bar-wrap">
+                       <div className="stage-bar-fill" style={{width: `${sPercent}%`, background: sStatus === 'completed' ? 'var(--text-sub)' : 'var(--neon-green)'}}></div>
+                     </div>
+                     <div style={{padding: '16px'}}>
+                       <div style={{fontSize: '11px', color: 'var(--text-sub)', marginBottom: '16px'}}>
+                         {sPercent}% of stage complete
+                       </div>
+                       
+                       <div className="sb-task-list">
+                          {activePanelStage.substeps.map((sub, i) => {
+                            let ai = null;
+                            if (dynamicSchedule && Array.isArray(dynamicSchedule)) ai = dynamicSchedule.find(s => s.task === sub);
+                            
+                            const stepInterval = Math.max(1, Math.floor(activePanelStage.duration_days / Math.max(1, activePanelStage.substeps.length)));
+                            const targetDay = ai ? ai.relative_day : (i * stepInterval) + 1;
+                            
+                            const isChecked = sStatus === 'completed' || substepStatus[`${activePanelStage.stage_id}_${i}`];
+                            return (
+                              <div key={i} className="task-item" style={{borderBottom: 'none', padding: '4px 0', opacity: isChecked ? 0.3 : 1}}>
+                                <div className="task-left">
+                                  <div className={`task-checkbox ${isChecked ? 'checked' : ''}`} style={{width: '16px', height: '16px', cursor: 'default'}}>
+                                    {isChecked && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0A0D0B" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" style={{marginTop:'-2px'}}><polyline points="20 6 9 17 4 12"></polyline></svg>}
+                                  </div>
+                                  <div className="task-content">
+                                    <h4 style={{fontSize: '13px', margin: 0, textDecoration: isChecked?'line-through':'none'}}>{sub}</h4>
+                                  </div>
+                                </div>
+                                <div className="task-right"><div className="task-day">Day {targetDay}/{activePanelStage.duration_days}</div></div>
+                              </div>
+                            );
+                          })}
+                       </div>
+                     </div>
+                   </div>
+                 );
+               })()}
+            </div>
+          )}
 
-      <Dialog open={binModalOpen} onClose={() => setBinModalOpen(false)} PaperProps={{ sx: { borderRadius: '20px', p: 1, minWidth: { xs: '90vw', sm: '400px' }, maxWidth: '500px' } }}>
-        <DialogTitle sx={{ fontWeight: 900, display: 'flex', alignItems: 'center', gap: 1 }}><DeleteSweep /> Recycle Bin</DialogTitle>
-        <DialogContent dividers>
-          {(() => {
-            const bin = JSON.parse(localStorage.getItem(`binned_crops_${session?.user?.id}`) || '[]');
-            if (!bin || bin.length === 0) return <Typography sx={{ color: '#94a3b8', textAlign: 'center', py: 4 }}>Bin is empty.</Typography>;
-            return (
-              <Stack spacing={2}>
-                {bin.map(b => (
-                  <Paper key={b.id} sx={{ p: 2, borderRadius: '12px', border: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', bgcolor: '#f8fafc' }}>
-                    <Box>
-                      <Typography sx={{ fontWeight: 800 }}>{b.cropName}</Typography>
-                      <Typography variant="caption" sx={{ color: '#64748b' }}>Deleted: {new Date(b.deletedAt).toLocaleDateString()}</Typography>
-                    </Box>
-                    <Button variant="outlined" size="small" onClick={() => handleRestoreFromBin(b.id)} sx={{ fontWeight: 700, borderRadius: '8px', textTransform: 'none' }}>Restore</Button>
-                  </Paper>
-                ))}
-              </Stack>
-            );
-          })()}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setBinModalOpen(false)} sx={{ fontWeight: 700 }}>Close</Button>
-        </DialogActions>
-      </Dialog>
+        </div>
 
-      {/* Bot only appears when logged in (already in ActionHome context) */}
+        {/* RIGHT COLUMN */}
+        <div className="right-column">
+          
+          {/* WEATHER CENTER */}
+          <div className="neo-card">
+            <div className="weather-header">
+              <div>
+                <h3>Weather Center</h3>
+                <p>{profile?.location || 'Hyderabad, TG'}</p>
+              </div>
+              <div className="live-badge">
+                <div className="live-dot"></div> Live
+              </div>
+            </div>
+            
+            <div className="weather-grid-4">
+              <div>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{color: 'var(--text-sub)'}}><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
+                <div className="w-stat-val">28°C</div>
+                <div className="w-stat-lbl">TEMP</div>
+              </div>
+              <div>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{color: 'var(--text-sub)'}}><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                <div className="w-stat-val">72%</div>
+                <div className="w-stat-lbl">HUMID</div>
+              </div>
+              <div>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{color: 'var(--text-sub)'}}><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>
+                <div className="w-stat-val">12</div>
+                <div className="w-stat-lbl">WIND</div>
+              </div>
+              <div>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{color: 'var(--text-sub)'}}><path d="M23 12a11.05 11.05 0 0 0-22 0zm-5 7a3 3 0 0 1-6 0v-7"/></svg>
+                <div className="w-stat-val">10%</div>
+                <div className="w-stat-lbl">RAIN</div>
+              </div>
+            </div>
+
+            <div className="forecast-grid">
+              <div className="f-day">
+                Mon<br/>
+                <svg width="16" height="16" style={{margin: '8px 0', color: 'var(--text-sub)'}} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+                <br/><span className="f-val">29°C</span>
+              </div>
+              <div className="f-day">
+                Tue<br/>
+                <svg width="16" height="16" style={{margin: '8px 0', color: 'var(--warning-yellow)'}} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                <br/><span className="f-val">31°C</span>
+              </div>
+              <div className="f-day">
+                Wed<br/>
+                <svg width="16" height="16" style={{margin: '8px 0', color: 'var(--text-sub)'}} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+                <br/><span className="f-val">26°C</span>
+              </div>
+            </div>
+
+          </div>
+
+          {/* PROFIT SNAPSHOT */}
+          {selectedCrop && (
+            <div className="neo-card profit-snapshot">
+              <h3>Profit Snapshot</h3>
+              <div className="profit-sub">{selectedCrop.crop_name}</div>
+              
+              <div className="profit-label">EXPECTED PROFIT</div>
+              <div className="profit-value">₹{cropEconomics?.profit_per_acre ? (cropEconomics.profit_per_acre * (profile?.land_size ? parseFloat(profile.land_size) : 2.5)).toLocaleString('en-IN') : '2,68,000'}</div>
+
+              <div className="profit-metrics">
+                <div className="pm-box">
+                  <div className="pm-label">EST. YIELD</div>
+                  <div className="pm-val">{cropEconomics?.yield_qtl_per_acre ? (cropEconomics.yield_qtl_per_acre * (profile?.land_size ? parseFloat(profile.land_size) : 2.5)).toFixed(0) : '200'} q</div>
+                </div>
+                <div className="pm-box">
+                  <div className="pm-label">MKT PRICE</div>
+                  <div className="pm-val">₹{cropEconomics?.market_price ? cropEconomics.market_price.toLocaleString('en-IN') : '2,300'}/q</div>
+                </div>
+                <div className="pm-box">
+                  <div className="pm-label">MONTHLY</div>
+                  <div className="pm-val">₹{cropEconomics?.profit_per_acre ? Math.round((cropEconomics.profit_per_acre * (profile?.land_size ? parseFloat(profile.land_size) : 2.5)) / (selectedCrop.total_duration_days/30)).toLocaleString('en-IN') : '44,667'}</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* UPCOMING TASKS */}
+          <div className="neo-card">
+            <h3 className="section-title" style={{marginBottom: '20px'}}>Upcoming Tasks</h3>
+            <div className="sb-task-list">
+               {upcomingTasks.length > 0 ? upcomingTasks.map((t, idx) => (
+                 <div key={idx} className="sb-task">
+                   <div className="sb-task-left">
+                     <span className={`sb-pill ${idx===0?'amber':(idx===1?'red':'green')}`}>{t.day}</span>
+                     <span className="sb-title" style={{fontSize: '11px'}}>{t.task}</span>
+                   </div>
+                 </div>
+               )) : (
+                 <>
+                   <div className="sb-task">
+                     <div className="sb-task-left">
+                       <span className="sb-pill amber">Day 58</span>
+                       <span className="sb-title">Start Water Management</span>
+                     </div>
+                     <div className="sb-time">+15 days</div>
+                   </div>
+                   <div className="sb-task">
+                     <div className="sb-task-left">
+                       <span className="sb-pill red">Day 98</span>
+                       <span className="sb-title">Start Pest & Disease Control</span>
+                     </div>
+                     <div className="sb-time">+55 days</div>
+                   </div>
+                   <div className="sb-task">
+                     <div className="sb-task-left">
+                       <span className="sb-pill green">Day 118</span>
+                       <span className="sb-title">Start Harvesting</span>
+                     </div>
+                     <div className="sb-time">+75 days</div>
+                   </div>
+                 </>
+               )}
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      {/* BIN MODAL */}
+      {binModalOpen && (
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(10, 13, 11, 0.8)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)' }}>
+          <div className="neo-card" style={{ width: '90%', maxWidth: '450px', margin: 0, padding: '24px' }}>
+             <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', color: 'var(--text-main)' }}>Recycle Bin</h3>
+             <div className="custom-scroll" style={{maxHeight:'300px', overflowY:'auto', paddingRight:'16px'}}>
+               {(() => {
+                  let binnedCrops = JSON.parse(localStorage.getItem(`binned_crops_${session?.user?.id}`) || '[]');
+                  
+                  // Auto-delete crops in the bin older than 3 days
+                  const validCrops = binnedCrops.filter(c => {
+                    const daysInBin = (new Date() - new Date(c.deletedAt)) / (1000 * 60 * 60 * 24);
+                    return daysInBin <= 3;
+                  });
+
+                  if (validCrops.length !== binnedCrops.length) {
+                    localStorage.setItem(`binned_crops_${session?.user?.id}`, JSON.stringify(validCrops));
+                    binnedCrops = validCrops;
+                  }
+
+                  if (binnedCrops.length === 0) return <p style={{color: 'var(--text-sub)', fontSize: '14px', margin: '20px 0'}}>No items in bin.</p>;
+                  return binnedCrops.map((crop, index) => (
+                    <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--card-border)' }}>
+                       <div>
+                         <div style={{fontWeight: 700, fontSize: '15px'}}>{crop.cropName}</div>
+                         <div style={{fontSize: '12px', color: 'var(--text-sub)', marginTop: '4px'}}>Deleted: {new Date(crop.deletedAt).toLocaleDateString()}</div>
+                       </div>
+                       <button onClick={() => handleRestoreFromBin(crop.id)} style={{ background: 'var(--neon-green)', color: '#000', border: 'none', padding: '8px 16px', borderRadius: '8px', fontWeight: 700, cursor: 'pointer', fontSize: '13px' }}>Restore</button>
+                    </div>
+                  ));
+               })()}
+             </div>
+             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '24px' }}>
+                <button onClick={() => setBinModalOpen(false)} style={{ background: 'transparent', color: 'var(--text-main)', border: '1px solid var(--card-border)', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>Close</button>
+             </div>
+          </div>
+        </div>
+      )}
+
+      {/* DELETE CONFIRM MODAL */}
+      {deleteConfirmOpen && (
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(10, 13, 11, 0.8)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)' }}>
+          <div className="neo-card" style={{ width: '90%', maxWidth: '400px', margin: 0, padding: '24px' }}>
+             <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', color: 'var(--danger-red)' }}>Move to Trash?</h3>
+             <p style={{ color: 'var(--text-sub)', fontSize: '14px', lineHeight: 1.6, marginBottom: '24px' }}>
+               This will move <strong>{selectedCrop?.crop_name}</strong> to the recycle bin. Crops are permanently deleted after 3 days. Are you sure you want to proceed?
+             </p>
+             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+                <button onClick={() => setDeleteConfirmOpen(false)} style={{ background: 'transparent', color: 'var(--text-main)', border: '1px solid var(--card-border)', padding: '10px 16px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
+                <button onClick={handleConfirmDelete} style={{ background: 'var(--danger-red)', color: '#fff', border: 'none', padding: '10px 16px', borderRadius: '8px', fontWeight: 700, cursor: 'pointer' }}>Yes, Trash it</button>
+             </div>
+          </div>
+        </div>
+      )}
+
+      {/* CUSTOM ALERT MODAL */}
+      {alertConfig.open && (
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(10, 13, 11, 0.8)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)' }}>
+          <div className="neo-card" style={{ width: '90%', maxWidth: '400px', margin: 0, padding: '24px', border: `1px solid ${alertConfig.type === 'error' ? 'var(--danger-red)' : 'var(--warning-yellow)'}` }}>
+             <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', color: alertConfig.type === 'error' ? 'var(--danger-red)' : 'var(--warning-yellow)' }}>
+               {alertConfig.type === 'error' ? 'Cannot Restore' : 'Restore Notice'}
+             </h3>
+             <p style={{ color: 'var(--text-main)', fontSize: '14px', lineHeight: 1.6, marginBottom: '24px' }}>
+               {alertConfig.message}
+             </p>
+             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <button onClick={() => setAlertConfig({ ...alertConfig, open: false })} style={{ background: alertConfig.type === 'error' ? 'var(--danger-red)' : 'var(--warning-yellow)', color: '#000', border: 'none', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 700 }}>Understood</button>
+             </div>
+          </div>
+        </div>
+      )}
+
+      {/* FLOATING AGRIBOT */}
       <AgriBot />
-    </Box>
+    </div>
   );
 };
 
 export default ActionHome;
-

@@ -6,7 +6,7 @@ export const useColorMode = () => useContext(ColorModeContext);
 
 export const ColorModeProvider = ({ children }) => {
   const [mode, setMode] = useState(() => {
-    return localStorage.getItem('themeMode') || 'light';
+    return localStorage.getItem('themeMode') || 'dark';
   });
 
   const toggleColorMode = () => {
@@ -16,6 +16,9 @@ export const ColorModeProvider = ({ children }) => {
       return next;
     });
   };
+  React.useEffect(() => {
+    document.body.dataset.theme = mode;
+  }, [mode]);
 
   const value = useMemo(() => ({ mode, toggleColorMode }), [mode]);
 

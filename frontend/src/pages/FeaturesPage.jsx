@@ -1,22 +1,24 @@
 import React from 'react';
-import { Box, Typography, Container, Card, Button, useTheme } from '@mui/material';
+import { Box, Typography, Container, Card, Button } from '@mui/material';
 import {
   Grass as SproutIcon, Timeline as TrendingUpIcon, MonetizationOn as AttachMoneyIcon,
   Cloud as CloudIcon, Science as ScienceIcon, Dashboard as DashboardIcon
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { useColorMode } from '../context/ThemeContext';
 
 const FeaturesPage = () => {
   const navigate = useNavigate();
-  const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
+  const { mode } = useColorMode();
+  const isDark = mode === 'dark';
 
-  const bgDefault = theme.palette.background.default;
-  const bgPaper = theme.palette.background.paper;
-  const textPrimary = theme.palette.text.primary;
-  const textSecondary = theme.palette.text.secondary;
-  const borderColor = isDark ? '#333' : '#e8ecea';
-  const altBg = isDark ? '#243028' : '#f7faf8';
+  const bgDefault = isDark ? '#0A0D0B' : '#ffffff';
+  const bgPaper = isDark ? '#0A0D0B' : '#ffffff';
+  const textPrimary = isDark ? '#e2e8f0' : '#1e293b';
+  const textSecondary = isDark ? '#94a3b8' : '#475569';
+  const borderColor = isDark ? 'rgba(255,255,255,0.1)' : '#e8ecea';
+  const altBg = isDark ? '#0A0D0B' : '#f7faf8';
+  const accentColor = isDark ? '#39FF6A' : '#2E7D32';
 
   const features = [
     { title: 'Crop Recommendation', description: 'Suggests optimal crops using soil & climate datasets', icon: <SproutIcon sx={{ fontSize: 20, color: '#2E7D32' }} />, color: isDark ? '#334d3d' : '#E8F5E9' },
@@ -50,8 +52,9 @@ const FeaturesPage = () => {
               <Card key={i} elevation={0} sx={{
                 p: '24px', borderRadius: '14px', backgroundColor: bgPaper,
                 border: `1px solid ${borderColor}`,
+                backdropFilter: isDark ? 'blur(10px)' : 'none',
                 transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                '&:hover': { transform: 'translateY(-4px)', boxShadow: isDark ? '0 12px 24px rgba(0,0,0,0.3)' : '0 12px 24px rgba(0,0,0,0.06)' }
+                '&:hover': { transform: 'translateY(-4px)', boxShadow: isDark ? '0 12px 24px rgba(0,0,0,0.6)' : '0 12px 24px rgba(0,0,0,0.06)' }
               }}>
                 <Box sx={{ width: '44px', height: '44px', borderRadius: '50%', backgroundColor: feature.color, display: 'flex', alignItems: 'center', justifyContent: 'center', mb: '20px' }}>
                   {feature.icon}
@@ -71,10 +74,10 @@ const FeaturesPage = () => {
             Start optimizing your farm decisions today
           </Typography>
           <Button variant="contained" onClick={() => navigate('/register')} sx={{
-            backgroundColor: '#2E7D32', color: '#fff', height: '48px', px: '32px',
+            backgroundColor: accentColor, color: isDark ? '#000' : '#fff', height: '48px', px: '32px',
             borderRadius: '10px', fontSize: '15px', fontWeight: 600, textTransform: 'none',
             boxShadow: 'none', transition: 'all 0.2s ease',
-            '&:hover': { backgroundColor: '#1B5E20', transform: 'translateY(-1px)', boxShadow: '0 4px 12px rgba(46, 125, 50, 0.3)' }
+            '&:hover': { backgroundColor: isDark ? '#2fe058' : '#1B5E20', transform: 'translateY(-1px)', boxShadow: isDark ? '0 4px 12px rgba(57,255,106, 0.3)' : '0 4px 12px rgba(46, 125, 50, 0.3)' }
           }}>
             Get Recommendation
           </Button>

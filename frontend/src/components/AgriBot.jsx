@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   Box, Fab, Paper, Typography, TextField, IconButton, List, ListItem,
-  ListItemText, Avatar, CircularProgress, Collapse, Fade, Tooltip, Button
+  ListItemText, Avatar, CircularProgress, Collapse, Fade, Tooltip, Button, useTheme
 } from '@mui/material';
 import { Chat as ChatIcon, Close, Send, SmartToy, Person, Mic, MicOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,8 @@ import { getAiCompletion } from '../services/aiService';
 import { supabase } from '../supabase';
 
 const AgriBot = () => {
+  const theme = useTheme();
+  const isDarkMode = theme.palette.mode === 'dark';
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const [messages, setMessages] = useState([
@@ -184,11 +186,14 @@ const AgriBot = () => {
           <Fade in={!isOpen} timeout={1000}>
             <Box sx={{
               display: { xs: 'none', sm: 'block' },
-              bgcolor: '#fff', px: 2, py: 1.2, borderRadius: '16px 16px 4px 16px',
-              boxShadow: '0 6px 18px rgba(0,0,0,0.08)', border: '1px solid #f1f5f9',
+              bgcolor: isDarkMode ? 'rgba(10, 13, 11, 0.7)' : 'rgba(255, 255, 255, 0.9)', 
+              px: 2, py: 1.2, borderRadius: '16px 16px 4px 16px',
+              backdropFilter: 'blur(10px)', 
+              border: isDarkMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)',
+              boxShadow: isDarkMode ? '0 6px 18px rgba(0,0,0,0.5)' : '0 6px 18px rgba(0,0,0,0.1)',
               animation: 'float-anim 3.5s ease-in-out infinite'
             }}>
-              <Typography variant="body2" sx={{ fontWeight: 700, color: '#1e293b' }}>
+              <Typography variant="body2" sx={{ fontWeight: 700, color: isDarkMode ? '#e2e8f0' : '#1e293b' }}>
                 Need help with crops? 🌾
               </Typography>
             </Box>
@@ -198,14 +203,16 @@ const AgriBot = () => {
             className="chatbot-fab"
             onClick={() => setIsOpen(true)}
             sx={{
-              background: 'linear-gradient(135deg, #16a34a, #22c55e)',
-              color: 'white',
+              background: isDarkMode ? 'rgba(10, 13, 11, 0.8)' : '#fff',
+              backdropFilter: 'blur(10px)',
+              border: `1px solid ${isDarkMode ? '#39FF6A' : '#2E7D32'}`,
+              color: isDarkMode ? '#39FF6A' : '#2E7D32',
               px: { xs: 2, lg: 3 }, py: { xs: 1, lg: 1.5 }, borderRadius: '999px',
               fontWeight: 800, fontSize: '15px',
               textTransform: 'none',
               transition: 'all 0.25s ease',
-              boxShadow: '0 10px 30px rgba(34,197,94,0.35)',
-              '&:hover': { background: 'linear-gradient(135deg, #15803d, #16a34a)', transform: 'scale(0.98)' },
+              boxShadow: isDarkMode ? '0 10px 30px rgba(57,255,106,0.15)' : '0 10px 30px rgba(46,125,50,0.1)',
+              '&:hover': { background: isDarkMode ? '#39FF6A' : '#2E7D32', color: '#fff', transform: 'scale(0.98)' },
               '&:active': { transform: 'scale(0.95)' }
             }}
             startIcon={<Typography sx={{ fontSize: 22, lineHeight: 1 }}>🤖</Typography>}
@@ -232,24 +239,26 @@ const AgriBot = () => {
             flexDirection: 'column',
             overflow: 'hidden',
             zIndex: 1001,
-            border: '1px solid #f1f5f9',
-            boxShadow: '0 24px 64px rgba(0,0,0,0.15)'
+            bgcolor: isDarkMode ? 'rgba(10, 13, 11, 0.85)' : '#fff',
+            backdropFilter: 'blur(16px)',
+            border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+            boxShadow: isDarkMode ? '0 24px 64px rgba(0,0,0,0.5)' : '0 24px 64px rgba(0,0,0,0.1)'
           }}
         >
           {/* Header */}
-          <Box sx={{ p: 2.5, bgcolor: '#16a34a', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box sx={{ p: 2.5, bgcolor: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)', borderBottom: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`, color: isDarkMode ? '#fff' : '#1e293b', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-              <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.2)', width: 40, height: 40 }}>
-                <SmartToy sx={{ fontSize: 24 }} />
+              <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.1)', width: 40, height: 40 }}>
+                <SmartToy sx={{ fontSize: 24, color: '#39FF6A' }} />
               </Avatar>
               <Box>
                 <Typography variant="subtitle1" sx={{ fontWeight: 800, lineHeight: 1.2 }}>AgriBot AI</Typography>
                 <Typography variant="caption" sx={{ opacity: 0.8, display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                  <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: '#4ade80' }} /> Online Assist
+                  <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: '#39FF6A' }} /> Online Assist
                 </Typography>
               </Box>
             </Box>
-            <IconButton onClick={() => setIsOpen(false)} sx={{ color: '#fff' }} size="small">
+            <IconButton onClick={() => setIsOpen(false)} sx={{ color: isDarkMode ? '#fff' : '#475569' }} size="small">
               <Close />
             </IconButton>
           </Box>
@@ -260,7 +269,7 @@ const AgriBot = () => {
               flex: 1,
               overflowY: 'auto',
               p: 2,
-              bgcolor: '#f8fafc',
+              bgcolor: 'transparent',
               display: 'flex',
               flexDirection: 'column',
               gap: 1.5
@@ -278,19 +287,19 @@ const AgriBot = () => {
                 }}
               >
                 {msg.role === 'assistant' && (
-                  <Avatar sx={{ bgcolor: '#ecfdf5', width: 32, height: 32, mt: 0.5 }}>
-                    <SmartToy sx={{ color: '#10b981', fontSize: 18 }} />
+                  <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.05)', width: 32, height: 32, mt: 0.5, border: '1px solid rgba(255,255,255,0.1)' }}>
+                    <SmartToy sx={{ color: '#39FF6A', fontSize: 18 }} />
                   </Avatar>
                 )}
                 <Paper
                   sx={{
                     p: 1.8,
                     borderRadius: msg.role === 'user' ? '20px 20px 4px 20px' : '4px 20px 20px 20px',
-                    bgcolor: msg.role === 'user' ? '#16a34a' : '#fff',
-                    color: msg.role === 'user' ? '#fff' : '#1e293b',
+                    bgcolor: msg.role === 'user' ? (isDarkMode ? '#39FF6A' : '#2E7D32') : (isDarkMode ? 'rgba(255,255,255,0.05)' : '#f1f5f9'),
+                    color: msg.role === 'user' ? (isDarkMode ? '#000' : '#fff') : (isDarkMode ? '#e2e8f0' : '#334155'),
                     maxWidth: '80%',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
-                    border: msg.role === 'assistant' ? '1px solid #f1f5f9' : 'none'
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                    border: msg.role === 'assistant' ? (isDarkMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.05)') : 'none'
                   }}
                 >
                   <Typography variant="body2" sx={{ lineHeight: 1.5, fontWeight: 500 }}>
@@ -298,19 +307,19 @@ const AgriBot = () => {
                   </Typography>
                 </Paper>
                 {msg.role === 'user' && (
-                  <Avatar sx={{ bgcolor: '#e2e8f0', width: 32, height: 32, mt: 0.5 }}>
-                    <Person sx={{ color: '#64748b', fontSize: 18 }} />
+                  <Avatar sx={{ bgcolor: 'rgba(57,255,106,0.2)', width: 32, height: 32, mt: 0.5 }}>
+                    <Person sx={{ color: '#39FF6A', fontSize: 18 }} />
                   </Avatar>
                 )}
               </ListItem>
             ))}
             {isLoading && (
               <ListItem sx={{ display: 'flex', gap: 1, px: 0 }}>
-                <Avatar sx={{ bgcolor: '#ecfdf5', width: 32, height: 32 }}>
-                  <SmartToy sx={{ color: '#10b981', fontSize: 18 }} />
+                <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.05)', width: 32, height: 32 }}>
+                  <SmartToy sx={{ color: '#39FF6A', fontSize: 18 }} />
                 </Avatar>
-                <Paper sx={{ p: 1.5, borderRadius: '4px 20px 20px 20px', bgcolor: '#fff', border: '1px solid #f1f5f9' }}>
-                  <CircularProgress size={16} sx={{ color: '#16a34a' }} />
+                <Paper sx={{ p: 1.5, borderRadius: '4px 20px 20px 20px', bgcolor: isDarkMode ? 'rgba(255,255,255,0.05)' : '#f1f5f9', border: isDarkMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.05)' }}>
+                  <CircularProgress size={16} sx={{ color: isDarkMode ? '#39FF6A' : '#2E7D32' }} />
                 </Paper>
               </ListItem>
             )}
@@ -318,7 +327,7 @@ const AgriBot = () => {
           </List>
 
           {/* Input Area */}
-          <Box sx={{ p: 2, bgcolor: '#fff', borderTop: '1px solid #f1f5f9' }}>
+          <Box sx={{ p: 2, bgcolor: 'transparent', borderTop: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}` }}>
             <Box sx={{ display: 'flex', gap: 1 }}>
               <TextField
                 fullWidth
@@ -329,11 +338,13 @@ const AgriBot = () => {
                 onKeyPress={handleKeyPress}
                 disabled={isLoading}
                 sx={{
+                  input: { color: isDarkMode ? '#e2e8f0' : '#1e293b' },
                   '& .MuiOutlinedInput-root': {
                     borderRadius: '12px',
-                    bgcolor: '#f8fafc',
-                    '& fieldset': { borderColor: '#e2e8f0' },
-                    '&:hover fieldset': { borderColor: '#cbd5e1' }
+                    bgcolor: isDarkMode ? 'rgba(255,255,255,0.05)' : '#f8fafc',
+                    '& fieldset': { borderColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' },
+                    '&:hover fieldset': { borderColor: isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)' },
+                    '&.Mui-focused fieldset': { borderColor: isDarkMode ? '#39FF6A' : '#2E7D32' }
                   }
                 }}
               />
@@ -341,10 +352,10 @@ const AgriBot = () => {
                 onClick={toggleListening}
                 disabled={isLoading || !recognitionRef.current}
                 sx={{
-                  bgcolor: isListening ? '#ef4444' : '#f8fafc',
+                  bgcolor: isListening ? '#ef4444' : 'rgba(255,255,255,0.05)',
                   color: isListening ? '#fff' : '#64748b',
-                  border: '1px solid #e2e8f0',
-                  '&:hover': { bgcolor: isListening ? '#dc2626' : '#e2e8f0' },
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  '&:hover': { bgcolor: isListening ? '#dc2626' : 'rgba(255,255,255,0.1)' },
                   transition: 'all 0.2s',
                   animation: isListening ? 'pulse-glow 2s infinite' : 'none'
                 }}
@@ -355,10 +366,10 @@ const AgriBot = () => {
                 onClick={handleSend}
                 disabled={!inputValue.trim() || isLoading}
                 sx={{
-                  bgcolor: '#16a34a',
-                  color: '#fff',
-                  '&:hover': { bgcolor: '#15803d' },
-                  '&.Mui-disabled': { bgcolor: '#e2e8f0', color: '#94a3b8' }
+                  bgcolor: isDarkMode ? '#39FF6A' : '#2E7D32',
+                  color: isDarkMode ? '#000' : '#fff',
+                  '&:hover': { bgcolor: isDarkMode ? '#2fe058' : '#1B5E20' },
+                  '&.Mui-disabled': { bgcolor: isDarkMode ? 'rgba(255,255,255,0.05)' : '#e2e8f0', color: '#64748b' }
                 }}
               >
                 <Send fontSize="small" />

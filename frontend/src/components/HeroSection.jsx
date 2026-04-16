@@ -2,9 +2,17 @@ import React from 'react';
 import { Box, Typography, Button, Container, Stack, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { PlayCircleOutline } from '@mui/icons-material';
+import { useColorMode } from '../context/ThemeContext';
 
 const HeroSection = () => {
   const navigate = useNavigate();
+  const { mode } = useColorMode();
+  const isDark = mode === 'dark';
+
+  const wrapperBg = isDark ? 'linear-gradient(135deg, #020617 0%, #0A0D0B 100%)' : 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)';
+  const textColor = isDark ? '#e2e8f0' : '#14532d';
+  const subTextColor = isDark ? '#94a3b8' : '#365314';
+  const accentColor = isDark ? '#39FF6A' : '#16a34a';
 
   return (
     <Box 
@@ -13,15 +21,15 @@ const HeroSection = () => {
         pt: { xs: '100px', md: '80px' },
         pb: { xs: '48px', md: '80px' },
         position: 'relative',
-        background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
+        background: wrapperBg,
         display: 'flex',
         alignItems: 'center',
         overflow: 'hidden'
       }}
     >
       {/* Decorative Elements */}
-      <Box sx={{ position: 'absolute', top: '10%', right: '-5%', width: '300px', height: '300px', borderRadius: '50%', background: 'rgba(34, 197, 94, 0.05)', filter: 'blur(50px)', zIndex: 0 }} />
-      <Box sx={{ position: 'absolute', bottom: '10%', left: '-5%', width: '400px', height: '400px', borderRadius: '50%', background: 'rgba(34, 197, 94, 0.08)', filter: 'blur(80px)', zIndex: 0 }} />
+      <Box sx={{ position: 'absolute', top: '10%', right: '-5%', width: '300px', height: '300px', borderRadius: '50%', background: isDark ? 'rgba(57, 255, 106, 0.05)' : 'rgba(34, 197, 94, 0.05)', filter: 'blur(50px)', zIndex: 0 }} />
+      <Box sx={{ position: 'absolute', bottom: '10%', left: '-5%', width: '400px', height: '400px', borderRadius: '50%', background: isDark ? 'rgba(57, 255, 106, 0.05)' : 'rgba(34, 197, 94, 0.08)', filter: 'blur(80px)', zIndex: 0 }} />
 
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
         <Grid container spacing={4} alignItems="center">
@@ -30,7 +38,7 @@ const HeroSection = () => {
               <Typography 
                 variant="h1" 
                 sx={{ 
-                  color: '#14532d', 
+                  color: textColor, 
                   fontSize: { xs: '40px', sm: '52px', md: '72px' }, 
                   fontWeight: 900, 
                   lineHeight: 1.1, 
@@ -38,11 +46,11 @@ const HeroSection = () => {
                   mb: 3
                 }}
               >
-                Smart Farming with <Box component="span" sx={{ color: '#16a34a' }}>AI Intelligence 🌾</Box>
+                Smart Farming with <Box component="span" sx={{ color: accentColor }}>AI Intelligence 🌾</Box>
               </Typography>
               <Typography 
                 sx={{ 
-                  color: '#365314', 
+                  color: subTextColor, 
                   fontSize: { xs: '18px', md: '22px' }, 
                   mb: 5, 
                   lineHeight: 1.6, 
@@ -60,16 +68,16 @@ const HeroSection = () => {
                   size="large"
                   onClick={() => navigate('/register')}
                   sx={{ 
-                    bgcolor: '#16a34a', 
-                    color: '#fff', 
+                    bgcolor: accentColor, 
+                    color: isDark ? '#000' : '#fff', 
                     px: 5, 
                     py: 2.2, 
                     borderRadius: '16px', 
                     fontSize: '18px', 
                     fontWeight: 800, 
                     textTransform: 'none',
-                    boxShadow: '0 20px 40px rgba(22, 163, 74, 0.25)',
-                    '&:hover': { bgcolor: '#15803d', transform: 'translateY(-2px)', boxShadow: '0 25px 50px rgba(22, 163, 74, 0.35)' },
+                    boxShadow: isDark ? '0 20px 40px rgba(57,255,106,0.3)' : '0 20px 40px rgba(22, 163, 74, 0.25)',
+                    '&:hover': { bgcolor: isDark ? '#2fe058' : '#15803d', transform: 'translateY(-2px)', boxShadow: isDark ? '0 25px 50px rgba(57,255,106,0.45)' : '0 25px 50px rgba(22, 163, 74, 0.35)' },
                     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
                   }}
                 >
@@ -81,8 +89,8 @@ const HeroSection = () => {
                   onClick={() => navigate('/login')}
                   startIcon={<PlayCircleOutline />}
                   sx={{ 
-                    borderColor: '#16a34a', 
-                    color: '#16a34a', 
+                    borderColor: accentColor, 
+                    color: accentColor, 
                     px: 5, 
                     py: 2.2, 
                     borderRadius: '16px', 
@@ -90,7 +98,7 @@ const HeroSection = () => {
                     fontWeight: 800, 
                     textTransform: 'none',
                     borderWidth: '2.5px',
-                    '&:hover': { borderWidth: '2.5px', bgcolor: 'rgba(22, 163, 74, 0.05)', transform: 'translateY(-2px)' },
+                    '&:hover': { borderWidth: '2.5px', bgcolor: isDark ? 'rgba(57,255,106,0.1)' : 'rgba(22, 163, 74, 0.05)', transform: 'translateY(-2px)' },
                     transition: 'all 0.3s ease'
                   }}
                 >
