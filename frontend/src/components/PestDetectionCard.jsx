@@ -76,7 +76,7 @@ const PestDetectionCard = () => {
         }
       }}
     >
-      <Box sx={{ p: 2.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--card-border)' }}>
+      <Box sx={{ padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Box>
             <Typography variant="subtitle1" sx={{ fontWeight: 800, color: 'var(--text-main)', lineHeight: 1.2, display: 'flex', alignItems: 'center', gap: 0.5 }}>
@@ -94,80 +94,72 @@ const PestDetectionCard = () => {
         )}
       </Box>
 
-      <Box sx={{ p: 3 }}>
+      <Box sx={{ px: '24px', pb: '20px' }}>
         {!previewUrl ? (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-            <Box 
-              onClick={() => fileInputRef.current.click()}
-              sx={{ 
-                border: '1px dashed var(--card-border)', 
-                borderRadius: '16px', 
-                minHeight: '220px',
-                p: { xs: 3, sm: 4 }, 
-                textAlign: 'center', 
-                cursor: 'pointer',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                transition: 'all 0.2s ease',
-                '&:hover': { 
-                  borderColor: 'var(--neon-green)',
-                  bgcolor: 'rgba(57, 255, 106, 0.02)'
-                }
-              }}
-            >
-              <Typography variant="body1" sx={{ fontWeight: 600, color: 'var(--text-main)', mb: 3 }}>
-                Upload leaf image to scan
-              </Typography>
+          <Box 
+            onClick={() => fileInputRef.current.click()}
+            sx={{ 
+              height: '120px', 
+              border: '1px dashed var(--card-border)',
+              borderRadius: '16px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              cursor: 'pointer',
+              gap: 2,
+              transition: 'all 0.2s ease',
+              '&:hover': {
+                borderColor: 'var(--neon-green)',
+                bgcolor: 'rgba(57, 255, 106, 0.02)'
+              }
+            }}
+          >
+            <Stack direction="row" spacing={2} justifyContent="center" sx={{ position: 'relative', zIndex: 2 }}>
+              <Button
+                variant="outlined"
+                onClick={(e) => { e.stopPropagation(); fileInputRef.current.click(); }}
+                sx={{ 
+                  borderColor: 'var(--neon-green)', 
+                  color: 'var(--neon-green)',
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  borderRadius: '12px',
+                  px: 3,
+                  py: 1,
+                  '&:hover': { borderColor: 'var(--neon-green)', bgcolor: 'rgba(57, 255, 106, 0.05)' }
+                }}
+              >
+                Gallery
+              </Button>
+              <Button
+                variant="contained"
+                onClick={(e) => { e.stopPropagation(); cameraInputRef.current.click(); }}
+                sx={{ 
+                  bgcolor: 'var(--neon-green)', 
+                  color: 'var(--card-bg)',
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  borderRadius: '12px',
+                  px: 3,
+                  py: 1,
+                  boxShadow: 'none',
+                  '&:hover': { bgcolor: 'var(--green-dark)', boxShadow: 'none' }
+                }}
+              >
+                Use Camera
+              </Button>
+            </Stack>
 
-              <Stack direction="row" spacing={2} justifyContent="center" sx={{ position: 'relative', zIndex: 2 }}>
-                <Button
-                  variant="outlined"
-                  onClick={(e) => { e.stopPropagation(); fileInputRef.current.click(); }}
-                  sx={{ 
-                    borderColor: 'var(--neon-green)', 
-                    color: 'var(--neon-green)',
-                    textTransform: 'none',
-                    fontWeight: 600,
-                    borderRadius: '12px',
-                    px: 3,
-                    py: 1,
-                    '&:hover': { borderColor: 'var(--neon-green)', bgcolor: 'rgba(57, 255, 106, 0.05)' }
-                  }}
-                >
-                  Gallery
-                </Button>
-                <Button
-                  variant="contained"
-                  onClick={(e) => { e.stopPropagation(); cameraInputRef.current.click(); }}
-                  sx={{ 
-                    bgcolor: 'var(--neon-green)', 
-                    color: 'var(--card-bg)',
-                    textTransform: 'none',
-                    fontWeight: 600,
-                    borderRadius: '12px',
-                    px: 3,
-                    py: 1,
-                    boxShadow: 'none',
-                    '&:hover': { bgcolor: 'var(--green-dark)', boxShadow: 'none' }
-                  }}
-                >
-                  Use Camera
-                </Button>
-              </Stack>
-            </Box>
-
-            {/* Possible Output Preview */}
-            <Box sx={{ textAlign: 'center' }}>
-              <Typography variant="caption" sx={{ color: 'var(--text-sub)', fontWeight: 500, display: 'block', mb: 1.5 }}>
-                Can detect:
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography variant="caption" sx={{ color: 'var(--text-sub)', fontWeight: 500 }}>
+                Detects:
               </Typography>
-              <Stack direction="row" spacing={1.5} justifyContent="center" flexWrap="wrap" useFlexGap>
-                <Chip size="small" label="Leaf Spot" sx={{ bgcolor: 'rgba(57, 255, 106, 0.1)', color: 'var(--green-dark)', border: '1px solid rgba(57, 255, 106, 0.3)', fontWeight: 500 }} />
-                <Chip size="small" label="Pest Attack" sx={{ bgcolor: 'rgba(57, 255, 106, 0.1)', color: 'var(--green-dark)', border: '1px solid rgba(57, 255, 106, 0.3)', fontWeight: 500 }} />
-                <Chip size="small" label="Nutrient Deficiency" sx={{ bgcolor: 'rgba(57, 255, 106, 0.1)', color: 'var(--green-dark)', border: '1px solid rgba(57, 255, 106, 0.3)', fontWeight: 500 }} />
-              </Stack>
+              <Typography variant="caption" sx={{ color: 'var(--green-dark)', fontWeight: 600, bgcolor: 'rgba(57, 255, 106, 0.1)', px: 1, py: 0.2, borderRadius: '4px' }}>Leaf Spot</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--text-sub)' }}>•</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--green-dark)', fontWeight: 600, bgcolor: 'rgba(57, 255, 106, 0.1)', px: 1, py: 0.2, borderRadius: '4px' }}>Pest Attack</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--text-sub)' }}>•</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--green-dark)', fontWeight: 600, bgcolor: 'rgba(57, 255, 106, 0.1)', px: 1, py: 0.2, borderRadius: '4px' }}>Nutrient Deficiency</Typography>
             </Box>
           </Box>
         ) : (
