@@ -65,39 +65,25 @@ const PestDetectionCard = () => {
       sx={{ 
         p: 0, 
         overflow: 'hidden', 
-        background: 'linear-gradient(135deg, rgba(20, 30, 20, 0.9) 0%, rgba(30, 20, 20, 0.9) 100%)',
-        borderColor: 'rgba(239, 68, 68, 0.3)',
+        bgcolor: 'var(--card-bg)',
+        borderColor: 'var(--card-border)',
         mb: '24px',
         position: 'relative',
         transition: 'all 0.3s ease',
         '&:hover': {
-          borderColor: 'rgba(57, 255, 106, 0.5)', 
-          boxShadow: '0 10px 30px rgba(57, 255, 106, 0.08)'
+          borderColor: 'var(--neon-green)', 
+          boxShadow: '0 4px 16px rgba(34,197,94,0.08)'
         }
       }}
     >
-      <style>
-        {`
-          @keyframes scanMove {
-            0% { top: 5%; opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { top: 95%; opacity: 0; }
-          }
-        `}
-      </style>
-
-      <Box sx={{ p: 2.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+      <Box sx={{ p: 2.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--card-border)' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <Box sx={{ p: 1, bgcolor: 'rgba(57, 255, 106, 0.15)', borderRadius: '10px', display: 'flex', border: '1px solid rgba(57, 255, 106, 0.3)', boxShadow: '0 0 10px rgba(57,255,106,0.2)' }}>
-            <DocumentScanner sx={{ color: 'var(--neon-green)', fontSize: 22 }} />
-          </Box>
           <Box>
             <Typography variant="subtitle1" sx={{ fontWeight: 800, color: 'var(--text-main)', lineHeight: 1.2, display: 'flex', alignItems: 'center', gap: 0.5 }}>
               🐛 AI Disease & Pest Detection
             </Typography>
             <Typography variant="caption" sx={{ color: 'var(--text-sub)' }}>
-              Instant leaf health scan powered by AI
+              Upload leaf image for instant scan
             </Typography>
           </Box>
         </Box>
@@ -114,75 +100,57 @@ const PestDetectionCard = () => {
             <Box 
               onClick={() => fileInputRef.current.click()}
               sx={{ 
-                border: '1.5px dashed rgba(57, 255, 106, 0.3)', 
-                borderRadius: '20px', 
+                border: '1px dashed var(--card-border)', 
+                borderRadius: '16px', 
+                minHeight: '220px',
                 p: { xs: 3, sm: 4 }, 
                 textAlign: 'center', 
                 cursor: 'pointer',
-                position: 'relative',
-                overflow: 'hidden',
-                background: 'linear-gradient(180deg, rgba(57, 255, 106, 0.02) 0%, rgba(57, 255, 106, 0.06) 100%)',
-                transition: 'all 0.3s ease',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                transition: 'all 0.2s ease',
                 '&:hover': { 
-                  transform: 'scale(1.02)',
-                  borderColor: 'rgba(57, 255, 106, 0.8)',
-                  boxShadow: '0 0 25px rgba(57, 255, 106, 0.15)' 
+                  borderColor: 'var(--neon-green)',
+                  bgcolor: 'rgba(57, 255, 106, 0.02)'
                 }
               }}
             >
-              {/* Animated AI Scan Line */}
-              <Box sx={{
-                position: 'absolute',
-                left: '10%',
-                width: '80%',
-                height: '2px',
-                background: 'linear-gradient(90deg, transparent, var(--neon-green), transparent)',
-                animation: 'scanMove 2.5s infinite linear',
-                boxShadow: '0 0 10px rgba(57, 255, 106, 0.8)',
-                zIndex: 1,
-              }} />
-
-              {/* Watermark leaf icon for premium feel */}
-              <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', opacity: 0.03, pointerEvents: 'none' }}>
-                 <EnergySavingsLeaf sx={{ fontSize: 180 }} />
-              </Box>
-
-              <CenterFocusWeak sx={{ fontSize: 48, color: 'var(--neon-green)', mb: 1.5, opacity: 0.9 }} />
-              <Typography variant="body1" sx={{ fontWeight: 800, color: 'var(--text-main)', mb: 0.5 }}>
+              <Typography variant="body1" sx={{ fontWeight: 600, color: 'var(--text-main)', mb: 3 }}>
                 Upload leaf image to scan
-              </Typography>
-              <Typography variant="caption" sx={{ color: 'var(--text-sub)', display: 'block', mb: 3 }}>
-                Click to browse or drag and drop
               </Typography>
 
               <Stack direction="row" spacing={2} justifyContent="center" sx={{ position: 'relative', zIndex: 2 }}>
                 <Button
                   variant="outlined"
-                  startIcon={<CloudUpload />}
                   onClick={(e) => { e.stopPropagation(); fileInputRef.current.click(); }}
                   sx={{ 
-                    borderColor: 'rgba(57, 255, 106, 0.5)', 
+                    borderColor: 'var(--neon-green)', 
                     color: 'var(--neon-green)',
                     textTransform: 'none',
-                    fontWeight: 700,
-                    borderRadius: '10px',
-                    '&:hover': { borderColor: 'var(--neon-green)', bgcolor: 'rgba(57,255,106,0.1)' }
+                    fontWeight: 600,
+                    borderRadius: '12px',
+                    px: 3,
+                    py: 1,
+                    '&:hover': { borderColor: 'var(--neon-green)', bgcolor: 'rgba(57, 255, 106, 0.05)' }
                   }}
                 >
                   Gallery
                 </Button>
                 <Button
                   variant="contained"
-                  startIcon={<CameraAlt />}
                   onClick={(e) => { e.stopPropagation(); cameraInputRef.current.click(); }}
                   sx={{ 
                     bgcolor: 'var(--neon-green)', 
-                    color: '#000',
+                    color: 'var(--card-bg)',
                     textTransform: 'none',
-                    fontWeight: 700,
-                    borderRadius: '10px',
-                    boxShadow: '0 4px 14px rgba(57,255,106,0.3)',
-                    '&:hover': { bgcolor: '#2fe058' }
+                    fontWeight: 600,
+                    borderRadius: '12px',
+                    px: 3,
+                    py: 1,
+                    boxShadow: 'none',
+                    '&:hover': { bgcolor: 'var(--green-dark)', boxShadow: 'none' }
                   }}
                 >
                   Use Camera
@@ -192,13 +160,13 @@ const PestDetectionCard = () => {
 
             {/* Possible Output Preview */}
             <Box sx={{ textAlign: 'center' }}>
-              <Typography variant="caption" sx={{ color: 'var(--text-sub)', fontWeight: 600, display: 'block', mb: 1, letterSpacing: 0.5 }}>
-                CAPABLE OF DETECTING
+              <Typography variant="caption" sx={{ color: 'var(--text-sub)', fontWeight: 500, display: 'block', mb: 1.5 }}>
+                Can detect:
               </Typography>
-              <Stack direction="row" spacing={1} justifyContent="center" flexWrap="wrap" useFlexGap sx={{ gap: 1 }}>
-                <Chip size="small" label="Leaf Spot" sx={{ bgcolor: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)', border: '1px solid rgba(255,255,255,0.1)' }} />
-                <Chip size="small" label="Pest Attacks" sx={{ bgcolor: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)', border: '1px solid rgba(255,255,255,0.1)' }} />
-                <Chip size="small" label="Nutrient Deficiency" sx={{ bgcolor: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)', border: '1px solid rgba(255,255,255,0.1)' }} />
+              <Stack direction="row" spacing={1.5} justifyContent="center" flexWrap="wrap" useFlexGap>
+                <Chip size="small" label="Leaf Spot" sx={{ bgcolor: 'rgba(57, 255, 106, 0.1)', color: 'var(--green-dark)', border: '1px solid rgba(57, 255, 106, 0.3)', fontWeight: 500 }} />
+                <Chip size="small" label="Pest Attack" sx={{ bgcolor: 'rgba(57, 255, 106, 0.1)', color: 'var(--green-dark)', border: '1px solid rgba(57, 255, 106, 0.3)', fontWeight: 500 }} />
+                <Chip size="small" label="Nutrient Deficiency" sx={{ bgcolor: 'rgba(57, 255, 106, 0.1)', color: 'var(--green-dark)', border: '1px solid rgba(57, 255, 106, 0.3)', fontWeight: 500 }} />
               </Stack>
             </Box>
           </Box>
