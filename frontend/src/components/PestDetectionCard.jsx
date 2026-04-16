@@ -63,16 +63,21 @@ const PestDetectionCard = () => {
       sx={{ 
         p: 0, 
         overflow: 'hidden', 
-        border: '1px solid rgba(239, 68, 68, 0.2)', // Subtle warning red border
-        background: 'linear-gradient(135deg, rgba(20, 20, 20, 0.95) 0%, rgba(30, 20, 20, 0.95) 100%)', // Very dark red tint
+        bgcolor: 'var(--card-bg)',
+        borderColor: 'var(--card-border)',
         mb: '24px',
-        position: 'relative'
+        position: 'relative',
+        transition: 'all 0.3s ease',
+        '&:hover': {
+          borderColor: 'rgba(239, 68, 68, 0.4)', // Subtle red glow on hover to retain health-warning context
+          boxShadow: '0 0 20px rgba(239, 68, 68, 0.05)'
+        }
       }}
     >
-      <Box sx={{ p: 2.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+      <Box sx={{ p: 2.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--card-border)' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <Box sx={{ p: 1, bgcolor: 'rgba(239, 68, 68, 0.1)', borderRadius: '10px', display: 'flex' }}>
-            <BugReport sx={{ color: '#fca5a5', fontSize: 20 }} />
+          <Box sx={{ p: 1, bgcolor: 'rgba(239, 68, 68, 0.1)', borderRadius: '10px', display: 'flex', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+            <BugReport sx={{ color: 'var(--danger-red)', fontSize: 20 }} />
           </Box>
           <Box>
             <Typography variant="subtitle1" sx={{ fontWeight: 800, color: 'var(--text-main)', lineHeight: 1.2 }}>
