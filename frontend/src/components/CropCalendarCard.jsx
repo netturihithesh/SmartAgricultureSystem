@@ -3,13 +3,13 @@ import { Box, Typography, Paper, IconButton, Stack } from '@mui/material';
 import { ChevronLeft, ChevronRight, CheckCircle, EventAvailable } from '@mui/icons-material';
 
 const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStatus }) => {
-  const [selectedDay, setSelectedDay] = useState(daysPassed);
+  const [selectedDay, setSelectedDay] = useState(1);
   const scrollRef = useRef(null);
 
-  // Scroll to current day on mount
+  // Scroll to sowing date (Day 1) on mount
   useEffect(() => {
-    setSelectedDay(daysPassed);
-  }, [daysPassed]);
+    setSelectedDay(1);
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -32,8 +32,9 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
   const totalDays = selectedCrop.total_duration_days;
   const startMs = new Date(cropStartDate).getTime();
   
-  // Create an array of days from Day 1 to totalDays
-  const daysArray = Array.from({ length: totalDays }, (_, i) => i + 1);
+  // Create an array of days from Day 1 to the present date (daysPassed)
+  const visibleDays = Math.min(totalDays, Math.max(1, daysPassed));
+  const daysArray = Array.from({ length: visibleDays }, (_, i) => i + 1);
 
   const getStageForDay = (dayNum) => {
       let elapsed = 0;
@@ -151,6 +152,11 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
                 {isToday && (
                   <Typography variant="overline" sx={{ position: 'absolute', top: -14, color: 'var(--teal-blue)', fontSize: '9px', fontWeight: 800, letterSpacing: 0.5 }}>
                     TODAY
+                  </Typography>
+                )}
+                {dayNum === 1 && !isToday && (
+                  <Typography variant="overline" sx={{ position: 'absolute', top: -14, color: 'var(--warning-yellow)', fontSize: '9px', fontWeight: 800, letterSpacing: 0.5 }}>
+                    SOWING
                   </Typography>
                 )}
                 

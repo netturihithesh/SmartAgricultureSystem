@@ -67,22 +67,6 @@ const FeaturesPage = () => {
         </Container>
       </Box>
 
-      {/* Bottom CTA */}
-      <Box sx={{ py: '50px', textAlign: 'center', borderTop: `1px solid ${borderColor}` }}>
-        <Container maxWidth="sm">
-          <Typography variant="h2" sx={{ fontSize: '24px', fontWeight: 700, color: textPrimary, mb: '24px' }}>
-            Start optimizing your farm decisions today
-          </Typography>
-          <Button variant="contained" onClick={() => navigate('/register')} sx={{
-            backgroundColor: accentColor, color: isDark ? '#000' : '#fff', height: '48px', px: '32px',
-            borderRadius: '10px', fontSize: '15px', fontWeight: 600, textTransform: 'none',
-            boxShadow: 'none', transition: 'all 0.2s ease',
-            '&:hover': { backgroundColor: isDark ? '#2fe058' : '#1B5E20', transform: 'translateY(-1px)', boxShadow: isDark ? '0 4px 12px rgba(57,255,106, 0.3)' : '0 4px 12px rgba(46, 125, 50, 0.3)' }
-          }}>
-            Get Recommendation
-          </Button>
-        </Container>
-      </Box>
     </Box>
   );
 };

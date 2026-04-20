@@ -6,6 +6,7 @@ import cropDataList from '../data/crop_data.json';
 import AgriBot from '../components/AgriBot';
 import CropCalendarCard from '../components/CropCalendarCard';
 import { getDailyQuote, generateStageSchedule } from '../services/aiService';
+import { fetchWeatherAndAlerts } from '../services/weatherService';
 import './ActionHome.css';
 
 const ActionHome = ({ session }) => {
@@ -31,6 +32,13 @@ const ActionHome = ({ session }) => {
   const [binModalOpen, setBinModalOpen] = useState(false);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [alertConfig, setAlertConfig] = useState({ open: false, message: '', type: 'info' });
+
+  // PEST & DISEASE DETECTION STATE
+  const [isDetecting, setIsDetecting] = useState(false);
+  const [detectionResult, setDetectionResult] = useState(null);
+
+  // WEATHER STATE
+  const [weatherData, setWeatherData] = useState(null);
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -92,6 +100,14 @@ const ActionHome = ({ session }) => {
           } catch (err) {
             setDailyQuote('The ultimate goal of farming is not the growing of crops, but the cultivation and perfection of human beings.');
           }
+
+          // Fetch Weather
+          try {
+            const res = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
+            if (res) setWeatherData(res);
+          } catch (err) {
+            console.error("Weather fetch failed", err);
+          }
         }
       }
       setLoading(false);
@@ -151,6 +167,32 @@ const ActionHome = ({ session }) => {
         tasks.push({ day: 'Regular', task: 'Monitor soil health and water needs' });
       }
       setUpcomingTasks(tasks.slice(0, 3));
+    }
+  };
+
+  const handleDetection = async (file) => {
+    if (!file) return;
+    setIsDetecting(true);
+    setDetectionResult(null);
+    
+    const formData = new FormData();
+    formData.append('image', file);
+    
+    try {
+      const response = await fetch('http://localhost:5000/detect/detect', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!response.ok) throw new Error('Detection failed');
+      
+      const data = await response.json();
+      setDetectionResult(data);
+    } catch (error) {
+      console.error('Detection Error:', error);
+      setAlertConfig({ open: true, message: 'AI Detection failed. Please ensure the backend is running.', type: 'error' });
+    } finally {
+      setIsDetecting(false);
     }
   };
 
@@ -329,7 +371,13 @@ const ActionHome = ({ session }) => {
                   </button>
                 </>
               ) : (
-                <button className="btn-filled" onClick={() => navigate('/add-crop')}>+ Add Crop</button>
+                <div style={{ display: 'flex', gap: '12px' }}>
+                  <button className="btn-filled" onClick={() => navigate('/add-crop')}>+ Add Crop</button>
+                  <button className="btn-outline" onClick={() => navigate('/recommendation')} style={{ border: '1px solid var(--neon-green)', color: 'var(--neon-green)' }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '8px' }}><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    Predict Best Crop
+                  </button>
+                </div>
               )}
             </div>
 
@@ -359,6 +407,32 @@ const ActionHome = ({ session }) => {
             </button>
           </div>
 
+          {!selectedCrop && (
+            <div className="neo-card" style={{ textAlign: 'center', padding: '48px 24px' }}>
+              <div style={{ 
+                width: '64px', 
+                height: '64px', 
+                background: 'var(--neon-green-dim)', 
+                borderRadius: '50%', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                margin: '0 auto 24px',
+                color: 'var(--neon-green)'
+              }}>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              </div>
+              <h3 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-main)', marginBottom: '12px' }}>Start Your Farming Journey</h3>
+              <p style={{ color: 'var(--text-sub)', maxWidth: '400px', margin: '0 auto 32px', lineHeight: 1.6 }}>
+                You don't have any active crops registered. Use our AI Recommendation engine to find the best crop for your soil and climate, or manually add one to start tracking.
+              </p>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
+                <button className="btn-filled" style={{ padding: '12px 32px' }} onClick={() => navigate('/recommendation')}>Predict Best Crop</button>
+                <button className="btn-outline" style={{ padding: '12px 32px' }} onClick={() => navigate('/add-crop')}>Add Manually</button>
+              </div>
+            </div>
+          )}
+
           {/* TODAY'S WORK CARD */}
           {selectedCrop && currentStage && (
             <div className="neo-card" style={{padding: 0}}>
@@ -370,6 +444,55 @@ const ActionHome = ({ session }) => {
                   </div>
                   <div className="day-pill">Day {daysPassed}</div>
                 </div>
+
+                {/* SMART WEATHER ADVISOR */}
+                {weatherData && weatherData.alert && (
+                  <div style={{ 
+                    marginTop: '12px', 
+                    padding: '12px 16px', 
+                    borderRadius: '12px', 
+                    background: weatherData.alert.severity === 'success' ? 'rgba(57, 255, 106, 0.08)' : 'rgba(255, 152, 0, 0.1)',
+                    border: `1px solid ${weatherData.alert.severity === 'success' ? 'rgba(57, 255, 106, 0.2)' : 'rgba(255, 152, 0, 0.3)'}`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px'
+                  }}>
+                    <div style={{ 
+                      width: '36px', 
+                      height: '36px', 
+                      borderRadius: '50%', 
+                      background: weatherData.alert.severity === 'success' ? 'rgba(57, 255, 106, 0.15)' : 'rgba(255, 152, 0, 0.2)',
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      color: weatherData.alert.severity === 'success' ? 'var(--neon-green)' : '#FF9800'
+                    }}>
+                      {weatherData.alert.severity === 'success' ? (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                      ) : (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                      )}
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '13px', fontWeight: 800, color: weatherData.alert.severity === 'success' ? 'var(--neon-green)' : '#F57C00', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        Weather Advisor
+                      </div>
+                      <div style={{ fontSize: '14px', color: 'var(--text-main)', fontWeight: 500, marginTop: '2px' }}>
+                        {(() => {
+                          let message = weatherData.alert.message;
+                          const stageTitle = currentStage?.title?.toLowerCase() || "";
+                          const isInitialPhase = stageTitle.includes('land preparation') || stageTitle.includes('ploughing') || daysPassed <= 3;
+                          
+                          if (isInitialPhase && message.toLowerCase().includes('heat stress on crops')) {
+                            const temp = Math.round(weatherData.weather.main.temp);
+                            return `It is currently ${temp}°C. Wear protective gear and stay hydrated while ploughing. Avoid working during peak heat hours.`;
+                          }
+                          return message;
+                        })()}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
               
               <div className="task-list">
@@ -543,22 +666,22 @@ const ActionHome = ({ session }) => {
             <div className="weather-grid-4">
               <div>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{color: 'var(--text-sub)'}}><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
-                <div className="w-stat-val">28°C</div>
+                <div className="w-stat-val">{weatherData?.weather ? Math.round(weatherData.weather.main.temp) : '--'}°C</div>
                 <div className="w-stat-lbl">TEMP</div>
               </div>
               <div>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{color: 'var(--text-sub)'}}><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-                <div className="w-stat-val">72%</div>
+                <div className="w-stat-val">{weatherData?.weather ? weatherData.weather.main.humidity : '--'}%</div>
                 <div className="w-stat-lbl">HUMID</div>
               </div>
               <div>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{color: 'var(--text-sub)'}}><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>
-                <div className="w-stat-val">12</div>
+                <div className="w-stat-val">{weatherData?.weather ? Math.round(weatherData.weather.wind.speed * 3.6) : '--'}</div>
                 <div className="w-stat-lbl">WIND</div>
               </div>
               <div>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{color: 'var(--text-sub)'}}><path d="M23 12a11.05 11.05 0 0 0-22 0zm-5 7a3 3 0 0 1-6 0v-7"/></svg>
-                <div className="w-stat-val">10%</div>
+                <div className="w-stat-val">{weatherData?.weather ? Math.round(weatherData.weather.pop * 100) : '--'}%</div>
                 <div className="w-stat-lbl">RAIN</div>
               </div>
             </div>
@@ -609,43 +732,129 @@ const ActionHome = ({ session }) => {
             </div>
           )}
 
-          {/* UPCOMING TASKS */}
-          <div className="neo-card">
-            <h3 className="section-title" style={{marginBottom: '20px'}}>Upcoming Tasks</h3>
-            <div className="sb-task-list">
-               {upcomingTasks.length > 0 ? upcomingTasks.map((t, idx) => (
-                 <div key={idx} className="sb-task">
-                   <div className="sb-task-left">
-                     <span className={`sb-pill ${idx===0?'amber':(idx===1?'red':'green')}`}>{t.day}</span>
-                     <span className="sb-title" style={{fontSize: '11px'}}>{t.task}</span>
-                   </div>
+          {/* BOTTOM SPLIT WRAPPER */}
+          <div className="split-wrapper">
+          
+            {/* DISEASE & PEST DETECTION */}
+            <div className="neo-card" style={{ display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
+               <h3 className="section-title" style={{marginBottom: '16px'}}>Disease & Pest Detection</h3>
+               
+               {isDetecting ? (
+                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                    <div style={{ width: '40px', height: '40px', border: '3px solid rgba(57, 255, 106, 0.1)', borderTopColor: 'var(--neon-green)', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+                    <div style={{ marginTop: '16px', fontSize: '13px', color: '#39FF6A', fontWeight: 600 }}>AI Analyzing Image...</div>
                  </div>
-               )) : (
-                 <>
-                   <div className="sb-task">
-                     <div className="sb-task-left">
-                       <span className="sb-pill amber">Day 58</span>
-                       <span className="sb-title">Start Water Management</span>
-                     </div>
-                     <div className="sb-time">+15 days</div>
-                   </div>
-                   <div className="sb-task">
-                     <div className="sb-task-left">
-                       <span className="sb-pill red">Day 98</span>
-                       <span className="sb-title">Start Pest & Disease Control</span>
-                     </div>
-                     <div className="sb-time">+55 days</div>
-                   </div>
-                   <div className="sb-task">
-                     <div className="sb-task-left">
-                       <span className="sb-pill green">Day 118</span>
-                       <span className="sb-title">Start Harvesting</span>
-                     </div>
-                     <div className="sb-time">+75 days</div>
-                   </div>
-                 </>
+               ) : detectionResult ? (
+                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px', padding: '0 4px', textAlign: 'left' }}>
+                    {/* Simplified Disease Name */}
+                    <div style={{ padding: '12px', background: 'rgba(6, 13, 8, 0.98)', borderRadius: '12px', border: '1px solid rgba(57, 255, 106, 0.3)' }}>
+                       <div style={{ fontSize: '10px', color: 'rgba(57, 255, 106, 0.5)', fontWeight: 800, textTransform: 'uppercase', marginBottom: '4px' }}>
+                          AI DIAGNOSIS
+                       </div>
+                       <div style={{ fontSize: '18px', fontWeight: 800, color: '#39FF6A' }}>{detectionResult.disease_name}</div>
+                    </div>
+
+                    {/* Grid for Symptoms and Cause */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                       <div style={{ padding: '10px', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                          <div style={{ fontSize: '9px', color: 'var(--text-secondary)', fontWeight: 700, marginBottom: '2px' }}>SYMPTOMS</div>
+                          <div style={{ fontSize: '11px', color: 'var(--text-primary)', lineHeight: '1.3' }}>{detectionResult.symptoms}</div>
+                       </div>
+                       <div style={{ padding: '10px', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                          <div style={{ fontSize: '9px', color: 'var(--text-secondary)', fontWeight: 700, marginBottom: '2px' }}>POSSIBLE CAUSE</div>
+                          <div style={{ fontSize: '11px', color: 'var(--text-primary)', lineHeight: '1.3' }}>{detectionResult.cause}</div>
+                       </div>
+                    </div>
+
+                    {/* Treatment */}
+                    <div style={{ padding: '12px', background: 'rgba(57, 255, 106, 0.08)', borderRadius: '12px', border: '1px solid rgba(57, 255, 106, 0.2)' }}>
+                       <div style={{ fontSize: '9px', color: '#39FF6A', fontWeight: 800, marginBottom: '4px' }}>TREATMENT & PREVENTION</div>
+                       <div style={{ fontSize: '12px', color: 'var(--text-primary)', fontWeight: 500, lineHeight: '1.4' }}>{detectionResult.treatment}</div>
+                    </div>
+
+                    <button 
+                      onClick={() => setDetectionResult(null)}
+                      style={{ background: 'transparent', border: 'none', color: '#39FF6A', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', cursor: 'pointer', alignSelf: 'center', marginTop: '4px' }}
+                    >
+                      Scan New Image
+                    </button>
+                 </div>
+               ) : (
+                 <div style={{ flex: 1, display: 'flex', gap: '16px' }}>
+                    
+                    {/* Camera Option */}
+                    <div style={{ flex: 1, position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', border: '1px solid rgba(57, 255, 106, 0.2)', borderRadius: '16px', background: 'rgba(57, 255, 106, 0.03)', transition: 'all 0.3s ease', cursor: 'pointer' }}
+                         onMouseOver={(e) => { e.currentTarget.style.borderColor = 'var(--neon-green)'; e.currentTarget.style.background = 'rgba(57, 255, 106, 0.08)'; }}
+                         onMouseOut={(e) => { e.currentTarget.style.borderColor = 'rgba(57, 255, 106, 0.2)'; e.currentTarget.style.background = 'rgba(57, 255, 106, 0.03)'; }}
+                         onClick={() => document.getElementById('camera-upload').click()}
+                    >
+                       <input type="file" id="camera-upload" accept="image/*" capture="environment" style={{ display: 'none' }} onChange={(e) => { if(e.target.files?.length) handleDetection(e.target.files[0]); }} />
+                       <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(57, 255, 106, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--neon-green)', marginBottom: '12px' }}>
+                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                       </div>
+                       <div style={{fontSize: '14px', fontWeight: 700, color: 'var(--text-main)'}}>Take Photo</div>
+                       <div style={{fontSize: '11px', color: 'var(--text-sub)', marginTop: '4px'}}>Use Camera</div>
+                    </div>
+
+                    {/* Upload Option */}
+                    <div style={{ flex: 1, position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', border: '1px dashed rgba(255, 255, 255, 0.2)', borderRadius: '16px', background: 'rgba(255, 255, 255, 0.02)', transition: 'all 0.3s ease', cursor: 'pointer' }}
+                         onMouseOver={(e) => { e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)'; e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'; }}
+                         onMouseOut={(e) => { e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)'; e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)'; }}
+                         onClick={() => document.getElementById('gallery-upload').click()}
+                    >
+                       <input type="file" id="gallery-upload" accept="image/*" style={{ display: 'none' }} onChange={(e) => { if(e.target.files?.length) handleDetection(e.target.files[0]); }} />
+                       <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(255, 255, 255, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-main)', marginBottom: '12px' }}>
+                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                       </div>
+                       <div style={{fontSize: '14px', fontWeight: 700, color: 'var(--text-main)'}}>Upload File</div>
+                       <div style={{fontSize: '11px', color: 'var(--text-sub)', marginTop: '4px'}}>From Gallery</div>
+                    </div>
+
+                 </div>
                )}
             </div>
+
+            {/* UPCOMING TASKS */}
+            {selectedCrop && (
+              <div className="neo-card">
+                <h3 className="section-title" style={{marginBottom: '20px'}}>Upcoming Tasks</h3>
+                <div className="sb-task-list">
+                   {upcomingTasks.length > 0 ? upcomingTasks.map((t, idx) => (
+                     <div key={idx} className="sb-task">
+                       <div className="sb-task-left">
+                         <span className={`sb-pill ${idx===0?'amber':(idx===1?'red':'green')}`}>{t.day}</span>
+                         <span className="sb-title" style={{fontSize: '11px'}}>{t.task}</span>
+                       </div>
+                     </div>
+                   )) : (
+                     <>
+                       <div className="sb-task">
+                         <div className="sb-task-left">
+                           <span className="sb-pill amber">Day 58</span>
+                           <span className="sb-title">Start Water Management</span>
+                         </div>
+                         <div className="sb-time">+15 days</div>
+                       </div>
+                       <div className="sb-task">
+                         <div className="sb-task-left">
+                           <span className="sb-pill red">Day 98</span>
+                           <span className="sb-title">Start Pest & Disease Control</span>
+                         </div>
+                         <div className="sb-time">+55 days</div>
+                       </div>
+                       <div className="sb-task">
+                         <div className="sb-task-left">
+                           <span className="sb-pill green">Day 118</span>
+                           <span className="sb-title">Start Harvesting</span>
+                         </div>
+                         <div className="sb-time">+75 days</div>
+                       </div>
+                     </>
+                   )}
+                </div>
+              </div>
+            )}
+
           </div>
 
         </div>
