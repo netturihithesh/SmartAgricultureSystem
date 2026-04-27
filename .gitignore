@@ -35,3 +35,8 @@ node22/
 
 # Claude Code local settings (contains API keys)
 .claude/settings.local.json
+
+# ML Models
+ml_engine/models/
+*.onnx
+*.onnx.data
