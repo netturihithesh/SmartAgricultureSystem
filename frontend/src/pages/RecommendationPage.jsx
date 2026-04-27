@@ -64,6 +64,7 @@ const RecommendationPage = () => {
 
   const [topCrops, setTopCrops] = useState([]);
   const [maxProfit, setMaxProfit] = useState(1);
+  const [isSyncing, setIsSyncing] = useState(false);
 
   useEffect(() => {
     // Keep it minimal, rely on App.jsx CSS Baseline
@@ -93,6 +94,26 @@ const RecommendationPage = () => {
     };
     fetchProfileAndWeather();
   }, [navigate]);
+
+  const handleSyncPrices = async () => {
+    setIsSyncing(true);
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiUrl}/api/prices/update`, {
+        method: 'POST',
+      });
+      if (response.ok) {
+        alert('Live market prices synced successfully!');
+      } else {
+        alert('Failed to sync prices.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error connecting to the server to sync prices.');
+    } finally {
+      setIsSyncing(false);
+    }
+  };
 
   const handleRecommendation = async () => {
     if (!waterAvailability || !soilType || !cropDurationType) return;
@@ -241,6 +262,19 @@ const RecommendationPage = () => {
               <div style={{ fontSize: '12px', color: theme.earth, fontWeight: 500 }}>{profile.season} · {profile.location?.split(',')[0]}</div>
             </div>
           </div>
+
+          <button 
+            onClick={handleSyncPrices}
+            disabled={isSyncing}
+            style={{
+              width: '100%', background: 'transparent', color: theme.leaf, border: `1.5px solid ${theme.leaf}`, borderRadius: '14px',
+              padding: '10px', fontFamily: theme.fontAccent, fontWeight: 600, fontSize: '13px',
+              cursor: isSyncing ? 'wait' : 'pointer', transition: 'all .2s', marginBottom: '20px',
+              opacity: isSyncing ? 0.6 : 1
+            }}
+          >
+            {isSyncing ? 'Syncing...' : '🔄 Sync Live Prices'}
+          </button>
 
           <button 
             onClick={handleRecommendation}
