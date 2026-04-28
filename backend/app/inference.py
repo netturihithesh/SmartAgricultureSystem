@@ -33,16 +33,16 @@ def load_model():
     global session, class_names
     if session is None:
         if not MODEL_PATH.exists() or not CLASS_NAMES_PATH.exists():
-            print(f"⚠️ Model not found at {MODEL_PATH}")
+            print(f"[*] Model not found at {MODEL_PATH}")
             return False
             
-        print("🧠 Loading ONNX Model Engine into memory...")
+        print("[*] Loading ONNX Model Engine into memory...")
         # providers=['CPUExecutionProvider'] ensures it runs flawlessly anywhere
         session = ort.InferenceSession(str(MODEL_PATH), providers=["CPUExecutionProvider"])
         
         with open(CLASS_NAMES_PATH, "r") as f:
             class_names = json.load(f)
-        print(f"✅ Fast ONNX Engine loaded successfully! Tracking {len(class_names)} diseases.")
+        print(f"[*] Fast ONNX Engine loaded successfully! Tracking {len(class_names)} diseases.")
     return True
 
 @router.on_event("startup")
@@ -119,7 +119,7 @@ async def detect(image: UploadFile = File(...)):
             result["treatment"] = "Crop is healthy! Maintain current irrigation, spacing, and nutrient schedule."
         elif api_key:
             try:
-                print(f"🧠 Local Model detected '{disease_name}'. Asking Gemini for dynamic treatment plans...")
+                print(f"[*] Local Model detected '{disease_name}'. Asking Gemini for dynamic treatment plans...")
                 client = genai.Client(api_key=api_key)
                 prompt = f"An agricultural AI has definitively visually diagnosed a crop with '{disease_name}'. Briefly provide the typical symptoms, biological causes, and the best agricultural treatment for this specific condition."
                 
@@ -137,9 +137,9 @@ async def detect(image: UploadFile = File(...)):
                 result["symptoms"] = info.get("symptoms", result["symptoms"])
                 result["cause"] = info.get("cause", result["cause"])
                 result["treatment"] = info.get("treatment", result["treatment"])
-                print("✅ Dynamic Treatment Plan generated via Gemini API!")
+                print("[*] Dynamic Treatment Plan generated via Gemini API!")
             except Exception as e:
-                print(f"⚠️ Gemini Text API failed, falling back to default text: {e}")
+                print(f"[*] Gemini Text API failed, falling back to default text: {e}")
             
         print(f"--- Fast Hybrid Result: {result['disease_name']} ({confidence}%) ---")
         return JSONResponse(content=result)

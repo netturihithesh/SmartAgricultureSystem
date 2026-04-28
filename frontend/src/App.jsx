@@ -19,6 +19,7 @@ import FarmCalendar from './pages/FarmCalendar';
 import WeatherCenter from './pages/WeatherCenter';
 import FarmAnalytics from './pages/FarmAnalytics';
 import AddCropPage from './pages/AddCropPage';
+import AdminDashboardPage from './pages/AdminDashboardPage';
 import './index.css';
 
 const MainLayout = ({ children }) => (
@@ -73,6 +74,7 @@ function ThemedApp() {
           <Route path="/dashboard/analytics" element={<PrivateRoute session={session}><MainLayout><FarmAnalytics /></MainLayout></PrivateRoute>} />
           <Route path="/recommendation" element={<PrivateRoute session={session}><MainLayout><RecommendationPage /></MainLayout></PrivateRoute>} />
           <Route path="/add-crop" element={<PrivateRoute session={session}><MainLayout><AddCropPage /></MainLayout></PrivateRoute>} />
+          <Route path="/admin" element={<MainLayout><AdminDashboardPage /></MainLayout>} />
 
           {/* Catch all */}
           <Route path="*" element={<Navigate to="/" replace />} />

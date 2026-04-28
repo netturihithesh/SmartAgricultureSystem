@@ -23,14 +23,34 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [session, setSession] = useState(null);
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const checkAdmin = async (currentSession) => {
+    if (!currentSession) {
+      setIsAdmin(false);
+      return;
+    }
+    try {
+      const { data } = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', currentSession.user.id)
+        .single();
+      setIsAdmin(data?.is_admin || false);
+    } catch (e) {
+      setIsAdmin(false);
+    }
+  };
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      checkAdmin(session);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      checkAdmin(session);
     });
 
     return () => subscription?.unsubscribe();
@@ -138,6 +158,15 @@ const Navbar = () => {
                     >
                       Dashboard
                     </Button>
+                    {isAdmin && (
+                      <Button
+                        variant="outlined"
+                        onClick={() => navigate('/admin')}
+                        sx={{ borderColor: accentColor, color: accentColor, fontSize: '14px', textTransform: 'none', fontWeight: 700, borderRadius: '20px', px: 3, '&:hover': { backgroundColor: hoverBg }, boxShadow: 'none' }}
+                      >
+                        Admin Panel
+                      </Button>
+                    )}
                     <Button
                       variant="contained"
                       onClick={() => setLogoutDialogOpen(true)}
@@ -225,6 +254,11 @@ const Navbar = () => {
                 <Button fullWidth variant="outlined" onClick={() => handleNavClick('/dashboard')} sx={{ py: 1.5, borderRadius: '20px', borderColor: dividerColor, color: textColor }}>
                   Dashboard
                 </Button>
+                {isAdmin && (
+                  <Button fullWidth variant="outlined" onClick={() => handleNavClick('/admin')} sx={{ py: 1.5, borderRadius: '20px', borderColor: accentColor, color: accentColor }}>
+                    Admin Panel
+                  </Button>
+                )}
                 <Button fullWidth variant="contained" onClick={() => { setDrawerOpen(false); setLogoutDialogOpen(true); }} sx={{ py: 1.5, borderRadius: '20px', backgroundColor: accentColor, color: isDark ? '#000' : '#fff' }}>
                   Sign Out
                 </Button>
