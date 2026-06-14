@@ -108,7 +108,7 @@ const RecommendationPage = () => {
                 setTemperature(30);
               }
             },
-            { timeout: 6000 }
+            { timeout: 15000, enableHighAccuracy: true }
           );
         } else {
           const rawWeather = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);

@@ -118,7 +118,7 @@ const ActionHome = ({ session }) => {
                   const res = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
                   if (res) setWeatherData(res);
                 },
-                { timeout: 6000 }
+                { timeout: 15000, enableHighAccuracy: true }
               );
             } else {
               const res = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
@@ -152,7 +152,7 @@ const ActionHome = ({ session }) => {
             if (res) setWeatherData(res);
           }
         },
-        { timeout: 8000, enableHighAccuracy: true }
+        { timeout: 15000, enableHighAccuracy: true }
       );
     }
   };
@@ -699,7 +699,7 @@ const ActionHome = ({ session }) => {
               <div>
                 <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   Weather Center
-                  {weatherData?.locationName && (
+                  {weatherData?.isGps && (
                     <span style={{ 
                       fontSize: '9px', 
                       background: 'rgba(57, 255, 106, 0.15)', 
@@ -716,7 +716,9 @@ const ActionHome = ({ session }) => {
                 </h3>
                 <p style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                  {weatherData?.locationName || profile?.location || 'Hyderabad, TG'}
+                  {weatherData?.isGps && weatherData?.coords
+                    ? `${weatherData.locationName} (${weatherData.coords.lat.toFixed(4)}°N, ${weatherData.coords.lon.toFixed(4)}°E)`
+                    : (weatherData?.locationName || profile?.location || 'Hyderabad, TG')}
                 </p>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>

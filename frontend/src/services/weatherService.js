@@ -70,7 +70,12 @@ const generateMockWeather = (locationOrCoords) => {
     weather: currentForecast, 
     alert, 
     forecastList,
-    locationName: state ? `${district}, ${state}` : district
+    locationName: state ? `${district}, ${state}` : district,
+    isGps: locationOrCoords && typeof locationOrCoords === 'object',
+    coords: (locationOrCoords && typeof locationOrCoords === 'object') ? {
+      lat: locationOrCoords.latitude || locationOrCoords.lat || 0,
+      lon: locationOrCoords.longitude || locationOrCoords.lon || 0
+    } : null
   };
 };
 
@@ -216,7 +221,9 @@ export const fetchWeatherAndAlerts = async (locationOrCoords, apiKey) => {
       weather: currentForecast, 
       alert, 
       forecastList: forecastData.list,
-      locationName: city ? (state ? `${city}, ${state}` : city) : ''
+      locationName: city ? (state ? `${city}, ${state}` : city) : '',
+      isGps: isCoords,
+      coords: isCoords ? { lat, lon } : null
     };
 
     // Save the fresh data to cache before returning

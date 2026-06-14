@@ -45,7 +45,7 @@ const WeatherCenter = () => {
         }
         setLoading(false);
       },
-      { timeout: 10000, enableHighAccuracy: true }
+      { timeout: 15000, enableHighAccuracy: true }
     );
   };
 
@@ -72,21 +72,30 @@ const WeatherCenter = () => {
                     setLocationSource('gps');
                   } else {
                     const fb = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
-                    if (fb) setWeatherData(fb);
+                    if (fb) {
+                      setWeatherData(fb);
+                      setLocationSource('profile');
+                    }
                   }
                   setLoading(false);
                 },
                 async (error) => {
                   console.warn("Auto-geolocation fallback:", error);
                   const res = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
-                  if (res) setWeatherData(res);
+                  if (res) {
+                    setWeatherData(res);
+                    setLocationSource('profile');
+                  }
                   setLoading(false);
                 },
-                { timeout: 6000 }
+                { timeout: 15000, enableHighAccuracy: true }
               );
             } else {
               const res = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
-              if (res) setWeatherData(res);
+              if (res) {
+                setWeatherData(res);
+                setLocationSource('profile');
+              }
               setLoading(false);
             }
           }
@@ -152,9 +161,13 @@ const WeatherCenter = () => {
             Live Farm Weather 🌤️
           </Typography>
           <Typography sx={{ color: '#555', fontSize: '15px', mt: 1, display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-            <LocationOn sx={{ color: locationSource === 'gps' ? '#2E7D32' : '#777', fontSize: '18px' }} />
-            <span>{weatherData?.locationName || profile?.location || 'Local'} intelligence and AI spraying advisory.</span>
-            {locationSource === 'gps' && (
+            <LocationOn sx={{ color: weatherData?.isGps ? '#2E7D32' : '#777', fontSize: '18px' }} />
+            <span>
+              {weatherData?.isGps && weatherData?.coords
+                ? `${weatherData.locationName} (${weatherData.coords.lat.toFixed(4)}°N, ${weatherData.coords.lon.toFixed(4)}°E)`
+                : (weatherData?.locationName || profile?.location || 'Local')} intelligence and AI spraying advisory.
+            </span>
+            {weatherData?.isGps && (
               <Chip label="GPS Real-Time" size="small" color="success" variant="outlined" sx={{ height: '20px', fontSize: '10px', fontWeight: 700 }} />
             )}
           </Typography>
