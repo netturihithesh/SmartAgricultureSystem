@@ -103,8 +103,27 @@ const ActionHome = ({ session }) => {
 
           // Fetch Weather
           try {
-            const res = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
-            if (res) setWeatherData(res);
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                  const coords = {
+                    lat: position.coords.latitude,
+                    lon: position.coords.longitude
+                  };
+                  const res = await fetchWeatherAndAlerts(coords, import.meta.env.VITE_OPENWEATHER_API_KEY);
+                  if (res) setWeatherData(res);
+                },
+                async (error) => {
+                  console.warn("Dashboard auto-geolocation fallback:", error);
+                  const res = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
+                  if (res) setWeatherData(res);
+                },
+                { timeout: 6000 }
+              );
+            } else {
+              const res = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
+              if (res) setWeatherData(res);
+            }
           } catch (err) {
             console.error("Weather fetch failed", err);
           }
@@ -114,6 +133,29 @@ const ActionHome = ({ session }) => {
     };
     initPage();
   }, [session]);
+
+  const handleGpsRefresh = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const coords = {
+            lat: position.coords.latitude,
+            lon: position.coords.longitude
+          };
+          const res = await fetchWeatherAndAlerts(coords, import.meta.env.VITE_OPENWEATHER_API_KEY);
+          if (res) setWeatherData(res);
+        },
+        async (error) => {
+          console.warn("Manual geolocation refresh failed:", error);
+          if (profile) {
+            const res = await fetchWeatherAndAlerts(profile.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
+            if (res) setWeatherData(res);
+          }
+        },
+        { timeout: 8000, enableHighAccuracy: true }
+      );
+    }
+  };
 
   const loadCropView = (cropObj) => {
     const crop = cropProcessData.find(c => c.crop_name === cropObj.cropName);
@@ -655,11 +697,51 @@ const ActionHome = ({ session }) => {
           <div className="neo-card">
             <div className="weather-header">
               <div>
-                <h3>Weather Center</h3>
-                <p>{profile?.location || 'Hyderabad, TG'}</p>
+                <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  Weather Center
+                  {weatherData?.locationName && (
+                    <span style={{ 
+                      fontSize: '9px', 
+                      background: 'rgba(57, 255, 106, 0.15)', 
+                      color: 'var(--neon-green)', 
+                      padding: '2px 6px', 
+                      borderRadius: '6px',
+                      fontWeight: 800,
+                      letterSpacing: '0.5px',
+                      textTransform: 'uppercase'
+                    }}>
+                      GPS Active
+                    </span>
+                  )}
+                </h3>
+                <p style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  {weatherData?.locationName || profile?.location || 'Hyderabad, TG'}
+                </p>
               </div>
-              <div className="live-badge">
-                <div className="live-dot"></div> Live
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
+                <div className="live-badge">
+                  <div className="live-dot"></div> Live
+                </div>
+                <button 
+                  onClick={handleGpsRefresh}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: 'var(--neon-green)',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '2px 0'
+                  }}
+                  title="Sync with device GPS"
+                >
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                  Sync GPS
+                </button>
               </div>
             </div>
             

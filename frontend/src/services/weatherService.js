@@ -1,7 +1,17 @@
-const generateMockWeather = (locationString) => {
-  const parts = locationString ? locationString.split(',') : [];
-  const district = parts[0]?.trim() || 'Nizamabad';
-  const state = parts[1]?.trim() || 'Telangana';
+const generateMockWeather = (locationOrCoords) => {
+  let district = 'Nizamabad';
+  let state = 'Telangana';
+
+  if (locationOrCoords && typeof locationOrCoords === 'object') {
+    const lat = locationOrCoords.latitude || locationOrCoords.lat || 0;
+    const lon = locationOrCoords.longitude || locationOrCoords.lon || 0;
+    district = `GPS (${lat.toFixed(2)}°N`;
+    state = `${lon.toFixed(2)}°E)`;
+  } else if (typeof locationOrCoords === 'string') {
+    const parts = locationOrCoords.split(',');
+    district = parts[0]?.trim() || 'Nizamabad';
+    state = parts[1]?.trim() || 'Telangana';
+  }
 
   const currentForecast = {
     dt: Math.floor(Date.now() / 1000),
@@ -56,27 +66,45 @@ const generateMockWeather = (locationString) => {
     });
   }
 
-  return { weather: currentForecast, alert, forecastList };
+  return { 
+    weather: currentForecast, 
+    alert, 
+    forecastList,
+    locationName: state ? `${district}, ${state}` : district
+  };
 };
 
-export const fetchWeatherAndAlerts = async (locationString, apiKey) => {
+export const fetchWeatherAndAlerts = async (locationOrCoords, apiKey) => {
   if (!apiKey) {
     console.warn("OpenWeather API key is missing. Using high-quality mock weather data.");
-    return generateMockWeather(locationString);
+    return generateMockWeather(locationOrCoords);
   }
 
+  const isCoords = locationOrCoords && typeof locationOrCoords === 'object' && 
+                   ('latitude' in locationOrCoords || 'lat' in locationOrCoords) &&
+                   ('longitude' in locationOrCoords || 'lon' in locationOrCoords);
+
   // CACHING LOGIC: Prevent hitting the API on every page reload
-  const CACHE_KEY = `weather_${locationString.replace(/\s+/g, '')}`; // e.g. "weather_Nizamabad,Telangana"
+  let cacheKey;
+  if (isCoords) {
+    const lat = locationOrCoords.latitude || locationOrCoords.lat;
+    const lon = locationOrCoords.longitude || locationOrCoords.lon;
+    cacheKey = `weather_coords_${lat.toFixed(2)}_${lon.toFixed(2)}`;
+  } else if (typeof locationOrCoords === 'string') {
+    cacheKey = `weather_${locationOrCoords.replace(/\s+/g, '')}`;
+  } else {
+    cacheKey = 'weather_default';
+  }
+
   const CACHE_HOURS = 1; // Store data for 1 hour
 
   try {
-    const cachedData = localStorage.getItem(CACHE_KEY);
+    const cachedData = localStorage.getItem(cacheKey);
     if (cachedData) {
       const parsedCache = JSON.parse(cachedData);
       const isFresh = (Date.now() - parsedCache.timestamp) < (CACHE_HOURS * 60 * 60 * 1000);
       
       if (isFresh && parsedCache.data) {
-        // Return instantly from browser memory! No API call made.
         return parsedCache.data;
       }
     }
@@ -85,26 +113,47 @@ export const fetchWeatherAndAlerts = async (locationString, apiKey) => {
   }
 
   try {
-    // 1. Convert State & District to Lat/Lon via Geo API
-    // We expect locationString format: "District, State"
-    const parts = locationString.split(',');
-    const district = parts[0]?.trim() || '';
-    const state = parts[1]?.trim() || '';
-    
-    // We append ",IN" to restrict searches to India
-    const geoResponse = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${district},${state},IN&limit=1&appid=${apiKey}`);
-    const geoData = await geoResponse.json();
+    let lat, lon, city = '', state = '';
 
-    // Check if OpenWeather returned an error object instead of an array (like 401 Unauthorized)
-    if (geoData.cod === '401' || geoData.cod === 401 || geoData.message) {
-      throw new Error(`OpenWeather API Error: ${geoData.message}`);
+    if (isCoords) {
+      lat = locationOrCoords.latitude || locationOrCoords.lat;
+      lon = locationOrCoords.longitude || locationOrCoords.lon;
+      
+      // Reverse geocode to get city name
+      try {
+        const reverseResponse = await fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${apiKey}`);
+        const reverseData = await reverseResponse.json();
+        if (Array.isArray(reverseData) && reverseData.length > 0) {
+          city = reverseData[0].name || '';
+          state = reverseData[0].state || '';
+        }
+      } catch (err) {
+        console.warn("Failed to reverse geocode coordinates", err);
+      }
+    } else {
+      // Convert State & District to Lat/Lon via Geo API
+      const parts = locationOrCoords.split(',');
+      const district = parts[0]?.trim() || '';
+      const statePart = parts[1]?.trim() || '';
+      
+      // We append ",IN" to restrict searches to India
+      const geoResponse = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${district},${statePart},IN&limit=1&appid=${apiKey}`);
+      const geoData = await geoResponse.json();
+
+      // Check if OpenWeather returned an error object instead of an array (like 401 Unauthorized)
+      if (geoData.cod === '401' || geoData.cod === 401 || geoData.message) {
+        throw new Error(`OpenWeather API Error: ${geoData.message}`);
+      }
+
+      if (!Array.isArray(geoData) || geoData.length === 0) {
+        throw new Error("Could not find coordinates for this district.");
+      }
+
+      lat = geoData[0].lat;
+      lon = geoData[0].lon;
+      city = geoData[0].name;
+      state = geoData[0].state || '';
     }
-
-    if (!Array.isArray(geoData) || geoData.length === 0) {
-      throw new Error("Could not find coordinates for this district.");
-    }
-
-    const { lat, lon } = geoData[0];
 
     // 2. Fetch the 5-day / 3-hour Forecast to get Rain Probability (pop) and Wind Speed
     const forecastResponse = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`);
@@ -117,8 +166,6 @@ export const fetchWeatherAndAlerts = async (locationString, apiKey) => {
     const humidity = currentForecast.main.humidity;
     const windSpeed_kmh = Math.round(currentForecast.wind.speed * 3.6); // Convert m/s to km/h
     const rainProbability = currentForecast.pop; // decimal between 0 and 1
-    const condition = currentForecast.weather[0].main; 
-    const description = currentForecast.weather[0].description;
     
     // 4. Generate Smart Farming Alerts based on strict logic rules
     let alert = null;
@@ -165,11 +212,16 @@ export const fetchWeatherAndAlerts = async (locationString, apiKey) => {
       };
     }
 
-    const finalResult = { weather: currentForecast, alert, forecastList: forecastData.list };
+    const finalResult = { 
+      weather: currentForecast, 
+      alert, 
+      forecastList: forecastData.list,
+      locationName: city ? (state ? `${city}, ${state}` : city) : ''
+    };
 
     // Save the fresh data to cache before returning
     try {
-      localStorage.setItem(CACHE_KEY, JSON.stringify({
+      localStorage.setItem(cacheKey, JSON.stringify({
         timestamp: Date.now(),
         data: finalResult
       }));

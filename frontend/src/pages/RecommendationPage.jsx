@@ -67,7 +67,6 @@ const RecommendationPage = () => {
   const [isSyncing, setIsSyncing] = useState(false);
 
   useEffect(() => {
-    // Keep it minimal, rely on App.jsx CSS Baseline
     const fetchProfileAndWeather = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return navigate('/login');
@@ -83,12 +82,42 @@ const RecommendationPage = () => {
           setLandSize(rawNum || '5');
         }
 
-        const rawWeather = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
-        setWeatherSummary(rawWeather);
-        if (rawWeather && rawWeather.weather) {
-          setTemperature(Math.round(rawWeather.weather.main.temp));
+        // Try browser geolocation first!
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            async (position) => {
+              const coords = {
+                lat: position.coords.latitude,
+                lon: position.coords.longitude
+              };
+              const rawWeather = await fetchWeatherAndAlerts(coords, import.meta.env.VITE_OPENWEATHER_API_KEY);
+              setWeatherSummary(rawWeather);
+              if (rawWeather && rawWeather.weather) {
+                setTemperature(Math.round(rawWeather.weather.main.temp));
+              } else {
+                setTemperature(30);
+              }
+            },
+            async (err) => {
+              console.warn("Recommendation auto-geolocation fallback:", err);
+              const rawWeather = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
+              setWeatherSummary(rawWeather);
+              if (rawWeather && rawWeather.weather) {
+                setTemperature(Math.round(rawWeather.weather.main.temp));
+              } else {
+                setTemperature(30);
+              }
+            },
+            { timeout: 6000 }
+          );
         } else {
-          setTemperature(30); 
+          const rawWeather = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
+          setWeatherSummary(rawWeather);
+          if (rawWeather && rawWeather.weather) {
+            setTemperature(Math.round(rawWeather.weather.main.temp));
+          } else {
+            setTemperature(30); 
+          }
         }
       }
     };
@@ -259,7 +288,7 @@ const RecommendationPage = () => {
             <div style={{ fontSize: '28px' }}>☀️</div>
             <div>
               <div style={{ fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '22px', color: theme.gold }}>{temperature !== null ? `${temperature}°C` : '--°C'}</div>
-              <div style={{ fontSize: '12px', color: theme.earth, fontWeight: 500 }}>{profile.season} · {profile.location?.split(',')[0]}</div>
+              <div style={{ fontSize: '12px', color: theme.earth, fontWeight: 500 }}>{profile.season} · {weatherSummary?.locationName?.split(',')[0] || profile.location?.split(',')[0]}</div>
             </div>
           </div>
 

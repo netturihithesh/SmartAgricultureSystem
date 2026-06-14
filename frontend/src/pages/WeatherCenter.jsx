@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Grid, Paper, Avatar, CircularProgress } from '@mui/material';
-import { WbSunny, WaterDrop, Air, Waves, Spoke, DeviceThermostat, Cloud } from '@mui/icons-material';
+import { Box, Typography, Grid, Paper, Avatar, CircularProgress, Button, Chip } from '@mui/material';
+import { WbSunny, WaterDrop, Air, Waves, Spoke, DeviceThermostat, Cloud, MyLocation, LocationOn } from '@mui/icons-material';
 import { supabase } from '../supabase';
 import { fetchWeatherAndAlerts } from '../services/weatherService';
 
@@ -8,6 +8,46 @@ const WeatherCenter = () => {
   const [profile, setProfile] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [locationSource, setLocationSource] = useState('profile'); // 'profile', 'gps'
+  const [gpsError, setGpsError] = useState(null);
+
+  const fetchWeatherWithGps = () => {
+    if (!navigator.geolocation) {
+      setGpsError("Geolocation is not supported by your browser.");
+      return;
+    }
+    setLoading(true);
+    setGpsError(null);
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const coords = {
+          lat: position.coords.latitude,
+          lon: position.coords.longitude
+        };
+        const res = await fetchWeatherAndAlerts(coords, import.meta.env.VITE_OPENWEATHER_API_KEY);
+        if (res) {
+          setWeatherData(res);
+          setLocationSource('gps');
+        } else {
+          setGpsError("Failed to fetch weather for GPS coordinates.");
+        }
+        setLoading(false);
+      },
+      async (error) => {
+        console.warn("Geolocation failed/denied:", error);
+        setGpsError("Location access denied or unavailable.");
+        if (profile) {
+          const res = await fetchWeatherAndAlerts(profile.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
+          if (res) {
+            setWeatherData(res);
+            setLocationSource('profile');
+          }
+        }
+        setLoading(false);
+      },
+      { timeout: 10000, enableHighAccuracy: true }
+    );
+  };
 
   useEffect(() => {
     const loadWeatherContext = async () => {
@@ -17,13 +57,42 @@ const WeatherCenter = () => {
           const { data: profileData } = await supabase.from('profiles').select('*').eq('id', session.user.id).single();
           if (profileData) {
             setProfile(profileData);
-            const res = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
-            if (res) setWeatherData(res);
+            
+            // Try to auto-request location
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                  const coords = {
+                    lat: position.coords.latitude,
+                    lon: position.coords.longitude
+                  };
+                  const res = await fetchWeatherAndAlerts(coords, import.meta.env.VITE_OPENWEATHER_API_KEY);
+                  if (res) {
+                    setWeatherData(res);
+                    setLocationSource('gps');
+                  } else {
+                    const fb = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
+                    if (fb) setWeatherData(fb);
+                  }
+                  setLoading(false);
+                },
+                async (error) => {
+                  console.warn("Auto-geolocation fallback:", error);
+                  const res = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
+                  if (res) setWeatherData(res);
+                  setLoading(false);
+                },
+                { timeout: 6000 }
+              );
+            } else {
+              const res = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
+              if (res) setWeatherData(res);
+              setLoading(false);
+            }
           }
         }
       } catch (e) {
         console.error("Weather init error", e);
-      } finally {
         setLoading(false);
       }
     };
@@ -77,14 +146,45 @@ const WeatherCenter = () => {
     <Box className="weather-container" sx={{ maxWidth: '1200px', margin: '0 auto', padding: { xs: '16px', md: '32px 24px' }, pt: { xs: '90px', md: '110px' }, minHeight: '80vh' }}>
       
       {/* Header */}
-      <Box sx={{ mb: '32px' }}>
-        <Typography variant="h4" sx={{ fontWeight: 800, color: '#111', fontSize: '28px', letterSpacing: '-0.5px' }}>
-          Live Farm Weather 🌤️
-        </Typography>
-        <Typography sx={{ color: '#555', fontSize: '15px', mt: 1 }}>
-          {profile?.location || 'Local'} intelligence and AI spraying advisory.
-        </Typography>
+      <Box sx={{ mb: '32px', display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2 }}>
+        <Box>
+          <Typography variant="h4" sx={{ fontWeight: 800, color: '#111', fontSize: '28px', letterSpacing: '-0.5px' }}>
+            Live Farm Weather 🌤️
+          </Typography>
+          <Typography sx={{ color: '#555', fontSize: '15px', mt: 1, display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+            <LocationOn sx={{ color: locationSource === 'gps' ? '#2E7D32' : '#777', fontSize: '18px' }} />
+            <span>{weatherData?.locationName || profile?.location || 'Local'} intelligence and AI spraying advisory.</span>
+            {locationSource === 'gps' && (
+              <Chip label="GPS Real-Time" size="small" color="success" variant="outlined" sx={{ height: '20px', fontSize: '10px', fontWeight: 700 }} />
+            )}
+          </Typography>
+        </Box>
+        <Button 
+          variant="contained" 
+          startIcon={<MyLocation />} 
+          onClick={fetchWeatherWithGps}
+          sx={{ 
+            backgroundColor: '#2E7D32', 
+            borderRadius: '12px', 
+            textTransform: 'none', 
+            fontWeight: 700, 
+            boxShadow: '0 4px 12px rgba(46,125,50,0.2)',
+            '&:hover': {
+              backgroundColor: '#1b5e20'
+            }
+          }}
+        >
+          Use Device GPS
+        </Button>
       </Box>
+
+      {gpsError && (
+        <Box sx={{ mb: 2, p: '10px 16px', borderRadius: '10px', background: '#ffebee', border: '1px solid #ef5350' }}>
+          <Typography sx={{ color: '#c62828', fontSize: '13px', fontWeight: 600 }}>
+            ⚠️ Geolocation: {gpsError}
+          </Typography>
+        </Box>
+      )}
 
       {/* Hero Advisory Card */}
       <Box className="advisory-banner" sx={{ display: 'flex', alignItems: 'center', gap: '18px', padding: '20px 24px', borderRadius: '20px', backgroundColor: alertInfo.bgColor, border: `1px solid ${alertInfo.iconColor}40`, mb: '28px' }}>
