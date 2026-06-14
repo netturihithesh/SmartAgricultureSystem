@@ -1,7 +1,68 @@
+const generateMockWeather = (locationString) => {
+  const parts = locationString ? locationString.split(',') : [];
+  const district = parts[0]?.trim() || 'Nizamabad';
+  const state = parts[1]?.trim() || 'Telangana';
+
+  const currentForecast = {
+    dt: Math.floor(Date.now() / 1000),
+    main: {
+      temp: 31,
+      humidity: 62,
+    },
+    wind: {
+      speed: 3.3, // ~12 km/h
+    },
+    pop: 0.15,
+    weather: [
+      {
+        main: 'Clear',
+        description: 'scattered clouds',
+      }
+    ]
+  };
+
+  const alert = {
+    title: "✅ Optimal Farming Conditions (Simulated)",
+    message: `Weather in ${district}, ${state} is optimal: 31°C with 12 km/h winds. Clear to proceed with routine spraying and irrigation.`,
+    severity: "success",
+    bgColor: '#F1F8E9',
+    iconColor: '#388E3C'
+  };
+
+  const forecastList = [];
+  const baseTime = Math.floor(Date.now() / 1000);
+  const conditions = ['Clear', 'Clouds', 'Rain', 'Clear', 'Clouds'];
+  
+  for (let i = 0; i < 40; i++) {
+    const timeOffset = i * 3 * 60 * 60;
+    const dayIndex = Math.floor(i / 8);
+    const tempVariance = Math.sin(i / 2) * 4;
+    forecastList.push({
+      dt: baseTime + timeOffset,
+      main: {
+        temp: 29 + tempVariance,
+        humidity: 60 + Math.sin(i) * 10,
+      },
+      wind: {
+        speed: 3 + Math.cos(i) * 1.5,
+      },
+      pop: conditions[dayIndex] === 'Rain' ? 0.70 : 0.1,
+      weather: [
+        {
+          main: conditions[dayIndex],
+          description: conditions[dayIndex] === 'Rain' ? 'light rain' : 'scattered clouds',
+        }
+      ]
+    });
+  }
+
+  return { weather: currentForecast, alert, forecastList };
+};
+
 export const fetchWeatherAndAlerts = async (locationString, apiKey) => {
   if (!apiKey) {
-    console.warn("OpenWeather API key is missing. Using fallback alert for UI testing.");
-    return null; // The UI will fallback to default mock alerts if this is null
+    console.warn("OpenWeather API key is missing. Using high-quality mock weather data.");
+    return generateMockWeather(locationString);
   }
 
   // CACHING LOGIC: Prevent hitting the API on every page reload
@@ -14,7 +75,7 @@ export const fetchWeatherAndAlerts = async (locationString, apiKey) => {
       const parsedCache = JSON.parse(cachedData);
       const isFresh = (Date.now() - parsedCache.timestamp) < (CACHE_HOURS * 60 * 60 * 1000);
       
-      if (isFresh) {
+      if (isFresh && parsedCache.data) {
         // Return instantly from browser memory! No API call made.
         return parsedCache.data;
       }
