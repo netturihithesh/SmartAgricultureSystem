@@ -1,7 +1,7 @@
 [
   {
-    "name": "Paddy(Basmati)",
-    "api_name": "Paddy(Basmati)",
+    "name": "Paddy (Basmati)",
+    "api_name": "Paddy (Basmati)",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -24,8 +24,8 @@
     }
   },
   {
-    "name": "Paddy(Common)",
-    "api_name": "Paddy(Common)",
+    "name": "Paddy (Common)",
+    "api_name": "Paddy (Common)",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -51,7 +51,7 @@
   },
   {
     "name": "Bajra",
-    "api_name": "Bajra(Pearl Millet/Cumbu)",
+    "api_name": "Bajra",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -73,7 +73,7 @@
   },
   {
     "name": "Barley",
-    "api_name": "Barley(Jau)",
+    "api_name": "Barley",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -94,7 +94,7 @@
   },
   {
     "name": "Foxtail Millet",
-    "api_name": "Foxtail Millet(Navane)",
+    "api_name": "Foxtail Millet",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -116,7 +116,7 @@
   },
   {
     "name": "Jowar",
-    "api_name": "Jowar(Sorghum)",
+    "api_name": "Jowar",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -139,7 +139,7 @@
   },
   {
     "name": "Kodo Millet",
-    "api_name": "Kodo Millet(Varagu)",
+    "api_name": "Kodo Millet",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -184,7 +184,7 @@
   },
   {
     "name": "Ragi",
-    "api_name": "Ragi(Finger Millet)",
+    "api_name": "Ragi",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -206,7 +206,7 @@
   },
   {
     "name": "Thinai",
-    "api_name": "Thinai(Italian Millet)",
+    "api_name": "Thinai",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -248,7 +248,7 @@
   },
   {
     "name": "Arhar",
-    "api_name": "Arhar(Tur/Red Gram)(Whole)",
+    "api_name": "Arhar",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -314,7 +314,7 @@
   },
   {
     "name": "Bengal Gram",
-    "api_name": "Bengal Gram(Gram)(Whole)",
+    "api_name": "Bengal Gram",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -335,7 +335,7 @@
   },
   {
     "name": "Black Gram",
-    "api_name": "Black Gram(Urd Beans)(Whole)",
+    "api_name": "Black Gram",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -357,7 +357,7 @@
   },
   {
     "name": "Cowpea",
-    "api_name": "Cowpea(Lobia/Karamani)",
+    "api_name": "Cowpea",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -401,7 +401,7 @@
   },
   {
     "name": "Green Gram",
-    "api_name": "Green Gram(Moong)(Whole)",
+    "api_name": "Green Gram",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -467,7 +467,7 @@
   },
   {
     "name": "Indian Beans",
-    "api_name": "Indian Beans(Seam)",
+    "api_name": "Indian Beans",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -489,7 +489,7 @@
   },
   {
     "name": "Kabuli Chana",
-    "api_name": "Kabuli Chana(Chickpeas-White)",
+    "api_name": "Kabuli Chana",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -510,7 +510,7 @@
   },
   {
     "name": "Kulthi",
-    "api_name": "Kulthi(Horse Gram)",
+    "api_name": "Kulthi",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -533,7 +533,7 @@
   },
   {
     "name": "Lentil",
-    "api_name": "Lentil(Masur)(Whole)",
+    "api_name": "Lentil",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -553,8 +553,8 @@
     }
   },
   {
-    "name": "Pegeon Pea",
-    "api_name": "Pegeon Pea(Arhar Fali)",
+    "name": "Pigeon Pea",
+    "api_name": "Pigeon Pea",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -619,8 +619,8 @@
     }
   },
   {
-    "name": "Ashgourd",
-    "api_name": "Ashgourd",
+    "name": "Ash gourd",
+    "api_name": "Ash gourd",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -663,7 +663,7 @@
   },
   {
     "name": "Bhindi",
-    "api_name": "Bhindi(Ladies Finger)",
+    "api_name": "Bhindi",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -862,8 +862,8 @@
     }
   },
   {
-    "name": "Colacasia",
-    "api_name": "Colacasia",
+    "name": "Colocasia",
+    "api_name": "Colocasia",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -883,8 +883,8 @@
     }
   },
   {
-    "name": "Cucumbar",
-    "api_name": "Cucumbar(Kheera)",
+    "name": "Cucumber",
+    "api_name": "Cucumber",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -931,7 +931,7 @@
   },
   {
     "name": "Elephant Yam",
-    "api_name": "Elephant Yam(Suran)",
+    "api_name": "Elephant Yam",
     "crop_duration_type": "long_term",
     "conditions": {
       "soil_types": [
@@ -952,8 +952,8 @@
     }
   },
   {
-    "name": "Knool Khol",
-    "api_name": "Knool Khol",
+    "name": "Knol Khol",
+    "api_name": "Knol Khol",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -973,7 +973,7 @@
   },
   {
     "name": "Little gourd",
-    "api_name": "Little gourd(Kundru)",
+    "api_name": "Little gourd",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -997,7 +997,7 @@
   },
   {
     "name": "Long Melon",
-    "api_name": "Long Melon(Kakri)",
+    "api_name": "Long Melon",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -1041,7 +1041,7 @@
   },
   {
     "name": "Pea Pod",
-    "api_name": "Pea Pod/Pea Cod/हरी मटर",
+    "api_name": "Pea Pod",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -1062,7 +1062,7 @@
   },
   {
     "name": "Pointed gourd",
-    "api_name": "Pointed gourd(Parval)",
+    "api_name": "Pointed gourd",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -1126,8 +1126,8 @@
     }
   },
   {
-    "name": "Raddish",
-    "api_name": "Raddish",
+    "name": "Radish",
+    "api_name": "Radish",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -1149,8 +1149,8 @@
     }
   },
   {
-    "name": "Ridgeguard",
-    "api_name": "Ridgeguard(Tori)",
+    "name": "Ridge gourd",
+    "api_name": "Ridge gourd",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -1171,8 +1171,8 @@
     }
   },
   {
-    "name": "Round gourd",
-    "api_name": "Round gourd",
+    "name": "Round Gourd (Tinda)",
+    "api_name": "Round Gourd (Tinda)",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -1192,8 +1192,8 @@
     }
   },
   {
-    "name": "Snakeguard",
-    "api_name": "Snakeguard",
+    "name": "Snake gourd",
+    "api_name": "Snake gourd",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -1261,8 +1261,8 @@
     }
   },
   {
-    "name": "Sweet Potato",
-    "api_name": "Sweet Potato",
+    "name": "Sweet potato",
+    "api_name": "Sweet potato",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -1329,7 +1329,7 @@
   },
   {
     "name": "Yam",
-    "api_name": "Yam(Ratalu)",
+    "api_name": "Yam",
     "crop_duration_type": "long_term",
     "conditions": {
       "soil_types": [
@@ -1350,8 +1350,8 @@
     }
   },
   {
-    "name": "Amla",
-    "api_name": "Amla(Nelli Kai)",
+    "name": "Amla (Indian Gooseberry)",
+    "api_name": "Amla (Indian Gooseberry)",
     "crop_duration_type": "perennial",
     "conditions": {
       "soil_types": [
@@ -1393,7 +1393,7 @@
   },
   {
     "name": "Apricot",
-    "api_name": "Apricot(Jardalu/Khumani)",
+    "api_name": "Apricot",
     "crop_duration_type": "perennial",
     "conditions": {
       "soil_types": [
@@ -1434,8 +1434,8 @@
     }
   },
   {
-    "name": "Ber",
-    "api_name": "Ber(Zizyphus/Borehannu)",
+    "name": "Ber (Indian Jujube)",
+    "api_name": "Ber (Indian Jujube)",
     "crop_duration_type": "perennial",
     "conditions": {
       "soil_types": [
@@ -1456,8 +1456,8 @@
     }
   },
   {
-    "name": "Chikoos",
-    "api_name": "Chikoos(Sapota)",
+    "name": "Chikoo (Sapota)",
+    "api_name": "Chikoo (Sapota)",
     "crop_duration_type": "perennial",
     "conditions": {
       "soil_types": [
@@ -1479,8 +1479,8 @@
     }
   },
   {
-    "name": "Custard Apple",
-    "api_name": "Custard Apple(Sharifa)",
+    "name": "Custard Apple (Sitaphal)",
+    "api_name": "Custard Apple (Sitaphal)",
     "crop_duration_type": "perennial",
     "conditions": {
       "soil_types": [
@@ -1502,8 +1502,8 @@
     }
   },
   {
-    "name": "Fig",
-    "api_name": "Fig(Anjura/Anjeer)",
+    "name": "Fig (Anjeer)",
+    "api_name": "Fig (Anjeer)",
     "crop_duration_type": "perennial",
     "conditions": {
       "soil_types": [
@@ -1569,8 +1569,8 @@
     }
   },
   {
-    "name": "Jack Fruit",
-    "api_name": "Jack Fruit",
+    "name": "Jackfruit",
+    "api_name": "Jackfruit",
     "crop_duration_type": "perennial",
     "conditions": {
       "soil_types": [
@@ -1591,8 +1591,8 @@
     }
   },
   {
-    "name": "Jamun",
-    "api_name": "Jamun(Narale Hannu)",
+    "name": "Jamun (Indian Blackberry)",
+    "api_name": "Jamun (Indian Blackberry)",
     "crop_duration_type": "perennial",
     "conditions": {
       "soil_types": [
@@ -1613,8 +1613,8 @@
     }
   },
   {
-    "name": "Kinnow",
-    "api_name": "Kinnow",
+    "name": "Kinnow (Citrus Fruit)",
+    "api_name": "Kinnow (Citrus Fruit)",
     "crop_duration_type": "perennial",
     "conditions": {
       "soil_types": [
@@ -1656,8 +1656,8 @@
     }
   },
   {
-    "name": "Litchi",
-    "api_name": "Litchi",
+    "name": "Litchi (Lychee)",
+    "api_name": "Litchi (Lychee)",
     "crop_duration_type": "perennial",
     "conditions": {
       "soil_types": [
@@ -1698,8 +1698,8 @@
     }
   },
   {
-    "name": "Sweet Lime",
-    "api_name": "Mousambi(Sweet Lime)",
+    "name": "Sweet Lime (Mosambi)",
+    "api_name": "Sweet Lime (Mosambi)",
     "crop_duration_type": "perennial",
     "conditions": {
       "soil_types": [
@@ -1782,7 +1782,7 @@
   },
   {
     "name": "Pear",
-    "api_name": "Pear(Marasebu)",
+    "api_name": "Pear",
     "crop_duration_type": "perennial",
     "conditions": {
       "soil_types": [
@@ -1864,8 +1864,8 @@
     }
   },
   {
-    "name": "Water Melon",
-    "api_name": "Water Melon",
+    "name": "Watermelon",
+    "api_name": "Watermelon",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -1885,7 +1885,7 @@
   },
   {
     "name": "Arecanut",
-    "api_name": "Arecanut(Betelnut/Supari)",
+    "api_name": "Arecanut",
     "crop_duration_type": "perennial",
     "conditions": {
       "soil_types": [
@@ -1926,8 +1926,8 @@
     }
   },
   {
-    "name": "Cardamoms",
-    "api_name": "Cardamoms",
+    "name": "Cardamom",
+    "api_name": "Cardamom",
     "crop_duration_type": "perennial",
     "conditions": {
       "soil_types": [
@@ -1946,8 +1946,8 @@
     }
   },
   {
-    "name": "Cashewnuts",
-    "api_name": "Cashewnuts",
+    "name": "Cashew",
+    "api_name": "Cashew",
     "crop_duration_type": "perennial",
     "conditions": {
       "soil_types": [
@@ -1990,8 +1990,8 @@
     }
   },
   {
-    "name": "Chili Red",
-    "api_name": "Chili Red",
+    "name": "Red Chili",
+    "api_name": "Red Chili",
     "crop_duration_type": "long_term",
     "conditions": {
       "soil_types": [
@@ -2012,8 +2012,8 @@
     }
   },
   {
-    "name": "Cloves",
-    "api_name": "Cloves",
+    "name": "Clove",
+    "api_name": "Clove",
     "crop_duration_type": "perennial",
     "conditions": {
       "soil_types": [
@@ -2053,7 +2053,7 @@
   },
   {
     "name": "Coriander",
-    "api_name": "Coriander(Leaves/Seed)",
+    "api_name": "Coriander",
     "crop_duration_type": "short_term",
     "conditions": {
       "soil_types": [
@@ -2115,7 +2115,7 @@
   },
   {
     "name": "Ginger",
-    "api_name": "Ginger(Green)",
+    "api_name": "Ginger",
     "crop_duration_type": "long_term",
     "conditions": {
       "soil_types": [

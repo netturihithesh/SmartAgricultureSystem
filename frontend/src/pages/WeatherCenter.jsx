@@ -8,46 +8,6 @@ const WeatherCenter = () => {
   const [profile, setProfile] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [locationSource, setLocationSource] = useState('profile'); // 'profile', 'gps'
-  const [gpsError, setGpsError] = useState(null);
-
-  const fetchWeatherWithGps = () => {
-    if (!navigator.geolocation) {
-      setGpsError("Geolocation is not supported by your browser.");
-      return;
-    }
-    setLoading(true);
-    setGpsError(null);
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const coords = {
-          lat: position.coords.latitude,
-          lon: position.coords.longitude
-        };
-        const res = await fetchWeatherAndAlerts(coords, import.meta.env.VITE_OPENWEATHER_API_KEY);
-        if (res) {
-          setWeatherData(res);
-          setLocationSource('gps');
-        } else {
-          setGpsError("Failed to fetch weather for GPS coordinates.");
-        }
-        setLoading(false);
-      },
-      async (error) => {
-        console.warn("Geolocation failed/denied:", error);
-        setGpsError("Location access denied or unavailable.");
-        if (profile) {
-          const res = await fetchWeatherAndAlerts(profile.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
-          if (res) {
-            setWeatherData(res);
-            setLocationSource('profile');
-          }
-        }
-        setLoading(false);
-      },
-      { timeout: 15000, enableHighAccuracy: true }
-    );
-  };
 
   useEffect(() => {
     const loadWeatherContext = async () => {
@@ -58,50 +18,15 @@ const WeatherCenter = () => {
           if (profileData) {
             setProfile(profileData);
             
-            // Try to auto-request location
-            if (navigator.geolocation) {
-              navigator.geolocation.getCurrentPosition(
-                async (position) => {
-                  const coords = {
-                    lat: position.coords.latitude,
-                    lon: position.coords.longitude
-                  };
-                  const res = await fetchWeatherAndAlerts(coords, import.meta.env.VITE_OPENWEATHER_API_KEY);
-                  if (res) {
-                    setWeatherData(res);
-                    setLocationSource('gps');
-                  } else {
-                    const fb = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
-                    if (fb) {
-                      setWeatherData(fb);
-                      setLocationSource('profile');
-                    }
-                  }
-                  setLoading(false);
-                },
-                async (error) => {
-                  console.warn("Auto-geolocation fallback:", error);
-                  const res = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
-                  if (res) {
-                    setWeatherData(res);
-                    setLocationSource('profile');
-                  }
-                  setLoading(false);
-                },
-                { timeout: 15000, enableHighAccuracy: true }
-              );
-            } else {
-              const res = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
-              if (res) {
-                setWeatherData(res);
-                setLocationSource('profile');
-              }
-              setLoading(false);
+            const res = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
+            if (res) {
+              setWeatherData(res);
             }
           }
         }
       } catch (e) {
         console.error("Weather init error", e);
+      } finally {
         setLoading(false);
       }
     };
@@ -161,43 +86,13 @@ const WeatherCenter = () => {
             Live Farm Weather 🌤️
           </Typography>
           <Typography sx={{ color: '#555', fontSize: '15px', mt: 1, display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-            <LocationOn sx={{ color: weatherData?.isGps ? '#2E7D32' : '#777', fontSize: '18px' }} />
+            <LocationOn sx={{ color: '#2E7D32', fontSize: '18px' }} />
             <span>
-              {weatherData?.isGps && weatherData?.coords
-                ? `${weatherData.locationName} (${weatherData.coords.lat.toFixed(4)}°N, ${weatherData.coords.lon.toFixed(4)}°E)`
-                : (weatherData?.locationName || profile?.location || 'Local')} intelligence and AI spraying advisory.
+              {weatherData?.locationName || profile?.location || 'Local'} intelligence and AI spraying advisory.
             </span>
-            {weatherData?.isGps && (
-              <Chip label="GPS Real-Time" size="small" color="success" variant="outlined" sx={{ height: '20px', fontSize: '10px', fontWeight: 700 }} />
-            )}
           </Typography>
         </Box>
-        <Button 
-          variant="contained" 
-          startIcon={<MyLocation />} 
-          onClick={fetchWeatherWithGps}
-          sx={{ 
-            backgroundColor: '#2E7D32', 
-            borderRadius: '12px', 
-            textTransform: 'none', 
-            fontWeight: 700, 
-            boxShadow: '0 4px 12px rgba(46,125,50,0.2)',
-            '&:hover': {
-              backgroundColor: '#1b5e20'
-            }
-          }}
-        >
-          Use Device GPS
-        </Button>
       </Box>
-
-      {gpsError && (
-        <Box sx={{ mb: 2, p: '10px 16px', borderRadius: '10px', background: '#ffebee', border: '1px solid #ef5350' }}>
-          <Typography sx={{ color: '#c62828', fontSize: '13px', fontWeight: 600 }}>
-            ⚠️ Geolocation: {gpsError}
-          </Typography>
-        </Box>
-      )}
 
       {/* Hero Advisory Card */}
       <Box className="advisory-banner" sx={{ display: 'flex', alignItems: 'center', gap: '18px', padding: '20px 24px', borderRadius: '20px', backgroundColor: alertInfo.bgColor, border: `1px solid ${alertInfo.iconColor}40`, mb: '28px' }}>

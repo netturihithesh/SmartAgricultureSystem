@@ -50,10 +50,10 @@ const PrivateRoute = ({ session, children }) => {
 
   if (isBlocked) {
     return (
-      <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', bgcolor: '#0A0D0B', color: '#e2e8f0' }}>
+      <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', bgcolor: '#F6F1EB', color: '#1E2B1A' }}>
         <Block sx={{ fontSize: 80, color: 'error.main', mb: 2 }} />
         <Typography variant="h3" fontWeight="bold" gutterBottom>Account Suspended</Typography>
-        <Typography variant="body1" sx={{ color: '#94a3b8', mb: 4 }}>
+        <Typography variant="body1" sx={{ color: '#5A6B54', mb: 4 }}>
           Your account has been blocked by an administrator. Please contact support.
         </Typography>
         <Button 

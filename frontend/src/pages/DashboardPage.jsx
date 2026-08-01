@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Grid, Paper, CircularProgress, Chip, Divider, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Autocomplete } from '@mui/material';
+import { Box, Typography, Grid, Paper, CircularProgress, Chip, Divider, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Autocomplete, useTheme } from '@mui/material';
 import { LocationOn, SquareFoot, Terrain, AccountCircle, Spa, TrendingUp, MonetizationOn, Flag, Edit } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabase';
@@ -8,6 +8,7 @@ import statesData from '../data/statesDistricts.json';
 
 const DashboardPage = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState(null);
 
@@ -112,10 +113,10 @@ const DashboardPage = () => {
   return (
     <Box sx={{ p: { xs: 2, md: 4, lg: 6 }, mt: { xs: 2, md: 4 }, maxWidth: '1300px', margin: '0 auto', minHeight: '80vh' }}>
       
-      <Typography variant="h3" sx={{ fontWeight: 800, color: '#111', mb: 1, fontSize: { xs: '28px', md: '36px' } }}>
+      <Typography variant="h3" sx={{ fontWeight: 800, color: 'text.primary', mb: 1, fontSize: { xs: '28px', md: '36px' } }}>
         Farm Dashboard
       </Typography>
-      <Typography sx={{ fontSize: '16px', color: '#666', mb: 5, fontWeight: 500 }}>
+      <Typography sx={{ fontSize: '16px', color: 'text.secondary', mb: 5, fontWeight: 500 }}>
         Detailed analytics, history, and farm health tracking.
       </Typography>
 
@@ -123,15 +124,15 @@ const DashboardPage = () => {
         
         {/* LEF T / TOP -> Profile Card */}
         <Grid size={{ xs: 12, md: 4, lg: 3 }}>
-          <Paper sx={{ p: 3, borderRadius: '24px', backgroundColor: '#fff', boxShadow: '0 16px 40px rgba(0,0,0,0.06)', position: 'sticky', top: '100px' }}>
+          <Paper sx={{ p: 3, borderRadius: '24px', backgroundColor: 'background.paper', border: '1px solid', borderColor: 'divider', boxShadow: '0 16px 40px rgba(0,0,0,0.06)', position: 'sticky', top: '100px' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 3, textAlign: 'center' }}>
               <Box sx={{ width: 80, height: 80, borderRadius: '24px', backgroundColor: '#E8F5E9', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
                 <AccountCircle sx={{ fontSize: '50px', color: '#2E7D32' }} />
               </Box>
-              <Typography variant="h5" sx={{ fontWeight: 800, color: '#111', mb: 0.5, wordBreak: 'break-word', whiteSpace: 'normal', overflowWrap: 'break-word' }}>
+              <Typography variant="h5" sx={{ fontWeight: 800, color: 'text.primary', mb: 0.5, wordBreak: 'break-word', whiteSpace: 'normal', overflowWrap: 'break-word' }}>
                 {profile.full_name}
               </Typography>
-              <Chip icon={<LocationOn sx={{ fontSize: '16px' }} />} label={profile.location} size="small" sx={{ backgroundColor: '#F1F8E9', color: '#33691E', fontWeight: 600, mb: 2 }} />
+              <Chip icon={<LocationOn sx={{ fontSize: '16px' }} />} label={profile.location} size="small" sx={{ backgroundColor: theme.palette.mode === 'light' ? '#F1F8E9' : 'rgba(139, 195, 74, 0.15)', color: theme.palette.mode === 'light' ? '#33691E' : '#a3e635', fontWeight: 600, mb: 2 }} />
               <Button variant="outlined" size="small" startIcon={<Edit />} onClick={() => setEditOpen(true)} sx={{ borderRadius: '8px', textTransform: 'none', color: '#2E7D32', borderColor: '#2E7D32' }}>
                 Edit Profile
               </Button>
@@ -141,17 +142,17 @@ const DashboardPage = () => {
 
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Box sx={{ width: 40, height: 40, borderRadius: '12px', backgroundColor: '#F5F5F5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Terrain sx={{ color: '#5D4037' }} /></Box>
+                <Box sx={{ width: 40, height: 40, borderRadius: '12px', backgroundColor: theme.palette.mode === 'light' ? '#F5F5F5' : '#1a241e', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Terrain sx={{ color: '#5D4037' }} /></Box>
                 <Box>
-                  <Typography sx={{ fontSize: '12px', color: '#888', fontWeight: 700, textTransform: 'uppercase' }}>Soil Type</Typography>
-                  <Typography sx={{ fontSize: '15px', color: '#222', fontWeight: 700 }}>{profile.soil_type}</Typography>
+                  <Typography sx={{ fontSize: '12px', color: 'text.secondary', fontWeight: 700, textTransform: 'uppercase' }}>Soil Type</Typography>
+                  <Typography sx={{ fontSize: '15px', color: 'text.primary', fontWeight: 700 }}>{profile.soil_type}</Typography>
                 </Box>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Box sx={{ width: 40, height: 40, borderRadius: '12px', backgroundColor: '#F5F5F5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><SquareFoot sx={{ color: '#E64A19' }} /></Box>
+                <Box sx={{ width: 40, height: 40, borderRadius: '12px', backgroundColor: theme.palette.mode === 'light' ? '#F5F5F5' : '#1a241e', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><SquareFoot sx={{ color: '#E64A19' }} /></Box>
                 <Box>
-                  <Typography sx={{ fontSize: '12px', color: '#888', fontWeight: 700, textTransform: 'uppercase' }}>Land Size</Typography>
-                  <Typography sx={{ fontSize: '15px', color: '#222', fontWeight: 700 }}>{profile.land_size}</Typography>
+                  <Typography sx={{ fontSize: '12px', color: 'text.secondary', fontWeight: 700, textTransform: 'uppercase' }}>Land Size</Typography>
+                  <Typography sx={{ fontSize: '15px', color: 'text.primary', fontWeight: 700 }}>{profile.land_size}</Typography>
                 </Box>
               </Box>
             </Box>
@@ -171,31 +172,31 @@ const DashboardPage = () => {
 
             {/* Analytics Snapshot */}
             <Grid size={{ xs: 12, sm: 6 }}>
-              <Paper sx={{ p: 4, borderRadius: '24px', backgroundColor: '#fff', boxShadow: '0 8px 30px rgba(0,0,0,0.04)', height: '100%', border: '1px solid #F0F0F0' }}>
+              <Paper sx={{ p: 4, borderRadius: '24px', backgroundColor: 'background.paper', boxShadow: '0 8px 30px rgba(0,0,0,0.04)', height: '100%', border: '1px solid', borderColor: 'divider' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
                   <TrendingUp sx={{ color: '#D84315' }} />
-                  <Typography sx={{ fontSize: '18px', fontWeight: 800, color: '#333' }}>Analytics Snapshot</Typography>
+                  <Typography sx={{ fontSize: '18px', fontWeight: 800, color: 'text.primary' }}>Analytics Snapshot</Typography>
                 </Box>
                 <Grid container spacing={2}>
                   <Grid size={{ xs: 6 }}>
-                    <Box sx={{ backgroundColor: '#FAFAFA', p: 2, borderRadius: '16px', border: '1px solid #EEE' }}>
-                      <Typography sx={{ fontSize: '12px', color: '#888', fontWeight: 700, mb: 0.5 }}>AVG YIELD</Typography>
-                      <Typography sx={{ fontSize: '20px', color: '#111', fontWeight: 800 }}>2.5 tons</Typography>
+                    <Box sx={{ backgroundColor: theme.palette.mode === 'light' ? '#FAFAFA' : '#1a241e', p: 2, borderRadius: '16px', border: '1px solid', borderColor: 'divider' }}>
+                      <Typography sx={{ fontSize: '12px', color: 'text.secondary', fontWeight: 700, mb: 0.5 }}>AVG YIELD</Typography>
+                      <Typography sx={{ fontSize: '20px', color: 'text.primary', fontWeight: 800 }}>2.5 tons</Typography>
                     </Box>
                   </Grid>
                   <Grid size={{ xs: 6 }}>
-                    <Box sx={{ backgroundColor: '#FAFAFA', p: 2, borderRadius: '16px', border: '1px solid #EEE' }}>
-                      <Typography sx={{ fontSize: '12px', color: '#888', fontWeight: 700, mb: 0.5 }}>PROFIT</Typography>
+                    <Box sx={{ backgroundColor: theme.palette.mode === 'light' ? '#FAFAFA' : '#1a241e', p: 2, borderRadius: '16px', border: '1px solid', borderColor: 'divider' }}>
+                      <Typography sx={{ fontSize: '12px', color: 'text.secondary', fontWeight: 700, mb: 0.5 }}>PROFIT</Typography>
                       <Typography sx={{ fontSize: '20px', color: '#2E7D32', fontWeight: 800 }}>₹45,000</Typography>
                     </Box>
                   </Grid>
                   <Grid size={{ xs: 12 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#FFF59D', p: 2, borderRadius: '16px', border: '1px solid #FFF176' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: theme.palette.mode === 'light' ? '#FFF59D' : 'rgba(253, 224, 71, 0.15)', p: 2, borderRadius: '16px', border: '1px solid', borderColor: theme.palette.mode === 'light' ? '#FFF176' : 'rgba(253, 224, 71, 0.3)' }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <MonetizationOn sx={{ color: '#F57F17' }} />
-                        <Typography sx={{ fontSize: '13px', color: '#F57F17', fontWeight: 700 }}>BEST CROP</Typography>
+                        <MonetizationOn sx={{ color: theme.palette.mode === 'light' ? '#F57F17' : '#fde047' }} />
+                        <Typography sx={{ fontSize: '13px', color: theme.palette.mode === 'light' ? '#F57F17' : '#fde047', fontWeight: 700 }}>BEST CROP</Typography>
                       </Box>
-                      <Typography sx={{ fontSize: '16px', color: '#444', fontWeight: 800 }}>Paddy</Typography>
+                      <Typography sx={{ fontSize: '16px', color: 'text.primary', fontWeight: 800 }}>Paddy</Typography>
                     </Box>
                   </Grid>
                 </Grid>
@@ -204,33 +205,33 @@ const DashboardPage = () => {
           </Grid>
 
           {/* Crop History Timeline */}
-          <Paper sx={{ p: 4, borderRadius: '24px', backgroundColor: '#fff', boxShadow: '0 8px 30px rgba(0,0,0,0.04)', border: '1px solid #F0F0F0' }}>
+          <Paper sx={{ p: 4, borderRadius: '24px', backgroundColor: 'background.paper', boxShadow: '0 8px 30px rgba(0,0,0,0.04)', border: '1px solid', borderColor: 'divider' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 4 }}>
               <Spa sx={{ color: '#2E7D32' }} />
-              <Typography sx={{ fontSize: '20px', fontWeight: 800, color: '#333' }}>Crop History</Typography>
+              <Typography sx={{ fontSize: '20px', fontWeight: 800, color: 'text.primary' }}>Crop History</Typography>
             </Box>
             
             {(profile.crop_history && profile.crop_history.length > 0) ? (
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0, position: 'relative' }}>
-                <Box sx={{ position: 'absolute', top: '24px', bottom: '24px', left: '23px', width: '2px', backgroundColor: '#EEEEEE' }} />
+                <Box sx={{ position: 'absolute', top: '24px', bottom: '24px', left: '23px', width: '2px', backgroundColor: 'divider' }} />
                 
                 {profile.crop_history.map((crop, index) => (
                   <Box key={index} sx={{ display: 'flex', gap: 3, position: 'relative', mb: index !== profile.crop_history.length - 1 ? 3 : 0 }}>
-                    <Box sx={{ width: 48, height: 48, borderRadius: '50%', backgroundColor: '#E8F5E9', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1, border: '4px solid #fff' }}>
+                    <Box sx={{ width: 48, height: 48, borderRadius: '50%', backgroundColor: theme.palette.mode === 'light' ? '#E8F5E9' : '#1a241e', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1, border: '4px solid', borderColor: 'background.paper' }}>
                       <Flag sx={{ color: '#2E7D32', fontSize: '20px' }} />
                     </Box>
                     <Box sx={{ pt: 1, pb: 2, flex: 1 }}>
-                      <Typography sx={{ fontSize: '18px', fontWeight: 700, color: '#222' }}>{crop.name}</Typography>
-                      <Typography sx={{ fontSize: '14px', color: '#888', fontWeight: 600 }}>{crop.season} {crop.year}</Typography>
+                      <Typography sx={{ fontSize: '18px', fontWeight: 700, color: 'text.primary' }}>{crop.name}</Typography>
+                      <Typography sx={{ fontSize: '14px', color: 'text.secondary', fontWeight: 600 }}>{crop.season} {crop.year}</Typography>
                     </Box>
                   </Box>
                 ))}
               </Box>
             ) : (
-              <Box sx={{ p: 4, textAlign: 'center', backgroundColor: '#FAFAFA', borderRadius: '16px', border: '2px dashed #EEE' }}>
+              <Box sx={{ p: 4, textAlign: 'center', backgroundColor: theme.palette.mode === 'light' ? '#FAFAFA' : '#1a241e', borderRadius: '16px', border: '2px dashed', borderColor: 'divider' }}>
                 <Spa sx={{ fontSize: '40px', color: '#BDBDBD', mb: 1 }} />
-                <Typography sx={{ color: '#555', fontWeight: 700, fontSize: '16px' }}>No crop history recorded yet.</Typography>
-                <Typography sx={{ color: '#888', fontSize: '14px', mt: 1, maxWidth: '300px', mx: 'auto' }}>
+                <Typography sx={{ color: 'text.primary', fontWeight: 700, fontSize: '16px' }}>No crop history recorded yet.</Typography>
+                <Typography sx={{ color: 'text.secondary', fontSize: '14px', mt: 1, maxWidth: '300px', mx: 'auto' }}>
                   Once you complete a farming season and record your yield, your crop history will appear here.
                 </Typography>
               </Box>

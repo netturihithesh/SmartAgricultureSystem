@@ -8,6 +8,93 @@ import { useNavigate } from 'react-router-dom';
 import { getAiCompletion } from '../services/aiService';
 import { supabase } from '../supabase';
 
+// Lightweight markdown renderer — no extra library needed
+const MarkdownMessage = ({ content, color }) => {
+  const parseInline = (text) => {
+    const parts = [];
+    // Regex to match **bold**, *italic*, `code`
+    const regex = /\*\*(.+?)\*\*|\*(.+?)\*|`([^`]+)`/g;
+    let last = 0;
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+      if (match.index > last) parts.push(text.slice(last, match.index));
+      if (match[1]) parts.push(<strong key={match.index}>{match[1]}</strong>);
+      else if (match[2]) parts.push(<em key={match.index}>{match[2]}</em>);
+      else if (match[3]) parts.push(
+        <code key={match.index} style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 4, padding: '1px 5px', fontFamily: 'monospace', fontSize: '0.85em' }}>
+          {match[3]}
+        </code>
+      );
+      last = match.index + match[0].length;
+    }
+    if (last < text.length) parts.push(text.slice(last));
+    return parts.length ? parts : text;
+  };
+
+  const lines = content.split('\n');
+  const elements = [];
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i].trim();
+    if (!line) { elements.push(<br key={i} />); i++; continue; }
+
+    // Numbered list item: "1. text"
+    const numMatch = line.match(/^(\d+)\.\s+(.*)/);
+    if (numMatch) {
+      const startNum = parseInt(numMatch[1], 10);
+      const listItems = [];
+      while (i < lines.length) {
+        const l = lines[i].trim();
+        const m = l.match(/^(\d+)\.\s+(.*)/);
+        if (!m) break;
+        listItems.push(<li key={i} style={{ marginBottom: 2 }}>{parseInline(m[2])}</li>);
+        i++;
+      }
+      elements.push(<ol key={`ol-${i}`} start={startNum} style={{ margin: '4px 0', paddingLeft: 20 }}>{listItems}</ol>);
+      continue;
+    }
+
+    // Bullet: "* text" or "- text"
+    const bulletMatch = line.match(/^[\*\-]\s+(.*)/);
+    if (bulletMatch) {
+      const listItems = [];
+      while (i < lines.length) {
+        const l = lines[i].trim();
+        const m = l.match(/^[\*\-]\s+(.*)/);
+        if (!m) break;
+        listItems.push(<li key={i} style={{ marginBottom: 2 }}>{parseInline(m[1])}</li>);
+        i++;
+      }
+      elements.push(<ul key={`ul-${i}`} style={{ margin: '4px 0', paddingLeft: 20 }}>{listItems}</ul>);
+      continue;
+    }
+
+    // Heading: "## text"
+    const headingMatch = line.match(/^#+\s+(.*)/);
+    if (headingMatch) {
+      elements.push(
+        <p key={i} style={{ fontWeight: 800, fontSize: '0.95em', margin: '6px 0 2px' }}>
+          {parseInline(headingMatch[1])}
+        </p>
+      );
+      i++;
+      continue;
+    }
+
+    // Normal paragraph
+    elements.push(
+      <p key={i} style={{ margin: '2px 0' }}>{parseInline(line)}</p>
+    );
+    i++;
+  }
+
+  return (
+    <div style={{ fontSize: '0.875rem', lineHeight: 1.6, fontWeight: 500, color }}>
+      {elements}
+    </div>
+  );
+};
+
 const AgriBot = () => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === 'dark';
@@ -182,7 +269,7 @@ const AgriBot = () => {
 
       {/* Floating Action Button area */}
       {!isOpen && (
-        <Box sx={{ position: 'fixed', bottom: { xs: 20, lg: 40 }, right: { xs: 16, lg: 40 }, zIndex: 1000, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 1.5 }}>
+        <Box sx={{ position: 'fixed', bottom: { xs: 20, lg: 32 }, right: { xs: 20, lg: 32 }, zIndex: 1000, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 1.5 }}>
           <Fade in={!isOpen} timeout={1000}>
             <Box sx={{
               display: { xs: 'none', sm: 'block' },
@@ -228,8 +315,8 @@ const AgriBot = () => {
           elevation={16}
           sx={{
             position: 'fixed',
-            bottom: { xs: 80, lg: 40 },
-            right: { xs: 'auto', lg: 40 },
+            bottom: { xs: 80, lg: 32 },
+            right: { xs: 'auto', lg: 32 },
             left: { xs: '50%', lg: 'auto' },
             transform: { xs: 'translateX(-50%)', lg: 'none' },
             width: { xs: 'calc(100% - 32px)', lg: 380 },
@@ -302,9 +389,13 @@ const AgriBot = () => {
                     border: msg.role === 'assistant' ? (isDarkMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.05)') : 'none'
                   }}
                 >
-                  <Typography variant="body2" sx={{ lineHeight: 1.5, fontWeight: 500 }}>
-                    {msg.content}
-                  </Typography>
+                  <MarkdownMessage
+                    content={msg.content}
+                    color={msg.role === 'user'
+                      ? (isDarkMode ? '#000' : '#fff')
+                      : (isDarkMode ? '#e2e8f0' : '#334155')
+                    }
+                  />
                 </Paper>
                 {msg.role === 'user' && (
                   <Avatar sx={{ bgcolor: 'rgba(57,255,106,0.2)', width: 32, height: 32, mt: 0.5 }}>

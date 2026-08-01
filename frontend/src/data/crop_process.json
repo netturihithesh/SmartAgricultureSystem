@@ -87,90 +87,95 @@
     ]
   },
   {
-    "crop_name": "Paddy(Common)",
+    "crop_name": "Paddy (Common)",
     "total_duration_days": 120,
     "stages": [
       {
         "stage_id": 1,
         "title": "Land Preparation",
-        "duration_days": 7,
+        "duration_days": 10,
         "substeps": [
-          "Plough the land",
-          "Level the field",
-          "Add farmyard manure"
+          { "task": "Plough the field thoroughly", "day": 1 },
+          { "task": "Apply farmyard manure (FYM)", "day": 3 },
+          { "task": "Flood field for puddling", "day": 6 },
+          { "task": "Puddling and leveling", "day": 9 }
         ]
       },
       {
         "stage_id": 2,
-        "title": "Seed Preparation & Nursery",
-        "duration_days": 15,
+        "title": "Nursery Raising",
+        "duration_days": 20,
         "substeps": [
-          "Select certified seeds",
-          "Seed treatment with fungicide",
-          "Soak seeds",
-          "Prepare nursery bed",
-          "Sow seeds in nursery"
+          { "task": "Seed treatment", "day": 10 },
+          { "task": "Prepare nursery bed", "day": 11 },
+          { "task": "Sow seeds in nursery", "day": 12 },
+          { "task": "Maintain water in nursery", "day": 15 },
+          { "task": "Grow seedlings (15-20 days)", "day": 20 }
         ]
       },
       {
         "stage_id": 3,
-        "title": "Transplantation",
+        "title": "Transplanting",
         "duration_days": 5,
         "substeps": [
-          "Uproot seedlings",
-          "Maintain spacing",
-          "Flood the field lightly"
+          { "task": "Uproot seedlings from nursery", "day": 22 },
+          { "task": "Transport to main field", "day": 23 },
+          { "task": "Transplant seedlings with proper spacing", "day": 24 },
+          { "task": "Maintain shallow water (2-3 cm)", "day": 25 }
         ]
       },
       {
         "stage_id": 4,
-        "title": "Fertilizer Application",
-        "duration_days": 30,
+        "title": "Early Vegetative Stage",
+        "duration_days": 25,
         "substeps": [
-          "Apply Urea",
-          "Apply DAP",
-          "Apply Potash",
-          "Check nitrogen deficiency"
+          { "task": "Maintain standing water", "day": 28 },
+          { "task": "Apply basal fertilizer (DAP)", "day": 28 },
+          { "task": "First weeding", "day": 30 },
+          { "task": "Apply Urea (1st split)", "day": 30 },
+          { "task": "Pest monitoring (leaf folder, stem borer)", "day": 35 }
         ]
       },
       {
         "stage_id": 5,
-        "title": "Water Management",
-        "duration_days": 40,
+        "title": "Tillering Stage",
+        "duration_days": 20,
         "substeps": [
-          "Maintain water level",
-          "Drain excess water",
-          "Monitor rainfall"
+          { "task": "Maintain water level", "day": 45 },
+          { "task": "Apply Urea (2nd split)", "day": 50 },
+          { "task": "Second weeding", "day": 50 },
+          { "task": "Pest inspection", "day": 55 }
         ]
       },
       {
         "stage_id": 6,
-        "title": "Pest & Disease Control",
+        "title": "Panicle Initiation Stage",
         "duration_days": 20,
         "substeps": [
-          "Check leaf blast",
-          "Monitor stem borer",
-          "Spray pesticide if needed"
+          { "task": "Apply Potash fertilizer", "day": 65 },
+          { "task": "Maintain irrigation", "day": 70 },
+          { "task": "Disease monitoring (blast, sheath blight)", "day": 75 }
         ]
       },
       {
         "stage_id": 7,
-        "title": "Harvesting",
-        "duration_days": 5,
+        "title": "Flowering & Grain Filling",
+        "duration_days": 15,
         "substeps": [
-          "Check grain maturity",
-          "Cut crop",
-          "Dry harvested crop"
+          { "task": "Ensure continuous water supply", "day": 85 },
+          { "task": "Avoid water stress", "day": 90 },
+          { "task": "Final pest inspection", "day": 95 }
         ]
       },
       {
         "stage_id": 8,
-        "title": "Post Harvest & Selling",
-        "duration_days": 3,
+        "title": "Maturity & Harvesting",
+        "duration_days": 10,
         "substeps": [
-          "Store safely",
-          "Check market price",
-          "Sell in mandi"
+          { "task": "Drain water from field", "day": 105 },
+          { "task": "Harvest crop", "day": 115 },
+          { "task": "Dry grains properly", "day": 118 },
+          { "task": "Storage", "day": 120 }
         ]
       }
     ]

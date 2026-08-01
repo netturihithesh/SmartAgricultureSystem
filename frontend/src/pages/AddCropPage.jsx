@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Box, Typography, Paper, TextField, MenuItem, Button,
-  Autocomplete, CircularProgress
+  Autocomplete, CircularProgress, useTheme
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Spa, Add } from '@mui/icons-material';
@@ -36,6 +36,7 @@ const parseLandSize = (raw) => (raw ? raw.replace(/[^0-9.]/g, '').trim() : '');
 // ─── Component ─────────────────────────────────────────────────────────────────
 const AddCropPage = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
   const [loadingProfile, setLoadingProfile] = useState(true);
 
   const [formData, setFormData] = useState({
@@ -43,7 +44,7 @@ const AddCropPage = () => {
     landSize: '',
     waterSource: '',
     duration: '',
-    sowingDate: '',
+    startDate: '',
     notes: '',
   });
 
@@ -91,7 +92,7 @@ const AddCropPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.cropName && formData.sowingDate) {
+    if (formData.cropName && formData.startDate) {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const crops = JSON.parse(localStorage.getItem(`user_crops_${user.id}`) || '[]');
@@ -102,7 +103,7 @@ const AddCropPage = () => {
         crops.push({
           id: Date.now(),
           cropName: formData.cropName,
-          startDate: new Date(formData.sowingDate).toISOString(),
+          startDate: new Date(formData.startDate).toISOString(),
         });
         localStorage.setItem(`user_crops_${user.id}`, JSON.stringify(crops));
         localStorage.setItem(`active_crop_index_${user.id}`, crops.length - 1);
@@ -111,7 +112,17 @@ const AddCropPage = () => {
     }
   };
 
-  const inputSx = { borderRadius: '14px', backgroundColor: '#fafafa' };
+  const inputSx = {
+    borderRadius: '14px',
+    backgroundColor: theme.palette.mode === 'light' ? '#fafafa' : '#1a241e',
+    color: 'text.primary',
+    '& .MuiOutlinedInput-notchedOutline': {
+      borderColor: theme.palette.mode === 'light' ? '#e5e7eb' : '#2A372E',
+    },
+    '&:hover .MuiOutlinedInput-notchedOutline': {
+      borderColor: theme.palette.mode === 'light' ? '#2e7d32' : '#39FF6A',
+    },
+  };
 
   if (loadingProfile) {
     return (
@@ -127,19 +138,21 @@ const AddCropPage = () => {
       {/* Header */}
       <Box sx={{ textAlign: 'center', mb: '32px' }}>
         <Typography variant="h4" sx={{
-          fontWeight: 800, color: '#111', fontSize: '32px',
+          fontWeight: 800, color: 'text.primary', fontSize: '32px',
           letterSpacing: '-0.5px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1.5
         }}>
           Add Crop <Spa sx={{ color: '#2e7d32', fontSize: '32px' }} />
         </Typography>
-        <Typography sx={{ color: '#555', fontSize: '15px', mt: 1, fontWeight: 500 }}>
+        <Typography sx={{ color: 'text.secondary', fontSize: '15px', mt: 1, fontWeight: 500 }}>
           Quickly add your crop plan
         </Typography>
       </Box>
 
       {/* Form Card */}
       <Paper sx={{
-        background: '#ffffff', border: '1px solid #e5e7eb',
+        backgroundColor: 'background.paper',
+        border: '1px solid',
+        borderColor: 'divider',
         borderRadius: '20px', padding: { xs: '24px', sm: '32px' },
         boxShadow: '0 6px 18px rgba(0,0,0,0.04)'
       }}>
@@ -147,7 +160,7 @@ const AddCropPage = () => {
 
           {/* Crop Name */}
           <Box>
-            <Typography sx={{ fontSize: '13px', fontWeight: 700, color: '#555', textTransform: 'uppercase', letterSpacing: '0.5px', mb: '8px' }}>
+            <Typography sx={{ fontSize: '13px', fontWeight: 700, color: 'text.primary', textTransform: 'uppercase', letterSpacing: '0.5px', mb: '8px' }}>
               Crop Name
             </Typography>
             <Autocomplete
@@ -168,7 +181,7 @@ const AddCropPage = () => {
 
           {/* Land Size */}
           <Box>
-            <Typography sx={{ fontSize: '13px', fontWeight: 700, color: '#555', textTransform: 'uppercase', letterSpacing: '0.5px', mb: '8px' }}>
+            <Typography sx={{ fontSize: '13px', fontWeight: 700, color: 'text.primary', textTransform: 'uppercase', letterSpacing: '0.5px', mb: '8px' }}>
               Land Size (Acres)
             </Typography>
             <TextField
@@ -186,7 +199,7 @@ const AddCropPage = () => {
 
           {/* Water Availability */}
           <Box>
-            <Typography sx={{ fontSize: '13px', fontWeight: 700, color: '#555', textTransform: 'uppercase', letterSpacing: '0.5px', mb: '8px' }}>
+            <Typography sx={{ fontSize: '13px', fontWeight: 700, color: 'text.primary', textTransform: 'uppercase', letterSpacing: '0.5px', mb: '8px' }}>
               Water Availability
             </Typography>
             <TextField
@@ -205,7 +218,7 @@ const AddCropPage = () => {
 
           {/* Duration — auto-filled from crop data */}
           <Box>
-            <Typography sx={{ fontSize: '13px', fontWeight: 700, color: '#555', textTransform: 'uppercase', letterSpacing: '0.5px', mb: '8px' }}>
+            <Typography sx={{ fontSize: '13px', fontWeight: 700, color: 'text.primary', textTransform: 'uppercase', letterSpacing: '0.5px', mb: '8px' }}>
               Crop Duration
             </Typography>
             <TextField
@@ -225,32 +238,32 @@ const AddCropPage = () => {
             </TextField>
           </Box>
 
-          {/* Sowing Date */}
+          {/* Start Date */}
           <Box>
-            <Typography sx={{ fontSize: '13px', fontWeight: 700, color: '#555', textTransform: 'uppercase', letterSpacing: '0.5px', mb: '8px' }}>
-              Sowing Date
+            <Typography sx={{ fontSize: '13px', fontWeight: 700, color: 'text.primary', textTransform: 'uppercase', letterSpacing: '0.5px', mb: '8px' }}>
+              Start Date
             </Typography>
             <TextField
               type="date"
               required
               fullWidth
               InputLabelProps={{ shrink: true }}
-              value={formData.sowingDate}
-              onChange={set('sowingDate')}
+              value={formData.startDate}
+              onChange={set('startDate')}
               inputProps={{
                 min: "2025-01-01",
                 max: "2027-12-31"
               }}
-              error={formData.sowingDate !== '' && (new Date(formData.sowingDate).getFullYear() < 2025 || new Date(formData.sowingDate).getFullYear() > 2027)}
-              helperText={formData.sowingDate !== '' && (new Date(formData.sowingDate).getFullYear() < 2025 || new Date(formData.sowingDate).getFullYear() > 2027) ? 'Date must be between 2025 and 2027' : ''}
+              error={formData.startDate !== '' && (new Date(formData.startDate).getFullYear() < 2025 || new Date(formData.startDate).getFullYear() > 2027)}
+              helperText={formData.startDate !== '' && (new Date(formData.startDate).getFullYear() < 2025 || new Date(formData.startDate).getFullYear() > 2027) ? 'Date must be between 2025 and 2027' : ''}
               InputProps={{ sx: inputSx }}
             />
           </Box>
 
           {/* Notes */}
           <Box>
-            <Typography sx={{ fontSize: '13px', fontWeight: 700, color: '#555', textTransform: 'uppercase', letterSpacing: '0.5px', mb: '8px' }}>
-              Notes <Box component="span" sx={{ fontWeight: 400, fontSize: '12px', color: '#aaa' }}>(Optional)</Box>
+            <Typography sx={{ fontSize: '13px', fontWeight: 700, color: 'text.primary', textTransform: 'uppercase', letterSpacing: '0.5px', mb: '8px' }}>
+              Notes <Box component="span" sx={{ fontWeight: 400, fontSize: '12px', color: 'text.secondary' }}>(Optional)</Box>
             </Typography>
             <TextField
               multiline
@@ -280,7 +293,7 @@ const AddCropPage = () => {
             >
               <Add /> Add Crop to Dashboard
             </Button>
-            <Typography sx={{ textAlign: 'center', color: '#888', fontSize: '13px', mt: '16px', fontWeight: 500 }}>
+            <Typography sx={{ textAlign: 'center', color: 'text.secondary', fontSize: '13px', mt: '16px', fontWeight: 500 }}>
               This crop will be added to your calendar and analytics.
             </Typography>
           </Box>

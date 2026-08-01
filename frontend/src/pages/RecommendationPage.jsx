@@ -1,31 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabase';
 import { fetchWeatherAndAlerts } from '../services/weatherService';
 import { generateSmartRecommendation } from '../services/recommendationEngine';
+import { useColorMode } from '../context/ThemeContext';
 
 // Colors mapped to match the wider SmartAgri MUI theme but retaining the premium earthly color grade
-const theme = {
-  soil: '#25211e', // Rich dark brown-black instead of flat gray
+const getThemeColors = (mode) => ({
+  soil: mode === 'light' ? '#25211e' : '#FFFFFF', // Rich dark brown-black or clean white text
   leaf: '#2E7D32',
   leafMid: '#256628',
   leafBright: '#4CAF50',
   leafGlow: '#66BB6A',
-  gold: '#c8902a', // Restored premium dark gold
+  gold: mode === 'light' ? '#c8902a' : '#E5A93C', // Premium dynamic gold
   goldLight: '#e5b95c', // Premium light gold
-  cream: '#fcfbfa', // Very subtle warm white
-  creamDark: '#f0ebe0', // Earthy muted cream
-  earth: '#8b6914', // Earthy brown/gold accent
+  cream: mode === 'light' ? '#fcfbfa' : '#1a241e', // Input bg
+  creamDark: mode === 'light' ? '#f0ebe0' : '#101512', // earth card subelements
+  earth: mode === 'light' ? '#8b6914' : '#E5A93C', // Earthy brown/gold accent
   sky: '#E3F2FD',
-  muted: '#7a7060', // Warm muted gray/brown
-  cardBg: '#FFFFFF',
-  pageBg: '#faf9f7', // Warm page background instead of stark white
-  border: '#E8E4DF', // Warm border color
+  muted: mode === 'light' ? '#7a7060' : '#9CA3AF', // Subtext gray
+  cardBg: mode === 'light' ? '#FFFFFF' : '#111613',
+  pageBg: mode === 'light' ? '#faf9f7' : '#0A0D0B', // Dark charcoal page background
+  border: mode === 'light' ? '#E8E4DF' : '#1A241E', // Border lines
   shadowGreen: '0 4px 20px rgba(46,125,50,0.12)',
   shadowCard: '0 8px 30px rgba(0,0,0,0.06)',
   fontAccent: '"Inter", sans-serif',
   fontBody: '"Inter", sans-serif',
-};
+});
 
 const getCropEmoji = (name) => {
   const n = name.toLowerCase();
@@ -51,6 +52,8 @@ const formatCurrency = (val) => {
 
 const RecommendationPage = () => {
   const navigate = useNavigate();
+  const { mode } = useColorMode();
+  const theme = useMemo(() => getThemeColors(mode), [mode]);
   const [profile, setProfile] = useState(null);
   const [uiState, setUiState] = useState('initial'); // 'initial', 'loading', 'success', 'error'
 
@@ -82,42 +85,12 @@ const RecommendationPage = () => {
           setLandSize(rawNum || '5');
         }
 
-        // Try browser geolocation first!
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            async (position) => {
-              const coords = {
-                lat: position.coords.latitude,
-                lon: position.coords.longitude
-              };
-              const rawWeather = await fetchWeatherAndAlerts(coords, import.meta.env.VITE_OPENWEATHER_API_KEY);
-              setWeatherSummary(rawWeather);
-              if (rawWeather && rawWeather.weather) {
-                setTemperature(Math.round(rawWeather.weather.main.temp));
-              } else {
-                setTemperature(30);
-              }
-            },
-            async (err) => {
-              console.warn("Recommendation auto-geolocation fallback:", err);
-              const rawWeather = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
-              setWeatherSummary(rawWeather);
-              if (rawWeather && rawWeather.weather) {
-                setTemperature(Math.round(rawWeather.weather.main.temp));
-              } else {
-                setTemperature(30);
-              }
-            },
-            { timeout: 15000, enableHighAccuracy: true }
-          );
+        const rawWeather = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
+        setWeatherSummary(rawWeather);
+        if (rawWeather && rawWeather.weather) {
+          setTemperature(Math.round(rawWeather.weather.main.temp));
         } else {
-          const rawWeather = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
-          setWeatherSummary(rawWeather);
-          if (rawWeather && rawWeather.weather) {
-            setTemperature(Math.round(rawWeather.weather.main.temp));
-          } else {
-            setTemperature(30); 
-          }
+          setTemperature(30);
         }
       }
     };
@@ -178,6 +151,90 @@ const RecommendationPage = () => {
     } catch (err) {
       console.error(err);
       setUiState('error');
+    }
+  };
+
+  const handleAddCrop = async (cropName) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate('/login');
+        return;
+      }
+      
+      const userId = session.user.id;
+      const crops = JSON.parse(localStorage.getItem(`user_crops_${userId}`) || '[]');
+      if (crops.length >= 2) {
+        alert('You can only manage a maximum of two crops simultaneously. Please delete a crop first.');
+        return;
+      }
+
+      // Prompt for start date
+      const todayStr = new Date().toISOString().split('T')[0];
+      const dateInput = window.prompt(`Enter start date for ${cropName} (YYYY-MM-DD):`, todayStr);
+      
+      if (dateInput === null) return; // User cancelled
+
+      // Parse and validate date
+      const startDate = new Date(dateInput);
+      if (isNaN(startDate.getTime())) {
+        alert('Invalid date format. Please enter a valid date in YYYY-MM-DD format.');
+        return;
+      }
+
+      const year = startDate.getFullYear();
+      if (year < 2025 || year > 2027) {
+        alert('Start date must be between 2025 and 2027.');
+        return;
+      }
+
+      // Add to user crops list
+      crops.push({
+        id: Date.now(),
+        cropName: cropName,
+        startDate: startDate.toISOString(),
+      });
+
+      localStorage.setItem(`user_crops_${userId}`, JSON.stringify(crops));
+      localStorage.setItem(`active_crop_index_${userId}`, (crops.length - 1).toString());
+
+      alert(`Successfully added ${cropName} to your tracked crops! Redirecting to Dashboard...`);
+      navigate('/');
+    } catch (err) {
+      console.error(err);
+      alert('An error occurred while adding the crop.');
+    }
+  };
+
+  const handleQuickAddAndRedirect = async (cropName) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate('/login');
+        return;
+      }
+      
+      const userId = session.user.id;
+      const crops = JSON.parse(localStorage.getItem(`user_crops_${userId}`) || '[]');
+      if (crops.length >= 2) {
+        alert('You can only manage a maximum of two crops simultaneously. Please delete a crop first.');
+        return;
+      }
+
+      const today = new Date();
+      crops.push({
+        id: Date.now(),
+        cropName: cropName,
+        startDate: today.toISOString(),
+      });
+
+      localStorage.setItem(`user_crops_${userId}`, JSON.stringify(crops));
+      localStorage.setItem(`active_crop_index_${userId}`, (crops.length - 1).toString());
+
+      navigate('/');
+    } catch (err) {
+      console.error(err);
+      alert('An error occurred.');
     }
   };
 
@@ -288,7 +345,7 @@ const RecommendationPage = () => {
             <div style={{ fontSize: '28px' }}>☀️</div>
             <div>
               <div style={{ fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '22px', color: theme.gold }}>{temperature !== null ? `${temperature}°C` : '--°C'}</div>
-              <div style={{ fontSize: '12px', color: theme.earth, fontWeight: 500 }}>{profile.season} · {weatherSummary?.locationName?.split(',')[0] || profile.location?.split(',')[0]}</div>
+              <div style={{ fontSize: '12px', color: theme.earth, fontWeight: 500 }}>{profile.season} · {weatherSummary?.isGps ? weatherSummary.locationName : (weatherSummary?.locationName?.split(',')[0] || profile.location?.split(',')[0])}</div>
             </div>
           </div>
 
@@ -425,8 +482,17 @@ const RecommendationPage = () => {
 
                       {/* Actions */}
                       <div style={{ display: 'flex', gap: '10px' }}>
-                         <button style={{ flex: 1, background: theme.leaf, color: '#fff', border: 'none', borderRadius: '12px', padding: '12px 18px', fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
-                           View Cultivation Plan →
+                         <button 
+                           onClick={() => handleAddCrop(crop.name)}
+                           style={{ flex: 1, background: theme.leaf, color: '#fff', border: 'none', borderRadius: '12px', padding: '12px 18px', fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '13px', cursor: 'pointer', transition: 'all 0.2s' }}
+                         >
+                           + Add to Active Crops
+                         </button>
+                         <button 
+                           onClick={() => handleQuickAddAndRedirect(crop.name)}
+                           style={{ flex: 1, background: 'transparent', color: theme.leaf, border: `1.5px solid ${theme.leaf}`, borderRadius: '12px', padding: '12px 18px', fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '13px', cursor: 'pointer', transition: 'all 0.2s' }}
+                         >
+                           Quick Plan →
                          </button>
                       </div>
 

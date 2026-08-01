@@ -3,13 +3,24 @@ import { Box, Typography, Paper, IconButton, Stack } from '@mui/material';
 import { ChevronLeft, ChevronRight, CheckCircle, EventAvailable } from '@mui/icons-material';
 
 const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStatus }) => {
-  const [selectedDay, setSelectedDay] = useState(1);
+  const [selectedDay, setSelectedDay] = useState(() => {
+    if (selectedCrop && daysPassed) {
+      const totalDays = selectedCrop.total_duration_days || 0;
+      return Math.min(totalDays, Math.max(1, daysPassed));
+    }
+    return 1;
+  });
   const scrollRef = useRef(null);
 
-  // Scroll to sowing date (Day 1) on mount
+  // Set selected day to today's date on mount or when crop/daysPassed changes
   useEffect(() => {
-    setSelectedDay(1);
-  }, []);
+    if (selectedCrop && daysPassed) {
+      const totalDays = selectedCrop.total_duration_days || 0;
+      setSelectedDay(Math.min(totalDays, Math.max(1, daysPassed)));
+    } else {
+      setSelectedDay(1);
+    }
+  }, [selectedCrop, daysPassed]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -37,27 +48,30 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
   const daysArray = Array.from({ length: visibleDays }, (_, i) => i + 1);
 
   const getStageForDay = (dayNum) => {
-      let elapsed = 0;
+      if (!selectedCrop || !selectedCrop.stages) return null;
       for (let stage of selectedCrop.stages) {
-          elapsed += stage.duration_days;
-          if (dayNum <= Math.max(1, elapsed)) return stage;
+          if (dayNum >= stage.start_day && dayNum <= stage.end_day) return stage;
       }
       return selectedCrop.stages[selectedCrop.stages.length - 1];
   };
 
   const getTasksForDay = (dayNum) => {
-      const stage = getStageForDay(dayNum);
-      if (!stage || !stage.substeps) return [];
-      
-      const stepInterval = Math.max(1, Math.floor(stage.duration_days / Math.max(1, stage.substeps.length)));
-      const relativeDayInStage = dayNum - stage.start_day + 1;
-      
-      return stage.substeps.map((sub, i) => ({
-          sub, 
-          i, 
-          targetDay: (i * stepInterval) + 1, 
-          stage_id: stage.stage_id
-      })).filter(item => item.targetDay === relativeDayInStage);
+      if (!selectedCrop || !selectedCrop.stages) return [];
+      const tasks = [];
+      for (let stage of selectedCrop.stages) {
+          if (!stage.substeps) continue;
+          stage.substeps.forEach((sub, i) => {
+              if (sub.day === dayNum) {
+                  tasks.push({
+                      sub: sub.task,
+                      i,
+                      targetDay: sub.day,
+                      stage_id: stage.stage_id
+                  });
+              }
+          });
+      }
+      return tasks;
   };
 
   const selectedStage = getStageForDay(selectedDay);
@@ -141,7 +155,7 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
                   display: 'flex', 
                   flexDirection: 'column',
                   alignItems: 'center',
-                  justifyContent: 'center',
+                  pt: '16px',
                   cursor: 'pointer',
                   position: 'relative',
                   flexShrink: 0,
@@ -149,14 +163,19 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
                   '&:hover': { borderColor: 'var(--neon-green)', bgcolor: isSelected ? boxBg : 'rgba(57, 255, 106, 0.02)' }
                 }}
               >
-                {isToday && (
-                  <Typography variant="overline" sx={{ position: 'absolute', top: -14, color: 'var(--teal-blue)', fontSize: '9px', fontWeight: 800, letterSpacing: 0.5 }}>
+                {isToday && dayNum !== 1 && (
+                  <Typography variant="overline" sx={{ position: 'absolute', top: 3, left: '50%', transform: 'translateX(-50%)', whiteSpace: 'nowrap', color: 'var(--teal-blue)', fontSize: '8px', fontWeight: 800, letterSpacing: 0.5, lineHeight: 1 }}>
                     TODAY
                   </Typography>
                 )}
+                {isToday && dayNum === 1 && (
+                  <Typography variant="overline" sx={{ position: 'absolute', top: 3, left: '50%', transform: 'translateX(-50%)', whiteSpace: 'nowrap', color: 'var(--teal-blue)', fontSize: '8px', fontWeight: 800, letterSpacing: 0.5, lineHeight: 1 }}>
+                    TODAY / START
+                  </Typography>
+                )}
                 {dayNum === 1 && !isToday && (
-                  <Typography variant="overline" sx={{ position: 'absolute', top: -14, color: 'var(--warning-yellow)', fontSize: '9px', fontWeight: 800, letterSpacing: 0.5 }}>
-                    SOWING
+                  <Typography variant="overline" sx={{ position: 'absolute', top: 3, left: '50%', transform: 'translateX(-50%)', whiteSpace: 'nowrap', color: 'var(--warning-yellow)', fontSize: '8px', fontWeight: 800, letterSpacing: 0.5, lineHeight: 1 }}>
+                    START DATE
                   </Typography>
                 )}
                 

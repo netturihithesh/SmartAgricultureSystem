@@ -3,91 +3,203 @@ const generateMockWeather = (locationOrCoords) => {
   let state = 'Telangana';
 
   if (locationOrCoords && typeof locationOrCoords === 'object') {
-    const lat = locationOrCoords.latitude || locationOrCoords.lat || 0;
-    const lon = locationOrCoords.longitude || locationOrCoords.lon || 0;
-    district = `GPS (${lat.toFixed(2)}°N`;
-    state = `${lon.toFixed(2)}°E)`;
+    district = 'Hyderabad (GPS)';
+    state = 'Telangana';
   } else if (typeof locationOrCoords === 'string') {
     const parts = locationOrCoords.split(',');
     district = parts[0]?.trim() || 'Nizamabad';
     state = parts[1]?.trim() || 'Telangana';
   }
 
+  const normalized = district.toLowerCase();
+  
+  let temp = 31;
+  let humidity = 62;
+  let windSpeed = 3.3; // m/s (~12 km/h)
+  let main = 'Clear';
+  let description = 'clear sky';
+  let pop = 0.15;
+  let alertTitle = '✅ Optimal Farming Conditions (Simulated)';
+  let alertMessage = `Weather in ${district}, ${state} is optimal: 31°C with 12 km/h winds. Clear to proceed.`;
+  let alertSeverity = 'success';
+  let alertBg = '#F1F8E9';
+  let alertIcon = '#388E3C';
+
+  if (normalized.includes('heavy rain') || normalized.includes('cherrapunji') || normalized.includes('storm') || normalized.includes('warangal')) {
+    temp = 22;
+    humidity = 95;
+    windSpeed = 5.5; // ~20 km/h
+    main = 'Rain';
+    description = 'heavy intensity rain';
+    pop = 0.95;
+    alertTitle = '⚠️ Heavy Rain Warning (Simulated)';
+    alertMessage = `Extreme rainfall warning in ${district}. Risk of waterlogging. Check drainage systems.`;
+    alertSeverity = 'warning';
+    alertBg = '#FFF8E1';
+    alertIcon = '#F57F17';
+  } else if (normalized.includes('moderate rain') || normalized.includes('hyderabad')) {
+    temp = 24;
+    humidity = 88;
+    windSpeed = 4.0;
+    main = 'Rain';
+    description = 'moderate rain';
+    pop = 0.70;
+    alertTitle = '🌧 Rainfall Detected (Simulated)';
+    alertMessage = `Moderate rain in ${district}. Delay fertilizer application to prevent chemical runoff.`;
+    alertSeverity = 'warning';
+    alertBg = '#FFF8E1';
+    alertIcon = '#F57F17';
+  } else if (normalized.includes('light rain') || normalized.includes('mumbai') || normalized.includes('drizzle')) {
+    temp = 26;
+    humidity = 80;
+    windSpeed = 2.5;
+    main = 'Rain';
+    description = 'light intensity drizzle';
+    pop = 0.45;
+    alertTitle = '🌦 Light Drizzle (Simulated)';
+    alertMessage = `Light rain in ${district}. Soil moisture is rising. Monitor spraying conditions.`;
+    alertSeverity = 'success';
+    alertBg = '#F1F8E9';
+    alertIcon = '#388E3C';
+  } else if (normalized.includes('hot') || normalized.includes('adilabad') || normalized.includes('ramagundam')) {
+    temp = 39;
+    humidity = 35;
+    windSpeed = 3.0;
+    main = 'Clear';
+    description = 'clear sky';
+    pop = 0.0;
+    alertTitle = '🔥 High Temperature Alert (Simulated)';
+    alertMessage = `Extreme heat in ${district} (${temp}°C). Boost irrigation by 10% to prevent crop stress.`;
+    alertSeverity = 'warning';
+    alertBg = '#FFEBEE';
+    alertIcon = '#D32F2F';
+  } else if (normalized.includes('cool') || normalized.includes('shimla') || normalized.includes('ooty')) {
+    temp = 18;
+    humidity = 55;
+    windSpeed = 2.0;
+    main = 'Clear';
+    description = 'clear sky';
+    pop = 0.0;
+    alertTitle = '❄️ Cool Weather Alert (Simulated)';
+    alertMessage = `Crisp morning temperatures in ${district} (${temp}°C). Growth conditions are stable.`;
+    alertSeverity = 'success';
+    alertBg = '#F1F8E9';
+    alertIcon = '#388E3C';
+  } else if (normalized.includes('windy') || normalized.includes('karimnagar')) {
+    temp = 27;
+    humidity = 50;
+    windSpeed = 7.5; // ~27 km/h
+    main = 'Clear';
+    description = 'clear sky';
+    pop = 0.0;
+    alertTitle = '🌬 Strong Winds Detected (Simulated)';
+    alertMessage = `High wind speeds in ${district} (${Math.round(windSpeed * 3.6)} km/h). Avoid chemical spraying.`;
+    alertSeverity = 'warning';
+    alertBg = '#F3E5F5';
+    alertIcon = '#8E24AA';
+  } else if (normalized.includes('clouds') || normalized.includes('nizamabad') || normalized.includes('overcast')) {
+    temp = 28;
+    humidity = 70;
+    windSpeed = 3.0;
+    main = 'Clouds';
+    description = 'overcast clouds';
+    pop = 0.20;
+    alertTitle = '☁️ Overcast Conditions (Simulated)';
+    alertMessage = `Cloudy skies in ${district}. Photosynthesis rates might be slightly lower.`;
+    alertSeverity = 'success';
+    alertBg = '#F1F8E9';
+    alertIcon = '#388E3C';
+  }
+
   const currentForecast = {
     dt: Math.floor(Date.now() / 1000),
-    main: {
-      temp: 31,
-      humidity: 62,
-    },
-    wind: {
-      speed: 3.3, // ~12 km/h
-    },
-    pop: 0.15,
-    weather: [
-      {
-        main: 'Clear',
-        description: 'scattered clouds',
-      }
-    ]
+    main: { temp, humidity },
+    wind: { speed: windSpeed },
+    pop,
+    weather: [{ main, description }]
   };
 
   const alert = {
-    title: "✅ Optimal Farming Conditions (Simulated)",
-    message: `Weather in ${district}, ${state} is optimal: 31°C with 12 km/h winds. Clear to proceed with routine spraying and irrigation.`,
-    severity: "success",
-    bgColor: '#F1F8E9',
-    iconColor: '#388E3C'
+    title: alertTitle,
+    message: alertMessage,
+    severity: alertSeverity,
+    bgColor: alertBg,
+    iconColor: alertIcon
   };
 
   const forecastList = [];
   const baseTime = Math.floor(Date.now() / 1000);
-  const conditions = ['Clear', 'Clouds', 'Rain', 'Clear', 'Clouds'];
   
   for (let i = 0; i < 40; i++) {
     const timeOffset = i * 3 * 60 * 60;
-    const dayIndex = Math.floor(i / 8);
-    const tempVariance = Math.sin(i / 2) * 4;
+    const tempVariance = Math.sin(i / 2) * 3;
+    let fMain = main;
+    let fDesc = description;
+    let fPop = pop;
+
+    if (main === 'Rain') {
+      fMain = Math.random() > 0.3 ? 'Rain' : 'Clouds';
+      fDesc = fMain === 'Rain' ? description : 'broken clouds';
+      fPop = fMain === 'Rain' ? pop : 0.4;
+    }
+
     forecastList.push({
       dt: baseTime + timeOffset,
       main: {
-        temp: 29 + tempVariance,
-        humidity: 60 + Math.sin(i) * 10,
+        temp: temp + tempVariance,
+        humidity: Math.min(100, Math.max(0, humidity + Math.sin(i) * 5)),
       },
       wind: {
-        speed: 3 + Math.cos(i) * 1.5,
+        speed: windSpeed + Math.cos(i) * 0.8,
       },
-      pop: conditions[dayIndex] === 'Rain' ? 0.70 : 0.1,
-      weather: [
-        {
-          main: conditions[dayIndex],
-          description: conditions[dayIndex] === 'Rain' ? 'light rain' : 'scattered clouds',
-        }
-      ]
+      pop: fPop,
+      weather: [{ main: fMain, description: fDesc }]
     });
   }
 
-  return { 
-    weather: currentForecast, 
-    alert, 
+  return {
+    weather: currentForecast,
+    alert,
     forecastList,
     locationName: state ? `${district}, ${state}` : district,
     isGps: locationOrCoords && typeof locationOrCoords === 'object',
     coords: (locationOrCoords && typeof locationOrCoords === 'object') ? {
-      lat: locationOrCoords.latitude || locationOrCoords.lat || 0,
-      lon: locationOrCoords.longitude || locationOrCoords.lon || 0
+      lat: locationOrCoords.latitude || locationOrCoords.lat || 17.3850,
+      lon: locationOrCoords.longitude || locationOrCoords.lon || 78.4867
     } : null
   };
 };
 
-export const fetchWeatherAndAlerts = async (locationOrCoords, apiKey) => {
-  if (!apiKey) {
-    console.warn("OpenWeather API key is missing. Using high-quality mock weather data.");
-    return generateMockWeather(locationOrCoords);
-  }
-
+export const fetchWeatherAndAlerts = async (locationOrCoords, apiKey, forceRefresh = false) => {
   const isCoords = locationOrCoords && typeof locationOrCoords === 'object' && 
                    ('latitude' in locationOrCoords || 'lat' in locationOrCoords) &&
                    ('longitude' in locationOrCoords || 'lon' in locationOrCoords);
+
+  if (!apiKey) {
+    console.warn("OpenWeather API key is missing. Attempting Nominatim reverse geocoding fallback.");
+    let resolvedLocation = null;
+    if (isCoords) {
+      try {
+        const lat = locationOrCoords.latitude || locationOrCoords.lat;
+        const lon = locationOrCoords.longitude || locationOrCoords.lon;
+        const reverseResponse = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10`);
+        const reverseData = await reverseResponse.json();
+        if (reverseData && reverseData.address) {
+          const addr = reverseData.address;
+          const city = addr.city || addr.town || addr.village || addr.suburb || addr.county || 'GPS Location';
+          const stateName = addr.state || '';
+          resolvedLocation = { city, state: stateName };
+        }
+      } catch (err) {
+        console.warn("Nominatim geocoding failed, falling back to mock defaults", err);
+      }
+    }
+    const mockRes = generateMockWeather(locationOrCoords);
+    if (resolvedLocation) {
+      mockRes.locationName = resolvedLocation.state ? `${resolvedLocation.city}, ${resolvedLocation.state}` : resolvedLocation.city;
+    }
+    return mockRes;
+  }
 
   // CACHING LOGIC: Prevent hitting the API on every page reload
   let cacheKey;
@@ -104,13 +216,15 @@ export const fetchWeatherAndAlerts = async (locationOrCoords, apiKey) => {
   const CACHE_HOURS = 1; // Store data for 1 hour
 
   try {
-    const cachedData = localStorage.getItem(cacheKey);
-    if (cachedData) {
-      const parsedCache = JSON.parse(cachedData);
-      const isFresh = (Date.now() - parsedCache.timestamp) < (CACHE_HOURS * 60 * 60 * 1000);
-      
-      if (isFresh && parsedCache.data) {
-        return parsedCache.data;
+    if (!forceRefresh) {
+      const cachedData = localStorage.getItem(cacheKey);
+      if (cachedData) {
+        const parsedCache = JSON.parse(cachedData);
+        const isFresh = (Date.now() - parsedCache.timestamp) < (CACHE_HOURS * 60 * 60 * 1000);
+        
+        if (isFresh && parsedCache.data) {
+          return parsedCache.data;
+        }
       }
     }
   } catch (e) {

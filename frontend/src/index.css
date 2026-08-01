@@ -1,14 +1,190 @@
-/* Global resets */
+/* ─── Google Fonts ─────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ─── CSS Custom Properties ────────────────────────────────────────────────── */
+:root {
+  /* Warm Earth Palette — Light Mode */
+  --color-forest:       #2D5A27;
+  --color-forest-deep:  #1A3A16;
+  --color-jade:         #3D7A45;
+  --color-jade-light:   #5A9A63;
+  --color-parchment:    #F6F1EB;
+  --color-cream:        #FDFAF6;
+  --color-gold:         #B5883A;
+  --color-gold-light:   #D4A853;
+  --color-terracotta:   #C97B4B;
+  --color-soil:         #7A5C3A;
+  --color-mist:         #E8F0E4;
+
+  /* Dark Mode Overrides (applied via .dark-mode class or data-theme) */
+  --color-dark-bg:      #0D1208;
+  --color-dark-surface: #141C10;
+  --color-dark-accent:  #5CDB78;
+  --color-dark-gold:    #D4A853;
+
+  /* Spacing */
+  --navbar-height: 72px;
+
+  /* Transitions */
+  --transition-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base:   250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow:   400ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Shadows — simple neutral depth, no color glow */
+  --shadow-sm:   0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:   0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+  --shadow-lg:   0 12px 40px rgba(0,0,0,0.10), 0 4px 12px rgba(0,0,0,0.05);
+  --shadow-xl:   0 24px 64px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.06);
+}
+
+/* ─── Global Reset ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body, html, #root {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%;
-  font-family: 'Inter', sans-serif;
+  min-height: 100%;
+  font-family: 'Inter', 'Outfit', sans-serif;
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Remove default link styles for react-router */
 a {
   text-decoration: none;
+}
+
+/* ─── Playfair Display utility class ───────────────────────────────────────── */
+.font-serif {
+  font-family: 'Playfair Display', Georgia, serif !important;
+}
+.font-outfit {
+  font-family: 'Outfit', sans-serif !important;
+}
+
+/* ─── Global Keyframe Animations ───────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33%       { transform: translateY(-12px) rotate(1deg); }
+  66%       { transform: translateY(-6px) rotate(-1deg); }
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-18px); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes leafSway {
+  0%, 100% { transform: rotate(-3deg) scale(1); }
+  50%       { transform: rotate(3deg) scale(1.02); }
+}
+
+/* Simple blink for "status" dot — no glow */
+@keyframes pulse-ring {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes navLinkUnderline {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ─── Utility Animation Classes ────────────────────────────────────────────── */
+.anim-fade-up   { animation: fadeInUp 0.6s ease both; }
+.anim-fade-left { animation: fadeInLeft 0.6s ease both; }
+.anim-scale-in  { animation: scaleIn 0.5s ease both; }
+.anim-float     { animation: float 6s ease-in-out infinite; }
+.anim-float-slow { animation: floatSlow 8s ease-in-out infinite; }
+.anim-leaf      { animation: leafSway 4s ease-in-out infinite; }
+
+/* ─── Scroll reveal base state ─────────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Organic texture overlay ──────────────────────────────────────────────── */
+.texture-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ─── Navbar scroll-aware utility ──────────────────────────────────────────── */
+.navbar-scrolled {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+}
+
+/* ─── Custom scrollbar ─────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { 
+  background: rgba(61, 122, 69, 0.3); 
+  border-radius: 999px; 
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(61, 122, 69, 0.6); }
+
+/* ─── Selection color ──────────────────────────────────────────────────────── */
+::selection {
+  background: rgba(61, 122, 69, 0.2);
+  color: #1A3A16;
 }

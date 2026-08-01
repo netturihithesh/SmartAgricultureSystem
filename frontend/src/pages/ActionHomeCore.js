@@ -294,4 +294,26 @@ const ActionHome = ({ session }) => {
   }, [selectedCrop, daysPassed]);
 
   if (loading) {
+    return (
+      <div style={{
+        display: 'flex', 
+        height: '100vh', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        background: '#F6F1EB', 
+        color: '#2D5A27',
+        fontFamily: '"Outfit", "Inter", sans-serif',
+        fontSize: '20px',
+        fontWeight: 600,
+        flexDirection: 'column',
+        gap: '16px'
+      }}>
+        Loading Dashboard...
+      </div>
+    );
+  }
+  return null;
+};
+
+export default ActionHome;
   

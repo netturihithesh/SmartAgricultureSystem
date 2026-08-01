@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Box, Typography, Grid, Paper, Chip, IconButton } from '@mui/material';
+import { Box, Typography, Grid, Paper, Chip, IconButton, useTheme } from '@mui/material';
 import { WaterDrop, LocalFlorist, WarningAmber, ChevronLeft, ChevronRight, FiberManualRecord, Agriculture, AccountCircle } from '@mui/icons-material';
 
 const FarmCalendar = () => {
+  const theme = useTheme();
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const currentMonth = currentDate.getMonth();
@@ -38,10 +39,10 @@ const FarmCalendar = () => {
       {/* Header */}
       <Box sx={{ mb: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
         <Box>
-          <Typography variant="h4" sx={{ fontWeight: 800, color: '#111', fontSize: '28px', letterSpacing: '-0.5px' }}>
+          <Typography variant="h4" sx={{ fontWeight: 800, color: 'text.primary', fontSize: '28px', letterSpacing: '-0.5px' }}>
             Farm Activity Calendar 📅
           </Typography>
-          <Typography sx={{ color: '#555', fontSize: '15px', mt: 1 }}>
+          <Typography sx={{ color: 'text.secondary', fontSize: '15px', mt: 1 }}>
             Track your farm's history, active crops, and upcoming tasks in real-time.
           </Typography>
         </Box>
@@ -55,12 +56,12 @@ const FarmCalendar = () => {
       <Grid container spacing={3}>
         {/* Main Calendar View (Left) */}
         <Grid size={{ xs: 12, md: 8 }}>
-          <Paper sx={{ p: { xs: '16px', sm: '24px' }, borderRadius: '24px', border: '1px solid #eaeaea', boxShadow: '0 8px 24px rgba(0,0,0,0.03)', minHeight: '600px' }}>
+          <Paper sx={{ p: { xs: '16px', sm: '24px' }, borderRadius: '24px', border: '1px solid', borderColor: 'divider', boxShadow: '0 8px 24px rgba(0,0,0,0.03)', minHeight: '600px' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-              <Typography variant="h5" sx={{ fontWeight: 900, color: '#1e293b' }}>{monthName} {currentYear}</Typography>
-              <Box sx={{ display: 'flex', gap: 1, bgcolor: '#f8fafc', borderRadius: '12px', p: 0.5 }}>
-                <IconButton onClick={prevMonth} size="small" sx={{ color: '#64748b', '&:hover': { bgcolor: '#e2e8f0', color: '#0f172a' } }}><ChevronLeft /></IconButton>
-                <IconButton onClick={nextMonth} size="small" sx={{ color: '#64748b', '&:hover': { bgcolor: '#e2e8f0', color: '#0f172a' } }}><ChevronRight /></IconButton>
+              <Typography variant="h5" sx={{ fontWeight: 900, color: 'text.primary' }}>{monthName} {currentYear}</Typography>
+              <Box sx={{ display: 'flex', gap: 1, bgcolor: theme.palette.mode === 'light' ? '#f8fafc' : '#1a241e', borderRadius: '12px', p: 0.5 }}>
+                <IconButton onClick={prevMonth} size="small" sx={{ color: '#64748b', '&:hover': { bgcolor: theme.palette.mode === 'light' ? '#e2e8f0' : '#2A372E', color: 'text.primary' } }}><ChevronLeft /></IconButton>
+                <IconButton onClick={nextMonth} size="small" sx={{ color: '#64748b', '&:hover': { bgcolor: theme.palette.mode === 'light' ? '#e2e8f0' : '#2A372E', color: 'text.primary' } }}><ChevronRight /></IconButton>
               </Box>
             </Box>
             
@@ -72,7 +73,7 @@ const FarmCalendar = () => {
               
               {/* Empty Blanks for First Week offset */}
               {blanks.map((_, i) => (
-                <Box key={`blank-${i}`} sx={{ height: { xs: '60px', sm: '90px' }, borderRadius: '12px', bgcolor: '#fafafa', border: '1px dashed #e2e8f0' }} />
+                <Box key={`blank-${i}`} sx={{ height: { xs: '60px', sm: '90px' }, borderRadius: '12px', bgcolor: theme.palette.mode === 'light' ? '#fafafa' : '#1a241e', border: '1px dashed', borderColor: 'divider' }} />
               ))}
 
               {/* Actual Days */}
@@ -83,7 +84,7 @@ const FarmCalendar = () => {
                 const isToday = currentMonth === new Date().getMonth() && currentYear === new Date().getFullYear() && day === today;
 
                 let bgContent = 'transparent';
-                let borderColor = '#f1f5f9';
+                let borderColor = theme.palette.mode === 'light' ? '#f1f5f9' : '#2A372E';
                 if (isSignup) { bgContent = '#f3e8ff'; borderColor = '#d8b4fe'; }
                 if (isCropStart) { bgContent = '#ecfdf5'; borderColor = '#6ee7b7'; }
                 if (isPrevCrop) { bgContent = '#fff7ed'; borderColor = '#fdba74'; }
@@ -98,7 +99,7 @@ const FarmCalendar = () => {
                   }}>
                     <Typography sx={{ 
                       fontWeight: 800, 
-                      color: isToday ? '#fff' : (isSignup || isCropStart || isPrevCrop ? '#111' : '#64748b'), 
+                      color: isToday ? '#fff' : (isSignup || isCropStart || isPrevCrop ? '#111' : 'text.secondary'), 
                       bgcolor: isToday ? '#3b82f6' : 'transparent',
                       width: '24px', height: '24px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
                       fontSize: '13px'
@@ -123,33 +124,33 @@ const FarmCalendar = () => {
         <Grid size={{ xs: 12, md: 4 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             
-            <Paper sx={{ p: '24px', borderRadius: '24px', border: '1px solid #eaeaea', boxShadow: '0 8px 24px rgba(0,0,0,0.03)' }}>
+            <Paper sx={{ p: '24px', borderRadius: '24px', border: '1px solid', borderColor: 'divider', boxShadow: '0 8px 24px rgba(0,0,0,0.03)' }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 3 }}>Today's Live Tasks</Typography>
               
               <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
                 <Box sx={{ p: 1, borderRadius: '12px', backgroundColor: '#e0f2fe', color: '#0284c7', display: 'flex' }}><WaterDrop /></Box>
                 <Box>
-                  <Typography sx={{ fontWeight: 800, fontSize: '15px', color: '#0f172a' }}>Irrigation (Field 2)</Typography>
-                  <Typography sx={{ fontSize: '13px', color: '#64748b', fontWeight: 500 }}>Requires 2 hours watering.</Typography>
+                  <Typography sx={{ fontWeight: 800, fontSize: '15px', color: 'text.primary' }}>Irrigation (Field 2)</Typography>
+                  <Typography sx={{ fontSize: '13px', color: 'text.secondary', fontWeight: 500 }}>Requires 2 hours watering.</Typography>
                 </Box>
               </Box>
 
               <Box sx={{ display: 'flex', gap: 2 }}>
                 <Box sx={{ p: 1, borderRadius: '12px', backgroundColor: '#fef3c7', color: '#d97706', display: 'flex' }}><LocalFlorist /></Box>
                 <Box>
-                  <Typography sx={{ fontWeight: 800, fontSize: '15px', color: '#0f172a' }}>Apply NPK Fertilizer</Typography>
-                  <Typography sx={{ fontSize: '13px', color: '#64748b', fontWeight: 500 }}>50kg expected coverage today.</Typography>
+                  <Typography sx={{ fontWeight: 800, fontSize: '15px', color: 'text.primary' }}>Apply NPK Fertilizer</Typography>
+                  <Typography sx={{ fontSize: '13px', color: 'text.secondary', fontWeight: 500 }}>50kg expected coverage today.</Typography>
                 </Box>
               </Box>
             </Paper>
 
-            <Paper sx={{ p: '24px', borderRadius: '24px', border: '1px solid #fee2e2', backgroundColor: '#fef2f2', boxShadow: '0 8px 24px rgba(0,0,0,0.03)' }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 2, color: '#b91c1c', display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Paper sx={{ p: '24px', borderRadius: '24px', border: '1px solid', borderColor: theme.palette.mode === 'light' ? '#fee2e2' : 'rgba(239, 68, 68, 0.3)', backgroundColor: theme.palette.mode === 'light' ? '#fef2f2' : 'rgba(239, 68, 68, 0.15)', boxShadow: '0 8px 24px rgba(0,0,0,0.03)' }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 2, color: theme.palette.mode === 'light' ? '#b91c1c' : '#ef4444', display: 'flex', alignItems: 'center', gap: 1 }}>
                 <WarningAmber fontSize="small" /> Overdue Tasks
               </Typography>
-              <Box sx={{ bgcolor: '#fff', p: 2, borderRadius: '16px', border: '1px solid #fecaca' }}>
-                <Typography sx={{ fontWeight: 800, fontSize: '14px', color: '#991b1b' }}>Pesticide Spray</Typography>
-                <Typography sx={{ fontSize: '13px', color: '#dc2626', fontWeight: 600 }}>Overdue by 2 days from schedule</Typography>
+              <Box sx={{ bgcolor: 'background.paper', p: 2, borderRadius: '16px', border: '1px solid', borderColor: 'divider' }}>
+                <Typography sx={{ fontWeight: 800, fontSize: '14px', color: theme.palette.mode === 'light' ? '#991b1b' : '#ef4444' }}>Pesticide Spray</Typography>
+                <Typography sx={{ fontSize: '13px', color: theme.palette.mode === 'light' ? '#dc2626' : '#f87171', fontWeight: 600 }}>Overdue by 2 days from schedule</Typography>
               </Box>
             </Paper>
 

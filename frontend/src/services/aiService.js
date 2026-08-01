@@ -1,45 +1,58 @@
 import axios from 'axios';
+import { GoogleGenAI } from '@google/genai';
 
-const POLLINATIONS_API_URL = 'https://text.pollinations.ai/';
+
 
 const fetchWithFallback = async (formattedMessages) => {
   const groqKey = import.meta.env.VITE_GROQ_API_KEY;
   const geminiKey = import.meta.env.VITE_GEMINI_API_KEY;
   const deepseekKey = import.meta.env.VITE_DEEPSEEK_API_KEY;
 
-  // 1. Try Groq (Ultra-fast Primary due to provided key)
+  // 1. Try Groq (Primary - confirmed working, ultra-fast llama model)
   if (groqKey) {
     try {
       const response = await axios.post(
         'https://api.groq.com/openai/v1/chat/completions',
-        { model: 'llama-3.3-70b-versatile', messages: formattedMessages },
+        { model: 'llama-3.3-70b-versatile', messages: formattedMessages, max_tokens: 1024 },
         { headers: { 'Authorization': `Bearer ${groqKey}`, 'Content-Type': 'application/json' } }
       );
       if (response.data?.choices?.[0]?.message?.content) {
-         return response.data.choices[0].message.content;
+        return response.data.choices[0].message.content;
       }
     } catch (e) {
-      console.warn('Groq failed, seamlessly falling back...', e.message);
+      console.warn('Groq failed, trying next provider...', e.message);
     }
   }
 
-  // 2. Try Gemini (Backup 1)
+  // 2. Try Gemini Auth Key via Bearer token (Backup 1)
   if (geminiKey) {
     try {
-      const response = await axios.post(
-        'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
-        { model: 'gemini-1.5-flash', messages: formattedMessages },
-        { headers: { 'Authorization': `Bearer ${geminiKey}`, 'Content-Type': 'application/json' } }
-      );
-      if (response.data?.choices?.[0]?.message?.content) {
-         return response.data.choices[0].message.content;
+      const systemMsg = formattedMessages.find(m => m.role === 'system');
+      const chatMessages = formattedMessages.filter(m => m.role !== 'system');
+      const contents = chatMessages.map(m => ({
+        role: m.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: m.content }],
+      }));
+      const requestBody = {
+        contents,
+        generationConfig: { temperature: 0.7, maxOutputTokens: 1024 },
+      };
+      if (systemMsg) {
+        requestBody.systemInstruction = { parts: [{ text: systemMsg.content }] };
       }
+      const response = await axios.post(
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
+        requestBody,
+        { headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${geminiKey}` } }
+      );
+      const text = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (text) return text;
     } catch (e) {
-      console.warn('Gemini failed, seamlessly falling back...', e.message);
+      console.warn('Gemini failed, trying next provider...', e.message);
     }
   }
 
-  // 2. Try DeepSeek (Backup 1)
+  // 3. Try DeepSeek (Backup 2)
   if (deepseekKey) {
     try {
       const response = await axios.post(
@@ -48,33 +61,19 @@ const fetchWithFallback = async (formattedMessages) => {
         { headers: { 'Authorization': `Bearer ${deepseekKey}`, 'Content-Type': 'application/json' } }
       );
       if (response.data?.choices?.[0]?.message?.content) {
-         return response.data.choices[0].message.content;
+        return response.data.choices[0].message.content;
       }
     } catch (e) {
-      console.warn('DeepSeek failed, seamlessly falling back...', e.message);
+      console.warn('DeepSeek failed.', e.message);
     }
   }
 
-  // 3. Fallback to Pollinations AI (Backup 2 - Free/No Key)
-  try {
-    const response = await axios.post(
-      POLLINATIONS_API_URL,
-      { messages: formattedMessages },
-      { headers: { 'Content-Type': 'application/json' } }
-    );
-    
-    // Pollinations AI returns raw text usually
-    if (typeof response.data === 'string') {
-        return response.data;
-    } else if (response.data?.choices?.[0]?.message?.content) {
-        return response.data.choices[0].message.content;
-    }
-    return String(response.data);
-  } catch (e) {
-    console.error('All AI fallback providers failed.', e.message);
-    throw new Error('Our AI services are temporarily unavailable. Please try again in a few moments.');
-  }
+  // All providers failed
+  console.error('All AI providers failed.');
+  throw new Error('Our AI services are temporarily unavailable. Please try again in a few moments.');
 };
+
+
 
 export const getAiCompletion = async (messages) => {
   try {
@@ -130,11 +129,12 @@ export const getDailyQuote = async () => {
   }
 };
 
-export const generateStageSchedule = async (cropName, stageName, durationDays, subtasks) => {
+export const generateStageSchedule = async (cropName, stageName, durationDays, subtasks, startDay = 1) => {
   try {
+    const subtaskTexts = (subtasks || []).map(t => (t && typeof t === 'object') ? t.task : t);
     const prompt = `I am growing ${cropName}. I am about to start the "${stageName}" stage, which lasts for ${durationDays} days.
 The required tasks for this stage are:
-${subtasks.map(t => `- ${t}`).join('\n')}
+${subtaskTexts.map(t => `- ${t}`).join('\n')}
 
 Distribute these subtasks logically across the ${durationDays} days. Do not put them all on day 1. 
 Return ONLY a valid JSON array. Each element should be an object with:
@@ -151,9 +151,14 @@ Do not wrap the response in markdown blocks. Return just the raw JSON array.`;
     console.warn('AI Stage Schedule API Error. Using Simulated Intelligence Fallback.');
     
     // Fallback logic
-    const simulatedSchedule = subtasks.map((task, index) => {
+    const simulatedSchedule = (subtasks || []).map((sub, index) => {
+      const task = (sub && typeof sub === 'object') ? sub.task : sub;
+      const originalDay = (sub && typeof sub === 'object') ? sub.day : null;
       let targetDay = 1;
-      if (durationDays > 1) {
+      
+      if (originalDay !== null) {
+        targetDay = Math.max(1, Math.min(durationDays, originalDay - startDay + 1));
+      } else if (durationDays > 1) {
         const step = (durationDays - 1) / Math.max(1, subtasks.length - 1);
         targetDay = Math.round(1 + index * step);
       }

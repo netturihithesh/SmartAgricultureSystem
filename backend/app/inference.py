@@ -67,7 +67,17 @@ async def detect(image: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail="Unsupported file type")
         
     if session is None and not load_model():
-        raise HTTPException(status_code=500, detail="ONNX model missing or failed to initialize.")
+        print("[*] ONNX model missing. Falling back to Gemini Client / Simulator Mode.")
+        try:
+            from backend.app.gemini_client import analyze_image
+            img_bytes = await image.read()
+            mime_type = "image/jpeg"
+            if image.filename.lower().endswith(".png"):
+                mime_type = "image/png"
+            result = analyze_image(img_bytes, mime_type=mime_type)
+            return JSONResponse(content=result)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"ONNX model missing and fallback failed: {e}")
         
     try:
         print(f"--- Incoming Local Diagnosis Request: {image.filename} ---")

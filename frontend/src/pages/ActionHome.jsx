@@ -7,11 +7,257 @@ import AgriBot from '../components/AgriBot';
 import CropCalendarCard from '../components/CropCalendarCard';
 import { getDailyQuote, generateStageSchedule } from '../services/aiService';
 import { fetchWeatherAndAlerts } from '../services/weatherService';
+import { calculateProfitSnapshot } from '../services/profitUtils';
 import './ActionHome.css';
+
+const adjustStageRanges = (crop) => {
+  if (!crop || !crop.stages) return crop;
+
+  // Convert substeps to objects and extract explicit task day numbers
+  const tempStages = crop.stages.map((stage) => {
+    const substeps = (stage.substeps || []).map((sub) =>
+      sub && typeof sub === 'object' ? sub : { task: sub, day: null }
+    );
+    const taskDays = substeps
+      .map((s) => s.day)
+      .filter((d) => typeof d === 'number' && !isNaN(d));
+
+    return {
+      ...stage,
+      substeps,
+      start_day: taskDays.length > 0 ? Math.min(...taskDays) : null,
+      end_day: taskDays.length > 0 ? Math.max(...taskDays) : null,
+      _hasTaskDays: taskDays.length > 0,
+    };
+  });
+
+  // For stages with no explicit task days, place them sequentially after the previous stage
+  let cursor = 1;
+  for (let i = 0; i < tempStages.length; i++) {
+    const s = tempStages[i];
+    if (s._hasTaskDays) {
+      // Use actual task days — just advance cursor
+      cursor = s.end_day + 1;
+    } else {
+      // No task days — allocate by duration after previous stage
+      s.start_day = cursor;
+      s.end_day = cursor + (s.duration_days || 1) - 1;
+      cursor = s.end_day + 1;
+    }
+  }
+
+  // Clamp all stages to the crop's total duration
+  const total = crop.total_duration_days;
+  if (total) {
+    for (const s of tempStages) {
+      if (s.start_day > total) s.start_day = total;
+      if (s.end_day > total) s.end_day = total;
+    }
+  }
+
+  return { ...crop, stages: tempStages };
+};
+
+
+
+// Compass helper to get wind direction
+const getWindDirection = (deg) => {
+  if (deg === undefined || deg === null) return { arrow: '↗', name: 'North-East' };
+  const d = Math.round(deg / 45) % 8;
+  const directions = [
+    { arrow: '↑', name: 'North' },
+    { arrow: '↗', name: 'North-East' },
+    { arrow: '→', name: 'East' },
+    { arrow: '↘', name: 'South-East' },
+    { arrow: '↓', name: 'South' },
+    { arrow: '↙', name: 'South-West' },
+    { arrow: '←', name: 'West' },
+    { arrow: '↖', name: 'North-West' }
+  ];
+  return directions[d];
+};
+
+// Season helper based on calendar month
+const getCurrentSeason = () => {
+  const month = new Date().getMonth(); // 0-indexed
+  if (month >= 5 && month <= 8) return 'monsoon';
+  if (month >= 9 && month <= 10) return 'harvest';
+  if (month >= 11 || month <= 1) return 'winter';
+  return 'summer';
+};
+
+// Hour formatter for forecast times
+const formatForecastHour = (dt) => {
+  if (!dt) return '--';
+  const d = new Date(dt * 1000);
+  let hrs = d.getHours();
+  const ampm = hrs >= 12 ? 'PM' : 'AM';
+  hrs = hrs % 12;
+  hrs = hrs ? hrs : 12;
+  return `${hrs} ${ampm}`;
+};
+
+// Vector SVG selector for weather forecast conditions (replaces font emojis for neat visual uniformity)
+const getForecastIcon = (main, speed, dt) => {
+  const speedKmh = speed ? Math.round(speed * 3.6) : 0;
+  if (main === 'Thunderstorm') {
+    return (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 8.58"></path>
+        <path d="m13 11-4 6h6l-4 6"></path>
+      </svg>
+    );
+  }
+  if (main === 'Rain' || main === 'Drizzle') {
+    return (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+        <path d="M16 14v6M8 14v6M12 16v6"></path>
+      </svg>
+    );
+  }
+  if (speedKmh > 20) {
+    return (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path>
+      </svg>
+    );
+  }
+  if (main === 'Clear') {
+    let isNightTime = false;
+    if (dt) {
+      const hr = new Date(dt * 1000).getHours();
+      if (hr < 6 || hr >= 19) isNightTime = true;
+    }
+    if (isNightTime) {
+      return (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+        </svg>
+      );
+    }
+    return (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#eab308" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+      </svg>
+    );
+  }
+  // Default is Clouds
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.42-3.87-3.13-7-7-7C5.17 4 2 7.17 2 11c0 3.79 3.06 6.5 6.5 6.5"></path>
+      <path d="M8.5 17.5h9"></path>
+    </svg>
+  );
+};
+
+// Procedural Web Audio API weather sound synthesiser
+let audioCtx = null;
+let noiseNode = null;
+let filterNode = null;
+let gainNode = null;
+let soundInterval = null;
+
+const playThunder = () => {
+  if (!audioCtx || audioCtx.state === 'suspended') return;
+  try {
+    const osc = audioCtx.createOscillator();
+    const thunderGain = audioCtx.createGain();
+    const thunderFilter = audioCtx.createBiquadFilter();
+    
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(40, audioCtx.currentTime);
+    osc.frequency.linearRampToValueAtTime(15, audioCtx.currentTime + 3.5);
+    
+    thunderFilter.type = 'lowpass';
+    thunderFilter.frequency.setValueAtTime(75, audioCtx.currentTime);
+    thunderFilter.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 3.5);
+    
+    thunderGain.gain.setValueAtTime(0, audioCtx.currentTime);
+    thunderGain.gain.linearRampToValueAtTime(0.18, audioCtx.currentTime + 0.15);
+    thunderGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 3.5);
+    
+    osc.connect(thunderFilter);
+    thunderFilter.connect(thunderGain);
+    thunderGain.connect(audioCtx.destination);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + 3.6);
+  } catch (err) {
+    console.warn("Failed to play thunder rumble:", err);
+  }
+};
+
+const startWeatherSound = (state) => {
+  try {
+    if (audioCtx) return;
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    audioCtx = new AudioContextClass();
+    
+    const bufferSize = 2 * audioCtx.sampleRate;
+    const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const output = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      output[i] = Math.random() * 2 - 1;
+    }
+    
+    noiseNode = audioCtx.createBufferSource();
+    noiseNode.buffer = noiseBuffer;
+    noiseNode.loop = true;
+    
+    filterNode = audioCtx.createBiquadFilter();
+    gainNode = audioCtx.createGain();
+    
+    if (state === 'rain' || state === 'thunderstorm') {
+      filterNode.type = 'bandpass';
+      filterNode.frequency.value = 1000;
+      gainNode.gain.value = 0.12;
+      
+      if (state === 'thunderstorm') {
+        soundInterval = setInterval(() => {
+          if (Math.random() > 0.4) {
+            playThunder();
+          }
+        }, 7000);
+      }
+    } else if (state === 'windy') {
+      filterNode.type = 'lowpass';
+      filterNode.frequency.value = 400;
+      gainNode.gain.value = 0.2;
+      
+      soundInterval = setInterval(() => {
+        if (audioCtx && filterNode) {
+          const t = audioCtx.currentTime;
+          filterNode.frequency.linearRampToValueAtTime(Math.random() * 250 + 150, t + 2);
+          gainNode.gain.linearRampToValueAtTime(Math.random() * 0.12 + 0.08, t + 2);
+        }
+      }, 2000);
+    } else {
+      gainNode.gain.value = 0.0;
+    }
+    
+    noiseNode.connect(filterNode);
+    filterNode.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    noiseNode.start();
+  } catch (e) {
+    console.warn("Audio Context init failed:", e);
+  }
+};
+
+const stopWeatherSound = () => {
+  try {
+    if (soundInterval) { clearInterval(soundInterval); soundInterval = null; }
+    if (noiseNode) { noiseNode.stop(); noiseNode = null; }
+    if (audioCtx) { audioCtx.close(); audioCtx = null; }
+  } catch {}
+};
 
 const ActionHome = ({ session }) => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [audioEnabled, setAudioEnabled] = useState(false);
 
   // NEW MULTI-CROP STATE
   const [userCrops, setUserCrops] = useState([]);
@@ -25,6 +271,15 @@ const ActionHome = ({ session }) => {
   const [cropEconomics, setCropEconomics] = useState(null);
   const [upcomingTasks, setUpcomingTasks] = useState([]);
 
+  const profitData = useMemo(() => {
+    if (!selectedCrop) return null;
+    return calculateProfitSnapshot(
+      cropEconomics,
+      profile?.land_size || 2.5,
+      selectedCrop.total_duration_days
+    );
+  }, [selectedCrop, cropEconomics, profile]);
+
   const [expandedStage, setExpandedStage] = useState(null);
   const [substepStatus, setSubstepStatus] = useState({});
   const [dynamicSchedule, setDynamicSchedule] = useState(null);
@@ -36,9 +291,122 @@ const ActionHome = ({ session }) => {
   // PEST & DISEASE DETECTION STATE
   const [isDetecting, setIsDetecting] = useState(false);
   const [detectionResult, setDetectionResult] = useState(null);
+  const [isDetectionModalOpen, setIsDetectionModalOpen] = useState(false);
 
   // WEATHER STATE
-  const [weatherData, setWeatherData] = useState(null);
+  const [farmWeather, setFarmWeather] = useState(null);
+  const displayWeather = farmWeather;
+  const [selectedHourIdx, setSelectedHourIdx] = useState(0);
+
+  const weatherState = useMemo(() => {
+    if (!displayWeather?.weather) return 'sunny';
+    const main = displayWeather.weather.weather[0]?.main || 'Clear';
+    const temp = displayWeather.weather.main.temp || 30;
+    const speed = displayWeather.weather.wind.speed || 3;
+    const speedKmh = Math.round(speed * 3.6);
+
+    if (main === 'Thunderstorm') return 'thunderstorm';
+    if (main === 'Rain' || main === 'Drizzle') return 'rain';
+    if (speedKmh > 20) return 'windy';
+    if (temp > 32 || main === 'Clear') return 'sunny';
+    return 'clouds';
+  }, [displayWeather]);
+
+  const weatherTheme = useMemo(() => {
+    if (!displayWeather?.weather) return 'sunny-normal';
+    const main = displayWeather.weather.weather[0]?.main || 'Clear';
+    const temp = displayWeather.weather.main.temp || 30;
+    const speed = displayWeather.weather.wind.speed || 3;
+    const speedKmh = Math.round(speed * 3.6);
+    const desc = displayWeather.weather.weather[0]?.description?.toLowerCase() || '';
+
+    if (main === 'Thunderstorm') return 'rain-heavy';
+    if (main === 'Rain' || main === 'Drizzle') {
+      if (desc.includes('heavy') || desc.includes('extreme') || desc.includes('ragged')) return 'rain-heavy';
+      if (desc.includes('moderate') || desc.includes('shower')) return 'rain-moderate';
+      return 'rain-light';
+    }
+    if (speedKmh > 20) return 'windy';
+    if (temp > 35) return 'sunny-hot';
+    if (temp >= 28 && temp <= 35) return 'sunny-normal';
+    if (temp < 28 && main === 'Clear') return 'cool';
+    return 'clouds';
+  }, [displayWeather]);
+
+  const isNight = useMemo(() => {
+    const hr = new Date().getHours();
+    return hr < 6 || hr >= 19;
+  }, []);
+
+  const pestFabState = useMemo(() => {
+    if (isDetecting) {
+      return {
+        status: 'detecting',
+        icon: (
+          <svg className="pest-fab-spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="12" y1="2" x2="12" y2="6"></line>
+            <line x1="12" y1="18" x2="12" y2="22"></line>
+            <line x1="4.93" y1="4.93" x2="7.05" y2="7.05"></line>
+            <line x1="16.97" y1="16.97" x2="19.07" y2="19.07"></line>
+            <line x1="2" y1="12" x2="6" y2="12"></line>
+            <line x1="18" y1="12" x2="22" y2="12"></line>
+            <line x1="4.93" y1="19.07" x2="7.05" y2="16.97"></line>
+            <line x1="16.97" y1="7.05" x2="19.07" y2="4.93"></line>
+          </svg>
+        ),
+        textDefault: 'Analyzing Crop Health...',
+        textHover: '',
+        style: {
+          width: '250px',
+          borderColor: '#22c55e',
+          boxShadow: '0 8px 24px rgba(34,197,94,0.25)'
+        }
+      };
+    }
+
+    return {
+      status: 'normal',
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      ),
+      textDefault: 'Disease Detection',
+      textHover: 'Scan crops for pests & diseases',
+      style: {}
+    };
+  }, [isDetecting]);
+
+  const weatherYieldImpact = useMemo(() => {
+    switch (weatherTheme) {
+      case 'sunny-hot': return 0.022;
+      case 'sunny-normal': return 0.018;
+      case 'cool': return 0.010;
+      case 'rain-light': return 0.005;
+      case 'rain-moderate': return 0.010;
+      case 'rain-heavy': return -0.004;
+      case 'windy': return 0.003;
+      default: return 0.006; // clouds/default
+    }
+  }, [weatherTheme]);
+
+  const adjustedProfitData = useMemo(() => {
+    if (!profitData) return null;
+    const factor = 1 + weatherYieldImpact;
+    return {
+      ...profitData,
+      totalProfit: Math.round(profitData.totalProfit * factor),
+      monthlyIncome: Math.round(profitData.monthlyIncome * factor),
+    };
+  }, [profitData, weatherYieldImpact]);
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good Morning';
+    if (hour < 17) return 'Good Afternoon';
+    return 'Good Evening';
+  };
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -103,27 +471,9 @@ const ActionHome = ({ session }) => {
 
           // Fetch Weather
           try {
-            if (navigator.geolocation) {
-              navigator.geolocation.getCurrentPosition(
-                async (position) => {
-                  const coords = {
-                    lat: position.coords.latitude,
-                    lon: position.coords.longitude
-                  };
-                  const res = await fetchWeatherAndAlerts(coords, import.meta.env.VITE_OPENWEATHER_API_KEY);
-                  if (res) setWeatherData(res);
-                },
-                async (error) => {
-                  console.warn("Dashboard auto-geolocation fallback:", error);
-                  const res = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
-                  if (res) setWeatherData(res);
-                },
-                { timeout: 15000, enableHighAccuracy: true }
-              );
-            } else {
-              const res = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
-              if (res) setWeatherData(res);
-            }
+            // Always fetch farm location weather
+            const farmRes = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
+            if (farmRes) setFarmWeather(farmRes);
           } catch (err) {
             console.error("Weather fetch failed", err);
           }
@@ -134,51 +484,275 @@ const ActionHome = ({ session }) => {
     initPage();
   }, [session]);
 
-  const handleGpsRefresh = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const coords = {
-            lat: position.coords.latitude,
-            lon: position.coords.longitude
-          };
-          const res = await fetchWeatherAndAlerts(coords, import.meta.env.VITE_OPENWEATHER_API_KEY);
-          if (res) setWeatherData(res);
-        },
-        async (error) => {
-          console.warn("Manual geolocation refresh failed:", error);
-          if (profile) {
-            const res = await fetchWeatherAndAlerts(profile.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
-            if (res) setWeatherData(res);
-          }
-        },
-        { timeout: 15000, enableHighAccuracy: true }
-      );
+  // Procedural weather sound play control
+  useEffect(() => {
+    if (audioEnabled) {
+      stopWeatherSound();
+      startWeatherSound(weatherState);
+    } else {
+      stopWeatherSound();
     }
-  };
+    return () => stopWeatherSound();
+  }, [audioEnabled, weatherState]);
+
+  // HTML5 Canvas Weather particle engine
+  useEffect(() => {
+    const canvas = document.getElementById('sa-weather-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animationFrameId;
+    let width = canvas.width = canvas.getBoundingClientRect().width || canvas.offsetWidth || 350;
+    let height = canvas.height = canvas.getBoundingClientRect().height || canvas.offsetHeight || 240;
+
+    const handleResize = () => {
+      width = canvas.width = canvas.getBoundingClientRect().width || canvas.offsetWidth || 350;
+      height = canvas.height = canvas.getBoundingClientRect().height || canvas.offsetHeight || 240;
+    };
+    window.addEventListener('resize', handleResize);
+
+    const particles = [];
+    const isNight = (() => {
+      const hr = new Date().getHours();
+      return hr < 6 || hr >= 19;
+    })();
+    const isDark = (document.documentElement.getAttribute('data-theme') === 'dark') || isNight;
+    const season = getCurrentSeason();
+
+    // Determine rain classification details from weatherTheme
+    const rainType = (() => {
+      if (weatherTheme === 'rain-heavy') return 'heavy';
+      if (weatherTheme === 'rain-moderate') return 'moderate';
+      if (weatherTheme === 'rain-light') return 'light';
+      return null;
+    })();
+
+    // Set particle density based on weatherTheme and season
+    const maxParticles = (() => {
+      if (rainType) {
+        return rainType === 'light' ? 45 : rainType === 'moderate' ? 150 : 350;
+      }
+      if (weatherTheme === 'windy') return 75;
+      if (weatherTheme === 'sunny-hot') return 50;
+      if (weatherTheme === 'sunny-normal') return 25;
+      if (weatherTheme === 'cool') return 15;
+      if (season === 'winter') return 40;
+      return 20;
+    })();
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.alpha = rainType === 'heavy' ? (Math.random() * 0.6 + 0.4) : (Math.random() * 0.5 + 0.25);
+        this.size = Math.random() * 2 + 1;
+        this.x = Math.random() * width;
+
+        if (rainType) {
+          // Rain droplets (top-down, fast)
+          this.y = Math.random() * -height;
+          this.vy = rainType === 'light' ? (Math.random() * 2 + 4) : rainType === 'moderate' ? (Math.random() * 4 + 7) : (Math.random() * 12 + 15);
+          this.vx = Math.random() * 1.2 - 0.6;
+          this.size = rainType === 'heavy' ? (Math.random() * 2.8 + 1.8) : rainType === 'moderate' ? (Math.random() * 1.5 + 1.0) : (Math.random() * 0.8 + 0.5);
+          this.color = isDark ? `rgba(156, 186, 211, ${this.alpha * 0.85})` : `rgba(74, 114, 150, ${this.alpha * 0.75})`;
+        } else if (weatherTheme === 'windy') {
+          // Thin horizontal wind sweeps
+          this.x = Math.random() * -width;
+          this.y = Math.random() * height;
+          this.vy = Math.random() * 0.4 - 0.2;
+          this.vx = Math.random() * 7 + 6;
+          this.size = Math.random() * 50 + 40;
+          this.color = isDark ? `rgba(255, 255, 255, 0.08)` : `rgba(255, 255, 255, 0.14)`;
+        } else if (weatherTheme === 'sunny-hot') {
+          // Scorching orange-gold pollen drifting faster
+          this.y = Math.random() * height;
+          this.vy = -(Math.random() * 0.8 + 0.3);
+          this.vx = Math.random() * 1.2 - 0.6;
+          this.size = Math.random() * 2.8 + 1.5;
+          this.color = `rgba(245, 158, 11, ${this.alpha * 0.9})`;
+        } else if (weatherTheme === 'sunny-normal') {
+          // Golden pollen particles floating upwards/around
+          this.y = Math.random() * height;
+          this.vy = -(Math.random() * 0.5 + 0.15);
+          this.vx = Math.random() * 0.7 - 0.35;
+          this.size = Math.random() * 2.2 + 1.2;
+          this.color = `rgba(234, 179, 8, ${this.alpha * 0.85})`;
+        } else if (weatherTheme === 'cool') {
+          // Cool light blue-white lazy mist particles
+          this.y = Math.random() * height;
+          this.vy = Math.random() * 0.3 - 0.15;
+          this.vx = Math.random() * 0.4 - 0.2;
+          this.size = Math.random() * 3 + 2;
+          this.color = isDark ? `rgba(224, 242, 254, ${this.alpha * 0.3})` : `rgba(186, 211, 230, ${this.alpha * 0.25})`;
+        } else if (season === 'winter') {
+          this.y = Math.random() * -height;
+          this.vy = Math.random() * 0.8 + 0.4;
+          this.vx = Math.random() * 0.4 - 0.2;
+          this.size = Math.random() * 2.5 + 1.5;
+          this.color = isDark ? `rgba(240, 248, 255, ${this.alpha * 0.8})` : `rgba(186, 211, 230, ${this.alpha * 0.7})`;
+        } else if (season === 'harvest') {
+          this.y = Math.random() * -height;
+          this.vy = Math.random() * 1.2 + 0.5;
+          this.vx = Math.random() * 0.6 - 0.3;
+          this.size = Math.random() * 3 + 2;
+          this.color = `rgba(245, 158, 11, ${this.alpha * 0.8})`;
+        } else {
+          this.y = Math.random() * height;
+          this.vy = Math.random() * 0.4 + 0.1;
+          this.vx = Math.random() * 0.4 - 0.2;
+          this.color = isDark ? `rgba(255, 255, 255, 0.08)` : `rgba(45, 90, 39, 0.06)`;
+        }
+      }
+
+      update() {
+        this.y += this.vy;
+        this.x += this.vx;
+
+        if (rainType) {
+          if (this.y > height || this.x < 0 || this.x > width) {
+            this.reset();
+            this.y = 0;
+          }
+        } else if (weatherTheme === 'windy') {
+          if (this.x > width || this.y < 0 || this.y > height) {
+            this.reset();
+            this.x = 0;
+          }
+        } else if (weatherTheme === 'sunny-hot' || weatherTheme === 'sunny-normal') {
+          if (this.y < 0 || this.x < 0 || this.x > width) {
+            this.reset();
+            this.y = height;
+          }
+        } else {
+          if (this.y > height || this.y < 0 || this.x < 0 || this.x > width) {
+            this.reset();
+          }
+        }
+      }
+
+      draw() {
+        ctx.beginPath();
+        if (rainType) {
+          // Draw rain streak line
+          ctx.strokeStyle = this.color;
+          ctx.lineWidth = this.size;
+          ctx.moveTo(this.x, this.y);
+          ctx.lineTo(this.x + this.vx * 1.3, this.y + this.vy * 1.3);
+          ctx.stroke();
+
+          // Splash ripple at screen bottom
+          if (this.y > height - 12) {
+            ctx.beginPath();
+            const rx = this.size * (rainType === 'heavy' ? 3.0 : rainType === 'moderate' ? 2.0 : 1.2);
+            const ry = this.size * (rainType === 'heavy' ? 0.8 : rainType === 'moderate' ? 0.5 : 0.3);
+            ctx.ellipse(this.x, height - 4, rx, ry, 0, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+          }
+        } else if (weatherTheme === 'windy') {
+          // Draw wind sweep line
+          ctx.strokeStyle = this.color;
+          ctx.lineWidth = 1.2;
+          ctx.moveTo(this.x, this.y);
+          ctx.lineTo(this.x + this.size, this.y + this.vy * 2);
+          ctx.stroke();
+        } else {
+          // Draw soft circular particles
+          ctx.fillStyle = this.color;
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+
+    // Swaying grass blades at screen bottom
+    const drawGrass = (time) => {
+      const bladeCount = 75;
+      const step = width / bladeCount;
+      
+      // Warm dry grass in sunny hot weather, lush green otherwise
+      ctx.strokeStyle = weatherTheme === 'sunny-hot'
+        ? (isDark ? 'rgba(163, 150, 74, 0.15)' : 'rgba(180, 160, 60, 0.16)')
+        : (isDark ? 'rgba(57, 255, 106, 0.16)' : 'rgba(46, 125, 50, 0.18)');
+      ctx.lineWidth = 1.8;
+      
+      for (let i = 0; i <= bladeCount; i++) {
+        const x = i * step;
+        const grassHeight = 24 + Math.sin(i * 0.6) * 8;
+        const swayRange = weatherTheme === 'windy' ? 14 : weatherTheme === 'rain-heavy' ? 7 : 3.5;
+        const speed = weatherTheme === 'windy' ? 0.007 : weatherTheme === 'rain-heavy' ? 0.004 : 0.0022;
+        const sway = Math.sin(time * speed + i) * swayRange;
+        ctx.beginPath();
+        ctx.moveTo(x, height);
+        ctx.quadraticCurveTo(x + sway * 0.5, height - grassHeight * 0.5, x + sway, height - grassHeight);
+        ctx.stroke();
+      }
+    };
+
+    for (let i = 0; i < maxParticles; i++) {
+      particles.push(new Particle());
+    }
+
+    const render = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      // Heavy rain screen fog
+      if (rainType === 'heavy') {
+        ctx.fillStyle = isDark ? 'rgba(15, 23, 42, 0.14)' : 'rgba(255, 255, 255, 0.12)';
+        ctx.fillRect(0, 0, width, height);
+      }
+
+      // Thunderstorm or heavy rain lightning flash
+      if ((weatherState === 'thunderstorm' || weatherTheme === 'rain-heavy') && Math.random() > 0.985) {
+        ctx.fillStyle = isDark ? 'rgba(255, 255, 255, 0.28)' : 'rgba(255, 255, 255, 0.65)';
+        ctx.fillRect(0, 0, width, height);
+        const card = document.getElementById('sa-weather-card');
+        if (card) {
+          card.classList.add('lightning-active');
+          setTimeout(() => card.classList.remove('lightning-active'), 400);
+        }
+      }
+
+      // Draw all weather/season particles
+      for (const p of particles) {
+        p.update();
+        p.draw();
+      }
+
+      // Draw dynamic swaying grass layer
+      drawGrass(Date.now());
+
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [weatherTheme]);
+
+
 
   const loadCropView = (cropObj) => {
-    const crop = cropProcessData.find(c => c.crop_name === cropObj.cropName);
+    // Normalize name: remove spaces before "(" so "Paddy (Common)" matches "Paddy(Common)"
+    const normalizeName = (n) => (n || '').replace(/\s*\(/g, '(').toLowerCase().trim();
+    const targetName = normalizeName(cropObj.cropName);
+    let crop = cropProcessData.find(c => normalizeName(c.crop_name) === targetName);
     if (crop) {
+      crop = adjustStageRanges(crop);
       const start = new Date(cropObj.startDate);
       const today = new Date();
       const diffTime = today.getTime() - start.getTime();
       const diffDays = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
 
-      let currentDay = 1;
-      const stagesWithDays = crop.stages.map(stage => {
-        const start_day = currentDay;
-        const end_day = currentDay + stage.duration_days - 1;
-        currentDay = end_day + 1;
-        return { ...stage, start_day, end_day };
-      });
-      const updatedCrop = { ...crop, stages: stagesWithDays };
-
-      setSelectedCrop(updatedCrop);
+      setSelectedCrop(crop);
       setCropStartDate(start);
       setDaysPassed(diffDays);
 
-      const currentStage = calculateCurrentStage(stagesWithDays, diffDays);
+      const currentStage = calculateCurrentStage(crop.stages, diffDays);
       setExpandedStage(currentStage?.stage_id);
 
       const cd = cropDataList.find(c => c.api_name === cropObj.cropName || c.name === cropObj.cropName);
@@ -189,23 +763,22 @@ const ActionHome = ({ session }) => {
       }
 
       let tasks = [];
-      for (const stage of stagesWithDays) {
+      for (const stage of crop.stages) {
         if (stage.end_day >= diffDays) {
-          const stepInterval = Math.max(1, Math.floor(stage.duration_days / Math.max(1, stage.substeps.length)));
-          for (let i = 0; i < stage.substeps.length; i++) {
-             let targetAbsoluteDay = stage.start_day + (i * stepInterval);
+          for (let sub of stage.substeps) {
+             const targetAbsoluteDay = sub.day;
              if (targetAbsoluteDay > diffDays) {
                  let daysFromNow = targetAbsoluteDay - diffDays;
                  let label = `Day ${targetAbsoluteDay}`;
                  if (daysFromNow === 1) label = 'Tomorrow';
                  else if (daysFromNow <= 7) label = `In ${daysFromNow} days`;
                  
-                 tasks.push({ day: label, task: stage.substeps[i] });
+                 tasks.push({ day: label, task: sub.task });
              }
           }
         }
       }
-      if (tasks.length === 0 && updatedCrop.total_duration_days > diffDays) {
+      if (tasks.length === 0 && crop.total_duration_days > diffDays) {
         tasks.push({ day: 'Regular', task: 'Monitor soil health and water needs' });
       }
       setUpcomingTasks(tasks.slice(0, 3));
@@ -221,7 +794,8 @@ const ActionHome = ({ session }) => {
     formData.append('image', file);
     
     try {
-      const response = await fetch('http://localhost:5000/detect/detect', {
+      const apiUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiUrl}/detect/detect`, {
         method: 'POST',
         body: formData,
       });
@@ -239,10 +813,8 @@ const ActionHome = ({ session }) => {
   };
 
   const calculateCurrentStage = (stages, days) => {
-    let elapsed = 0;
     for (let stage of stages) {
-      elapsed += stage.duration_days;
-      if (days <= elapsed) return stage;
+      if (days >= stage.start_day && days <= stage.end_day) return stage;
     }
     return stages[stages.length - 1];
   };
@@ -321,13 +893,13 @@ const ActionHome = ({ session }) => {
       if (!selectedCrop) return;
       const targetStage = selectedCrop.stages.find(s => s.stage_id === (expandedStage || currentStage?.stage_id)) || currentStage;
       if (!targetStage) return;
-      const stageKey = `stage_schedule_v3_${selectedCrop.crop_name}_${targetStage.stage_id}`;
+      const stageKey = `stage_schedule_v5_${selectedCrop.crop_name}_${targetStage.stage_id}`;
       const cached = localStorage.getItem(stageKey);
       if (cached) {
         setDynamicSchedule(JSON.parse(cached));
       } else {
         setIsGeneratingSchedule(true);
-        const schedule = await generateStageSchedule(selectedCrop.crop_name, targetStage.title, targetStage.duration_days, targetStage.substeps);
+        const schedule = await generateStageSchedule(selectedCrop.crop_name, targetStage.title, targetStage.duration_days, targetStage.substeps, targetStage.start_day);
         if (schedule && Array.isArray(schedule)) {
           localStorage.setItem(stageKey, JSON.stringify(schedule));
           setDynamicSchedule(schedule);
@@ -346,20 +918,59 @@ const ActionHome = ({ session }) => {
   }, [selectedCrop, daysPassed]);
 
   if (loading) {
-    return <div style={{display:'flex', height:'100vh', justifyContent:'center', alignItems:'center', background:'#0A0D0B', color:'#39FF6A'}}>Loading Dashboard...</div>;
+    return (
+      <div style={{
+        display: 'flex', 
+        height: '100vh', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        background: '#F6F1EB', 
+        color: '#2D5A27',
+        fontFamily: '"Outfit", "Inter", sans-serif',
+        fontSize: '20px',
+        fontWeight: 600,
+        flexDirection: 'column',
+        gap: '16px'
+      }}>
+        <div style={{
+          width: '40px',
+          height: '40px',
+          border: '3px solid rgba(45, 90, 39, 0.1)',
+          borderTopColor: '#2D5A27',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite'
+        }} />
+        <style>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+        Loading Dashboard...
+      </div>
+    );
   }
 
+  const currentSeason = getCurrentSeason();
+
   return (
-    <div className="antigravity-dashboard">
-      <div className="neo-card daily-word-card" style={{ marginBottom: '24px', padding: '24px', display: 'flex', alignItems: 'center', gap: '16px', border: '1px solid var(--neon-green-dim)' }}>
-        <div style={{ padding: '12px', background: 'var(--neon-green-dim)', borderRadius: '12px', color: 'var(--neon-green)', display: 'flex' }}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <>
+      <div className={`antigravity-dashboard weather-bg-${weatherState} weather-theme-${weatherTheme} season-${currentSeason} ${isNight ? 'night-time' : ''}`}>
+      
+      <div className="daily-word-card">
+        <div className="daily-word-icon-wrap">
+          <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+            <path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+          </svg>
         </div>
-        <div>
-          <div style={{ fontSize: '12px', fontWeight: 800, color: 'var(--neon-green)', letterSpacing: '1px', marginBottom: '4px' }}>DAILY WORD</div>
-          <div style={{ fontSize: '15px', color: 'var(--text-main)', lineHeight: 1.5, fontWeight: 500 }}>
-            {dailyQuote || 'The ultimate goal of farming is not the growing of crops, but the cultivation and perfection of human beings.'}
+        <div className="daily-word-content">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h3 className="daily-word-label">Daily Word</h3>
+
           </div>
+          <p className="daily-word-quote">
+            {dailyQuote ? `"${dailyQuote}"` : '"The ultimate goal of farming is not the growing of crops, but the cultivation and perfection of human beings."'}
+          </p>
         </div>
       </div>
 
@@ -371,11 +982,48 @@ const ActionHome = ({ session }) => {
           {/* HERO CARD */}
           <div className="neo-card hero-card">
             <div className="hero-glow"></div>
-            <div className="hero-header">
-              <h1>Hi, {profile?.full_name || 'Hitheshsena'}</h1>
-              <svg className="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2L2 22l10-4 10 4L12 2z"/></svg>
+            <div className="hero-header" style={{ display: 'block' }}>
+              {weatherState === 'rain' ? (
+                <div>
+                  <h1 className="hero-welcome">{getGreeting()}, {profile?.full_name || 'Hithesh'}</h1>
+                  <div className="hero-impact-pill">Rainfall Detected: 12mm Today</div>
+                  <p className="hero-impact-desc">Your farm is receiving adequate moisture. Expected Water Saving: <strong>₹240</strong></p>
+                </div>
+              ) : weatherState === 'thunderstorm' ? (
+                <div>
+                  <h1 className="hero-welcome">{getGreeting()}, {profile?.full_name || 'Hithesh'}</h1>
+                  <div className="hero-impact-pill warning">⚡ Thunderstorm Warning</div>
+                  <p className="hero-impact-desc">Expected Rain: <strong>45mm</strong>. Risk of <strong>Waterlogging</strong>. Ensure drainage valves are clear.</p>
+                </div>
+              ) : weatherState === 'windy' ? (
+                <div>
+                  <h1 className="hero-welcome">{getGreeting()}, {profile?.full_name || 'Hithesh'}</h1>
+                  <div className="hero-impact-pill warning">High Wind Warning</div>
+                  <p className="hero-impact-desc">Wind Speed: <strong>22 km/h</strong>. Risk of crop stress. <strong>Avoid chemical spraying</strong> due to drift.</p>
+                </div>
+              ) : weatherState === 'sunny' ? (
+                isNight ? (
+                  <div>
+                    <h1 className="hero-welcome">{getGreeting()}, {profile?.full_name || 'Hithesh'}</h1>
+                    <div className="hero-impact-pill">Clear Night Sky</div>
+                    <p className="hero-impact-desc">Temperatures are cool. Soil evaporation rates are low. Standard nighttime rest active.</p>
+                  </div>
+                ) : (
+                  <div>
+                    <h1 className="hero-welcome">{getGreeting()}, {profile?.full_name || 'Hithesh'}</h1>
+                    <div className="hero-impact-pill warning">High Temperature Alert</div>
+                    <p className="hero-impact-desc">Heat Stress Risk: <strong>Medium</strong>. AI Recommendation: <strong>Increase irrigation by 10%</strong> today.</p>
+                  </div>
+                )
+              ) : (
+                <div>
+                  <h1 className="hero-welcome">{getGreeting()}, {profile?.full_name || 'Hithesh'}</h1>
+                  <div className="hero-impact-pill">Overcast Conditions</div>
+                  <p className="hero-impact-desc">Photosynthesis rate is slightly reduced. Monitor for mildew signs. Keep normal maintenance.</p>
+                </div>
+              )}
             </div>
-            <div className="hero-sub">ACTIVE FARMER</div>
+            <div className="hero-sub" style={{ marginTop: '12px' }}>ACTIVE FARMER</div>
             <h2 className="hero-crop-title">{selectedCrop ? selectedCrop.crop_name : 'No Active Crop'}</h2>
             
             {selectedCrop && (
@@ -488,13 +1136,13 @@ const ActionHome = ({ session }) => {
                 </div>
 
                 {/* SMART WEATHER ADVISOR */}
-                {weatherData && weatherData.alert && (
+                {farmWeather && farmWeather.alert && (
                   <div style={{ 
                     marginTop: '12px', 
                     padding: '12px 16px', 
                     borderRadius: '12px', 
-                    background: weatherData.alert.severity === 'success' ? 'rgba(57, 255, 106, 0.08)' : 'rgba(255, 152, 0, 0.1)',
-                    border: `1px solid ${weatherData.alert.severity === 'success' ? 'rgba(57, 255, 106, 0.2)' : 'rgba(255, 152, 0, 0.3)'}`,
+                    background: farmWeather.alert.severity === 'success' ? 'rgba(57, 255, 106, 0.08)' : 'rgba(255, 152, 0, 0.1)',
+                    border: `1px solid ${farmWeather.alert.severity === 'success' ? 'rgba(57, 255, 106, 0.2)' : 'rgba(255, 152, 0, 0.3)'}`,
                     display: 'flex',
                     alignItems: 'center',
                     gap: '12px'
@@ -503,31 +1151,31 @@ const ActionHome = ({ session }) => {
                       width: '36px', 
                       height: '36px', 
                       borderRadius: '50%', 
-                      background: weatherData.alert.severity === 'success' ? 'rgba(57, 255, 106, 0.15)' : 'rgba(255, 152, 0, 0.2)',
+                      background: farmWeather.alert.severity === 'success' ? 'rgba(57, 255, 106, 0.15)' : 'rgba(255, 152, 0, 0.2)',
                       display: 'flex', 
                       alignItems: 'center', 
                       justifyContent: 'center',
-                      color: weatherData.alert.severity === 'success' ? 'var(--neon-green)' : '#FF9800'
+                      color: farmWeather.alert.severity === 'success' ? 'var(--neon-green)' : '#FF9800'
                     }}>
-                      {weatherData.alert.severity === 'success' ? (
+                      {farmWeather.alert.severity === 'success' ? (
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
                       ) : (
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                       )}
                     </div>
                     <div>
-                      <div style={{ fontSize: '13px', fontWeight: 800, color: weatherData.alert.severity === 'success' ? 'var(--neon-green)' : '#F57C00', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                        Weather Advisor
+                      <div style={{ fontSize: '13px', fontWeight: 800, color: farmWeather.alert.severity === 'success' ? 'var(--neon-green)' : '#F57C00', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        Weather Advisor (Farm: {profile?.location?.split(',')[0] || 'Farm'})
                       </div>
                       <div style={{ fontSize: '14px', color: 'var(--text-main)', fontWeight: 500, marginTop: '2px' }}>
                         {(() => {
-                          let message = weatherData.alert.message;
+                          let message = farmWeather.alert.message;
                           const stageTitle = currentStage?.title?.toLowerCase() || "";
                           const isInitialPhase = stageTitle.includes('land preparation') || stageTitle.includes('ploughing') || daysPassed <= 3;
                           
                           if (isInitialPhase && message.toLowerCase().includes('heat stress on crops')) {
-                            const temp = Math.round(weatherData.weather.main.temp);
-                            return `It is currently ${temp}°C. Wear protective gear and stay hydrated while ploughing. Avoid working during peak heat hours.`;
+                            const temp = farmWeather.weather ? Math.round(farmWeather.weather.main.temp) : 35;
+                            return `It is currently ${temp}°C at your farm. Wear protective gear and stay hydrated while ploughing. Avoid working during peak heat hours.`;
                           }
                           return message;
                         })()}
@@ -539,20 +1187,65 @@ const ActionHome = ({ session }) => {
               
               <div className="task-list">
                 {(() => {
-                  const stepInterval = Math.max(1, Math.floor(currentStage.duration_days / Math.max(1, currentStage.substeps.length)));
-                  const relativeDayInStage = daysPassed - currentStage.start_day + 1;
-                  
                   const sortedSubsteps = currentStage.substeps.map((sub, i) => {
+                    const taskText = sub.task;
                     let ai = null;
-                    if (dynamicSchedule && Array.isArray(dynamicSchedule)) ai = dynamicSchedule.find(s => s.task === sub);
-                    return { sub, i, ai, targetDay: ai ? ai.relative_day : (i * stepInterval) + 1 };
+                    if (dynamicSchedule && Array.isArray(dynamicSchedule)) {
+                      ai = dynamicSchedule.find(s => s.task === taskText);
+                    }
+                    const targetDay = ai 
+                      ? (currentStage.start_day + ai.relative_day - 1) 
+                      : sub.day;
+                    
+                    return { sub: taskText, i, ai, targetDay };
                   }).sort((a, b) => a.targetDay - b.targetDay);
                   
                   // Filter to only show tasks scheduled for today, or past-due tasks not yet checked off
-                  const todaysTasks = sortedSubsteps.filter(item => {
+                  let todaysTasks = sortedSubsteps.filter(item => {
                     const isChecked = substepStatus[`${currentStage.stage_id}_${item.i}`];
-                    return item.targetDay === relativeDayInStage || (item.targetDay < relativeDayInStage && !isChecked);
+                    return item.targetDay === daysPassed || (item.targetDay < daysPassed && !isChecked);
                   });
+
+                  // Weather dynamic tasks injection
+                  let weatherPrepTask = null;
+                  const todayStr = new Date().toISOString().split('T')[0];
+                  if (weatherState === 'rain' || weatherState === 'thunderstorm') {
+                    const todayKey = `weather_task_drainage_${todayStr}`;
+                    const isChecked = substepStatus[todayKey] || false;
+                    weatherPrepTask = {
+                      sub: "🌧 Inspect drainage channels and clear rainwater harvest systems",
+                      i: todayKey,
+                      isWeatherTask: true,
+                      isChecked: isChecked,
+                      weatherBadge: "WEATHER PREP",
+                      weatherDesc: "Monsoon rainfall active. Prevent pooling on field borders and ensure storage tank fills cleanly.",
+                      targetDay: daysPassed,
+                      toggleFunc: () => {
+                        localStorage.setItem(todayKey, (!isChecked).toString());
+                        setSubstepStatus(prev => ({ ...prev, [todayKey]: !isChecked }));
+                      }
+                    };
+                  } else if (weatherState === 'windy') {
+                    const todayKey = `weather_task_wind_${todayStr}`;
+                    const isChecked = substepStatus[todayKey] || false;
+                    weatherPrepTask = {
+                      sub: "🌬 Secure trellises, strappings, and crop support posts",
+                      i: todayKey,
+                      isWeatherTask: true,
+                      isChecked: isChecked,
+                      weatherBadge: "WIND ALERT",
+                      weatherDesc: "Wind speed is high (22 km/h). Prevent damage to seedlings and tall crop stalks.",
+                      targetDay: daysPassed,
+                      toggleFunc: () => {
+                        localStorage.setItem(todayKey, (!isChecked).toString());
+                        setSubstepStatus(prev => ({ ...prev, [todayKey]: !isChecked }));
+                      }
+                    };
+                  }
+
+                  if (weatherPrepTask) {
+                    todaysTasks = [weatherPrepTask, ...todaysTasks];
+                  }
 
                   if (todaysTasks.length === 0) {
                      return (
@@ -565,35 +1258,86 @@ const ActionHome = ({ session }) => {
                   }
                   
                   return todaysTasks.map((item, idx) => {
-                    const isChecked = substepStatus[`${currentStage.stage_id}_${item.i}`];
+                    const isChecked = item.isWeatherTask ? item.isChecked : substepStatus[`${currentStage.stage_id}_${item.i}`];
                     const isActive = !isChecked && idx === 0; // Top uncompleted task is active focus
+                    const taskDate = new Date(cropStartDate.getTime() + (item.targetDay - 1) * 86400000);
+                    const formattedDate = taskDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
                     
+                    // Weather-driven prioritization / warning badges
+                    const isSprayTask = !item.isWeatherTask && /spray|fertiliz|pesticid|applic/i.test(item.sub);
+                    const isIrrigationTask = !item.isWeatherTask && /water|irrigat/i.test(item.sub);
+                    let taskWeatherAlert = null;
+                    let taskWeatherBadge = null;
+                    let badgeType = "neutral";
+                    
+                    if (isSprayTask && (weatherState === 'rain' || weatherState === 'thunderstorm')) {
+                      taskWeatherBadge = "DELAYED";
+                      taskWeatherAlert = "Postpone chemical spraying to avoid rain runoff and loss.";
+                    } else if (isSprayTask && weatherState === 'windy') {
+                      taskWeatherBadge = "DELAYED";
+                      taskWeatherAlert = "Postpone pesticide application to avoid wind drift.";
+                    } else if (isIrrigationTask && weatherState === 'sunny') {
+                      taskWeatherBadge = "BOOST WATER";
+                      taskWeatherAlert = "Increase irrigation rate by 10% due to heat stress.";
+                      badgeType = "boost";
+                    }
+
                     return (
                       <div key={idx} className={`task-item ${isActive ? 'active' : ''}`} style={{opacity: isChecked ? 0.4 : 1}}>
                         <div className="task-left">
-                          <div className={`task-checkbox ${isChecked ? 'checked' : ''}`} onClick={() => toggleSubstep(currentStage.stage_id, item.i)}>
+                          <div className={`task-checkbox ${isChecked ? 'checked' : ''}`} onClick={() => item.isWeatherTask ? item.toggleFunc() : toggleSubstep(currentStage.stage_id, item.i)}>
                              {isChecked && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0A0D0B" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>}
                           </div>
                           <div className="task-content">
                             <h4 style={{textDecoration: isChecked ? 'line-through' : 'none'}}>
                               {item.sub} 
-                              {isActive && <span className="high-badge">URGENT</span>}
+                              {item.isWeatherTask ? (
+                                <span className="high-badge" style={{ background: 'var(--neon-green-dim)', color: 'var(--neon-green)', borderColor: 'var(--neon-green)' }}>{item.weatherBadge}</span>
+                              ) : (
+                                <>
+                                  {isActive && <span className="high-badge">URGENT</span>}
+                                  {taskWeatherBadge && (
+                                    <span className="high-badge" style={{ 
+                                      background: badgeType === 'boost' ? 'rgba(57, 255, 106, 0.1)' : 'rgba(156, 163, 175, 0.15)', 
+                                      color: badgeType === 'boost' ? 'var(--neon-green)' : 'var(--text-sub)',
+                                      borderColor: badgeType === 'boost' ? 'rgba(57, 255, 106, 0.3)' : 'rgba(156, 163, 175, 0.3)'
+                                    }}>
+                                      {taskWeatherBadge}
+                                    </span>
+                                  )}
+                                </>
+                              )}
                             </h4>
-                            {isActive && item.ai && (
+                            {item.isWeatherTask ? (
+                              <div className="task-desc">{item.weatherDesc}</div>
+                            ) : (
                               <>
-                                <div className="task-desc">{item.ai.reason}</div>
-                                <div className="sys-rec">
-                                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>
-                                  System Recommendation
-                                </div>
+                                {isActive && item.ai && <div className="task-desc">{item.ai.reason}</div>}
+                                {taskWeatherAlert && !isChecked && (
+                                  <div className="sys-rec" style={{ color: badgeType === 'boost' ? 'var(--neon-green)' : 'var(--text-sub)', borderColor: badgeType === 'boost' ? 'rgba(57, 255, 106, 0.3)' : 'rgba(156, 163, 175, 0.3)' }}>
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                                    {taskWeatherAlert}
+                                  </div>
+                                )}
+                                {isActive && item.ai && !taskWeatherAlert && (
+                                  <div className="sys-rec">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>
+                                    System Recommendation
+                                  </div>
+                                )}
                               </>
                             )}
                           </div>
                         </div>
                         <div className="task-right">
-                          <div className="task-day">Day {item.targetDay} of {currentStage.duration_days}</div>
-                          {isActive && <div className="task-timing">Optimal timing</div>}
-                          {item.targetDay < relativeDayInStage && !isChecked && <div className="task-timing" style={{color: 'var(--danger-red)'}}>Past Due</div>}
+                          <div className="task-day">
+                            Day {item.targetDay}
+                            <span style={{ fontSize: '10px', color: 'var(--text-sub)', marginLeft: '4px', display: 'block', textAlign: 'right' }}>
+                              {formattedDate}
+                            </span>
+                          </div>
+                          {isActive && !taskWeatherAlert && <div className="task-timing">Optimal timing</div>}
+                          {item.targetDay < daysPassed && !isChecked && <div className="task-timing" style={{color: 'var(--danger-red)'}}>Past Due</div>}
                         </div>
                       </div>
                     );
@@ -622,69 +1366,89 @@ const ActionHome = ({ session }) => {
                  <div className="pipeline-line"></div>
                  {selectedCrop.stages.map((stage, idx) => {
                     const status = stage.stage_id < currentStage?.stage_id ? 'done' : (stage.stage_id === currentStage?.stage_id ? 'active' : 'pending');
+                    const isSelected = stage.stage_id === (expandedStage || currentStage?.stage_id);
                     return (
-                      <div key={idx} className="pipeline-node-wrap" onClick={() => setExpandedStage(stage.stage_id)} style={{cursor: 'pointer'}}>
-                        <div className={`p-node ${status}`}>
+                      <div key={idx} className={`pipeline-node-wrap ${isSelected ? 'selected' : ''}`} onClick={() => setExpandedStage(stage.stage_id)} style={{cursor: 'pointer'}}>
+                        <div className={`p-node ${status} ${isSelected ? 'selected' : ''}`}>
                           {status === 'done' ? (
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                           ) : stage.stage_id}
                         </div>
-                        <div className="p-label" style={{maxWidth: '60px', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: status==='active'?'var(--neon-green)':''}}>{stage.title}</div>
+                        <div className="p-label" style={{maxWidth: '60px', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{stage.title}</div>
                       </div>
                     )
                  })}
                </div>
 
                {(() => {
-                 const activePanelStage = selectedCrop.stages.find(s => s.stage_id === (expandedStage || currentStage?.stage_id)) || currentStage;
-                 if (!activePanelStage) return null;
-                 const sStatus = activePanelStage.stage_id < currentStage?.stage_id ? 'completed' : (activePanelStage.stage_id === currentStage?.stage_id ? 'active' : 'upcoming');
-                 const sDays = (sStatus === 'active') ? Math.min(daysPassed - activePanelStage.start_day + 1, activePanelStage.duration_days) : (sStatus === 'completed' ? activePanelStage.duration_days : 0);
-                 let sPercent = Math.round((sDays / activePanelStage.duration_days) * 100);
-                 if (activePanelStage.duration_days === 0) sPercent = 100;
+                  const activePanelStage = selectedCrop.stages.find(s => s.stage_id === (expandedStage || currentStage?.stage_id)) || currentStage;
+                  if (!activePanelStage) return null;
+                  const sStatus = activePanelStage.stage_id < currentStage?.stage_id ? 'completed' : (activePanelStage.stage_id === currentStage?.stage_id ? 'active' : 'upcoming');
+                  const stageDuration = activePanelStage.end_day - activePanelStage.start_day + 1;
+                  const sDays = (sStatus === 'active') 
+                    ? Math.max(0, Math.min(daysPassed - activePanelStage.start_day + 1, stageDuration)) 
+                    : (sStatus === 'completed' ? stageDuration : 0);
+                  let sPercent = Math.round((sDays / stageDuration) * 100);
+                  if (stageDuration <= 0) sPercent = 100;
 
-                 return (
-                   <div className="stage-active-box">
-                     <div className="stage-active-header">
-                       <h3>{activePanelStage.title} {sStatus === 'active' ? '— In Progress' : ''}</h3>
-                       <span>Day {activePanelStage.start_day} → Day {activePanelStage.end_day}</span>
-                     </div>
-                     <div className="stage-bar-wrap">
-                       <div className="stage-bar-fill" style={{width: `${sPercent}%`, background: sStatus === 'completed' ? 'var(--text-sub)' : 'var(--neon-green)'}}></div>
-                     </div>
-                     <div style={{padding: '16px'}}>
-                       <div style={{fontSize: '11px', color: 'var(--text-sub)', marginBottom: '16px'}}>
-                         {sPercent}% of stage complete
-                       </div>
-                       
-                       <div className="sb-task-list">
-                          {activePanelStage.substeps.map((sub, i) => {
-                            let ai = null;
-                            if (dynamicSchedule && Array.isArray(dynamicSchedule)) ai = dynamicSchedule.find(s => s.task === sub);
-                            
-                            const stepInterval = Math.max(1, Math.floor(activePanelStage.duration_days / Math.max(1, activePanelStage.substeps.length)));
-                            const targetDay = ai ? ai.relative_day : (i * stepInterval) + 1;
-                            
-                            const isChecked = sStatus === 'completed' || substepStatus[`${activePanelStage.stage_id}_${i}`];
-                            return (
-                              <div key={i} className="task-item" style={{borderBottom: 'none', padding: '4px 0', opacity: isChecked ? 0.3 : 1}}>
-                                <div className="task-left">
-                                  <div className={`task-checkbox ${isChecked ? 'checked' : ''}`} style={{width: '16px', height: '16px', cursor: 'default'}}>
-                                    {isChecked && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0A0D0B" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" style={{marginTop:'-2px'}}><polyline points="20 6 9 17 4 12"></polyline></svg>}
+                  return (
+                    <div className="stage-active-box">
+                      <div className="stage-active-header">
+                        <h3>{activePanelStage.title} {sStatus === 'active' ? '— In Progress' : ''}</h3>
+                        <span>Day {activePanelStage.start_day} → Day {activePanelStage.end_day}</span>
+                      </div>
+                      <div className="stage-bar-wrap">
+                        <div className="stage-bar-fill" style={{width: `${sPercent}%`, background: sStatus === 'completed' ? 'var(--text-sub)' : 'var(--neon-green)'}}></div>
+                      </div>
+                      <div style={{padding: '16px'}}>
+                        <div style={{fontSize: '11px', color: 'var(--text-sub)', marginBottom: '16px'}}>
+                          {sPercent}% of stage complete
+                        </div>
+                        
+                        <div className="sb-task-list">
+                           {activePanelStage.substeps.map((sub, i) => {
+                              const taskText = sub.task;
+                              const originalTargetDay = sub.day;
+                              
+                              let ai = null;
+                              if (dynamicSchedule && Array.isArray(dynamicSchedule)) {
+                                ai = dynamicSchedule.find(s => s.task === taskText);
+                              }
+                              
+                              const targetDay = ai 
+                                ? (activePanelStage.start_day + ai.relative_day - 1) 
+                                : originalTargetDay;
+                              
+                              const isChecked = sStatus === 'completed' || substepStatus[`${activePanelStage.stage_id}_${i}`];
+                              const taskDate = new Date(cropStartDate.getTime() + (targetDay - 1) * 86400000);
+                              const formattedDate = taskDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+
+                              return (
+                                <div key={i} className="task-item" style={{borderBottom: 'none', padding: '4px 0', opacity: isChecked ? 0.3 : 1}}>
+                                  <div className="task-left">
+                                    <div className={`task-checkbox ${isChecked ? 'checked' : ''}`} style={{width: '16px', height: '16px', cursor: 'default'}}>
+                                      {isChecked && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0A0D0B" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" style={{marginTop:'-2px'}}><polyline points="20 6 9 17 4 12"></polyline></svg>}
+                                    </div>
+                                    <div className="task-content">
+                                      <h4 style={{fontSize: '13px', margin: 0, textDecoration: isChecked?'line-through':'none'}}>{taskText}</h4>
+                                    </div>
                                   </div>
-                                  <div className="task-content">
-                                    <h4 style={{fontSize: '13px', margin: 0, textDecoration: isChecked?'line-through':'none'}}>{sub}</h4>
+                                  <div className="task-right">
+                                    <div className="task-day">
+                                      Day {targetDay}
+                                      <span style={{ fontSize: '10px', color: 'var(--text-sub)', marginLeft: '4px', display: 'block', textAlign: 'right' }}>
+                                        {formattedDate}
+                                      </span>
+                                    </div>
                                   </div>
                                 </div>
-                                <div className="task-right"><div className="task-day">Day {targetDay}/{activePanelStage.duration_days}</div></div>
-                              </div>
-                            );
-                          })}
-                       </div>
-                     </div>
-                   </div>
-                 );
-               })()}
+                              );
+                            })}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
             </div>
           )}
 
@@ -694,123 +1458,387 @@ const ActionHome = ({ session }) => {
         <div className="right-column">
           
           {/* WEATHER CENTER */}
-          <div className="neo-card">
-            <div className="weather-header">
-              <div>
-                <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  Weather Center
-                  {weatherData?.isGps && (
-                    <span style={{ 
-                      fontSize: '9px', 
-                      background: 'rgba(57, 255, 106, 0.15)', 
-                      color: 'var(--neon-green)', 
-                      padding: '2px 6px', 
-                      borderRadius: '6px',
-                      fontWeight: 800,
-                      letterSpacing: '0.5px',
-                      textTransform: 'uppercase'
-                    }}>
-                      GPS Active
-                    </span>
-                  )}
-                </h3>
-                <p style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                  {weatherData?.isGps && weatherData?.coords
-                    ? `${weatherData.locationName} (${weatherData.coords.lat.toFixed(4)}°N, ${weatherData.coords.lon.toFixed(4)}°E)`
-                    : (weatherData?.locationName || profile?.location || 'Hyderabad, TG')}
-                </p>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
-                <div className="live-badge">
-                  <div className="live-dot"></div> Live
+          {(() => {
+            const weatherScene = (() => {
+              if (isNight) return 'night';
+              if (weatherState === 'thunderstorm' || weatherTheme === 'rain-heavy') return 'thunderstorm';
+              if (weatherTheme === 'rain-light' || weatherTheme === 'rain-moderate') return 'rain';
+              if (weatherTheme === 'sunny-hot' || weatherTheme === 'sunny-normal') return 'sunny';
+              if (weatherTheme === 'cool') return 'partly-cloudy';
+              if (weatherTheme === 'clouds') return 'cloudy';
+              if (weatherTheme === 'windy') return 'partly-cloudy';
+              return 'sunny'; // fallback
+            })();
+
+            const dynamicInsight = (() => {
+              if (weatherScene === 'rain' || weatherScene === 'thunderstorm') {
+                return {
+                  title: "✨ SmartAgri AI: Rain Expected",
+                  message: "Heavy rain / storm detected. Avoid pesticide spraying or fertilizer spreading to prevent chemical run-off. Soil moisture is naturally improving. No irrigation is needed today."
+                };
+              }
+              if (weatherScene === 'sunny') {
+                return {
+                  title: "✨ SmartAgri AI: High Evaporation",
+                  message: "High temperature and strong sunlight will increase transpiration. Secure soil moisture. Increase irrigation by 10% in the evening. Ideal time for crop scouting and pest check."
+                };
+              }
+              if (weatherTheme === 'windy') {
+                return {
+                  title: "✨ SmartAgri AI: Drift Advisory",
+                  message: "Wind speeds are high. Avoid any chemical spraying to prevent drift damage to adjacent rows. Secure tall crops and inspect greenhouse covers if applicable."
+                };
+              }
+              if (weatherScene === 'clouds' || weatherScene === 'partly-cloudy') {
+                return {
+                  title: "✨ SmartAgri AI: Stable Conditions",
+                  message: "Overcast skies will slightly reduce direct light. Photosynthesis is moderate. Keep standard weeding schedules, maintain normal irrigation, and watch out for early leaf spot."
+                };
+              }
+              return {
+                title: "✨ SmartAgri AI: Optimal Outlook",
+                message: "Farming conditions are highly favorable today. Soil conditions and ambient temp are stable. Clear to apply fertilizer, weed fields, and run routine soil testing."
+              };
+            })();
+
+            const fallbackForecasts = [
+              { dt: Math.floor(Date.now() / 1000) + 10800, main: { temp: 33 }, weather: [{ main: 'Clear' }] },
+              { dt: Math.floor(Date.now() / 1000) + 21600, main: { temp: 30 }, weather: [{ main: 'Clouds' }] },
+              { dt: Math.floor(Date.now() / 1000) + 32400, main: { temp: 27 }, weather: [{ main: 'Rain' }] },
+              { dt: Math.floor(Date.now() / 1000) + 43200, main: { temp: 24 }, weather: [{ main: 'Thunderstorm' }] }
+            ];
+            const list = (displayWeather?.forecastList || []).slice(0, 4);
+            const activeForecasts = list.length === 4 ? list : fallbackForecasts;
+
+            // Compute values based on selected forecast item (0 is NOW, 1-4 are hourly)
+            const currentTemp = displayWeather?.weather ? Math.round(displayWeather.weather.main.temp) : 24;
+            const currentHumidity = displayWeather?.weather ? displayWeather.weather.main.humidity : 65;
+            const currentWindSpeed = displayWeather?.weather ? Math.round(displayWeather.weather.wind.speed * 3.6) : 12;
+            const currentWindDeg = displayWeather?.weather ? displayWeather.weather.wind.deg : 45;
+            const currentRainChance = displayWeather?.weather ? Math.round(displayWeather.weather.pop * 100) : 15;
+
+            const selectedTemp = selectedHourIdx === 0 
+              ? currentTemp 
+              : Math.round(activeForecasts[selectedHourIdx - 1]?.main?.temp || currentTemp);
+              
+            const selectedCond = selectedHourIdx === 0
+              ? (displayWeather?.weather ? displayWeather.weather.weather[0]?.main : 'Sunny')
+              : (activeForecasts[selectedHourIdx - 1]?.weather?.[0]?.main || 'Sunny');
+
+            const selectedDesc = selectedHourIdx === 0
+              ? (displayWeather?.weather ? displayWeather.weather.weather[0]?.description : 'clear sky')
+              : (activeForecasts[selectedHourIdx - 1]?.weather?.[0]?.description || 'clear sky');
+
+            return (
+              <div id="sa-weather-card" className={`neo-card weather-center-card scene-${weatherScene}`}>
+                
+                {/* 1. HTML5 Canvas Weather particle engine */}
+                <canvas id="sa-weather-canvas" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0 }} />
+
+                {/* 2. Parallax and Sun/Moon Glow layers */}
+                {!isNight && weatherScene === 'sunny' && <div className="live-sky-sun-glow" />}
+                {isNight && <div className="live-sky-moon-glow" />}
+                <div className="sky-parallax-clouds">
+                  <div className="parallax-cloud-layer cloud-fast" />
+                  <div className="parallax-cloud-layer cloud-slow" />
                 </div>
-                <button 
-                  onClick={handleGpsRefresh}
-                  style={{
-                    background: 'transparent',
-                    border: 'none',
-                    color: 'var(--neon-green)',
-                    fontSize: '11px',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    padding: '2px 0'
-                  }}
-                  title="Sync with device GPS"
-                >
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-                  Sync GPS
-                </button>
-              </div>
-            </div>
-            
-            <div className="weather-grid-4">
-              <div>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{color: 'var(--text-sub)'}}><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
-                <div className="w-stat-val">{weatherData?.weather ? Math.round(weatherData.weather.main.temp) : '--'}°C</div>
-                <div className="w-stat-lbl">TEMP</div>
-              </div>
-              <div>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{color: 'var(--text-sub)'}}><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-                <div className="w-stat-val">{weatherData?.weather ? weatherData.weather.main.humidity : '--'}%</div>
-                <div className="w-stat-lbl">HUMID</div>
-              </div>
-              <div>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{color: 'var(--text-sub)'}}><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>
-                <div className="w-stat-val">{weatherData?.weather ? Math.round(weatherData.weather.wind.speed * 3.6) : '--'}</div>
-                <div className="w-stat-lbl">WIND</div>
-              </div>
-              <div>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{color: 'var(--text-sub)'}}><path d="M23 12a11.05 11.05 0 0 0-22 0zm-5 7a3 3 0 0 1-6 0v-7"/></svg>
-                <div className="w-stat-val">{weatherData?.weather ? Math.round(weatherData.weather.pop * 100) : '--'}%</div>
-                <div className="w-stat-lbl">RAIN</div>
-              </div>
-            </div>
+                {isNight && (
+                  <div className="shooting-star-overlay">
+                    <div className="shooting-star" style={{ animationDelay: '2s' }} />
+                    <div className="shooting-star" style={{ animationDelay: '7s', top: '40%', left: '70%' }} />
+                  </div>
+                )}
 
-            <div className="forecast-grid">
-              <div className="f-day">
-                Mon<br/>
-                <svg width="16" height="16" style={{margin: '8px 0', color: 'var(--text-sub)'}} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
-                <br/><span className="f-val">29°C</span>
-              </div>
-              <div className="f-day">
-                Tue<br/>
-                <svg width="16" height="16" style={{margin: '8px 0', color: 'var(--warning-yellow)'}} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-                <br/><span className="f-val">31°C</span>
-              </div>
-              <div className="f-day">
-                Wed<br/>
-                <svg width="16" height="16" style={{margin: '8px 0', color: 'var(--text-sub)'}} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
-                <br/><span className="f-val">26°C</span>
-              </div>
-            </div>
+                {/* 3. Weather Layout Wrapper (No overall blur, keeps background sharp) */}
+                <div className="weather-layout-wrapper">
+                  
+                  {/* Header Row */}
+                  <div className="weather-header-row">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ fontSize: '18px', animation: 'weatherFloat 3s infinite ease-in-out alternate' }}>📍</span>
+                      <span style={{ fontWeight: 800, fontSize: '15px', letterSpacing: '-0.3px', color: '#ffffff' }}>
+                        {displayWeather?.locationName || profile?.location || 'Hyderabad, TG'}
+                      </span>
+                    </div>
+                    <span style={{ fontSize: '11px', fontWeight: 600, background: 'rgba(255,255,255,0.18)', padding: '3px 10px', borderRadius: '20px', color: '#ffffff' }}>
+                      LIVE
+                    </span>
+                  </div>
 
-          </div>
+                  {/* Glass Card 1: Temperature & Primary Info */}
+                  <div className="weather-glass-card">
+                    <div className="weather-main-row">
+                      <div className="weather-text-details">
+                        <div className="temp-text-large">
+                          {selectedTemp}<span>°</span>
+                        </div>
+                        <div className="weather-title-desc" style={{ color: '#ffffff' }}>
+                          {selectedCond}
+                        </div>
+                        <div className="weather-sub-details" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
+                          <span style={{ textTransform: 'capitalize' }}>{selectedDesc}</span>
+                          <span>•</span>
+                          <span>Feels like {selectedTemp + (weatherScene === 'sunny' ? 2 : -2)}°</span>
+                          <span>•</span>
+                          <span className="weather-aqi-badge">AQI 32 • Good</span>
+                        </div>
+                      </div>
+
+                      {/* Floating dynamic icon */}
+                      <div className="weather-floating-icon">
+                        {(() => {
+                          if (weatherScene === 'sunny') {
+                            return (
+                              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#FFE8A3" strokeWidth="2" style={{ animation: 'spin 10s linear infinite' }}>
+                                <circle cx="12" cy="12" r="5" fill="#FFE8A3" />
+                                <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M5.64 18.36l-1.42 1.42M19.78 4.22l-1.42 1.42" strokeLinecap="round" />
+                              </svg>
+                            );
+                          }
+                          if (weatherScene === 'partly-cloudy') {
+                            return (
+                              <div style={{ position: 'relative', width: 64, height: 64 }}>
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#FFE8A3" strokeWidth="2" style={{ position: 'absolute', top: 4, right: 4, animation: 'spin 12s linear infinite' }}>
+                                  <circle cx="12" cy="12" r="5" fill="#FFE8A3" />
+                                  <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M5.64 18.36l-1.42 1.42M19.78 4.22l-1.42 1.42" />
+                                </svg>
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" style={{ position: 'absolute', bottom: 4, left: 4, animation: 'weatherFloat 4s infinite ease-in-out alternate' }}>
+                                  <path d="M18 10h-1.26A8 8 0 1 0 9 15h9a5 5 0 0 0 0-10z" fill="#ffffff" opacity="0.9" />
+                                </svg>
+                              </div>
+                            );
+                          }
+                          if (weatherScene === 'cloudy') {
+                            return (
+                              <div style={{ position: 'relative', width: 64, height: 64 }}>
+                                <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#e2e8f0" strokeWidth="2" style={{ position: 'absolute', top: 4, left: 4, animation: 'weatherFloat 5s infinite ease-in-out alternate-reverse' }}>
+                                  <path d="M18 10h-1.26A8 8 0 1 0 9 15h9a5 5 0 0 0 0-10z" fill="#e2e8f0" opacity="0.8" />
+                                </svg>
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" style={{ position: 'absolute', bottom: 4, right: 4, animation: 'weatherFloat 4.2s infinite ease-in-out alternate' }}>
+                                  <path d="M18 10h-1.26A8 8 0 1 0 9 15h9a5 5 0 0 0 0-10z" fill="#ffffff" />
+                                </svg>
+                              </div>
+                            );
+                          }
+                          if (weatherScene === 'rain') {
+                            return (
+                              <div style={{ position: 'relative', width: 64, height: 64 }}>
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="2" style={{ position: 'absolute', top: 2, left: 8, animation: 'weatherFloat 4s infinite ease-in-out alternate' }}>
+                                  <path d="M18 10h-1.26A8 8 0 1 0 9 15h9a5 5 0 0 0 0-10z" fill="#cbd5e1" />
+                                </svg>
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#7EAEDB" strokeWidth="2" style={{ position: 'absolute', bottom: 2, left: 16 }}>
+                                  <path d="M10 14v4M14 14v4M6 14v4" strokeDasharray="2 3" style={{ animation: 'rainFallAnim 1s linear infinite' }} />
+                                </svg>
+                              </div>
+                            );
+                          }
+                          if (weatherScene === 'thunderstorm') {
+                            return (
+                              <div style={{ position: 'relative', width: 64, height: 64 }}>
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" style={{ position: 'absolute', top: 2, left: 8, animation: 'weatherFloat 3.5s infinite ease-in-out alternate' }}>
+                                  <path d="M18 10h-1.26A8 8 0 1 0 9 15h9a5 5 0 0 0 0-10z" fill="#94a3b8" />
+                                </svg>
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" style={{ position: 'absolute', bottom: 0, left: 16, animation: 'boltFlash 1.5s infinite step-end' }}>
+                                  <path d="m13 2-8 10h7l-2 10 10-12h-7z" fill="#f59e0b" />
+                                </svg>
+                              </div>
+                            );
+                          }
+                          if (weatherScene === 'fog') {
+                            return (
+                              <div style={{ position: 'relative', width: 64, height: 64 }}>
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="2" style={{ position: 'absolute', top: 4, left: 8, animation: 'weatherFloat 5s infinite ease-in-out alternate' }}>
+                                  <path d="M18 10h-1.26A8 8 0 1 0 9 15h9a5 5 0 0 0 0-10z" fill="#cbd5e1" opacity="0.6" />
+                                </svg>
+                                <div style={{ position: 'absolute', bottom: 12, left: 8, width: 48, height: 12, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                                  <div style={{ width: '100%', height: 2, background: 'rgba(255,255,255,0.7)', borderRadius: 1, animation: 'fogDriftLine 3s infinite linear alternate' }} />
+                                  <div style={{ width: '80%', height: 2, background: 'rgba(255,255,255,0.5)', borderRadius: 1, animation: 'fogDriftLine 4s infinite linear alternate-reverse' }} />
+                                </div>
+                              </div>
+                            );
+                          }
+                          if (weatherScene === 'snow') {
+                            return (
+                              <div style={{ position: 'relative', width: 64, height: 64 }}>
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#e2e8f0" strokeWidth="2" style={{ position: 'absolute', top: 2, left: 8, animation: 'weatherFloat 4s infinite ease-in-out alternate' }}>
+                                  <path d="M18 10h-1.26A8 8 0 1 0 9 15h9a5 5 0 0 0 0-10z" fill="#e2e8f0" />
+                                </svg>
+                                <span style={{ position: 'absolute', bottom: 4, left: 16, fontSize: 18, animation: 'spin 4s linear infinite' }}>❄️</span>
+                                <span style={{ position: 'absolute', bottom: 8, left: 32, fontSize: 12, animation: 'spin 6s linear infinite' }}>❄️</span>
+                              </div>
+                            );
+                          }
+                          // default: Night Moon
+                          return (
+                            <div style={{ position: 'relative', width: 64, height: 64 }}>
+                              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#FFE8A3" strokeWidth="2" style={{ position: 'absolute', top: 6, left: 10, animation: 'weatherFloat 4s infinite ease-in-out alternate' }}>
+                                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" fill="#FFE8A3" />
+                              </svg>
+                              <span style={{ position: 'absolute', top: 6, left: 4, fontSize: 10, animation: 'starBlink 2.2s infinite alternate' }}>⭐</span>
+                              <span style={{ position: 'absolute', bottom: 12, right: 4, fontSize: 8, animation: 'starBlink 1.8s infinite alternate' }}>⭐</span>
+                            </div>
+                          );
+                        })()}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Glass Card 2: Hourly Forecast Timeline */}
+                  <div className="weather-glass-card">
+                    <div className="hourly-timeline-slider">
+                      <div 
+                        className={`hourly-timeline-item ${selectedHourIdx === 0 ? 'selected' : ''}`}
+                        onClick={() => setSelectedHourIdx(0)}
+                      >
+                        <span className="timeline-time-label">NOW</span>
+                        <span className="timeline-icon-wrap">
+                          {getForecastIcon(
+                            weatherState === 'sunny' ? 'Clear' : weatherState === 'rain' ? 'Rain' : weatherState === 'thunderstorm' ? 'Thunderstorm' : weatherState === 'windy' ? 'Windy' : 'Clouds',
+                            weatherState === 'windy' ? 25 : 5,
+                            Math.floor(Date.now() / 1000)
+                          )}
+                        </span>
+                        <span className="timeline-temp-label">{currentTemp}°</span>
+                      </div>
+                      {activeForecasts.map((f, idx) => {
+                        const timeStr = formatForecastHour(f.dt);
+                        const mainCond = f.weather?.[0]?.main || 'Clear';
+                        const icon = getForecastIcon(mainCond, f.wind?.speed, f.dt);
+                        const tempVal = Math.round(f.main?.temp || 30);
+                        
+                        return (
+                          <div 
+                            className={`hourly-timeline-item ${selectedHourIdx === idx + 1 ? 'selected' : ''}`}
+                            key={idx}
+                            onClick={() => setSelectedHourIdx(idx + 1)}
+                          >
+                            <span className="timeline-time-label">{timeStr}</span>
+                            <span className="timeline-icon-wrap">{icon}</span>
+                            <span className="timeline-temp-label">{tempVal}°</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Glass Card 3: Metrics Pills Card */}
+                  <div className="weather-glass-card" style={{ padding: '12px' }}>
+                    <div className="weather-metrics-pills">
+                      <div className="metric-glass-pill">
+                        <span style={{ fontSize: '16px' }}>🌡️</span>
+                        <span className="metric-pill-val">{currentTemp}°C</span>
+                        <span className="metric-pill-lbl">Temp</span>
+                      </div>
+                      <div className="metric-glass-pill">
+                        <span style={{ fontSize: '16px' }}>💧</span>
+                        <span className="metric-pill-val">{currentHumidity}%</span>
+                        <span className="metric-pill-lbl">Humid</span>
+                      </div>
+                      <div className="metric-glass-pill">
+                        <span style={{ fontSize: '16px' }}>🌬️</span>
+                        <span className="metric-pill-val">
+                          {currentWindSpeed} <span style={{ fontSize: '8px' }}>km/h</span>
+                        </span>
+                        <span className="metric-pill-lbl">{displayWeather?.weather ? getWindDirection(currentWindDeg).arrow : ''} Wind</span>
+                      </div>
+                      <div className="metric-glass-pill">
+                        <span style={{ fontSize: '16px' }}>☔</span>
+                        <span className="metric-pill-val">{currentRainChance}%</span>
+                        <span className="metric-pill-lbl">Rain</span>
+                      </div>
+                      <div className="metric-glass-pill">
+                        <span style={{ fontSize: '16px' }}>☀️</span>
+                        <span className="metric-pill-val">
+                          {weatherScene === 'sunny' ? '6' : weatherScene === 'partly-cloudy' ? '4' : '1'}
+                        </span>
+                        <span className="metric-pill-lbl">UV Index</span>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+                  {/* Glass Card 5: Farming Impacts Card */}
+                  <div className="weather-glass-card" style={{ padding: '14px' }}>
+                    <div className="farming-impact-grid">
+                      <div className="impact-glass-card">
+                        <span className="impact-icon-wrap">🌱</span>
+                        <div className="impact-info-col">
+                          <span className="impact-info-lbl">Soil Moisture</span>
+                          <span className="impact-info-val" style={{ color: (weatherScene === 'rain' || weatherScene === 'thunderstorm') ? '#74D99F' : '#FFE8A3' }}>
+                            {(weatherScene === 'rain' || weatherScene === 'thunderstorm') ? 'Excellent' : 'Good'}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="impact-glass-card">
+                        <span className="impact-icon-wrap">💧</span>
+                        <div className="impact-info-col">
+                          <span className="impact-info-lbl">Irrigation Need</span>
+                          <span className="impact-info-val">
+                            {(weatherScene === 'rain' || weatherScene === 'thunderstorm') ? 'None' : 'Moderate'}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="impact-glass-card">
+                        <span className="impact-icon-wrap">🌾</span>
+                        <div className="impact-info-col">
+                          <span className="impact-info-lbl">Crop Growth</span>
+                          <span className="impact-info-val">
+                            {weatherScene === 'sunny' ? '+3.2%' : (weatherScene === 'rain' || weatherScene === 'thunderstorm') ? '+1.5%' : '+1.0%'}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="impact-glass-card">
+                        <span className="impact-icon-wrap">🐛</span>
+                        <div className="impact-info-col">
+                          <span className="impact-info-lbl">Pest Risk</span>
+                          <span className="impact-info-val" style={{ color: (weatherScene === 'rain' || weatherScene === 'thunderstorm') ? '#EF4444' : '#74D99F' }}>
+                            {(weatherScene === 'rain' || weatherScene === 'thunderstorm') ? 'High' : 'Low'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            );
+          })()}
 
           {/* PROFIT SNAPSHOT */}
           {selectedCrop && (
             <div className="neo-card profit-snapshot">
               <h3>Profit Snapshot</h3>
-              <div className="profit-sub">{selectedCrop.crop_name}</div>
+              <div className="profit-sub" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span>{selectedCrop.crop_name}</span>
+                <span style={{ 
+                  fontSize: '11px', 
+                  color: weatherYieldImpact >= 0 ? 'var(--neon-green)' : 'var(--danger-red)', 
+                  fontWeight: 800,
+                  background: weatherYieldImpact >= 0 ? 'var(--neon-green-dim)' : 'rgba(239, 68, 68, 0.1)',
+                  padding: '2px 8px',
+                  borderRadius: '6px',
+                  border: `1px solid ${weatherYieldImpact >= 0 ? 'rgba(57, 255, 106, 0.25)' : 'rgba(239, 68, 68, 0.25)'}`
+                }}>
+                  {weatherYieldImpact >= 0 ? `+${(weatherYieldImpact * 100).toFixed(1)}%` : `${(weatherYieldImpact * 100).toFixed(1)}%`} Yield Impact
+                </span>
+              </div>
               
-              <div className="profit-label">EXPECTED PROFIT</div>
-              <div className="profit-value">₹{cropEconomics?.profit_per_acre ? (cropEconomics.profit_per_acre * (profile?.land_size ? parseFloat(profile.land_size) : 2.5)).toLocaleString('en-IN') : '2,68,000'}</div>
+              <div className="profit-label">EXPECTED PROFIT (WEATHER ADJUSTED)</div>
+              <div className="profit-value">₹{adjustedProfitData ? adjustedProfitData.totalProfit.toLocaleString('en-IN') : '2,68,000'}</div>
 
               <div className="profit-metrics">
                 <div className="pm-box">
                   <div className="pm-label">EST. YIELD</div>
-                  <div className="pm-val">{cropEconomics?.yield_qtl_per_acre ? (cropEconomics.yield_qtl_per_acre * (profile?.land_size ? parseFloat(profile.land_size) : 2.5)).toFixed(0) : '200'} q</div>
+                  <div className="pm-val">{adjustedProfitData ? adjustedProfitData.totalYield : '200'} q</div>
                 </div>
                 <div className="pm-box">
                   <div className="pm-label">MKT PRICE</div>
-                  <div className="pm-val">₹{cropEconomics?.market_price ? cropEconomics.market_price.toLocaleString('en-IN') : '2,300'}/q</div>
+                  <div className="pm-val">₹{adjustedProfitData ? adjustedProfitData.marketPricePerQ.toLocaleString('en-IN') : '2,300'}/q</div>
                 </div>
                 <div className="pm-box">
                   <div className="pm-label">MONTHLY</div>
-                  <div className="pm-val">₹{cropEconomics?.profit_per_acre ? Math.round((cropEconomics.profit_per_acre * (profile?.land_size ? parseFloat(profile.land_size) : 2.5)) / (selectedCrop.total_duration_days/30)).toLocaleString('en-IN') : '44,667'}</div>
+                  <div className="pm-val">₹{adjustedProfitData ? adjustedProfitData.monthlyIncome.toLocaleString('en-IN') : '44,667'}</div>
                 </div>
               </div>
             </div>
@@ -819,91 +1847,12 @@ const ActionHome = ({ session }) => {
           {/* BOTTOM SPLIT WRAPPER */}
           <div className="split-wrapper">
           
-            {/* DISEASE & PEST DETECTION */}
-            <div className="neo-card" style={{ display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
-               <h3 className="section-title" style={{marginBottom: '16px'}}>Disease & Pest Detection</h3>
-               
-               {isDetecting ? (
-                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                    <div style={{ width: '40px', height: '40px', border: '3px solid rgba(57, 255, 106, 0.1)', borderTopColor: 'var(--neon-green)', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
-                    <div style={{ marginTop: '16px', fontSize: '13px', color: '#39FF6A', fontWeight: 600 }}>AI Analyzing Image...</div>
-                 </div>
-               ) : detectionResult ? (
-                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px', padding: '0 4px', textAlign: 'left' }}>
-                    {/* Simplified Disease Name */}
-                    <div style={{ padding: '12px', background: 'rgba(6, 13, 8, 0.98)', borderRadius: '12px', border: '1px solid rgba(57, 255, 106, 0.3)' }}>
-                       <div style={{ fontSize: '10px', color: 'rgba(57, 255, 106, 0.5)', fontWeight: 800, textTransform: 'uppercase', marginBottom: '4px' }}>
-                          AI DIAGNOSIS
-                       </div>
-                       <div style={{ fontSize: '18px', fontWeight: 800, color: '#39FF6A' }}>{detectionResult.disease_name}</div>
-                    </div>
-
-                    {/* Grid for Symptoms and Cause */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                       <div style={{ padding: '10px', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                          <div style={{ fontSize: '9px', color: 'var(--text-secondary)', fontWeight: 700, marginBottom: '2px' }}>SYMPTOMS</div>
-                          <div style={{ fontSize: '11px', color: 'var(--text-primary)', lineHeight: '1.3' }}>{detectionResult.symptoms}</div>
-                       </div>
-                       <div style={{ padding: '10px', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                          <div style={{ fontSize: '9px', color: 'var(--text-secondary)', fontWeight: 700, marginBottom: '2px' }}>POSSIBLE CAUSE</div>
-                          <div style={{ fontSize: '11px', color: 'var(--text-primary)', lineHeight: '1.3' }}>{detectionResult.cause}</div>
-                       </div>
-                    </div>
-
-                    {/* Treatment */}
-                    <div style={{ padding: '12px', background: 'rgba(57, 255, 106, 0.08)', borderRadius: '12px', border: '1px solid rgba(57, 255, 106, 0.2)' }}>
-                       <div style={{ fontSize: '9px', color: '#39FF6A', fontWeight: 800, marginBottom: '4px' }}>TREATMENT & PREVENTION</div>
-                       <div style={{ fontSize: '12px', color: 'var(--text-primary)', fontWeight: 500, lineHeight: '1.4' }}>{detectionResult.treatment}</div>
-                    </div>
-
-                    <button 
-                      onClick={() => setDetectionResult(null)}
-                      style={{ background: 'transparent', border: 'none', color: '#39FF6A', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', cursor: 'pointer', alignSelf: 'center', marginTop: '4px' }}
-                    >
-                      Scan New Image
-                    </button>
-                 </div>
-               ) : (
-                 <div style={{ flex: 1, display: 'flex', gap: '16px' }}>
-                    
-                    {/* Camera Option */}
-                    <div style={{ flex: 1, position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', border: '1px solid rgba(57, 255, 106, 0.2)', borderRadius: '16px', background: 'rgba(57, 255, 106, 0.03)', transition: 'all 0.3s ease', cursor: 'pointer' }}
-                         onMouseOver={(e) => { e.currentTarget.style.borderColor = 'var(--neon-green)'; e.currentTarget.style.background = 'rgba(57, 255, 106, 0.08)'; }}
-                         onMouseOut={(e) => { e.currentTarget.style.borderColor = 'rgba(57, 255, 106, 0.2)'; e.currentTarget.style.background = 'rgba(57, 255, 106, 0.03)'; }}
-                         onClick={() => document.getElementById('camera-upload').click()}
-                    >
-                       <input type="file" id="camera-upload" accept="image/*" capture="environment" style={{ display: 'none' }} onChange={(e) => { if(e.target.files?.length) handleDetection(e.target.files[0]); }} />
-                       <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(57, 255, 106, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--neon-green)', marginBottom: '12px' }}>
-                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                       </div>
-                       <div style={{fontSize: '14px', fontWeight: 700, color: 'var(--text-main)'}}>Take Photo</div>
-                       <div style={{fontSize: '11px', color: 'var(--text-sub)', marginTop: '4px'}}>Use Camera</div>
-                    </div>
-
-                    {/* Upload Option */}
-                    <div style={{ flex: 1, position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', border: '1px dashed rgba(255, 255, 255, 0.2)', borderRadius: '16px', background: 'rgba(255, 255, 255, 0.02)', transition: 'all 0.3s ease', cursor: 'pointer' }}
-                         onMouseOver={(e) => { e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)'; e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'; }}
-                         onMouseOut={(e) => { e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)'; e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)'; }}
-                         onClick={() => document.getElementById('gallery-upload').click()}
-                    >
-                       <input type="file" id="gallery-upload" accept="image/*" style={{ display: 'none' }} onChange={(e) => { if(e.target.files?.length) handleDetection(e.target.files[0]); }} />
-                       <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(255, 255, 255, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-main)', marginBottom: '12px' }}>
-                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                       </div>
-                       <div style={{fontSize: '14px', fontWeight: 700, color: 'var(--text-main)'}}>Upload File</div>
-                       <div style={{fontSize: '11px', color: 'var(--text-sub)', marginTop: '4px'}}>From Gallery</div>
-                    </div>
-
-                 </div>
-               )}
-            </div>
-
             {/* UPCOMING TASKS */}
-            {selectedCrop && (
-              <div className="neo-card">
-                <h3 className="section-title" style={{marginBottom: '20px'}}>Upcoming Tasks</h3>
-                <div className="sb-task-list">
-                   {upcomingTasks.length > 0 ? upcomingTasks.map((t, idx) => (
+            <div className="neo-card">
+              <h3 className="section-title" style={{marginBottom: '20px'}}>Upcoming Tasks</h3>
+              <div className="sb-task-list">
+                 {selectedCrop ? (
+                   upcomingTasks.length > 0 ? upcomingTasks.map((t, idx) => (
                      <div key={idx} className="sb-task">
                        <div className="sb-task-left">
                          <span className={`sb-pill ${idx===0?'amber':(idx===1?'red':'green')}`}>{t.day}</span>
@@ -934,15 +1883,20 @@ const ActionHome = ({ session }) => {
                          <div className="sb-time">+75 days</div>
                        </div>
                      </>
-                   )}
-                </div>
+                   )
+                 ) : (
+                   <p style={{ color: 'var(--text-sub)', fontSize: '13px', margin: '16px 0', textAlign: 'center' }}>
+                     No active crops. Add a crop to view upcoming task recommendations.
+                   </p>
+                 )}
               </div>
-            )}
+            </div>
 
           </div>
 
         </div>
       </div>
+    </div>
 
 
       {/* BIN MODAL */}
@@ -1019,7 +1973,124 @@ const ActionHome = ({ session }) => {
 
       {/* FLOATING AGRIBOT */}
       <AgriBot />
-    </div>
+
+      {/* PEST & DISEASE FAB */}
+      <button 
+        className={`pest-fab pest-fab-${pestFabState.status}`} 
+        onClick={() => setIsDetectionModalOpen(true)} 
+        style={pestFabState.style}
+        title="Pest & Disease Detection"
+      >
+        <div className="pest-fab-icon-wrap">
+          {pestFabState.icon}
+        </div>
+        <div className="pest-fab-text-container">
+          <span className="pest-fab-text-default">{pestFabState.textDefault}</span>
+          {pestFabState.textHover && (
+            <span className="pest-fab-text-hover">{pestFabState.textHover}</span>
+          )}
+        </div>
+      </button>
+
+      {/* HIDDEN FILE INPUTS */}
+      <input 
+        type="file" 
+        accept="image/*" 
+        capture="environment" 
+        id="camera-upload" 
+        style={{ display: 'none' }} 
+        onChange={(e) => { 
+          if (e.target.files?.[0]) handleDetection(e.target.files[0]); 
+        }} 
+      />
+      <input 
+        type="file" 
+        accept="image/*" 
+        id="gallery-upload" 
+        style={{ display: 'none' }} 
+        onChange={(e) => { 
+          if (e.target.files?.[0]) handleDetection(e.target.files[0]); 
+        }} 
+      />
+
+      {/* DETECTION MODAL */}
+      {isDetectionModalOpen && (
+        <div className="detection-modal-overlay">
+          <div className="neo-card detection-modal-card">
+            <button className="detection-modal-close" onClick={() => {
+              setIsDetectionModalOpen(false);
+              setDetectionResult(null);
+            }} title="Close">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+
+            <h3 style={{ margin: '0 0 8px 0', fontSize: '20px', color: 'var(--text-main)' }}>Disease & Pest Detection</h3>
+            <p style={{ color: 'var(--text-sub)', fontSize: '13px', margin: '0 0 20px 0' }}>Upload an image of your crop to diagnose diseases or pests.</p>
+
+            {isDetecting ? (
+              <div className="detection-loader-container">
+                <div className="detection-spinner"></div>
+                <div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-main)' }}>AI Diagnosis in progress...</div>
+                <div style={{ fontSize: '12px', color: 'var(--text-sub)', marginTop: '6px' }}>Analyzing the crop foliage for health patterns.</div>
+              </div>
+            ) : detectionResult ? (
+              <div className="detection-result-container">
+                <div className="detection-result-header">
+                  <span className="detection-result-title">{detectionResult.disease_name}</span>
+                  <span className="detection-result-confidence">
+                    {detectionResult.confidence_level} Confidence
+                  </span>
+                </div>
+                
+                <div className="detection-result-section">
+                  <div className="detection-result-section-label">Symptoms</div>
+                  <div className="detection-result-section-text">{detectionResult.symptoms}</div>
+                </div>
+
+                <div className="detection-result-section">
+                  <div className="detection-result-section-label">Biological Cause</div>
+                  <div className="detection-result-section-text">{detectionResult.cause}</div>
+                </div>
+
+                <div className="detection-result-section">
+                  <div className="detection-result-section-label">Treatment Recommendation</div>
+                  <div className="detection-result-section-text" style={{ whiteSpace: 'pre-line' }}>{detectionResult.treatment}</div>
+                </div>
+
+                <div className="detection-result-actions">
+                  <button className="btn-filled" style={{ flex: 1, padding: '12px' }} onClick={() => setDetectionResult(null)}>
+                    Diagnose Another
+                  </button>
+                  <button className="btn-outline" style={{ flex: 1, padding: '12px' }} onClick={() => {
+                    setIsDetectionModalOpen(false);
+                    setDetectionResult(null);
+                  }}>
+                    Done
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="detection-options-container">
+                <div className="detection-option-card" onClick={() => document.getElementById('camera-upload').click()}>
+                  <div className="detection-option-icon">📷</div>
+                  <div className="detection-option-title">Take Photo</div>
+                  <div className="detection-option-sub">Use Device Camera</div>
+                </div>
+                
+                <div className="detection-option-card" onClick={() => document.getElementById('gallery-upload').click()}>
+                  <div className="detection-option-icon">📁</div>
+                  <div className="detection-option-title">Upload File</div>
+                  <div className="detection-option-sub">From Photo Gallery</div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
