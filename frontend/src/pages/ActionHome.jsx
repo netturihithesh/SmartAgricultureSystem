@@ -965,13 +965,23 @@ const ActionHome = ({ session }) => {
 
 
   const loadCropView = (cropObj) => {
+    if (!cropObj) return;
     // Normalize name: remove spaces before "(" so "Paddy (Common)" matches "Paddy(Common)"
     const normalizeName = (n) => (n || '').replace(/\s*\(/g, '(').toLowerCase().trim();
-    const targetName = normalizeName(cropObj.cropName);
+    const rawName = cropObj.cropName || cropObj.crop_name || cropObj.name || '';
+    const targetName = normalizeName(rawName);
+    
     let crop = cropProcessData.find(c => normalizeName(c.crop_name) === targetName);
+    if (!crop) {
+      crop = cropProcessData.find(c => targetName.includes(normalizeName(c.crop_name)) || normalizeName(c.crop_name).includes(targetName)) || cropProcessData[0];
+    }
+    
     if (crop) {
       crop = adjustStageRanges(crop);
-      const start = new Date(cropObj.startDate);
+      const rawDate = cropObj.startDate || cropObj.start_date || cropObj.created_at;
+      const parsedStart = rawDate ? new Date(rawDate) : new Date();
+      const start = isNaN(parsedStart.getTime()) ? new Date() : parsedStart;
+
       const today = new Date();
       const diffTime = today.getTime() - start.getTime();
       const diffDays = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
@@ -983,7 +993,7 @@ const ActionHome = ({ session }) => {
       const currentStage = calculateCurrentStage(crop.stages, diffDays);
       setExpandedStage(currentStage?.stage_id);
 
-      const cd = cropDataList.find(c => c.api_name === cropObj.cropName || c.name === cropObj.cropName);
+      const cd = cropDataList.find(c => normalizeName(c.api_name) === targetName || normalizeName(c.name) === targetName);
       if (cd && cd.economics) {
         setCropEconomics(cd.economics);
       } else {
@@ -994,14 +1004,15 @@ const ActionHome = ({ session }) => {
       for (const stage of crop.stages) {
         if (stage.end_day >= diffDays) {
           for (let sub of stage.substeps) {
-             const targetAbsoluteDay = sub.day;
+             const subTask = typeof sub === 'object' ? sub.task : sub;
+             const targetAbsoluteDay = typeof sub === 'object' ? sub.day : stage.start_day;
              if (targetAbsoluteDay > diffDays) {
                  let daysFromNow = targetAbsoluteDay - diffDays;
                  let label = `Day ${targetAbsoluteDay}`;
                  if (daysFromNow === 1) label = 'Tomorrow';
                  else if (daysFromNow <= 7) label = `In ${daysFromNow} days`;
                  
-                 tasks.push({ day: label, task: sub.task });
+                 tasks.push({ day: label, task: subTask });
              }
           }
         }
@@ -1704,7 +1715,15 @@ const ActionHome = ({ session }) => {
                   <div className="journey-active-stage-panel">
                     <div className="stage-panel-head">
                       <h4 className="stage-title">{activeStgObj.title} — <span style={{color: isCurrent ? '#059669' : (isPast ? '#2563EB' : '#6B7280')}}>{statusTag}</span></h4>
-                      <span className="stage-dates">Day {activeStgObj.start_day} — Day {activeStgObj.end_day}</span>
+                      <span className="stage-dates">
+                        {cropStartDate && !isNaN(new Date(cropStartDate).getTime()) ? (
+                          <>
+                            {new Date(new Date(cropStartDate).getTime() + (activeStgObj.start_day - 1) * 86400000).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} – {new Date(new Date(cropStartDate).getTime() + (activeStgObj.end_day - 1) * 86400000).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} • Day {activeStgObj.start_day}–{activeStgObj.end_day}
+                          </>
+                        ) : (
+                          <>Day {activeStgObj.start_day} — Day {activeStgObj.end_day}</>
+                        )}
+                      </span>
                     </div>
                     <div className="stage-progress-bar-wrap">
                       <div className="stage-progress-fill" style={{width: `${pct}%`}}></div>
@@ -1714,6 +1733,18 @@ const ActionHome = ({ session }) => {
                     <div className="stage-substeps-checklist">
                       {activeStgObj.substeps?.map((sub, idx) => {
                         const isSubDone = isPast || (substepStatus && substepStatus[`${activeStgObj.stage_id}_${idx}`]);
+                        const subTask = typeof sub === 'object' ? sub.task : sub;
+                        const subDayNum = typeof sub === 'object' ? sub.day : null;
+                        const targetDay = subDayNum || activeStgObj.start_day;
+
+                        let subDateFormatted = `Day ${targetDay}`;
+                        if (cropStartDate && !isNaN(new Date(cropStartDate).getTime())) {
+                          const calDate = new Date(new Date(cropStartDate).getTime() + (targetDay - 1) * 86400000);
+                          if (!isNaN(calDate.getTime())) {
+                            subDateFormatted = `${calDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} (Day ${targetDay})`;
+                          }
+                        }
+
                         return (
                           <div 
                             key={idx} 
@@ -1726,10 +1757,10 @@ const ActionHome = ({ session }) => {
                                 {isSubDone && <span className="check-dot">✓</span>}
                               </span>
                               <span style={{ textDecoration: isSubDone ? 'line-through' : 'none', color: isSubDone ? '#9CA3AF' : 'inherit' }}>
-                                {sub.task || sub}
+                                {subTask}
                               </span>
                             </div>
-                            <span className="subitem-date">Day {sub.day || activeStgObj.start_day}</span>
+                            <span className="subitem-date">{subDateFormatted}</span>
                           </div>
                         );
                       })}
