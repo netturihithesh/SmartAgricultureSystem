@@ -1670,8 +1670,8 @@ const ActionHome = ({ session }) => {
                     <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 800, color: '#065F46', display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <span>📋</span> Today's Action Items
                     </h4>
-                    <span style={{ fontSize: '12px', color: '#047857', fontWeight: 700, background: 'rgba(5, 150, 105, 0.1)', padding: '2px 8px', borderRadius: '999px' }}>
-                      Active Stage: {currentStage.title}
+                    <span style={{ fontSize: '11px', color: '#64748B', fontStyle: 'italic' }}>
+                      {new Date().toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' })}
                     </span>
                   </div>
 
@@ -1725,11 +1725,11 @@ const ActionHome = ({ session }) => {
                           style={{ cursor: 'pointer', transition: 'all 0.2s ease', opacity: t.isDone ? 0.7 : 1 }}
                         >
                           <div className="task-left-check">
-                            <span className={`circle-radio ${t.isDone ? 'checked' : ''}`} style={{ flexShrink: 0, marginRight: '12px' }}>
-                              {t.isDone && <span className="check-dot" style={{ display: 'block', width: '6px', height: '6px', backgroundColor: '#fff', borderRadius: '50%', margin: 'auto' }} />}
+                            <span className={`circle-radio ${t.isDone ? 'checked' : ''}`} style={{ flexShrink: 0, marginRight: '4px' }}>
+                              {t.isDone && '✓'}
                             </span>
                             <div className="task-title-desc">
-                              <h4 className="task-heading" style={{ textDecoration: t.isDone ? 'line-through' : 'none', color: t.isDone ? '#9CA3AF' : '#0F172A', fontWeight: 700 }}>
+                              <h4 className="task-heading" style={{ textDecoration: t.isDone ? 'line-through' : 'none', color: t.isDone ? '#9CA3AF' : '#0F172A', fontWeight: 700, opacity: t.isDone ? 0.75 : 1 }}>
                                 {t.task}
                               </h4>
                             </div>
@@ -1812,11 +1812,19 @@ const ActionHome = ({ session }) => {
                 const isPast = activeStgId < (currentStage?.stage_id || 4);
                 const statusTag = isCurrent ? 'In Progress' : (isPast ? 'Completed' : 'Upcoming');
                 
+                // Progress: for past stages 100%, for current stage use substep completion ratio (more accurate than day-based)
                 let pct = 0;
-                if (isPast) pct = 100;
-                else if (isCurrent) {
-                  const totalStageDays = (activeStgObj.end_day - activeStgObj.start_day) || 1;
-                  pct = Math.min(100, Math.max(0, Math.round(((daysPassed - activeStgObj.start_day) / totalStageDays) * 100)));
+                if (isPast) {
+                  pct = 100;
+                } else if (isCurrent) {
+                  const subs = activeStgObj.substeps || [];
+                  if (subs.length > 0) {
+                    const doneCount = subs.filter((_sub, i) => substepStatus && substepStatus[`${activeStgObj.stage_id}_${i}`]).length;
+                    pct = Math.round((doneCount / subs.length) * 100);
+                  } else {
+                    const totalStageDays = (activeStgObj.end_day - activeStgObj.start_day) || 1;
+                    pct = Math.min(100, Math.max(0, Math.round(((daysPassed - activeStgObj.start_day) / totalStageDays) * 100)));
+                  }
                 }
 
                 return (
@@ -1870,9 +1878,9 @@ const ActionHome = ({ session }) => {
                           >
                             <div className="check-left">
                               <span className={`circle-radio ${isSubDone ? 'checked' : ''}`}>
-                                {isSubDone && <span className="check-dot">✓</span>}
+                                {isSubDone && '✓'}
                               </span>
-                              <span style={{ textDecoration: isSubDone ? 'line-through' : 'none', color: isSubDone ? '#9CA3AF' : 'inherit' }}>
+                              <span style={{ textDecoration: isSubDone ? 'line-through' : 'none', color: isSubDone ? '#9CA3AF' : 'inherit', opacity: isSubDone ? 0.75 : 1 }}>
                                 {subTask}
                               </span>
                             </div>
