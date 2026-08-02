@@ -504,16 +504,6 @@ const ActionHome = ({ session }) => {
   const [cropEconomics, setCropEconomics] = useState(null);
   const [upcomingTasks, setUpcomingTasks] = useState([]);
 
-  const adjustedProfitData = useMemo(() => {
-    if (!selectedCrop) return null;
-    return calculateProfitSnapshot(
-      cropEconomics,
-      profile?.land_size || 1.5,
-      selectedCrop.total_duration_days,
-      selectedCrop.crop_name,
-      weatherYieldImpact
-    );
-  }, [selectedCrop, cropEconomics, profile, weatherYieldImpact]);
 
   const [expandedStage, setExpandedStage] = useState(null);
   const [activeJourneyStageId, setActiveJourneyStageId] = useState(null);
@@ -627,6 +617,17 @@ const ActionHome = ({ session }) => {
       default: return 0.006; // clouds/default
     }
   }, [weatherTheme]);
+
+  const adjustedProfitData = useMemo(() => {
+    if (!selectedCrop) return null;
+    return calculateProfitSnapshot(
+      cropEconomics,
+      profile?.land_size || 1.5,
+      selectedCrop.total_duration_days,
+      selectedCrop.crop_name,
+      weatherYieldImpact
+    );
+  }, [selectedCrop, cropEconomics, profile, weatherYieldImpact]);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
