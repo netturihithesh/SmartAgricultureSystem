@@ -24,32 +24,21 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
 
   useEffect(() => {
     if (scrollRef.current) {
-        // Find the active element
-        setTimeout(() => {
-          if (!scrollRef.current) return;
-          const activeElement = scrollRef.current.querySelector('.active-day');
-          if (activeElement) {
-              const containerOffset = scrollRef.current.offsetLeft;
-              const elementOffset = activeElement.offsetLeft;
-              const centerPos = elementOffset - containerOffset - (scrollRef.current.offsetWidth / 2) + (activeElement.offsetWidth / 2);
-              scrollRef.current.scrollTo({ left: centerPos, behavior: 'smooth' });
-          }
-        }, 100);
+      setTimeout(() => {
+        if (!scrollRef.current) return;
+        scrollRef.current.scrollTo({ left: scrollRef.current.scrollWidth, behavior: 'smooth' });
+      }, 100);
     }
-  }, [daysPassed, selectedDay, selectedCrop]);
+  }, [daysPassed, selectedCrop]);
 
   if (!selectedCrop || !cropStartDate) return null;
 
   const totalDays = selectedCrop.total_duration_days || 140;
   const startMs = new Date(cropStartDate).getTime();
   
-  // Show past 5 days before today, plus upcoming days for compact scrolling
-  const startDayNum = Math.max(1, (daysPassed || 1) - 5);
-  const endDayNum = Math.min(totalDays, Math.max(startDayNum + 15, (daysPassed || 1) + 20));
-  const daysArray = [];
-  for (let d = startDayNum; d <= endDayNum; d++) {
-    daysArray.push(d);
-  }
+  // Render from Day 1 (Start Date) up to present date (daysPassed) only
+  const endDayNum = Math.min(totalDays, Math.max(1, daysPassed || 1));
+  const daysArray = Array.from({ length: endDayNum }, (_, i) => i + 1);
 
   const getStageForDay = (dayNum) => {
       if (!selectedCrop || !selectedCrop.stages) return null;
