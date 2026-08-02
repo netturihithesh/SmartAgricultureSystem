@@ -117,59 +117,158 @@ const formatForecastHour = (dt) => {
   return `${hrs} ${ampm}`;
 };
 
-// Vector SVG selector for weather forecast conditions (replaces font emojis for neat visual uniformity)
+// ── Professional inline-SVG weather icon helper ──────────────────────────
+// Covers: Thunderstorm · Rain · Drizzle · Snow · Fog · Windy · Clear-Day ·
+//         Clear-Night · Partly-Cloudy-Day · Partly-Cloudy-Night · Clouds
+const WeatherSVG = {
+  // Thunderstorm: dark cloud + lightning bolt
+  thunderstorm: (
+    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
+      <ellipse cx="32" cy="22" rx="18" ry="12" fill="#64748B"/>
+      <ellipse cx="20" cy="26" rx="11" ry="8" fill="#64748B"/>
+      <ellipse cx="44" cy="26" rx="11" ry="8" fill="#64748B"/>
+      <rect x="10" y="26" width="40" height="10" rx="5" fill="#64748B"/>
+      {/* rain lines */}
+      <line x1="20" y1="38" x2="17" y2="48" stroke="#93C5FD" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="34" y1="38" x2="31" y2="48" stroke="#93C5FD" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="44" y1="38" x2="41" y2="48" stroke="#93C5FD" strokeWidth="2" strokeLinecap="round"/>
+      {/* bolt */}
+      <polygon points="36,32 28,44 33,44 27,56 40,40 34,40" fill="#FBBF24"/>
+    </svg>
+  ),
+  // Rain / heavy shower
+  rain: (
+    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
+      <ellipse cx="32" cy="20" rx="18" ry="12" fill="#94A3B8"/>
+      <ellipse cx="20" cy="24" rx="11" ry="8" fill="#94A3B8"/>
+      <ellipse cx="44" cy="24" rx="11" ry="8" fill="#94A3B8"/>
+      <rect x="10" y="24" width="40" height="10" rx="5" fill="#94A3B8"/>
+      <line x1="20" y1="38" x2="16" y2="52" stroke="#60A5FA" strokeWidth="2.5" strokeLinecap="round"/>
+      <line x1="30" y1="38" x2="26" y2="52" stroke="#60A5FA" strokeWidth="2.5" strokeLinecap="round"/>
+      <line x1="40" y1="38" x2="36" y2="52" stroke="#60A5FA" strokeWidth="2.5" strokeLinecap="round"/>
+      <line x1="48" y1="38" x2="44" y2="52" stroke="#60A5FA" strokeWidth="2.5" strokeLinecap="round"/>
+    </svg>
+  ),
+  // Drizzle – lighter rain
+  drizzle: (
+    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
+      <ellipse cx="32" cy="22" rx="18" ry="12" fill="#CBD5E1"/>
+      <ellipse cx="20" cy="26" rx="11" ry="8" fill="#CBD5E1"/>
+      <ellipse cx="44" cy="26" rx="11" ry="8" fill="#CBD5E1"/>
+      <rect x="10" y="26" width="40" height="10" rx="5" fill="#CBD5E1"/>
+      <line x1="22" y1="40" x2="20" y2="50" stroke="#93C5FD" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="32" y1="40" x2="30" y2="50" stroke="#93C5FD" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="42" y1="40" x2="40" y2="50" stroke="#93C5FD" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  ),
+  // Snow
+  snow: (
+    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
+      <ellipse cx="32" cy="22" rx="18" ry="12" fill="#CBD5E1"/>
+      <ellipse cx="20" cy="26" rx="11" ry="8" fill="#CBD5E1"/>
+      <rect x="10" y="26" width="40" height="10" rx="5" fill="#CBD5E1"/>
+      {[18,28,38,48].map(x => (
+        <g key={x}>
+          <line x1={x} y1="38" x2={x} y2="54" stroke="#BAE6FD" strokeWidth="2" strokeLinecap="round"/>
+          <line x1={x-4} y1="44" x2={x+4} y2="50" stroke="#BAE6FD" strokeWidth="1.5" strokeLinecap="round"/>
+          <line x1={x+4} y1="44" x2={x-4} y2="50" stroke="#BAE6FD" strokeWidth="1.5" strokeLinecap="round"/>
+        </g>
+      ))}
+    </svg>
+  ),
+  // Fog / Mist
+  fog: (
+    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
+      <ellipse cx="32" cy="18" rx="18" ry="10" fill="#D1D5DB"/>
+      <rect x="8" y="28" width="44" height="5" rx="2.5" fill="#D1D5DB" opacity="0.8"/>
+      <rect x="12" y="36" width="38" height="5" rx="2.5" fill="#D1D5DB" opacity="0.6"/>
+      <rect x="8" y="44" width="44" height="5" rx="2.5" fill="#D1D5DB" opacity="0.4"/>
+    </svg>
+  ),
+  // Wind – horizontal flow lines
+  wind: (
+    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
+      <path d="M8 20 Q24 14 40 20" stroke="#94A3B8" strokeWidth="3" strokeLinecap="round" fill="none"/>
+      <path d="M40 20 Q48 18 50 22 Q52 26 46 26 H8" stroke="#94A3B8" strokeWidth="3" strokeLinecap="round" fill="none"/>
+      <path d="M8 34 Q20 28 36 34" stroke="#CBD5E1" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
+      <path d="M36 34 Q44 32 46 36 Q48 40 43 40 H8" stroke="#CBD5E1" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
+      <path d="M8 46 Q16 42 28 46 Q36 50 40 46" stroke="#E2E8F0" strokeWidth="2" strokeLinecap="round" fill="none"/>
+    </svg>
+  ),
+  // Clear day – realistic sun with rays
+  clearDay: (
+    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
+      <circle cx="32" cy="32" r="14" fill="#FCD34D"/>
+      <circle cx="32" cy="32" r="10" fill="#FBBF24"/>
+      {[[32,6],[32,58],[6,32],[58,32],[13,13],[51,51],[51,13],[13,51]].map(([x,y],i) => {
+        const dx = x - 32, dy = y - 32;
+        const len = Math.sqrt(dx*dx+dy*dy);
+        const nx = dx/len, ny = dy/len;
+        return <line key={i} x1={32+nx*16} y1={32+ny*16} x2={32+nx*24} y2={32+ny*24} stroke="#FCD34D" strokeWidth="3" strokeLinecap="round"/>;
+      })}
+    </svg>
+  ),
+  // Clear night – crescent moon + 2 stars
+  clearNight: (
+    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
+      <path d="M38 12 A18 18 0 1 1 22 46 A14 14 0 0 0 38 12Z" fill="#DBEAFE"/>
+      <circle cx="50" cy="16" r="2.5" fill="#FDE68A"/>
+      <circle cx="46" cy="8" r="1.5" fill="#FDE68A"/>
+      <circle cx="56" cy="24" r="1.5" fill="#FDE68A"/>
+    </svg>
+  ),
+  // Partly cloudy day
+  partlyDay: (
+    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
+      <circle cx="22" cy="22" r="13" fill="#FCD34D"/>
+      <circle cx="22" cy="22" r="9" fill="#FBBF24"/>
+      <ellipse cx="38" cy="38" rx="16" ry="10" fill="#F1F5F9"/>
+      <ellipse cx="28" cy="41" rx="10" ry="7" fill="#F1F5F9"/>
+      <ellipse cx="50" cy="41" rx="10" ry="7" fill="#F1F5F9"/>
+      <rect x="18" y="38" width="38" height="10" rx="5" fill="white"/>
+    </svg>
+  ),
+  // Partly cloudy night
+  partlyNight: (
+    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
+      <path d="M28 8 A14 14 0 1 1 16 36 A11 11 0 0 0 28 8Z" fill="#DBEAFE"/>
+      <ellipse cx="40" cy="40" rx="16" ry="10" fill="#E2E8F0"/>
+      <ellipse cx="28" cy="43" rx="10" ry="7" fill="#E2E8F0"/>
+      <rect x="20" y="40" width="34" height="10" rx="5" fill="#F8FAFC"/>
+    </svg>
+  ),
+  // Overcast / Clouds
+  clouds: (
+    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
+      <ellipse cx="32" cy="24" rx="18" ry="12" fill="#E2E8F0"/>
+      <ellipse cx="20" cy="28" rx="12" ry="9" fill="#E2E8F0"/>
+      <ellipse cx="44" cy="28" rx="12" ry="9" fill="#E2E8F0"/>
+      <rect x="8" y="28" width="44" height="12" rx="6" fill="#F1F5F9"/>
+    </svg>
+  ),
+};
+
 const getForecastIcon = (main, speed, dt) => {
   const speedKmh = speed ? Math.round(speed * 3.6) : 0;
-  if (main === 'Thunderstorm') {
-    return (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 8.58"></path>
-        <path d="m13 11-4 6h6l-4 6"></path>
-      </svg>
-    );
+  const isNight = dt ? (() => { const h = new Date(dt * 1000).getHours(); return h < 6 || h >= 19; })() : false;
+
+  if (main === 'Thunderstorm') return WeatherSVG.thunderstorm;
+  if (main === 'Snow')         return WeatherSVG.snow;
+  if (main === 'Drizzle')      return WeatherSVG.drizzle;
+  if (main === 'Rain')         return WeatherSVG.rain;
+  if (main === 'Fog' || main === 'Mist' || main === 'Haze' || main === 'Smoke') return WeatherSVG.fog;
+  if (speedKmh > 20)           return WeatherSVG.wind;
+  if (main === 'Clear')        return isNight ? WeatherSVG.clearNight : WeatherSVG.clearDay;
+  if (main === 'Clouds')       return isNight ? WeatherSVG.partlyNight : WeatherSVG.partlyDay;
+  return WeatherSVG.clouds;
+};
+
+// Returns the correct large hero illustration based on current weather state + hour
+const getHeroWeatherSVG = (weatherMain, windKmh, isNight) => {
+  if (!weatherMain || weatherMain === 'Clouds') {
+    return isNight ? WeatherSVG.partlyNight : WeatherSVG.partlyDay;
   }
-  if (main === 'Rain' || main === 'Drizzle') {
-    return (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
-        <path d="M16 14v6M8 14v6M12 16v6"></path>
-      </svg>
-    );
-  }
-  if (speedKmh > 20) {
-    return (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path>
-      </svg>
-    );
-  }
-  if (main === 'Clear') {
-    let isNightTime = false;
-    if (dt) {
-      const hr = new Date(dt * 1000).getHours();
-      if (hr < 6 || hr >= 19) isNightTime = true;
-    }
-    if (isNightTime) {
-      return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-        </svg>
-      );
-    }
-    return (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#eab308" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="4"></circle>
-        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
-      </svg>
-    );
-  }
-  // Default is Clouds
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.42-3.87-3.13-7-7-7C5.17 4 2 7.17 2 11c0 3.79 3.06 6.5 6.5 6.5"></path>
-      <path d="M8.5 17.5h9"></path>
-    </svg>
-  );
+  return getForecastIcon(weatherMain, windKmh ? windKmh / 3.6 : 0, isNight ? 0 : 13 * 3600);
 };
 
 // Procedural Web Audio API weather sound synthesiser
@@ -1365,16 +1464,28 @@ const ActionHome = ({ session }) => {
                   </span>
                 </div>
               </div>
-              <div className="weather-icon-illustration">
-                <svg width="90" height="90" viewBox="0 0 80 80" fill="none">
-                  <circle cx="54" cy="26" r="16" fill="#FBBF24" opacity="0.95"/>
-                  <circle cx="54" cy="26" r="11" fill="#FDE68A"/>
-                  <ellipse cx="34" cy="50" rx="22" ry="14" fill="white" opacity="0.97"/>
-                  <ellipse cx="22" cy="54" rx="14" ry="10" fill="white" opacity="0.97"/>
-                  <ellipse cx="48" cy="54" rx="16" ry="10" fill="white" opacity="0.97"/>
-                  <rect x="8" y="50" width="52" height="14" rx="7" fill="white" opacity="0.97"/>
-                  <ellipse cx="30" cy="46" rx="14" ry="9" fill="white" opacity="0.6"/>
-                </svg>
+              <div className="weather-icon-illustration" style={{width:96,height:96,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                {(() => {
+                  const wMain = displayWeather?.weather?.weather[0]?.main || 'Clouds';
+                  const windKmh = displayWeather?.weather ? Math.round(displayWeather.weather.wind.speed * 3.6) : 10;
+                  const curHour = new Date().getHours();
+                  const isNight = curHour < 6 || curHour >= 19;
+
+                  // Scale up whichever SVG we return
+                  const icon = (() => {
+                    if (wMain === 'Thunderstorm') return WeatherSVG.thunderstorm;
+                    if (wMain === 'Snow')         return WeatherSVG.snow;
+                    if (wMain === 'Drizzle')      return WeatherSVG.drizzle;
+                    if (wMain === 'Rain')         return WeatherSVG.rain;
+                    if (wMain === 'Fog' || wMain === 'Mist' || wMain === 'Haze') return WeatherSVG.fog;
+                    if (windKmh > 25)             return WeatherSVG.wind;
+                    if (wMain === 'Clear')        return isNight ? WeatherSVG.clearNight : WeatherSVG.clearDay;
+                    return isNight ? WeatherSVG.partlyNight : WeatherSVG.partlyDay;
+                  })();
+
+                  // Clone the SVG element with bigger dimensions
+                  return React.cloneElement(icon, { width: 92, height: 92 });
+                })()}
               </div>
             </div>
 
@@ -1388,48 +1499,88 @@ const ActionHome = ({ session }) => {
                 </div>
               )) : (
                 <>
-                  <div className="fhu-item"><span className="fhu-lbl">Now</span><span className="fhu-icon">☁️</span><span className="fhu-temp">25°</span></div>
-                  <div className="fhu-item"><span className="fhu-lbl">8 AM</span><span className="fhu-icon">🌬️</span><span className="fhu-temp">25°</span></div>
-                  <div className="fhu-item"><span className="fhu-lbl">11 AM</span><span className="fhu-icon">🌬️</span><span className="fhu-temp">26°</span></div>
-                  <div className="fhu-item"><span className="fhu-lbl">2 PM</span><span className="fhu-icon">🌧️</span><span className="fhu-temp">27°</span></div>
-                  <div className="fhu-item"><span className="fhu-lbl">5 PM</span><span className="fhu-icon">🌧️</span><span className="fhu-temp">28°</span></div>
+                  <div className="fhu-item"><span className="fhu-lbl">Now</span><span className="fhu-icon">{WeatherSVG.clouds}</span><span className="fhu-temp">25°</span></div>
+                  <div className="fhu-item"><span className="fhu-lbl">8 AM</span><span className="fhu-icon">{WeatherSVG.wind}</span><span className="fhu-temp">25°</span></div>
+                  <div className="fhu-item"><span className="fhu-lbl">11 AM</span><span className="fhu-icon">{WeatherSVG.partlyDay}</span><span className="fhu-temp">26°</span></div>
+                  <div className="fhu-item"><span className="fhu-lbl">2 PM</span><span className="fhu-icon">{WeatherSVG.rain}</span><span className="fhu-temp">27°</span></div>
+                  <div className="fhu-item"><span className="fhu-lbl">5 PM</span><span className="fhu-icon">{WeatherSVG.rain}</span><span className="fhu-temp">28°</span></div>
                 </>
               )}
             </div>
 
-            {/* WHITE PANEL 2: 5 weather metrics */}
+{/* WHITE PANEL 2: 5 weather metrics – professional SVG icons */}
             <div className="unified-inner-panel metrics-inner-panel">
               <div className="um-item">
-                <div className="um-icon red">🌡️</div>
+                <div className="um-icon red">
+                  {/* Thermometer */}
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0Z" fill="#EF4444" opacity="0.15" stroke="#EF4444" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <circle cx="11.5" cy="19" r="2.5" fill="#EF4444"/>
+                    <line x1="11.5" y1="14" x2="11.5" y2="7" stroke="#EF4444" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </div>
                 <span className="um-val">{displayWeather?.weather ? Math.round(displayWeather.weather.main.temp) : 25}°C</span>
                 <span className="um-lbl">Temp</span>
               </div>
               <div className="um-item">
-                <div className="um-icon blue">💧</div>
+                <div className="um-icon blue">
+                  {/* Water drop */}
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2C12 2 5 10 5 15a7 7 0 0 0 14 0c0-5-7-13-7-13Z" fill="#3B82F6" opacity="0.15" stroke="#3B82F6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 19a4 4 0 0 1-4-4" stroke="#3B82F6" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                </div>
                 <span className="um-val">{displayWeather?.weather ? displayWeather.weather.main.humidity : 81}%</span>
                 <span className="um-lbl">Humidity</span>
               </div>
               <div className="um-item">
-                <div className="um-icon cyan">🌬️</div>
+                <div className="um-icon cyan">
+                  {/* Wind lines */}
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0891B2" strokeWidth="1.6" strokeLinecap="round">
+                    <path d="M5 8h10a3 3 0 1 0-3-3"/>
+                    <path d="M5 12h14a3 3 0 1 1-3 3"/>
+                    <path d="M5 16h8"/>
+                  </svg>
+                </div>
                 <span className="um-val">{displayWeather?.weather ? Math.round(displayWeather.weather.wind.speed * 3.6) : 21}<span className="um-unit"> km/h</span></span>
                 <span className="um-lbl">Wind</span>
               </div>
               <div className="um-item">
-                <div className="um-icon purple">🌧️</div>
+                <div className="um-icon purple">
+                  {/* Umbrella / rain */}
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M23 12a11.05 11.05 0 0 0-22 0zm-5 7a3 3 0 0 1-6 0v-7"/>
+                  </svg>
+                </div>
                 <span className="um-val">0%</span>
                 <span className="um-lbl">Rain</span>
               </div>
               <div className="um-item">
-                <div className="um-icon amber">☀️</div>
+                <div className="um-icon amber">
+                  {/* Sun / UV */}
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="5" fill="#F59E0B" opacity="0.25" stroke="#F59E0B" strokeWidth="1.5"/>
+                    <circle cx="12" cy="12" r="3" fill="#F59E0B"/>
+                    <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                </div>
                 <span className="um-val">4</span>
                 <span className="um-lbl">UV Index</span>
               </div>
             </div>
 
-            {/* WHITE PANEL 3: 4 soil items in a single row with dividers */}
+{/* WHITE PANEL 3: 4 soil items – professional SVG icons */}
             <div className="unified-inner-panel soil-inner-panel">
               <div className="sui-item">
-                <div className="sui-icon green">🌱</div>
+                <div className="sui-icon green">
+                  {/* Soil moisture – layered ground wave */}
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <path d="M3 17c2-2 4-3 6-1s4 3 6 1 4-3 6-1" stroke="#059669" strokeWidth="1.8" strokeLinecap="round" fill="none"/>
+                    <path d="M3 21c2-2 4-3 6-1s4 3 6 1 4-3 6-1" stroke="#059669" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.5"/>
+                    <path d="M12 3v8" stroke="#059669" strokeWidth="1.8" strokeLinecap="round"/>
+                    <path d="M9 6l3-3 3 3" stroke="#059669" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
                 <div className="sui-text">
                   <span className="sui-lbl">Soil Moisture</span>
                   <span className="sui-val green">Good</span>
@@ -1438,7 +1589,13 @@ const ActionHome = ({ session }) => {
               </div>
               <div className="sui-divider"></div>
               <div className="sui-item">
-                <div className="sui-icon blue">💧</div>
+                <div className="sui-icon blue">
+                  {/* Irrigation – tap/droplet */}
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2C12 2 6 9 6 14a6 6 0 0 0 12 0c0-5-6-12-6-12Z" fill="#2563EB" fillOpacity="0.12"/>
+                    <path d="M12 18a3 3 0 0 1-3-3"/>
+                  </svg>
+                </div>
                 <div className="sui-text">
                   <span className="sui-lbl">Irrigation Need</span>
                   <span className="sui-val blue">Moderate</span>
@@ -1447,7 +1604,15 @@ const ActionHome = ({ session }) => {
               </div>
               <div className="sui-divider"></div>
               <div className="sui-item">
-                <div className="sui-icon yellow">🌾</div>
+                <div className="sui-icon yellow">
+                  {/* Crop growth – sprouting seedling */}
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 22V12"/>
+                    <path d="M12 12C12 12 8 9 5 11c0 0 1 5 7 5"/>
+                    <path d="M12 12C12 12 16 9 19 11c0 0-1 5-7 5"/>
+                    <path d="M12 12C12 7 10 4 10 4s4 1 4 8"/>
+                  </svg>
+                </div>
                 <div className="sui-text">
                   <span className="sui-lbl">Crop Growth</span>
                   <span className="sui-val green">+1.0%</span>
@@ -1456,7 +1621,13 @@ const ActionHome = ({ session }) => {
               </div>
               <div className="sui-divider"></div>
               <div className="sui-item">
-                <div className="sui-icon teal">🐛</div>
+                <div className="sui-icon teal">
+                  {/* Pest risk – shield checkmark */}
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0D9488" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" fill="#0D9488" fillOpacity="0.1"/>
+                    <path d="M9 12l2 2 4-4"/>
+                  </svg>
+                </div>
                 <div className="sui-text">
                   <span className="sui-lbl">Pest Risk</span>
                   <span className="sui-val green">Low</span>
