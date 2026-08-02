@@ -3885,76 +3885,119 @@ body {
 
 /* 5 Quick Weather Metrics Card */
 .weather-quick-metrics-card {
-  padding: 16px;
+  padding: 16px 20px;
   margin-bottom: 20px;
 }
 
 .metrics-5grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
-  text-align: center;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  align-items: center;
 }
 
 .metric-box-item {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: 8px 4px;
-  background: #F9FAFB;
-  border-radius: 12px;
-  border: 1px solid #F3F4F6;
+  gap: 10px;
+  background: #FFFFFF;
+  border-right: 1px solid #F3F4F6;
+  padding-right: 8px;
 }
 
-.m-icon {
-  font-size: 16px;
+.metric-box-item:last-child {
+  border-right: none;
+}
+
+.m-icon-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.m-icon-circle.red { background: #FEF2F2; color: #EF4444; }
+.m-icon-circle.blue { background: #EFF6FF; color: #3B82F6; }
+.m-icon-circle.cyan { background: #ECFEFF; color: #06B6D4; }
+.m-icon-circle.purple { background: #F5F3FF; color: #8B5CF6; }
+.m-icon-circle.amber { background: #FFFBEB; color: #F59E0B; }
+
+.m-text-meta {
+  display: flex;
+  flex-direction: column;
 }
 
 .m-val {
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 800;
   color: #111827;
   white-space: nowrap;
+  line-height: 1.1;
 }
 
 .u-unit {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
 }
 
 .m-lbl {
-  font-size: 10px;
+  font-size: 11px;
   color: #6B7280;
   font-weight: 500;
+  white-space: nowrap;
+  margin-top: 2px;
 }
 
 /* Soil & Irrigation Summary Card */
 .soil-summary-card {
-  padding: 16px;
+  padding: 16px 20px;
   margin-bottom: 20px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 .soil-summary-4grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  align-items: center;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
 }
 
-.soil-item {
+.soil-card-item {
+  background: #FFFFFF;
+  border: 1px solid #EAEFE7;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+}
+
+.soil-card-top {
   display: flex;
   align-items: center;
-  gap: 6px;
-  background: #F8FAF7;
-  padding: 8px 10px;
-  border-radius: 12px;
-  border: 1px solid #EAEFE7;
+  gap: 12px;
 }
 
-.s-icon {
-  font-size: 16px;
+.s-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
 }
+
+.s-icon-box.green { background: #ECFDF5; }
+.s-icon-box.blue { background: #EFF6FF; }
 
 .s-text {
   display: flex;
@@ -3962,25 +4005,31 @@ body {
 }
 
 .s-lbl {
-  font-size: 10px;
+  font-size: 11px;
   color: #6B7280;
   font-weight: 500;
   white-space: nowrap;
 }
 
 .s-val {
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 800;
+  margin-top: 1px;
   white-space: nowrap;
 }
 
-.s-val.green {
-  color: #059669;
+.s-val.green { color: #059669; }
+.s-val.blue { color: #2563EB; }
+.s-val.amber { color: #D97706; }
+
+.soil-progress-bar {
+  height: 4px;
+  border-radius: 999px;
+  width: 100%;
 }
 
-.s-val.amber {
-  color: #D97706;
-}
+.soil-progress-bar.green { background: #059669; }
+.soil-progress-bar.blue { background: #2563EB; }
 
 /* Profit Snapshot Card */
 .profit-snapshot-card {

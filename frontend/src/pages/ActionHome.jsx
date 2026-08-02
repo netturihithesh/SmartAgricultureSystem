@@ -1280,29 +1280,39 @@ const ActionHome = ({ session }) => {
           <div className="card-box weather-quick-metrics-card">
             <div className="metrics-5grid">
               <div className="metric-box-item">
-                <span className="m-icon red">🌡️</span>
-                <span className="m-val">{displayWeather?.weather ? Math.round(displayWeather.weather.main.temp) : 25}°C</span>
-                <span className="m-lbl">Temp</span>
+                <div className="m-icon-circle red">🌡️</div>
+                <div className="m-text-meta">
+                  <span className="m-val">{displayWeather?.weather ? Math.round(displayWeather.weather.main.temp) : 25}°C</span>
+                  <span className="m-lbl">Temperature</span>
+                </div>
               </div>
               <div className="metric-box-item">
-                <span className="m-icon blue">💧</span>
-                <span className="m-val">{displayWeather?.weather ? displayWeather.weather.main.humidity : 81}%</span>
-                <span className="m-lbl">Humidity</span>
+                <div className="m-icon-circle blue">💧</div>
+                <div className="m-text-meta">
+                  <span className="m-val">{displayWeather?.weather ? displayWeather.weather.main.humidity : 81}%</span>
+                  <span className="m-lbl">Humidity</span>
+                </div>
               </div>
               <div className="metric-box-item">
-                <span className="m-icon cyan">🌬️</span>
-                <span className="m-val">{displayWeather?.weather ? Math.round(displayWeather.weather.wind.speed * 3.6) : 21} <span className="u-unit">km/h</span></span>
-                <span className="m-lbl">Wind</span>
+                <div className="m-icon-circle cyan">🌬️</div>
+                <div className="m-text-meta">
+                  <span className="m-val">{displayWeather?.weather ? Math.round(displayWeather.weather.wind.speed * 3.6) : 21} <span className="u-unit">km/h</span></span>
+                  <span className="m-lbl">Wind</span>
+                </div>
               </div>
               <div className="metric-box-item">
-                <span className="m-icon blue">🌧️</span>
-                <span className="m-val">0%</span>
-                <span className="m-lbl">Rain</span>
+                <div className="m-icon-circle purple">🌧️</div>
+                <div className="m-text-meta">
+                  <span className="m-val">0%</span>
+                  <span className="m-lbl">Rain Chance</span>
+                </div>
               </div>
               <div className="metric-box-item">
-                <span className="m-icon amber">☀️</span>
-                <span className="m-val">4</span>
-                <span className="m-lbl">UV Index</span>
+                <div className="m-icon-circle amber">☀️</div>
+                <div className="m-text-meta">
+                  <span className="m-val">4</span>
+                  <span className="m-lbl">UV Index</span>
+                </div>
               </div>
             </div>
           </div>
@@ -1310,33 +1320,48 @@ const ActionHome = ({ session }) => {
           {/* 3. SOIL & IRRIGATION SUMMARY CARD */}
           <div className="card-box soil-summary-card">
             <div className="soil-summary-4grid">
-              <div className="soil-item">
-                <span className="s-icon">🌱</span>
-                <div className="s-text">
-                  <span className="s-lbl">Soil Moisture</span>
-                  <span className="s-val green">Good</span>
+              <div className="soil-card-item">
+                <div className="soil-card-top">
+                  <div className="s-icon-box green">🌱</div>
+                  <div className="s-text">
+                    <span className="s-lbl">Soil Moisture</span>
+                    <span className="s-val green">Good</span>
+                  </div>
                 </div>
+                <div className="soil-progress-bar green"></div>
               </div>
-              <div className="soil-item">
-                <span className="s-icon">💧</span>
-                <div className="s-text">
-                  <span className="s-lbl">Irrigation Need</span>
-                  <span className="s-val amber">Moderate</span>
+
+              <div className="soil-card-item">
+                <div className="soil-card-top">
+                  <div className="s-icon-box blue">💧</div>
+                  <div className="s-text">
+                    <span className="s-lbl">Irrigation Need</span>
+                    <span className="s-val blue">Moderate</span>
+                  </div>
                 </div>
+                <div className="soil-progress-bar blue"></div>
               </div>
-              <div className="soil-item">
-                <span className="s-icon">🌾</span>
-                <div className="s-text">
-                  <span className="s-lbl">Crop Growth</span>
-                  <span className="s-val green">+1.0%</span>
+
+              <div className="soil-card-item">
+                <div className="soil-card-top">
+                  <div className="s-icon-box green">🌾</div>
+                  <div className="s-text">
+                    <span className="s-lbl">Crop Growth</span>
+                    <span className="s-val green">+1.0%</span>
+                  </div>
                 </div>
+                <div className="soil-progress-bar green"></div>
               </div>
-              <div className="soil-item">
-                <span className="s-icon">🐛</span>
-                <div className="s-text">
-                  <span className="s-lbl">Pest Risk</span>
-                  <span className="s-val green">Low</span>
+
+              <div className="soil-card-item">
+                <div className="soil-card-top">
+                  <div className="s-icon-box green">🐛</div>
+                  <div className="s-text">
+                    <span className="s-lbl">Pest Risk</span>
+                    <span className="s-val green">Low</span>
+                  </div>
                 </div>
+                <div className="soil-progress-bar green"></div>
               </div>
             </div>
           </div>
