@@ -1486,9 +1486,46 @@ const ActionHome = ({ session }) => {
             </div>
           ) : (
             <div className="card-box no-crop-state-card">
-              <h3>Start Your Farming Journey</h3>
-              <p>Register a crop or use AI recommendations to get started.</p>
-              <button className="btn-solid-dark-green" onClick={() => navigate('/add-crop')}>+ Add Crop</button>
+              <div className="no-crop-header-area">
+                <h3>Start Your Farming Journey</h3>
+                <p>Register a crop or use AI recommendations to get started.</p>
+              </div>
+              <div className="no-crop-actions-row">
+                <div className="left-btn-group">
+                  <button className="btn-predict-crop-gradient" onClick={() => navigate('/add-crop')}>
+                    <span style={{ fontSize: '16px' }}>+</span>
+                    <span>Add Crop</span>
+                  </button>
+
+                  <button className="btn-outline-green-pill" onClick={() => navigate('/recommendation')}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M15 4V2"/><path d="M15 16v-2"/><path d="M8 9h2"/><path d="M20 9h-2"/>
+                      <path d="M17.8 5.2L16.4 6.6"/><path d="M12.2 10.8L10.8 12.2"/><path d="M17.8 12.8L16.4 11.4"/><path d="M12.2 7.2L10.8 5.8"/>
+                      <path d="M4 14l3.5-3.5a1.5 1.5 0 0 1 2.1 0l7.8 7.8a1.5 1.5 0 0 1 0 2.1L14 24"/>
+                    </svg>
+                    <span>Predict Crop</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                  </button>
+                </div>
+
+                <button className="recycle-bin-card-btn" onClick={() => setBinModalOpen(true)}>
+                  <div className="recycle-icon-box">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="23 4 23 10 17 10"/>
+                      <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                    </svg>
+                  </div>
+                  <div className="recycle-meta">
+                    <span className="r-title">Recycle Bin</span>
+                    <span className="r-sub">View deleted crops</span>
+                  </div>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" strokeWidth="2">
+                    <polyline points="9 18 15 12 9 6"/>
+                  </svg>
+                </button>
+              </div>
             </div>
           )}
 

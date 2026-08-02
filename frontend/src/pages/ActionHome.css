@@ -955,6 +955,43 @@ body {
   border-radius: 999px;
 }
 
+/* No Crop State Card */
+.no-crop-state-card {
+  padding: 24px 28px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 28px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.no-crop-header-area h3 {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0 0 4px 0;
+  letter-spacing: -0.4px;
+}
+
+.no-crop-header-area p {
+  font-size: 14px;
+  color: #64748B;
+  margin: 0;
+}
+
+.no-crop-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding-top: 16px;
+  border-top: 1px solid #F1F5F9;
+}
+
 /* Bottom Action Row */
 .crop-card-actions-subrow {
   display: flex;
