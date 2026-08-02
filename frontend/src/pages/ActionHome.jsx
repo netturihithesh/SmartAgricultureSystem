@@ -1077,6 +1077,92 @@ const ActionHome = ({ session }) => {
     return stages[stages.length - 1];
   };
 
+
+  const todaysWorkTasks = useMemo(() => {
+    if (!selectedCrop || !selectedCrop.stages) return [];
+    
+    const tasks = [];
+    const windSpeedKmh = displayWeather?.weather ? Math.round(displayWeather.weather.wind.speed * 3.6) : 0;
+
+    // 1. High Wind Alert Task if wind > 20 km/h
+    if (windSpeedKmh > 20) {
+      tasks.push({
+        id: 'wind_alert_task',
+        stage_id: currentStage?.stage_id || 1,
+        substep_index: 999,
+        isAlert: true,
+        alertType: 'WIND ALERT',
+        task: 'Secure trellises, strappings, and crop support posts',
+        desc: `Wind speed is high (${windSpeedKmh} km/h). Prevent damage to seedlings and tall crop stalks.`,
+        day: daysPassed,
+        statusTag: 'Optimal timing',
+        statusClass: 'optimal',
+        isDone: substepStatus[`${currentStage?.stage_id || 1}_999`] || false,
+      });
+    }
+
+    // 2. Extract tasks from stages
+    for (const stage of selectedCrop.stages) {
+      if (!stage.substeps) continue;
+      
+      stage.substeps.forEach((sub, idx) => {
+        const taskText = typeof sub === 'object' ? sub.task : sub;
+        const targetDay = typeof sub === 'object' && sub.day ? sub.day : stage.start_day;
+        const key = `${stage.stage_id}_${idx}`;
+        const isDone = Boolean(substepStatus[key]);
+
+        // Include tasks for current stage or daysPassed window
+        const isCurrentStage = stage.stage_id === currentStage?.stage_id;
+        const isDue = targetDay <= daysPassed;
+        const isUpcomingNear = targetDay > daysPassed && targetDay <= daysPassed + 2;
+
+        if (isCurrentStage || isDue || isUpcomingNear) {
+          let statusTag = 'Optimal timing';
+          let statusClass = 'optimal';
+
+          if (isDone) {
+            statusTag = 'Completed';
+            statusClass = 'completed';
+          } else if (targetDay < daysPassed) {
+            statusTag = 'Past Due';
+            statusClass = 'past-due';
+          } else if (targetDay > daysPassed) {
+            statusTag = 'Upcoming';
+            statusClass = 'upcoming';
+          }
+
+          // Calculate date string
+          let dateStr = `Day ${targetDay}`;
+          if (cropStartDate && !isNaN(new Date(cropStartDate).getTime())) {
+            const d = new Date(new Date(cropStartDate).getTime() + (targetDay - 1) * 86400000);
+            if (!isNaN(d.getTime())) {
+              dateStr = d.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+            }
+          }
+
+          tasks.push({
+            id: key,
+            stage_id: stage.stage_id,
+            substep_index: idx,
+            task: taskText,
+            desc: `Stage ${stage.stage_id}: ${stage.title}`,
+            day: targetDay,
+            dateStr,
+            statusTag,
+            statusClass,
+            isDone,
+          });
+        }
+      });
+    }
+
+    // Sort: Pending/Overdue first, then by targetDay
+    return tasks.sort((a, b) => {
+      if (a.isDone !== b.isDone) return a.isDone ? 1 : -1;
+      return a.day - b.day;
+    });
+  }, [selectedCrop, currentStage, daysPassed, substepStatus, displayWeather, cropStartDate]);
+
   const handleSwapCrop = () => {
     if (userCrops.length > 1) {
       const nextIndex = activeCropIndex === 0 ? 1 : 0;
@@ -1621,39 +1707,39 @@ const ActionHome = ({ session }) => {
               </div>
 
               <div className="todays-tasks-list">
-                <div className="task-row-item active-urgent">
-                  <div className="task-left-check">
-                    <div className="radio-check-circle"></div>
-                    <div className="task-title-desc">
-                      <h4 className="task-heading">
-                        <span className="flag-icon">🚩</span> Secure trellises, strappings, and crop support posts
-                        <span className="task-alert-tag">WIND ALERT</span>
-                      </h4>
-                      <p className="task-subtext">Wind speed is high (22 km/h). Prevent damage to seedlings and tall crop stalks.</p>
+                {todaysWorkTasks.length > 0 ? (
+                  todaysWorkTasks.map((t) => (
+                    <div 
+                      key={t.id} 
+                      className={`task-row-item ${t.isDone ? 'completed-task' : (t.statusClass === 'past-due' ? 'past-due' : 'active-urgent')}`}
+                      onClick={() => toggleSubstep(t.stage_id, t.substep_index)}
+                      style={{ cursor: 'pointer' }}
+                      title="Click to toggle task completion"
+                    >
+                      <div className="task-left-check">
+                        <div className={`radio-check-circle ${t.isDone ? 'checked' : ''}`}>
+                          {t.isDone && <span className="check-mark">✓</span>}
+                        </div>
+                        <div className="task-title-desc">
+                          <h4 className="task-heading" style={{ textDecoration: t.isDone ? 'line-through' : 'none', color: t.isDone ? '#9CA3AF' : '#0F172A' }}>
+                            {t.isAlert ? <span className="flag-icon">🚩</span> : <span className="leaf-icon">🌿</span>} {t.task}
+                            {t.alertType && <span className="task-alert-tag">{t.alertType}</span>}
+                          </h4>
+                          {t.desc && <p className="task-subtext">{t.desc}</p>}
+                        </div>
+                      </div>
+                      <div className="task-right-meta">
+                        <span className="t-day-val">Day {t.day}</span>
+                        {t.dateStr && <span className="t-date-val">{t.dateStr}</span>}
+                        <span className={`t-status-tag ${t.statusClass}`}>{t.statusTag}</span>
+                      </div>
                     </div>
+                  ))
+                ) : (
+                  <div style={{ textAlign: 'center', padding: '24px', color: '#64748B' }}>
+                    <span>All tasks for today are completed! Great job 🎉</span>
                   </div>
-                  <div className="task-right-meta">
-                    <span className="t-day-val">Day {daysPassed}</span>
-                    <span className="t-date-val">Aug 2</span>
-                    <span className="t-status-tag optimal">Optimal timing</span>
-                  </div>
-                </div>
-
-                <div className="task-row-item past-due">
-                  <div className="task-left-check">
-                    <div className="radio-check-circle"></div>
-                    <div className="task-title-desc">
-                      <h4 className="task-heading">
-                        <span className="leaf-icon">🌿</span> Apply basal dose of NPK
-                      </h4>
-                    </div>
-                  </div>
-                  <div className="task-right-meta">
-                    <span className="t-day-val">Day 37</span>
-                    <span className="t-date-val">Jul 21</span>
-                    <span className="t-status-tag red">Past Due</span>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
           )}
@@ -1775,9 +1861,8 @@ const ActionHome = ({ session }) => {
                         return (
                           <div 
                             key={idx} 
-                            className="checklist-subitem"
-                            onClick={() => toggleSubstep(activeStgObj.stage_id, idx)}
-                            style={{ cursor: 'pointer' }}
+                            className="checklist-subitem readonly-subitem"
+                            style={{ cursor: 'default', userSelect: 'none' }}
                           >
                             <div className="check-left">
                               <span className={`circle-radio ${isSubDone ? 'checked' : ''}`}>

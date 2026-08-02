@@ -1220,31 +1220,6 @@ body {
   color: #0F172A;
 }
 
-/* Side-by-side Layout: Crop Journey (Left) + Crop Calendar (Right) */
-.journey-calendar-row-grid {
-  display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  gap: 20px;
-  align-items: start;
-  margin-bottom: 24px;
-}
-
-.journey-calendar-row-grid > .crop-journey-card {
-  margin-bottom: 0;
-  height: 100%;
-}
-
-.journey-calendar-row-grid > .MuiPaper-root {
-  margin-bottom: 0;
-  height: 100%;
-}
-
-@media (max-width: 1100px) {
-  .journey-calendar-row-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* Today's Work Card */
 .card-title-header-row {
   display: flex;
@@ -4877,5 +4852,191 @@ body {
 .subitem-date {
   font-size: 11px;
   color: #6B7280;
+}
+
+/* Today's Work Card & Interactive Task Checklist */
+.todays-work-card {
+  position: relative;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 24px;
+  padding: 24px;
+  margin-top: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.weather-advisor-inner-banner {
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: 16px;
+  padding: 14px 18px;
+  margin: 16px 0;
+}
+
+.advisor-warning-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #B45309;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.advisor-desc-text {
+  font-size: 13px;
+  color: #78350F;
+  margin: 0;
+  font-weight: 500;
+}
+
+.todays-tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.task-row-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 14px 18px;
+  transition: all 0.2s ease;
+}
+
+.task-row-item:hover {
+  border-color: #059669;
+  background: #ECFDF5;
+}
+
+.task-row-item.completed-task {
+  background: #F0FDF4;
+  border-color: #A7F3D0;
+  opacity: 0.85;
+}
+
+.task-left-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  flex: 1;
+}
+
+.radio-check-circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #CBD5E1;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+  transition: all 0.2s ease;
+}
+
+.radio-check-circle:hover {
+  border-color: #059669;
+}
+
+.radio-check-circle.checked {
+  background: #059669;
+  border-color: #059669;
+  color: #FFFFFF;
+}
+
+.check-mark {
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.task-title-desc {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.task-heading {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0F172A;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.task-subtext {
+  margin: 0;
+  font-size: 12px;
+  color: #64748B;
+}
+
+.task-alert-tag {
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #A7F3D0;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.task-right-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  margin-left: 12px;
+}
+
+.t-day-val {
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+}
+
+.t-date-val {
+  font-size: 11px;
+  color: #94A3B8;
+}
+
+.t-status-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-top: 2px;
+}
+
+.t-status-tag.optimal {
+  background: #EFF6FF;
+  color: #2563EB;
+  border: 1px solid #BFDBFE;
+}
+
+.t-status-tag.past-due {
+  background: #FEF2F2;
+  color: #DC2626;
+  border: 1px solid #FECACA;
+}
+
+.t-status-tag.completed {
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #A7F3D0;
+}
+
+.t-status-tag.upcoming {
+  background: #F8FAFC;
+  color: #64748B;
+  border: 1px solid #E2E8F0;
 }
 
