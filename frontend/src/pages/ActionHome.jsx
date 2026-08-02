@@ -1205,6 +1205,56 @@ const ActionHome = ({ session }) => {
     return calculateCurrentStage(selectedCrop.stages, daysPassed);
   }, [selectedCrop, daysPassed]);
 
+  const todaysTasks = useMemo(() => {
+    if (!selectedCrop || !currentStage) return [];
+    
+    const stageId = currentStage.stage_id;
+    const substeps = currentStage.substeps || [];
+    
+    return substeps.map((sub, idx) => {
+      const isDone = substepStatus && substepStatus[`${stageId}_${idx}`];
+      const taskText = typeof sub === 'object' ? sub.task : sub;
+      const taskDay = typeof sub === 'object' ? sub.day : currentStage.start_day;
+      
+      let statusTag = '';
+      let statusClass = '';
+      
+      if (isDone) {
+        statusTag = 'Completed';
+        statusClass = 'completed';
+      } else if (taskDay === daysPassed) {
+        statusTag = 'Due Today';
+        statusClass = 'due-today';
+      } else if (taskDay < daysPassed) {
+        statusTag = 'Past Due';
+        statusClass = 'past-due';
+      } else {
+        statusTag = 'Upcoming';
+        statusClass = 'upcoming';
+      }
+      
+      // Calculate calendar date for the task
+      let taskDateStr = '';
+      if (cropStartDate) {
+        const d = new Date(new Date(cropStartDate).getTime() + (taskDay - 1) * 86400000);
+        if (!isNaN(d.getTime())) {
+          taskDateStr = d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+        }
+      }
+      
+      return {
+        idx,
+        task: taskText,
+        day: taskDay,
+        dateStr: taskDateStr,
+        isDone,
+        statusTag,
+        statusClass,
+        stageId,
+      };
+    });
+  }, [selectedCrop, currentStage, daysPassed, substepStatus, cropStartDate]);
+
   useEffect(() => {
     const fetchSchedule = async () => {
       if (!selectedCrop) return;
@@ -1622,39 +1672,61 @@ const ActionHome = ({ session }) => {
               </div>
 
               <div className="todays-tasks-list">
-                <div className="task-row-item active-urgent">
-                  <div className="task-left-check">
-                    <div className="radio-check-circle"></div>
-                    <div className="task-title-desc">
-                      <h4 className="task-heading">
-                        <span className="flag-icon">🚩</span> Secure trellises, strappings, and crop support posts
-                        <span className="task-alert-tag">WIND ALERT</span>
-                      </h4>
-                      <p className="task-subtext">Wind speed is high (22 km/h). Prevent damage to seedlings and tall crop stalks.</p>
+                {/* DYNAMIC WIND WARNING TASK */}
+                {farmWeather?.weather?.wind?.speed && Math.round(farmWeather.weather.wind.speed * 3.6) > 20 && (
+                  <div className="task-row-item active-urgent" style={{ borderLeft: '4px solid #DC2626', background: '#FEF2F2' }}>
+                    <div className="task-left-check">
+                      <span style={{ fontSize: '18px', marginRight: '8px' }}>🚩</span>
+                      <div className="task-title-desc">
+                        <h4 className="task-heading" style={{ color: '#991B1B', fontWeight: 800 }}>
+                          Secure trellises and crop support posts
+                          <span className="task-alert-tag" style={{ background: '#DC2626', color: '#FFFFFF', fontSize: '9px', padding: '2px 6px', borderRadius: '4px', marginLeft: '8px', fontWeight: 900 }}>WIND ALERT</span>
+                        </h4>
+                        <p className="task-subtext" style={{ color: '#7F1D1D', fontSize: '12px' }}>
+                          Wind speed is high ({Math.round(farmWeather.weather.wind.speed * 3.6)} km/h). Prevent damage to seedlings.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="task-right-meta">
+                      <span className="t-day-val" style={{ color: '#991B1B' }}>Day {daysPassed}</span>
+                      <span className="t-status-tag" style={{ background: '#FEE2E2', color: '#991B1B', fontWeight: 700 }}>High Risk</span>
                     </div>
                   </div>
-                  <div className="task-right-meta">
-                    <span className="t-day-val">Day {daysPassed}</span>
-                    <span className="t-date-val">Aug 2</span>
-                    <span className="t-status-tag optimal">Optimal timing</span>
-                  </div>
-                </div>
+                )}
 
-                <div className="task-row-item past-due">
-                  <div className="task-left-check">
-                    <div className="radio-check-circle"></div>
-                    <div className="task-title-desc">
-                      <h4 className="task-heading">
-                        <span className="leaf-icon">🌿</span> Apply basal dose of NPK
-                      </h4>
+                {/* DYNAMIC CROP JOURNEY TASKS */}
+                {todaysTasks.length === 0 ? (
+                  <div style={{ textAlign: 'center', padding: '24px', color: '#64748B' }}>
+                    No tasks scheduled for the current stage.
+                  </div>
+                ) : (
+                  todaysTasks.map(t => (
+                    <div 
+                      key={t.idx} 
+                      className={`task-row-item ${t.isDone ? 'completed' : t.statusClass}`}
+                      onClick={() => toggleSubstep(t.stageId, t.idx)}
+                      style={{ cursor: 'pointer', transition: 'all 0.2s ease', opacity: t.isDone ? 0.7 : 1 }}
+                    >
+                      <div className="task-left-check">
+                        <span className={`circle-radio ${t.isDone ? 'checked' : ''}`} style={{ flexShrink: 0, marginRight: '12px' }}>
+                          {t.isDone && <span className="check-dot" style={{ display: 'block', width: '6px', height: '6px', backgroundColor: '#fff', borderRadius: '50%', margin: 'auto' }} />}
+                        </span>
+                        <div className="task-title-desc">
+                          <h4 className="task-heading" style={{ textDecoration: t.isDone ? 'line-through' : 'none', color: t.isDone ? '#9CA3AF' : '#0F172A', fontWeight: 700 }}>
+                            {t.task}
+                          </h4>
+                        </div>
+                      </div>
+                      <div className="task-right-meta">
+                        <span className="t-day-val">Day {t.day}</span>
+                        {t.dateStr && <span className="t-date-val">{t.dateStr}</span>}
+                        <span className={`t-status-tag ${t.statusClass}`}>
+                          {t.statusTag}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="task-right-meta">
-                    <span className="t-day-val">Day 37</span>
-                    <span className="t-date-val">Jul 21</span>
-                    <span className="t-status-tag red">Past Due</span>
-                  </div>
-                </div>
+                  ))
+                )}
               </div>
             </div>
           )}
