@@ -504,14 +504,16 @@ const ActionHome = ({ session }) => {
   const [cropEconomics, setCropEconomics] = useState(null);
   const [upcomingTasks, setUpcomingTasks] = useState([]);
 
-  const profitData = useMemo(() => {
+  const adjustedProfitData = useMemo(() => {
     if (!selectedCrop) return null;
     return calculateProfitSnapshot(
       cropEconomics,
-      profile?.land_size || 2.5,
-      selectedCrop.total_duration_days
+      profile?.land_size || 1.5,
+      selectedCrop.total_duration_days,
+      selectedCrop.crop_name,
+      weatherYieldImpact
     );
-  }, [selectedCrop, cropEconomics, profile]);
+  }, [selectedCrop, cropEconomics, profile, weatherYieldImpact]);
 
   const [expandedStage, setExpandedStage] = useState(null);
   const [activeJourneyStageId, setActiveJourneyStageId] = useState(null);
@@ -625,16 +627,6 @@ const ActionHome = ({ session }) => {
       default: return 0.006; // clouds/default
     }
   }, [weatherTheme]);
-
-  const adjustedProfitData = useMemo(() => {
-    if (!profitData) return null;
-    const factor = 1 + weatherYieldImpact;
-    return {
-      ...profitData,
-      totalProfit: Math.round(profitData.totalProfit * factor),
-      monthlyIncome: Math.round(profitData.monthlyIncome * factor),
-    };
-  }, [profitData, weatherYieldImpact]);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -1969,34 +1961,38 @@ const ActionHome = ({ session }) => {
           );
           })()}
 
-          {/* 4. PROFIT SNAPSHOT CARD (Only shown when active crop exists) */}
-          {selectedCrop && (
+          {/* 4. PROFIT SNAPSHOT CARD (Fully Dynamic & Weather-Adjusted) */}
+          {selectedCrop && adjustedProfitData && (
             <div className="card-box profit-snapshot-card">
               <div className="profit-card-header">
                 <div>
                   <h3 className="card-main-title">Profit Snapshot</h3>
-                  <span className="profit-crop-sub">{selectedCrop.crop_name}</span>
+                  <span className="profit-crop-sub">{selectedCrop.crop_name} • {profile?.land_size || '1.5'} Acres</span>
                 </div>
-                <span className="yield-impact-badge">+0.3% Yield Impact</span>
+                <span className={`yield-impact-badge ${weatherYieldImpact >= 0 ? 'positive' : 'negative'}`}>
+                  {weatherYieldImpact >= 0 ? `+${(weatherYieldImpact * 100).toFixed(1)}%` : `${(weatherYieldImpact * 100).toFixed(1)}%`} Yield Impact
+                </span>
               </div>
 
               <div className="profit-main-amount-block">
                 <span className="profit-amount-lbl">EXPECTED PROFIT (WEATHER ADJUSTED)</span>
-                <h2 className="profit-amount-val">₹1,23,570</h2>
+                <h2 className="profit-amount-val">
+                  ₹{(adjustedProfitData.totalProfit || 0).toLocaleString('en-IN')}
+                </h2>
               </div>
 
               <div className="profit-three-metrics-grid">
                 <div className="profit-metric-item">
                   <span className="pm-lbl">EST. YIELD</span>
-                  <span className="pm-val">144 q</span>
+                  <span className="pm-val">{adjustedProfitData.totalYield || 0} q</span>
                 </div>
                 <div className="profit-metric-item">
                   <span className="pm-lbl">MKT PRICE</span>
-                  <span className="pm-val">₹2,300/q</span>
+                  <span className="pm-val">₹{(adjustedProfitData.marketPricePerQ || 2400).toLocaleString('en-IN')}/q</span>
                 </div>
                 <div className="profit-metric-item">
                   <span className="pm-lbl">MONTHLY</span>
-                  <span className="pm-val">₹20,595</span>
+                  <span className="pm-val">₹{(adjustedProfitData.monthlyIncome || 0).toLocaleString('en-IN')}</span>
                 </div>
               </div>
 
