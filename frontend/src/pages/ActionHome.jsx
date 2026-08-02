@@ -1628,126 +1628,127 @@ const ActionHome = ({ session }) => {
             </div>
           )}
 
-          {/* EXPANDED & INTERACTIVE CROP JOURNEY CARD IN MAIN COLUMN */}
+          {/* SIDE-BY-SIDE: CROP JOURNEY (LEFT) + CROP CALENDAR (RIGHT) */}
           {selectedCrop && (
-            <div className="card-box crop-journey-card">
-              <div className="card-title-header-row" style={{marginBottom: '20px'}}>
-                <div>
-                  <h3 className="card-main-title">Crop Journey</h3>
-                  <span className="card-date-sub">Click any stage to inspect details & task checklist</span>
+            <div className="journey-calendar-row-grid">
+              {/* EXPANDED & INTERACTIVE CROP JOURNEY CARD */}
+              <div className="card-box crop-journey-card">
+                <div className="card-title-header-row" style={{marginBottom: '20px'}}>
+                  <div>
+                    <h3 className="card-main-title">Crop Journey</h3>
+                    <span className="card-date-sub">Click any stage to inspect details & task checklist</span>
+                  </div>
+                  <span className="day-counter-pill">Stage {(activeJourneyStageId || currentStage?.stage_id || 4)} of {selectedCrop.stages?.length || 8}</span>
                 </div>
-                <span className="day-counter-pill">Stage {(activeJourneyStageId || currentStage?.stage_id || 4)} of {selectedCrop.stages?.length || 8}</span>
-              </div>
-              
-              <div className="journey-pipeline-nodes-row">
-                {(selectedCrop.stages || [
-                  { stage_id: 1, title: 'Land Prep.', start_day: 1, end_day: 15 },
-                  { stage_id: 2, title: 'Seed Prep.', start_day: 16, end_day: 30 },
-                  { stage_id: 3, title: 'Transplant.', start_day: 31, end_day: 36 },
-                  { stage_id: 4, title: 'Fertilizer Application', start_day: 37, end_day: 71 },
-                  { stage_id: 5, title: 'Water Man.', start_day: 72, end_day: 90 },
-                  { stage_id: 6, title: 'Pest & Dis.', start_day: 91, end_day: 110 },
-                  { stage_id: 7, title: 'Harvesting', start_day: 111, end_day: 130 },
-                  { stage_id: 8, title: 'Post Harv.', start_day: 131, end_day: 140 }
-                ]).map((stg) => {
-                  const currentCurId = currentStage?.stage_id || 4;
-                  const isDone = stg.stage_id < currentCurId;
-                  const isSelected = stg.stage_id === (activeJourneyStageId || currentCurId);
-                  const statusClass = isSelected ? 'active' : (isDone ? 'done' : 'pending');
+                
+                <div className="journey-pipeline-nodes-row">
+                  {(selectedCrop.stages || [
+                    { stage_id: 1, title: 'Land Prep.', start_day: 1, end_day: 15 },
+                    { stage_id: 2, title: 'Seed Prep.', start_day: 16, end_day: 30 },
+                    { stage_id: 3, title: 'Transplant.', start_day: 31, end_day: 36 },
+                    { stage_id: 4, title: 'Fertilizer Application', start_day: 37, end_day: 71 },
+                    { stage_id: 5, title: 'Water Man.', start_day: 72, end_day: 90 },
+                    { stage_id: 6, title: 'Pest & Dis.', start_day: 91, end_day: 110 },
+                    { stage_id: 7, title: 'Harvesting', start_day: 111, end_day: 130 },
+                    { stage_id: 8, title: 'Post Harv.', start_day: 131, end_day: 140 }
+                  ]).map((stg) => {
+                    const currentCurId = currentStage?.stage_id || 4;
+                    const isDone = stg.stage_id < currentCurId;
+                    const isSelected = stg.stage_id === (activeJourneyStageId || currentCurId);
+                    const statusClass = isSelected ? 'active' : (isDone ? 'done' : 'pending');
+
+                    return (
+                      <div 
+                        key={stg.stage_id} 
+                        className={`node-item ${statusClass}`}
+                        onClick={() => setActiveJourneyStageId(stg.stage_id)}
+                        style={{ cursor: 'pointer' }}
+                        title={`Click to view Stage ${stg.stage_id}: ${stg.title}`}
+                      >
+                        <div className="node-circle">
+                          {isDone ? (
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+                          ) : stg.stage_id}
+                        </div>
+                        <span className="node-label">
+                          {stg.title.length > 12 ? stg.title.slice(0, 10) + '...' : stg.title}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {(() => {
+                  const activeStgId = activeJourneyStageId || currentStage?.stage_id || 4;
+                  const activeStgObj = selectedCrop.stages?.find(s => s.stage_id === activeStgId) || currentStage || {
+                    title: 'Fertilizer Application',
+                    start_day: 37,
+                    end_day: 71,
+                    substeps: [
+                      { task: 'Apply basal dose of NPK', day: 37 },
+                      { task: 'Apply top dressing of Urea in splits', day: 54 },
+                      { task: 'Apply Zinc sulfate to prevent Khaira disease', day: 71 }
+                    ]
+                  };
+
+                  const isCurrent = activeStgId === (currentStage?.stage_id || 4);
+                  const isPast = activeStgId < (currentStage?.stage_id || 4);
+                  const statusTag = isCurrent ? 'In Progress' : (isPast ? 'Completed' : 'Upcoming');
+                  
+                  let pct = 0;
+                  if (isPast) pct = 100;
+                  else if (isCurrent) {
+                    const totalStageDays = (activeStgObj.end_day - activeStgObj.start_day) || 1;
+                    pct = Math.min(100, Math.max(0, Math.round(((daysPassed - activeStgObj.start_day) / totalStageDays) * 100)));
+                  }
 
                   return (
-                    <div 
-                      key={stg.stage_id} 
-                      className={`node-item ${statusClass}`}
-                      onClick={() => setActiveJourneyStageId(stg.stage_id)}
-                      style={{ cursor: 'pointer' }}
-                      title={`Click to view Stage ${stg.stage_id}: ${stg.title}`}
-                    >
-                      <div className="node-circle">
-                        {isDone ? (
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
-                        ) : stg.stage_id}
+                    <div className="journey-active-stage-panel">
+                      <div className="stage-panel-head">
+                        <h4 className="stage-title">{activeStgObj.title} — <span style={{color: isCurrent ? '#059669' : (isPast ? '#2563EB' : '#6B7280')}}>{statusTag}</span></h4>
+                        <span className="stage-dates">Day {activeStgObj.start_day} — Day {activeStgObj.end_day}</span>
                       </div>
-                      <span className="node-label">
-                        {stg.title.length > 12 ? stg.title.slice(0, 10) + '...' : stg.title}
-                      </span>
+                      <div className="stage-progress-bar-wrap">
+                        <div className="stage-progress-fill" style={{width: `${pct}%`}}></div>
+                      </div>
+                      <span className="stage-progress-lbl">{pct}% of stage complete</span>
+
+                      <div className="stage-substeps-checklist">
+                        {activeStgObj.substeps?.map((sub, idx) => {
+                          const isSubDone = isPast || (substepStatus && substepStatus[`${activeStgObj.stage_id}_${idx}`]);
+                          return (
+                            <div 
+                              key={idx} 
+                              className="checklist-subitem"
+                              onClick={() => toggleSubstep(activeStgObj.stage_id, idx)}
+                              style={{ cursor: 'pointer' }}
+                            >
+                              <div className="check-left">
+                                <span className={`circle-radio ${isSubDone ? 'checked' : ''}`}>
+                                  {isSubDone && <span className="check-dot">✓</span>}
+                                </span>
+                                <span style={{ textDecoration: isSubDone ? 'line-through' : 'none', color: isSubDone ? '#9CA3AF' : 'inherit' }}>
+                                  {sub.task || sub}
+                                </span>
+                              </div>
+                              <span className="subitem-date">Day {sub.day || activeStgObj.start_day}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   );
-                })}
+                })()}
               </div>
 
-              {(() => {
-                const activeStgId = activeJourneyStageId || currentStage?.stage_id || 4;
-                const activeStgObj = selectedCrop.stages?.find(s => s.stage_id === activeStgId) || currentStage || {
-                  title: 'Fertilizer Application',
-                  start_day: 37,
-                  end_day: 71,
-                  substeps: [
-                    { task: 'Apply basal dose of NPK', day: 37 },
-                    { task: 'Apply top dressing of Urea in splits', day: 54 },
-                    { task: 'Apply Zinc sulfate to prevent Khaira disease', day: 71 }
-                  ]
-                };
-
-                const isCurrent = activeStgId === (currentStage?.stage_id || 4);
-                const isPast = activeStgId < (currentStage?.stage_id || 4);
-                const statusTag = isCurrent ? 'In Progress' : (isPast ? 'Completed' : 'Upcoming');
-                
-                let pct = 0;
-                if (isPast) pct = 100;
-                else if (isCurrent) {
-                  const totalStageDays = (activeStgObj.end_day - activeStgObj.start_day) || 1;
-                  pct = Math.min(100, Math.max(0, Math.round(((daysPassed - activeStgObj.start_day) / totalStageDays) * 100)));
-                }
-
-                return (
-                  <div className="journey-active-stage-panel">
-                    <div className="stage-panel-head">
-                      <h4 className="stage-title">{activeStgObj.title} — <span style={{color: isCurrent ? '#059669' : (isPast ? '#2563EB' : '#6B7280')}}>{statusTag}</span></h4>
-                      <span className="stage-dates">Day {activeStgObj.start_day} — Day {activeStgObj.end_day}</span>
-                    </div>
-                    <div className="stage-progress-bar-wrap">
-                      <div className="stage-progress-fill" style={{width: `${pct}%`}}></div>
-                    </div>
-                    <span className="stage-progress-lbl">{pct}% of stage complete</span>
-
-                    <div className="stage-substeps-checklist">
-                      {activeStgObj.substeps?.map((sub, idx) => {
-                        const isSubDone = isPast || (substepStatus && substepStatus[`${activeStgObj.stage_id}_${idx}`]);
-                        return (
-                          <div 
-                            key={idx} 
-                            className="checklist-subitem"
-                            onClick={() => toggleSubstep(activeStgObj.stage_id, idx)}
-                            style={{ cursor: 'pointer' }}
-                          >
-                            <div className="check-left">
-                              <span className={`circle-radio ${isSubDone ? 'checked' : ''}`}>
-                                {isSubDone && <span className="check-dot">✓</span>}
-                              </span>
-                              <span style={{ textDecoration: isSubDone ? 'line-through' : 'none', color: isSubDone ? '#9CA3AF' : 'inherit' }}>
-                                {sub.task || sub}
-                              </span>
-                            </div>
-                            <span className="subitem-date">Day {sub.day || activeStgObj.start_day}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })()}
+              {/* CROP DAILY CALENDAR CARD (RIGHT OF CROP JOURNEY) */}
+              <CropCalendarCard 
+                selectedCrop={selectedCrop} 
+                cropStartDate={cropStartDate} 
+                daysPassed={daysPassed} 
+                substepStatus={substepStatus} 
+              />
             </div>
-          )}
-
-          {/* CROP DAILY CALENDAR CARD (COMPACT SIZE) */}
-          {selectedCrop && (
-            <CropCalendarCard 
-              selectedCrop={selectedCrop} 
-              cropStartDate={cropStartDate} 
-              daysPassed={daysPassed} 
-              substepStatus={substepStatus} 
-            />
           )}
 
         </div>

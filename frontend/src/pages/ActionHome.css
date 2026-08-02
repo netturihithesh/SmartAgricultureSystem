@@ -1220,6 +1220,31 @@ body {
   color: #0F172A;
 }
 
+/* Side-by-side Layout: Crop Journey (Left) + Crop Calendar (Right) */
+.journey-calendar-row-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 20px;
+  align-items: start;
+  margin-bottom: 24px;
+}
+
+.journey-calendar-row-grid > .crop-journey-card {
+  margin-bottom: 0;
+  height: 100%;
+}
+
+.journey-calendar-row-grid > .MuiPaper-root {
+  margin-bottom: 0;
+  height: 100%;
+}
+
+@media (max-width: 1100px) {
+  .journey-calendar-row-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Today's Work Card */
 .card-title-header-row {
   display: flex;
