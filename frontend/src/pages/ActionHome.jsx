@@ -117,141 +117,263 @@ const formatForecastHour = (dt) => {
   return `${hrs} ${ampm}`;
 };
 
-// ── Professional inline-SVG weather icon helper ──────────────────────────
-// Covers: Thunderstorm · Rain · Drizzle · Snow · Fog · Windy · Clear-Day ·
-//         Clear-Night · Partly-Cloudy-Day · Partly-Cloudy-Night · Clouds
+// ── PANEL ICONS (dark fills, clearly visible on white backgrounds) ──────────
 const WeatherSVG = {
-  // Thunderstorm: dark cloud + lightning bolt
   thunderstorm: (
-    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
-      <ellipse cx="32" cy="22" rx="18" ry="12" fill="#64748B"/>
-      <ellipse cx="20" cy="26" rx="11" ry="8" fill="#64748B"/>
-      <ellipse cx="44" cy="26" rx="11" ry="8" fill="#64748B"/>
-      <rect x="10" y="26" width="40" height="10" rx="5" fill="#64748B"/>
-      {/* rain lines */}
-      <line x1="20" y1="38" x2="17" y2="48" stroke="#93C5FD" strokeWidth="2" strokeLinecap="round"/>
-      <line x1="34" y1="38" x2="31" y2="48" stroke="#93C5FD" strokeWidth="2" strokeLinecap="round"/>
-      <line x1="44" y1="38" x2="41" y2="48" stroke="#93C5FD" strokeWidth="2" strokeLinecap="round"/>
-      {/* bolt */}
-      <polygon points="36,32 28,44 33,44 27,56 40,40 34,40" fill="#FBBF24"/>
+    <svg width="28" height="28" viewBox="0 0 64 64" fill="none">
+      <ellipse cx="32" cy="20" rx="20" ry="13" fill="#374151"/>
+      <ellipse cx="18" cy="25" rx="13" ry="9" fill="#374151"/>
+      <ellipse cx="46" cy="25" rx="13" ry="9" fill="#374151"/>
+      <rect x="8" y="25" width="44" height="12" rx="6" fill="#4B5563"/>
+      <line x1="18" y1="39" x2="14" y2="52" stroke="#2563EB" strokeWidth="3.5" strokeLinecap="round"/>
+      <line x1="32" y1="39" x2="28" y2="52" stroke="#2563EB" strokeWidth="3.5" strokeLinecap="round"/>
+      <line x1="46" y1="39" x2="42" y2="52" stroke="#2563EB" strokeWidth="3.5" strokeLinecap="round"/>
+      <polygon points="37,30 27,44 33,44 26,58 42,40 35,40" fill="#F59E0B"/>
     </svg>
   ),
-  // Rain / heavy shower
   rain: (
-    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
-      <ellipse cx="32" cy="20" rx="18" ry="12" fill="#94A3B8"/>
-      <ellipse cx="20" cy="24" rx="11" ry="8" fill="#94A3B8"/>
-      <ellipse cx="44" cy="24" rx="11" ry="8" fill="#94A3B8"/>
-      <rect x="10" y="24" width="40" height="10" rx="5" fill="#94A3B8"/>
-      <line x1="20" y1="38" x2="16" y2="52" stroke="#60A5FA" strokeWidth="2.5" strokeLinecap="round"/>
-      <line x1="30" y1="38" x2="26" y2="52" stroke="#60A5FA" strokeWidth="2.5" strokeLinecap="round"/>
-      <line x1="40" y1="38" x2="36" y2="52" stroke="#60A5FA" strokeWidth="2.5" strokeLinecap="round"/>
-      <line x1="48" y1="38" x2="44" y2="52" stroke="#60A5FA" strokeWidth="2.5" strokeLinecap="round"/>
+    <svg width="28" height="28" viewBox="0 0 64 64" fill="none">
+      <ellipse cx="32" cy="20" rx="20" ry="13" fill="#374151"/>
+      <ellipse cx="18" cy="25" rx="13" ry="9" fill="#374151"/>
+      <ellipse cx="46" cy="25" rx="13" ry="9" fill="#374151"/>
+      <rect x="8" y="25" width="44" height="12" rx="6" fill="#4B5563"/>
+      <line x1="16" y1="40" x2="11" y2="56" stroke="#1D4ED8" strokeWidth="4" strokeLinecap="round"/>
+      <line x1="28" y1="40" x2="23" y2="56" stroke="#1D4ED8" strokeWidth="4" strokeLinecap="round"/>
+      <line x1="40" y1="40" x2="35" y2="56" stroke="#1D4ED8" strokeWidth="4" strokeLinecap="round"/>
+      <line x1="50" y1="40" x2="45" y2="56" stroke="#1D4ED8" strokeWidth="4" strokeLinecap="round"/>
     </svg>
   ),
-  // Drizzle – lighter rain
   drizzle: (
-    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
-      <ellipse cx="32" cy="22" rx="18" ry="12" fill="#CBD5E1"/>
-      <ellipse cx="20" cy="26" rx="11" ry="8" fill="#CBD5E1"/>
-      <ellipse cx="44" cy="26" rx="11" ry="8" fill="#CBD5E1"/>
-      <rect x="10" y="26" width="40" height="10" rx="5" fill="#CBD5E1"/>
-      <line x1="22" y1="40" x2="20" y2="50" stroke="#93C5FD" strokeWidth="2" strokeLinecap="round"/>
-      <line x1="32" y1="40" x2="30" y2="50" stroke="#93C5FD" strokeWidth="2" strokeLinecap="round"/>
-      <line x1="42" y1="40" x2="40" y2="50" stroke="#93C5FD" strokeWidth="2" strokeLinecap="round"/>
+    <svg width="28" height="28" viewBox="0 0 64 64" fill="none">
+      <ellipse cx="32" cy="22" rx="18" ry="12" fill="#4B5563"/>
+      <ellipse cx="20" cy="27" rx="12" ry="8" fill="#4B5563"/>
+      <ellipse cx="44" cy="27" rx="12" ry="8" fill="#4B5563"/>
+      <rect x="10" y="27" width="40" height="10" rx="5" fill="#6B7280"/>
+      <line x1="22" y1="40" x2="18" y2="54" stroke="#3B82F6" strokeWidth="3" strokeLinecap="round"/>
+      <line x1="34" y1="40" x2="30" y2="54" stroke="#3B82F6" strokeWidth="3" strokeLinecap="round"/>
+      <line x1="46" y1="40" x2="42" y2="54" stroke="#3B82F6" strokeWidth="3" strokeLinecap="round"/>
     </svg>
   ),
-  // Snow
   snow: (
-    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
-      <ellipse cx="32" cy="22" rx="18" ry="12" fill="#CBD5E1"/>
-      <ellipse cx="20" cy="26" rx="11" ry="8" fill="#CBD5E1"/>
-      <rect x="10" y="26" width="40" height="10" rx="5" fill="#CBD5E1"/>
-      {[18,28,38,48].map(x => (
+    <svg width="28" height="28" viewBox="0 0 64 64" fill="none">
+      <ellipse cx="32" cy="22" rx="18" ry="12" fill="#6B7280"/>
+      <ellipse cx="20" cy="27" rx="12" ry="8" fill="#6B7280"/>
+      <rect x="10" y="27" width="40" height="10" rx="5" fill="#9CA3AF"/>
+      {[16,28,40,52].map(x => (
         <g key={x}>
-          <line x1={x} y1="38" x2={x} y2="54" stroke="#BAE6FD" strokeWidth="2" strokeLinecap="round"/>
-          <line x1={x-4} y1="44" x2={x+4} y2="50" stroke="#BAE6FD" strokeWidth="1.5" strokeLinecap="round"/>
-          <line x1={x+4} y1="44" x2={x-4} y2="50" stroke="#BAE6FD" strokeWidth="1.5" strokeLinecap="round"/>
+          <line x1={x} y1="40" x2={x} y2="57" stroke="#60A5FA" strokeWidth="3" strokeLinecap="round"/>
+          <line x1={x-6} y1="46" x2={x+6} y2="52" stroke="#60A5FA" strokeWidth="2" strokeLinecap="round"/>
+          <line x1={x+6} y1="46" x2={x-6} y2="52" stroke="#60A5FA" strokeWidth="2" strokeLinecap="round"/>
         </g>
       ))}
     </svg>
   ),
-  // Fog / Mist
   fog: (
-    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
-      <ellipse cx="32" cy="18" rx="18" ry="10" fill="#D1D5DB"/>
-      <rect x="8" y="28" width="44" height="5" rx="2.5" fill="#D1D5DB" opacity="0.8"/>
-      <rect x="12" y="36" width="38" height="5" rx="2.5" fill="#D1D5DB" opacity="0.6"/>
-      <rect x="8" y="44" width="44" height="5" rx="2.5" fill="#D1D5DB" opacity="0.4"/>
+    <svg width="28" height="28" viewBox="0 0 64 64" fill="none">
+      <rect x="8" y="10" width="48" height="9" rx="4.5" fill="#6B7280"/>
+      <rect x="4" y="23" width="56" height="8" rx="4" fill="#4B5563"/>
+      <rect x="8" y="35" width="48" height="8" rx="4" fill="#6B7280"/>
+      <rect x="4" y="47" width="56" height="8" rx="4" fill="#9CA3AF"/>
     </svg>
   ),
-  // Wind – horizontal flow lines
   wind: (
-    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
-      <path d="M8 20 Q24 14 40 20" stroke="#94A3B8" strokeWidth="3" strokeLinecap="round" fill="none"/>
-      <path d="M40 20 Q48 18 50 22 Q52 26 46 26 H8" stroke="#94A3B8" strokeWidth="3" strokeLinecap="round" fill="none"/>
-      <path d="M8 34 Q20 28 36 34" stroke="#CBD5E1" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-      <path d="M36 34 Q44 32 46 36 Q48 40 43 40 H8" stroke="#CBD5E1" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-      <path d="M8 46 Q16 42 28 46 Q36 50 40 46" stroke="#E2E8F0" strokeWidth="2" strokeLinecap="round" fill="none"/>
+    <svg width="28" height="28" viewBox="0 0 64 64" fill="none">
+      <path d="M6 16 Q22 8 40 16 Q50 20 56 14 Q62 8 56 4 Q50 0 44 6" stroke="#1F2937" strokeWidth="3.5" strokeLinecap="round" fill="none"/>
+      <path d="M6 32 Q18 24 36 32 Q46 37 52 31 Q58 25 52 21" stroke="#374151" strokeWidth="3" strokeLinecap="round" fill="none"/>
+      <path d="M6 48 Q16 40 32 48 Q40 53 46 48" stroke="#4B5563" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
     </svg>
   ),
-  // Clear day – realistic sun with rays
   clearDay: (
-    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
-      <circle cx="32" cy="32" r="14" fill="#FCD34D"/>
-      <circle cx="32" cy="32" r="10" fill="#FBBF24"/>
-      {[[32,6],[32,58],[6,32],[58,32],[13,13],[51,51],[51,13],[13,51]].map(([x,y],i) => {
-        const dx = x - 32, dy = y - 32;
-        const len = Math.sqrt(dx*dx+dy*dy);
-        const nx = dx/len, ny = dy/len;
-        return <line key={i} x1={32+nx*16} y1={32+ny*16} x2={32+nx*24} y2={32+ny*24} stroke="#FCD34D" strokeWidth="3" strokeLinecap="round"/>;
+    <svg width="28" height="28" viewBox="0 0 64 64" fill="none">
+      <circle cx="32" cy="32" r="16" fill="#FCD34D"/>
+      <circle cx="32" cy="32" r="11" fill="#F59E0B"/>
+      {[[32,6],[32,58],[6,32],[58,32],[12,12],[52,52],[52,12],[12,52]].map(([x,y],i) => {
+        const dx=x-32, dy=y-32, l=Math.sqrt(dx*dx+dy*dy), nx=dx/l, ny=dy/l;
+        return <line key={i} x1={32+nx*18} y1={32+ny*18} x2={32+nx*28} y2={32+ny*28} stroke="#F59E0B" strokeWidth="3.5" strokeLinecap="round"/>;
       })}
     </svg>
   ),
-  // Clear night – crescent moon + 2 stars
   clearNight: (
-    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
-      <path d="M38 12 A18 18 0 1 1 22 46 A14 14 0 0 0 38 12Z" fill="#DBEAFE"/>
-      <circle cx="50" cy="16" r="2.5" fill="#FDE68A"/>
-      <circle cx="46" cy="8" r="1.5" fill="#FDE68A"/>
-      <circle cx="56" cy="24" r="1.5" fill="#FDE68A"/>
+    <svg width="28" height="28" viewBox="0 0 64 64" fill="none">
+      <path d="M40 10 A20 20 0 1 1 20 52 A16 16 0 0 0 40 10Z" fill="#1E3A5F"/>
+      <circle cx="52" cy="14" r="3.5" fill="#FDE68A"/>
+      <circle cx="48" cy="5" r="2.5" fill="#FDE68A"/>
+      <circle cx="60" cy="26" r="2" fill="#FDE68A"/>
     </svg>
   ),
-  // Partly cloudy day
   partlyDay: (
-    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
-      <circle cx="22" cy="22" r="13" fill="#FCD34D"/>
-      <circle cx="22" cy="22" r="9" fill="#FBBF24"/>
-      <ellipse cx="38" cy="38" rx="16" ry="10" fill="#F1F5F9"/>
-      <ellipse cx="28" cy="41" rx="10" ry="7" fill="#F1F5F9"/>
-      <ellipse cx="50" cy="41" rx="10" ry="7" fill="#F1F5F9"/>
-      <rect x="18" y="38" width="38" height="10" rx="5" fill="white"/>
+    <svg width="28" height="28" viewBox="0 0 64 64" fill="none">
+      <circle cx="22" cy="20" r="15" fill="#FCD34D"/>
+      <circle cx="22" cy="20" r="10" fill="#F59E0B"/>
+      <ellipse cx="40" cy="40" rx="20" ry="13" fill="#CBD5E1"/>
+      <ellipse cx="28" cy="44" rx="13" ry="9" fill="#CBD5E1"/>
+      <ellipse cx="52" cy="44" rx="13" ry="9" fill="#CBD5E1"/>
+      <rect x="17" y="40" width="44" height="13" rx="6.5" fill="#E2E8F0"/>
     </svg>
   ),
-  // Partly cloudy night
   partlyNight: (
-    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
-      <path d="M28 8 A14 14 0 1 1 16 36 A11 11 0 0 0 28 8Z" fill="#DBEAFE"/>
-      <ellipse cx="40" cy="40" rx="16" ry="10" fill="#E2E8F0"/>
-      <ellipse cx="28" cy="43" rx="10" ry="7" fill="#E2E8F0"/>
-      <rect x="20" y="40" width="34" height="10" rx="5" fill="#F8FAFC"/>
+    <svg width="28" height="28" viewBox="0 0 64 64" fill="none">
+      <path d="M30 6 A18 18 0 1 1 12 40 A14 14 0 0 0 30 6Z" fill="#1E3A5F"/>
+      <ellipse cx="44" cy="44" rx="18" ry="12" fill="#CBD5E1"/>
+      <ellipse cx="32" cy="48" rx="12" ry="8" fill="#CBD5E1"/>
+      <rect x="23" y="44" width="38" height="12" rx="6" fill="#E2E8F0"/>
     </svg>
   ),
-  // Overcast / Clouds
   clouds: (
-    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
-      <ellipse cx="32" cy="24" rx="18" ry="12" fill="#E2E8F0"/>
-      <ellipse cx="20" cy="28" rx="12" ry="9" fill="#E2E8F0"/>
-      <ellipse cx="44" cy="28" rx="12" ry="9" fill="#E2E8F0"/>
-      <rect x="8" y="28" width="44" height="12" rx="6" fill="#F1F5F9"/>
+    <svg width="28" height="28" viewBox="0 0 64 64" fill="none">
+      <ellipse cx="32" cy="24" rx="20" ry="14" fill="#4B5563"/>
+      <ellipse cx="18" cy="30" rx="14" ry="10" fill="#4B5563"/>
+      <ellipse cx="46" cy="30" rx="14" ry="10" fill="#4B5563"/>
+      <rect x="6" y="30" width="48" height="14" rx="7" fill="#6B7280"/>
     </svg>
   ),
+};
+
+// ── HERO ICONS (white/light fills, visible on gradient card background) ───────
+const WeatherHeroSVG = {
+  thunderstorm: (
+    <svg width="92" height="92" viewBox="0 0 64 64" fill="none">
+      <ellipse cx="32" cy="20" rx="20" ry="13" fill="rgba(0,0,0,0.35)"/>
+      <ellipse cx="18" cy="25" rx="13" ry="9" fill="rgba(0,0,0,0.3)"/>
+      <ellipse cx="46" cy="25" rx="13" ry="9" fill="rgba(0,0,0,0.3)"/>
+      <rect x="8" y="25" width="44" height="12" rx="6" fill="rgba(0,0,0,0.25)"/>
+      <line x1="18" y1="39" x2="14" y2="52" stroke="#BFDBFE" strokeWidth="3.5" strokeLinecap="round"/>
+      <line x1="32" y1="39" x2="28" y2="52" stroke="#BFDBFE" strokeWidth="3.5" strokeLinecap="round"/>
+      <line x1="46" y1="39" x2="42" y2="52" stroke="#BFDBFE" strokeWidth="3.5" strokeLinecap="round"/>
+      <polygon points="37,30 27,44 33,44 26,58 42,40 35,40" fill="#FCD34D"/>
+    </svg>
+  ),
+  rain: (
+    <svg width="92" height="92" viewBox="0 0 64 64" fill="none">
+      <ellipse cx="32" cy="20" rx="20" ry="13" fill="rgba(255,255,255,0.28)"/>
+      <ellipse cx="18" cy="25" rx="13" ry="9" fill="rgba(255,255,255,0.22)"/>
+      <ellipse cx="46" cy="25" rx="13" ry="9" fill="rgba(255,255,255,0.22)"/>
+      <rect x="8" y="25" width="44" height="12" rx="6" fill="rgba(255,255,255,0.33)"/>
+      <line x1="16" y1="40" x2="11" y2="56" stroke="white" strokeWidth="4" strokeLinecap="round"/>
+      <line x1="28" y1="40" x2="23" y2="56" stroke="white" strokeWidth="4" strokeLinecap="round"/>
+      <line x1="40" y1="40" x2="35" y2="56" stroke="white" strokeWidth="4" strokeLinecap="round"/>
+      <line x1="50" y1="40" x2="45" y2="56" stroke="white" strokeWidth="4" strokeLinecap="round"/>
+    </svg>
+  ),
+  drizzle: (
+    <svg width="92" height="92" viewBox="0 0 64 64" fill="none">
+      <ellipse cx="32" cy="22" rx="18" ry="12" fill="rgba(255,255,255,0.3)"/>
+      <ellipse cx="20" cy="27" rx="12" ry="8" fill="rgba(255,255,255,0.25)"/>
+      <rect x="10" y="27" width="40" height="10" rx="5" fill="rgba(255,255,255,0.35)"/>
+      <line x1="22" y1="40" x2="18" y2="54" stroke="#BFDBFE" strokeWidth="3" strokeLinecap="round"/>
+      <line x1="34" y1="40" x2="30" y2="54" stroke="#BFDBFE" strokeWidth="3" strokeLinecap="round"/>
+      <line x1="46" y1="40" x2="42" y2="54" stroke="#BFDBFE" strokeWidth="3" strokeLinecap="round"/>
+    </svg>
+  ),
+  snow: (
+    <svg width="92" height="92" viewBox="0 0 64 64" fill="none">
+      <ellipse cx="32" cy="22" rx="18" ry="12" fill="rgba(255,255,255,0.4)"/>
+      <ellipse cx="20" cy="27" rx="12" ry="8" fill="rgba(255,255,255,0.35)"/>
+      <rect x="10" y="27" width="40" height="10" rx="5" fill="rgba(255,255,255,0.45)"/>
+      {[16,28,40,52].map(x => (
+        <g key={x}>
+          <line x1={x} y1="40" x2={x} y2="57" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+          <line x1={x-6} y1="46" x2={x+6} y2="52" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+          <line x1={x+6} y1="46" x2={x-6} y2="52" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        </g>
+      ))}
+    </svg>
+  ),
+  fog: (
+    <svg width="92" height="92" viewBox="0 0 64 64" fill="none">
+      <rect x="8" y="10" width="48" height="9" rx="4.5" fill="rgba(255,255,255,0.55)"/>
+      <rect x="4" y="23" width="56" height="8" rx="4" fill="rgba(255,255,255,0.45)"/>
+      <rect x="8" y="35" width="48" height="8" rx="4" fill="rgba(255,255,255,0.35)"/>
+      <rect x="4" y="47" width="56" height="8" rx="4" fill="rgba(255,255,255,0.2)"/>
+    </svg>
+  ),
+  wind: (
+    <svg width="92" height="92" viewBox="0 0 64 64" fill="none">
+      <path d="M6 16 Q22 8 40 16 Q50 20 56 14 Q62 8 56 4" stroke="rgba(255,255,255,0.95)" strokeWidth="4" strokeLinecap="round" fill="none"/>
+      <path d="M6 32 Q18 24 36 32 Q46 37 52 31" stroke="rgba(255,255,255,0.75)" strokeWidth="3" strokeLinecap="round" fill="none"/>
+      <path d="M6 48 Q16 40 32 48 Q40 53 46 48" stroke="rgba(255,255,255,0.5)" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
+    </svg>
+  ),
+  clearDay: (
+    <svg width="92" height="92" viewBox="0 0 64 64" fill="none">
+      <circle cx="32" cy="32" r="22" fill="#FDE68A" opacity="0.35"/>
+      <circle cx="32" cy="32" r="16" fill="#FCD34D"/>
+      <circle cx="32" cy="32" r="11" fill="#F59E0B"/>
+      {[[32,4],[32,60],[4,32],[60,32],[10,10],[54,54],[54,10],[10,54]].map(([x,y],i) => {
+        const dx=x-32, dy=y-32, l=Math.sqrt(dx*dx+dy*dy), nx=dx/l, ny=dy/l;
+        return <line key={i} x1={32+nx*20} y1={32+ny*20} x2={32+nx*30} y2={32+ny*30} stroke="#FDE68A" strokeWidth="4.5" strokeLinecap="round"/>;
+      })}
+    </svg>
+  ),
+  clearNight: (
+    <svg width="92" height="92" viewBox="0 0 64 64" fill="none">
+      <path d="M42 8 A26 26 0 1 1 18 56 A21 21 0 0 0 42 8Z" fill="#DBEAFE" opacity="0.95"/>
+      <circle cx="56" cy="14" r="4" fill="#FDE68A"/>
+      <circle cx="50" cy="5" r="2.5" fill="#FDE68A"/>
+      <circle cx="62" cy="28" r="2" fill="#FDE68A"/>
+      <circle cx="58" cy="6" r="1.5" fill="white" opacity="0.6"/>
+    </svg>
+  ),
+  partlyDay: (
+    <svg width="92" height="92" viewBox="0 0 64 64" fill="none">
+      <circle cx="20" cy="18" r="16" fill="#FDE68A" opacity="0.4"/>
+      <circle cx="20" cy="18" r="13" fill="#FCD34D"/>
+      <circle cx="20" cy="18" r="9" fill="#F59E0B"/>
+      <ellipse cx="40" cy="42" rx="22" ry="14" fill="white" opacity="0.97"/>
+      <ellipse cx="27" cy="46" rx="14" ry="10" fill="white" opacity="0.97"/>
+      <ellipse cx="53" cy="46" rx="14" ry="10" fill="white" opacity="0.97"/>
+      <rect x="15" y="42" width="46" height="15" rx="7.5" fill="white"/>
+    </svg>
+  ),
+  partlyNight: (
+    <svg width="92" height="92" viewBox="0 0 64 64" fill="none">
+      <path d="M28 6 A18 18 0 1 1 12 40 A14 14 0 0 0 28 6Z" fill="#DBEAFE" opacity="0.9"/>
+      <ellipse cx="44" cy="44" rx="20" ry="13" fill="rgba(255,255,255,0.88)"/>
+      <ellipse cx="31" cy="48" rx="13" ry="9" fill="rgba(255,255,255,0.88)"/>
+      <rect x="23" y="44" width="40" height="14" rx="7" fill="white" opacity="0.93"/>
+    </svg>
+  ),
+  clouds: (
+    <svg width="92" height="92" viewBox="0 0 64 64" fill="none">
+      <ellipse cx="32" cy="22" rx="22" ry="15" fill="rgba(255,255,255,0.45)"/>
+      <ellipse cx="18" cy="28" rx="15" ry="11" fill="rgba(255,255,255,0.55)"/>
+      <ellipse cx="46" cy="28" rx="15" ry="11" fill="rgba(255,255,255,0.55)"/>
+      <rect x="6" y="28" width="52" height="18" rx="9" fill="white" opacity="0.93"/>
+    </svg>
+  ),
+};
+
+// ── WEATHER THEME GRADIENTS (card background per weather state) ────────────
+const WEATHER_THEMES = {
+  thunderstorm: 'linear-gradient(180deg, #1F2937 0%, #374151 30%, #56647A 60%, #8FA0B4 100%)',
+  rain:         'linear-gradient(180deg, #243B55 0%, #3A5470 35%, #5578A0 65%, #8DB4CF 100%)',
+  drizzle:      'linear-gradient(180deg, #3A5570 0%, #527590 40%, #7AA0B8 70%, #B8D0E0 100%)',
+  snow:         'linear-gradient(180deg, #4A7FA8 0%, #6EA0C4 40%, #A8CCDF 70%, #E2F0F8 100%)',
+  fog:          'linear-gradient(180deg, #4B5563 0%, #6B7280 40%, #9CA3AF 70%, #D1D5DB 100%)',
+  wind:         'linear-gradient(180deg, #2D5F7A 0%, #4A85A0 40%, #7EB0C6 70%, #C0DDE8 100%)',
+  clearNight:   'linear-gradient(180deg, #0C1829 0%, #1A3356 35%, #2D5080 65%, #6B93B8 100%)',
+  clearDay:     'linear-gradient(180deg, #1D6BDB 0%, #3685F0 40%, #5BADF8 70%, #BAE3FF 100%)',
+  partlyDay:    'linear-gradient(180deg, #4A90E2 0%, #7BB8F5 40%, #B8D9F8 70%, #F0F7FF 100%)',
+  partlyNight:  'linear-gradient(180deg, #1A3A60 0%, #2E5585 40%, #4D7DB5 65%, #8EBDE0 100%)',
+  default:      'linear-gradient(180deg, #4A90E2 0%, #7BB8F5 40%, #B8D9F8 70%, #F0F7FF 100%)',
+};
+
+const getWeatherThemeKey = (weatherMain, windKmh, isNight) => {
+  if (!weatherMain) return 'default';
+  if (weatherMain === 'Thunderstorm') return 'thunderstorm';
+  if (weatherMain === 'Rain')         return 'rain';
+  if (weatherMain === 'Drizzle')      return 'drizzle';
+  if (weatherMain === 'Snow')         return 'snow';
+  if (weatherMain === 'Fog' || weatherMain === 'Mist' || weatherMain === 'Haze' || weatherMain === 'Smoke') return 'fog';
+  if (windKmh > 25)                   return 'wind';
+  if (weatherMain === 'Clear')        return isNight ? 'clearNight' : 'clearDay';
+  if (weatherMain === 'Clouds')       return isNight ? 'partlyNight' : 'partlyDay';
+  return 'default';
 };
 
 const getForecastIcon = (main, speed, dt) => {
   const speedKmh = speed ? Math.round(speed * 3.6) : 0;
   const isNight = dt ? (() => { const h = new Date(dt * 1000).getHours(); return h < 6 || h >= 19; })() : false;
-
   if (main === 'Thunderstorm') return WeatherSVG.thunderstorm;
   if (main === 'Snow')         return WeatherSVG.snow;
   if (main === 'Drizzle')      return WeatherSVG.drizzle;
@@ -261,14 +383,6 @@ const getForecastIcon = (main, speed, dt) => {
   if (main === 'Clear')        return isNight ? WeatherSVG.clearNight : WeatherSVG.clearDay;
   if (main === 'Clouds')       return isNight ? WeatherSVG.partlyNight : WeatherSVG.partlyDay;
   return WeatherSVG.clouds;
-};
-
-// Returns the correct large hero illustration based on current weather state + hour
-const getHeroWeatherSVG = (weatherMain, windKmh, isNight) => {
-  if (!weatherMain || weatherMain === 'Clouds') {
-    return isNight ? WeatherSVG.partlyNight : WeatherSVG.partlyDay;
-  }
-  return getForecastIcon(weatherMain, windKmh ? windKmh / 3.6 : 0, isNight ? 0 : 13 * 3600);
 };
 
 // Procedural Web Audio API weather sound synthesiser
@@ -1435,7 +1549,28 @@ const ActionHome = ({ session }) => {
         <div className="dashboard-right-col">
           
           {/* ── UNIFIED WEATHER + METRICS + SOIL CARD ── */}
-          <div className="unified-weather-card">
+          {(() => {
+            const _wMain   = displayWeather?.weather?.weather[0]?.main || null;
+            const _windKmh = displayWeather?.weather ? Math.round(displayWeather.weather.wind.speed * 3.6) : 10;
+            const _curHr   = new Date().getHours();
+            const _isNight = _curHr < 6 || _curHr >= 19;
+            const _themeKey = getWeatherThemeKey(_wMain, _windKmh, _isNight);
+            const _heroBg  = WEATHER_THEMES[_themeKey];
+            const _heroIcon = (() => {
+              const key = _themeKey;
+              if (key === 'thunderstorm') return WeatherHeroSVG.thunderstorm;
+              if (key === 'rain')         return WeatherHeroSVG.rain;
+              if (key === 'drizzle')      return WeatherHeroSVG.drizzle;
+              if (key === 'snow')         return WeatherHeroSVG.snow;
+              if (key === 'fog')          return WeatherHeroSVG.fog;
+              if (key === 'wind')         return WeatherHeroSVG.wind;
+              if (key === 'clearNight')   return WeatherHeroSVG.clearNight;
+              if (key === 'clearDay')     return WeatherHeroSVG.clearDay;
+              if (key === 'partlyNight')  return WeatherHeroSVG.partlyNight;
+              return WeatherHeroSVG.partlyDay;
+            })();
+            return (
+          <div className="unified-weather-card" style={{ background: _heroBg }}>
 
             {/* TOP: location + live pill */}
             <div className="weather-widget-top">
@@ -1465,27 +1600,7 @@ const ActionHome = ({ session }) => {
                 </div>
               </div>
               <div className="weather-icon-illustration" style={{width:96,height:96,display:'flex',alignItems:'center',justifyContent:'center'}}>
-                {(() => {
-                  const wMain = displayWeather?.weather?.weather[0]?.main || 'Clouds';
-                  const windKmh = displayWeather?.weather ? Math.round(displayWeather.weather.wind.speed * 3.6) : 10;
-                  const curHour = new Date().getHours();
-                  const isNight = curHour < 6 || curHour >= 19;
-
-                  // Scale up whichever SVG we return
-                  const icon = (() => {
-                    if (wMain === 'Thunderstorm') return WeatherSVG.thunderstorm;
-                    if (wMain === 'Snow')         return WeatherSVG.snow;
-                    if (wMain === 'Drizzle')      return WeatherSVG.drizzle;
-                    if (wMain === 'Rain')         return WeatherSVG.rain;
-                    if (wMain === 'Fog' || wMain === 'Mist' || wMain === 'Haze') return WeatherSVG.fog;
-                    if (windKmh > 25)             return WeatherSVG.wind;
-                    if (wMain === 'Clear')        return isNight ? WeatherSVG.clearNight : WeatherSVG.clearDay;
-                    return isNight ? WeatherSVG.partlyNight : WeatherSVG.partlyDay;
-                  })();
-
-                  // Clone the SVG element with bigger dimensions
-                  return React.cloneElement(icon, { width: 92, height: 92 });
-                })()}
+                {_heroIcon}
               </div>
             </div>
 
@@ -1637,6 +1752,8 @@ const ActionHome = ({ session }) => {
             </div>
 
           </div>
+          );
+          })()}
 
           {/* 4. PROFIT SNAPSHOT CARD */}
           <div className="card-box profit-snapshot-card">
