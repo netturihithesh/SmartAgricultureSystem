@@ -1883,42 +1883,44 @@ const ActionHome = ({ session }) => {
           );
           })()}
 
-          {/* 4. PROFIT SNAPSHOT CARD */}
-          <div className="card-box profit-snapshot-card">
-            <div className="profit-card-header">
-              <div>
-                <h3 className="card-main-title">Profit Snapshot</h3>
-                <span className="profit-crop-sub">{selectedCrop ? selectedCrop.crop_name : 'Paddy(Basmati)'}</span>
+          {/* 4. PROFIT SNAPSHOT CARD (Only shown when active crop exists) */}
+          {selectedCrop && (
+            <div className="card-box profit-snapshot-card">
+              <div className="profit-card-header">
+                <div>
+                  <h3 className="card-main-title">Profit Snapshot</h3>
+                  <span className="profit-crop-sub">{selectedCrop.crop_name}</span>
+                </div>
+                <span className="yield-impact-badge">+0.3% Yield Impact</span>
               </div>
-              <span className="yield-impact-badge">+0.3% Yield Impact</span>
-            </div>
 
-            <div className="profit-main-amount-block">
-              <span className="profit-amount-lbl">EXPECTED PROFIT (WEATHER ADJUSTED)</span>
-              <h2 className="profit-amount-val">₹1,23,570</h2>
-            </div>
+              <div className="profit-main-amount-block">
+                <span className="profit-amount-lbl">EXPECTED PROFIT (WEATHER ADJUSTED)</span>
+                <h2 className="profit-amount-val">₹1,23,570</h2>
+              </div>
 
-            <div className="profit-three-metrics-grid">
-              <div className="profit-metric-item">
-                <span className="pm-lbl">EST. YIELD</span>
-                <span className="pm-val">144 q</span>
+              <div className="profit-three-metrics-grid">
+                <div className="profit-metric-item">
+                  <span className="pm-lbl">EST. YIELD</span>
+                  <span className="pm-val">144 q</span>
+                </div>
+                <div className="profit-metric-item">
+                  <span className="pm-lbl">MKT PRICE</span>
+                  <span className="pm-val">₹2,300/q</span>
+                </div>
+                <div className="profit-metric-item">
+                  <span className="pm-lbl">MONTHLY</span>
+                  <span className="pm-val">₹20,595</span>
+                </div>
               </div>
-              <div className="profit-metric-item">
-                <span className="pm-lbl">MKT PRICE</span>
-                <span className="pm-val">₹2,300/q</span>
-              </div>
-              <div className="profit-metric-item">
-                <span className="pm-lbl">MONTHLY</span>
-                <span className="pm-val">₹20,595</span>
-              </div>
-            </div>
 
-            <div className="profit-wave-accent">
-              <svg viewBox="0 0 400 30" preserveAspectRatio="none" style={{width: '100%', height: '30px', display: 'block'}}>
-                <path d="M0 15 Q100 0 200 15 T400 15 L400 30 L0 30 Z" fill="rgba(5, 150, 105, 0.08)"/>
-              </svg>
+              <div className="profit-wave-accent">
+                <svg viewBox="0 0 400 30" preserveAspectRatio="none" style={{width: '100%', height: '30px', display: 'block'}}>
+                  <path d="M0 15 Q100 0 200 15 T400 15 L400 30 L0 30 Z" fill="rgba(5, 150, 105, 0.08)"/>
+                </svg>
+              </div>
             </div>
-          </div>
+          )}
 
         </div>
 
