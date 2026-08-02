@@ -1285,23 +1285,71 @@ const ActionHome = ({ session }) => {
           {/* ACTIVE CROP MAIN CARD */}
           {selectedCrop ? (
             <div className="card-box active-crop-main-card">
-              <div className="crop-header-flex">
-                <div className="crop-sprout-icon-box">
-                  <span className="crop-emoji-icon">🌾</span>
-                </div>
-                <div className="crop-title-group">
-                  <span className="crop-active-farmer-badge">👤 ACTIVE FARMER</span>
-                  <h2 className="crop-name-heading">{selectedCrop.crop_name}</h2>
-                  <div className="crop-stage-outline-pill">
-                    <span className="sprout-icon">🌿</span>
-                    <span>{currentStage?.title || 'Fertilizer Application'}</span>
+              {/* Top Banner Row */}
+              <div className="crop-banner-top-row">
+                <div className="crop-header-left">
+                  <div className="crop-avatar-circle">
+                    <svg width="56" height="56" viewBox="0 0 64 64" fill="none">
+                      <path d="M14 52C16 38 24 24 36 16C28 26 24 38 22 52Z" fill="#16A34A"/>
+                      <path d="M12 52C14 42 10 32 4 26C10 32 14 42 14 52Z" fill="#22C55E"/>
+                      <path d="M22 56C24 40 32 24 46 10" stroke="#CA8A04" strokeWidth="3" strokeLinecap="round"/>
+                      <path d="M22 56C28 38 42 20 54 14" stroke="#EAB308" strokeWidth="2.5" strokeLinecap="round"/>
+                      {[
+                        [46,10],[42,14],[38,18],[34,22],[30,26],[26,30],
+                        [54,14],[50,18],[46,22],[42,26],[38,30],[34,34]
+                      ].map(([x,y], i) => (
+                        <g key={i}>
+                          <ellipse cx={x} cy={y} rx="3.5" ry="6" fill="#F59E0B" transform={`rotate(${i % 2 === 0 ? 35 : -35} ${x} ${y})`}/>
+                          <ellipse cx={x} cy={y} rx="2" ry="4.5" fill="#FDE047" transform={`rotate(${i % 2 === 0 ? 35 : -35} ${x} ${y})`}/>
+                        </g>
+                      ))}
+                    </svg>
                   </div>
+                  <div className="crop-title-group">
+                    <div className="crop-active-farmer-badge">
+                      <span className="farmer-dot"></span>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                      </svg>
+                      <span>Active Farmer</span>
+                    </div>
+                    <h2 className="crop-name-heading">{selectedCrop.crop_name}</h2>
+                    <div className="crop-stage-pill">
+                      <span className="leaf-icon">🌿</span>
+                      <span>{currentStage?.title || 'Fertilizer Application'}</span>
+                      <span className="leaf-icon">🌿</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="crop-tip-card">
+                  <div className="tip-icon-circle">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M8.5 14.5A5 5 0 0 1 12 5a5 5 0 0 1 3.5 9.5c-.7.7-1.5 1.6-1.5 2.5V18h-4v-1c0-.9-.8-1.8-1.5-2.5z"/>
+                      <path d="M9 21h6"/>
+                    </svg>
+                  </div>
+                  <div className="tip-text-body">
+                    <span className="tip-label"><strong>Tip:</strong> Apply fertilizer in the next 3 days for best yield.</span>
+                  </div>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="9 18 15 12 9 6"/>
+                  </svg>
                 </div>
               </div>
 
-              <div className="crop-stats-three-cols">
-                <div className="crop-stat-item">
-                  <div className="stat-icon-circle green">📅</div>
+              {/* Middle Row: 4 Metric Cards */}
+              <div className="crop-stats-four-cols">
+                <div className="crop-stat-card-pill">
+                  <div className="stat-icon-box green">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                      <line x1="16" y1="2" x2="16" y2="6"/>
+                      <line x1="8" y1="2" x2="8" y2="6"/>
+                      <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                  </div>
                   <div className="stat-text-meta">
                     <span className="stat-lbl-sm">Expected Harvest</span>
                     <span className="stat-val-bold">
@@ -1310,47 +1358,97 @@ const ActionHome = ({ session }) => {
                   </div>
                 </div>
 
-                <div className="crop-stat-item">
-                  <div className="stat-icon-circle green">🌱</div>
-                  <div className="stat-text-meta">
+                <div className="crop-stat-card-pill">
+                  <div className="stat-icon-box green">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 10v12"/>
+                      <path d="M12 10C12 10 8 7 5 9c0 0 1 5 7 5"/>
+                      <path d="M12 10C12 10 16 7 19 9c0 0-1 5-7 5"/>
+                    </svg>
+                  </div>
+                  <div className="stat-text-meta" style={{ flex: 1 }}>
                     <span className="stat-lbl-sm">Current Stage</span>
                     <span className="stat-val-bold">{currentStage?.stage_id || 4} of {selectedCrop.stages?.length || 8} Stages</span>
+                    <div className="stat-progress-bar-track">
+                      <div 
+                        className="stat-progress-bar-fill" 
+                        style={{ width: `${Math.min(100, Math.round(((currentStage?.stage_id || 4) / (selectedCrop.stages?.length || 8)) * 100))}%` }}
+                      ></div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="crop-stat-item">
-                  <div className="stat-icon-circle green">⏱️</div>
+                <div className="crop-stat-card-pill">
+                  <div className="stat-icon-box green">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                      <line x1="16" y1="2" x2="16" y2="6"/>
+                      <line x1="8" y1="2" x2="8" y2="6"/>
+                      <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                  </div>
                   <div className="stat-text-meta">
                     <span className="stat-lbl-sm">Total Days</span>
                     <span className="stat-val-bold">Day {daysPassed} / {selectedCrop.total_duration_days}</span>
                   </div>
                 </div>
+
+                <div className="crop-stat-card-pill">
+                  <div className="stat-icon-box green">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M3 3h18v18H3z"/>
+                      <path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>
+                    </svg>
+                  </div>
+                  <div className="stat-text-meta">
+                    <span className="stat-lbl-sm">Field Area</span>
+                    <span className="stat-val-bold">{selectedCrop.land_size || '1.5 Acres'}</span>
+                  </div>
+                </div>
               </div>
 
+              {/* Bottom Row Buttons */}
               <div className="crop-card-actions-subrow">
                 <div className="left-btn-group">
-                  <button className="btn-solid-dark-green" onClick={() => navigate('/dashboard/calendar')}>
-                    <span style={{marginRight: '6px'}}>👁️</span>
-                    View Full Journey
+                  <button className="btn-predict-crop-gradient" onClick={() => navigate('/recommendation')}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M15 4V2"/><path d="M15 16v-2"/><path d="M8 9h2"/><path d="M20 9h-2"/>
+                      <path d="M17.8 5.2L16.4 6.6"/><path d="M12.2 10.8L10.8 12.2"/><path d="M17.8 12.8L16.4 11.4"/><path d="M12.2 7.2L10.8 5.8"/>
+                      <path d="M4 14l3.5-3.5a1.5 1.5 0 0 1 2.1 0l7.8 7.8a1.5 1.5 0 0 1 0 2.1L14 24"/>
+                    </svg>
+                    <span>Predict Crop</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                    </svg>
                   </button>
+
                   {userCrops.length === 2 ? (
-                    <button className="btn-outline-green" onClick={handleSwapCrop}>Swap Crop</button>
+                    <button className="btn-outline-green-pill" onClick={handleSwapCrop}>Swap Crop</button>
                   ) : (
-                    <button className="btn-outline-green" onClick={() => navigate('/add-crop')}>+ Add 2nd Crop</button>
+                    <button className="btn-outline-green-pill" onClick={() => navigate('/add-crop')}>+ Add 2nd Crop</button>
                   )}
-                  <button className="btn-outline-red" onClick={requestDelete} title="Move to Trash">
-                    <span style={{marginRight: '6px'}}>🗑️</span>
-                    Delete Crop
+
+                  <button className="btn-outline-red-pill" onClick={requestDelete} title="Move to Trash">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                    <span>Delete Crop</span>
                   </button>
                 </div>
 
                 <button className="recycle-bin-card-btn" onClick={() => setBinModalOpen(true)}>
-                  <span className="recycle-emoji">♻️</span>
+                  <div className="recycle-icon-box">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="23 4 23 10 17 10"/>
+                      <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                    </svg>
+                  </div>
                   <div className="recycle-meta">
                     <span className="r-title">Recycle Bin</span>
                     <span className="r-sub">View deleted crops</span>
                   </div>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" strokeWidth="2">
                     <polyline points="9 18 15 12 9 6"/>
                   </svg>
                 </button>
