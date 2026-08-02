@@ -1652,94 +1652,110 @@ const ActionHome = ({ session }) => {
             </div>
           )}
 
-          {/* TODAY'S WORK CARD */}
-          {selectedCrop && currentStage && (
-            <div className="card-box todays-work-card">
-              <div className="card-title-header-row">
+          {/* COMBINED CROP JOURNEY & DAILY TASKS CARD */}
+          {selectedCrop && (
+            <div className="card-box crop-journey-card">
+              <div className="card-title-header-row" style={{ marginBottom: '24px' }}>
                 <div>
-                  <h3 className="card-main-title">Today's Work</h3>
-                  <span className="card-date-sub">{new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                  <h3 className="card-main-title">Crop Journey & Daily Tasks</h3>
+                  <span className="card-date-sub">Complete daily activities and track overall stage milestones</span>
                 </div>
                 <span className="day-counter-pill">📅 Day {daysPassed}</span>
               </div>
 
-              <div className="weather-advisor-inner-banner">
-                <div className="advisor-warning-badge">
-                  <span className="sun-icon">☀️</span>
-                  <span>WEATHER ADVISOR (FARM: {profile?.location?.split(',')[0]?.toUpperCase() || 'KAMAREDDY'})</span>
-                </div>
-                <p className="advisor-desc-text">Avoid pesticide spraying today to prevent chemical drift.</p>
-              </div>
-
-              <div className="todays-tasks-list">
-                {/* DYNAMIC WIND WARNING TASK */}
-                {farmWeather?.weather?.wind?.speed && Math.round(farmWeather.weather.wind.speed * 3.6) > 20 && (
-                  <div className="task-row-item active-urgent" style={{ borderLeft: '4px solid #DC2626', background: '#FEF2F2' }}>
-                    <div className="task-left-check">
-                      <span style={{ fontSize: '18px', marginRight: '8px' }}>🚩</span>
-                      <div className="task-title-desc">
-                        <h4 className="task-heading" style={{ color: '#991B1B', fontWeight: 800 }}>
-                          Secure trellises and crop support posts
-                          <span className="task-alert-tag" style={{ background: '#DC2626', color: '#FFFFFF', fontSize: '9px', padding: '2px 6px', borderRadius: '4px', marginLeft: '8px', fontWeight: 900 }}>WIND ALERT</span>
-                        </h4>
-                        <p className="task-subtext" style={{ color: '#7F1D1D', fontSize: '12px' }}>
-                          Wind speed is high ({Math.round(farmWeather.weather.wind.speed * 3.6)} km/h). Prevent damage to seedlings.
-                        </p>
-                      </div>
-                    </div>
-                    <div className="task-right-meta">
-                      <span className="t-day-val" style={{ color: '#991B1B' }}>Day {daysPassed}</span>
-                      <span className="t-status-tag" style={{ background: '#FEE2E2', color: '#991B1B', fontWeight: 700 }}>High Risk</span>
-                    </div>
+              {/* DAILY TASKS SECTION */}
+              {currentStage && (
+                <div className="todays-work-section-wrap" style={{ marginBottom: '32px', background: 'rgba(5, 150, 105, 0.03)', border: '1px solid rgba(5, 150, 105, 0.08)', borderRadius: '16px', padding: '20px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                    <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 800, color: '#065F46', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span>📋</span> Today's Action Items
+                    </h4>
+                    <span style={{ fontSize: '12px', color: '#047857', fontWeight: 700, background: 'rgba(5, 150, 105, 0.1)', padding: '2px 8px', borderRadius: '999px' }}>
+                      Active Stage: {currentStage.title}
+                    </span>
                   </div>
-                )}
 
-                {/* DYNAMIC CROP JOURNEY TASKS */}
-                {todaysTasks.length === 0 ? (
-                  <div style={{ textAlign: 'center', padding: '24px', color: '#64748B' }}>
-                    No tasks scheduled for the current stage.
+                  {/* Weather Advisor banner inside combined card */}
+                  <div className="weather-advisor-inner-banner" style={{ margin: '0 0 16px 0', padding: '10px 14px', borderRadius: '8px' }}>
+                    <div className="advisor-warning-badge" style={{ fontSize: '11px' }}>
+                      <span className="sun-icon">☀️</span>
+                      <span>WEATHER ADVISOR</span>
+                    </div>
+                    <p className="advisor-desc-text" style={{ margin: '4px 0 0', fontSize: '12px' }}>
+                      Avoid pesticide spraying today to prevent chemical drift.
+                    </p>
                   </div>
-                ) : (
-                  todaysTasks.map(t => (
-                    <div 
-                      key={t.idx} 
-                      className={`task-row-item ${t.isDone ? 'completed' : t.statusClass}`}
-                      onClick={() => toggleSubstep(t.stageId, t.idx)}
-                      style={{ cursor: 'pointer', transition: 'all 0.2s ease', opacity: t.isDone ? 0.7 : 1 }}
-                    >
-                      <div className="task-left-check">
-                        <span className={`circle-radio ${t.isDone ? 'checked' : ''}`} style={{ flexShrink: 0, marginRight: '12px' }}>
-                          {t.isDone && <span className="check-dot" style={{ display: 'block', width: '6px', height: '6px', backgroundColor: '#fff', borderRadius: '50%', margin: 'auto' }} />}
-                        </span>
-                        <div className="task-title-desc">
-                          <h4 className="task-heading" style={{ textDecoration: t.isDone ? 'line-through' : 'none', color: t.isDone ? '#9CA3AF' : '#0F172A', fontWeight: 700 }}>
-                            {t.task}
-                          </h4>
+
+                  <div className="todays-tasks-list">
+                    {/* DYNAMIC WIND WARNING TASK */}
+                    {farmWeather?.weather?.wind?.speed && Math.round(farmWeather.weather.wind.speed * 3.6) > 20 && (
+                      <div className="task-row-item active-urgent" style={{ borderLeft: '4px solid #DC2626', background: '#FEF2F2' }}>
+                        <div className="task-left-check">
+                          <span style={{ fontSize: '18px', marginRight: '8px' }}>🚩</span>
+                          <div className="task-title-desc">
+                            <h4 className="task-heading" style={{ color: '#991B1B', fontWeight: 800 }}>
+                              Secure trellises and crop support posts
+                              <span className="task-alert-tag" style={{ background: '#DC2626', color: '#FFFFFF', fontSize: '9px', padding: '2px 6px', borderRadius: '4px', marginLeft: '8px', fontWeight: 900 }}>WIND ALERT</span>
+                            </h4>
+                            <p className="task-subtext" style={{ color: '#7F1D1D', fontSize: '12px' }}>
+                              Wind speed is high ({Math.round(farmWeather.weather.wind.speed * 3.6)} km/h). Prevent damage to seedlings.
+                            </p>
+                          </div>
+                        </div>
+                        <div className="task-right-meta">
+                          <span className="t-day-val" style={{ color: '#991B1B' }}>Day {daysPassed}</span>
+                          <span className="t-status-tag" style={{ background: '#FEE2E2', color: '#991B1B', fontWeight: 700 }}>High Risk</span>
                         </div>
                       </div>
-                      <div className="task-right-meta">
-                        <span className="t-day-val">Day {t.day}</span>
-                        {t.dateStr && <span className="t-date-val">{t.dateStr}</span>}
-                        <span className={`t-status-tag ${t.statusClass}`}>
-                          {t.statusTag}
-                        </span>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-          )}
+                    )}
 
-          {/* EXPANDED & INTERACTIVE CROP JOURNEY CARD IN MAIN COLUMN */}
-          {selectedCrop && (
-            <div className="card-box crop-journey-card">
-              <div className="card-title-header-row" style={{marginBottom: '20px'}}>
-                <div>
-                  <h3 className="card-main-title">Crop Journey</h3>
-                  <span className="card-date-sub">Click any stage to inspect details & task checklist</span>
+                    {/* DYNAMIC CROP JOURNEY TASKS */}
+                    {todaysTasks.length === 0 ? (
+                      <div style={{ textAlign: 'center', padding: '24px', background: 'rgba(255,255,255,0.5)', borderRadius: '12px', border: '1px dashed #E2E8F0', color: '#64748B', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <span style={{ fontSize: '24px' }}>🔍</span>
+                        <span style={{ fontWeight: 700, color: '#475569' }}>All Scheduled tasks completed!</span>
+                        <span style={{ fontSize: '13px', color: '#64748B' }}>Today's Tip: Walk your fields to monitor soil moisture, leaf colors, and check for any pest or disease onset.</span>
+                      </div>
+                    ) : (
+                      todaysTasks.map(t => (
+                        <div 
+                          key={t.idx} 
+                          className={`task-row-item ${t.isDone ? 'completed' : t.statusClass}`}
+                          onClick={() => toggleSubstep(t.stageId, t.idx)}
+                          style={{ cursor: 'pointer', transition: 'all 0.2s ease', opacity: t.isDone ? 0.7 : 1 }}
+                        >
+                          <div className="task-left-check">
+                            <span className={`circle-radio ${t.isDone ? 'checked' : ''}`} style={{ flexShrink: 0, marginRight: '12px' }}>
+                              {t.isDone && <span className="check-dot" style={{ display: 'block', width: '6px', height: '6px', backgroundColor: '#fff', borderRadius: '50%', margin: 'auto' }} />}
+                            </span>
+                            <div className="task-title-desc">
+                              <h4 className="task-heading" style={{ textDecoration: t.isDone ? 'line-through' : 'none', color: t.isDone ? '#9CA3AF' : '#0F172A', fontWeight: 700 }}>
+                                {t.task}
+                              </h4>
+                            </div>
+                          </div>
+                          <div className="task-right-meta">
+                            <span className="t-day-val">Day {t.day}</span>
+                            {t.dateStr && <span className="t-date-val">{t.dateStr}</span>}
+                            <span className={`t-status-tag ${t.statusClass}`}>
+                              {t.statusTag}
+                            </span>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
                 </div>
-                <span className="day-counter-pill">Stage {(activeJourneyStageId || currentStage?.stage_id || 4)} of {selectedCrop.stages?.length || 8}</span>
+              )}
+
+              {/* PIPELINE PROGRESS FLOW */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 800, color: '#1E293B' }}>
+                  Pipeline Milestones
+                </h4>
+                <span className="stage-counter-pill" style={{ background: 'rgba(71, 85, 105, 0.08)', color: '#475569', fontSize: '11px', padding: '2px 8px', borderRadius: '999px', fontWeight: 700 }}>
+                  Stage {(activeJourneyStageId || currentStage?.stage_id || 4)} of {selectedCrop.stages?.length || 8}
+                </span>
               </div>
               
               <div className="journey-pipeline-nodes-row">
