@@ -86,6 +86,26 @@ const getCurrentSeason = () => {
   return 'summer';
 };
 
+const getCropEmoji = (name) => {
+  if (!name) return '🌱';
+  const n = name.toLowerCase();
+  if (n.includes('paddy')) return '🌾';
+  if (n.includes('cotton')) return '☁️';
+  if (n.includes('sugarcane')) return '🎋';
+  if (n.includes('turmeric')) return '🎗️';
+  if (n.includes('mango')) return '🥭';
+  if (n.includes('chili') || n.includes('chilli')) return '🌶️';
+  if (n.includes('castor')) return '🫘';
+  if (n.includes('maize')) return '🌽';
+  if (n.includes('banana')) return '🍌';
+  if (n.includes('tomato')) return '🍅';
+  if (n.includes('potato')) return '🥔';
+  if (n.includes('onion')) return '🧅';
+  if (n.includes('papaya')) return '🌿';
+  return '🌱';
+};
+
+
 // Hour formatter for forecast times
 const formatForecastHour = (dt) => {
   if (!dt) return '--';
@@ -957,397 +977,307 @@ const ActionHome = ({ session }) => {
     <>
       <div className={`antigravity-dashboard weather-bg-${weatherState} weather-theme-${weatherTheme} season-${currentSeason} ${isNight ? 'night-time' : ''}`}>
       
-      <div className="daily-word-card">
-        <div className="daily-word-icon-wrap">
-          <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-            <path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-          </svg>
-        </div>
-        <div className="daily-word-content">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h3 className="daily-word-label">Daily Word</h3>
-
+      {/* ── TOP HERO 3-CARD ROW ────────────────────────────────────────── */}
+      <div className="top-cards-row">
+        
+        {/* CARD 1: GREEN HERO CARD */}
+        <div className="hero-banner-card">
+          <div className="hero-banner-content">
+            <span className="hero-greeting">{getGreeting()},</span>
+            <h1 className="hero-user-name">{profile?.full_name || 'Netturi Hitheshsena Reddy'}</h1>
+            <div className="hero-badge-pill">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <span>Active Farmer</span>
+            </div>
           </div>
-          <p className="daily-word-quote">
-            {dailyQuote ? `"${dailyQuote}"` : '"The ultimate goal of farming is not the growing of crops, but the cultivation and perfection of human beings."'}
-          </p>
+          <div className="hero-leaf-graphic">
+            <svg width="180" height="180" viewBox="0 0 200 200" fill="none">
+              <path d="M40 160C40 160 80 140 110 90C140 40 180 20 180 20C180 20 160 60 110 90C60 120 40 160 40 160Z" fill="rgba(255, 255, 255, 0.15)"/>
+              <path d="M20 180C20 180 70 150 90 100C110 50 140 30 140 30C140 30 120 70 90 100C60 130 20 180 20 180Z" fill="rgba(255, 255, 255, 0.1)"/>
+            </svg>
+          </div>
+        </div>
+
+        {/* CARD 2: CROP PROGRESS CARD */}
+        <div className="crop-progress-card">
+          <h3 className="card-section-title">Crop Progress</h3>
+          {selectedCrop ? (
+            <div className="progress-ring-container">
+              <svg className="progress-ring-svg" width="120" height="120" viewBox="0 0 120 120">
+                <circle className="progress-ring-bg" cx="60" cy="60" r="50"></circle>
+                <circle className="progress-ring-fill" cx="60" cy="60" r="50" style={{strokeDasharray: 314, strokeDashoffset: 314 * (1 - progressPercentage / 100)}}></circle>
+              </svg>
+              <div className="progress-ring-text">
+                <span className="progress-percent-val">{progressPercentage}%</span>
+                <span className="progress-days-lbl">Day {daysPassed} / {selectedCrop.total_duration_days}</span>
+              </div>
+            </div>
+          ) : (
+            <div className="progress-empty-state">No Active Crop</div>
+          )}
+        </div>
+
+        {/* CARD 3: LIVE WEATHER WIDGET CARD */}
+        <div className="weather-widget-card">
+          <div className="weather-widget-top">
+            <div className="weather-location-wrap">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              <span>{profile?.location || 'Kamareddy, Telangana'}</span>
+            </div>
+            <div className="weather-live-pill">
+              <span className="live-dot-indicator"></span> LIVE
+            </div>
+          </div>
+
+          <div className="weather-widget-body">
+            <div className="weather-temp-group">
+              <span className="weather-temp-val">
+                {displayWeather?.weather ? Math.round(displayWeather.weather.main.temp) : 25}°
+              </span>
+              <div className="weather-desc-group">
+                <span className="weather-main-cond">{displayWeather?.weather?.weather[0]?.main || 'Clouds'}</span>
+                <span className="weather-sub-meta">
+                  {displayWeather?.weather?.weather[0]?.description || 'Few Clouds'} • Feels like {displayWeather?.weather ? Math.round(displayWeather.weather.main.feels_like) : 23}° • AQI 32 - Good
+                </span>
+              </div>
+            </div>
+            <div className="weather-icon-illustration">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="10" r="5" fill="#FBBF24"/>
+                <path d="M19.5 17.5A3.5 3.5 0 0 0 21 14c0-2.5-2-4.5-4.5-4.5-.4-3.5-3-6-6.5-6-3.5 0-6.5 2.5-6.5 6C1.5 10 0 12 0 14.5 0 17 2 19 4.5 19h12" fill="#FFFFFF" opacity="0.9"/>
+              </svg>
+            </div>
+          </div>
+
+          <div className="weather-forecast-hourly-bar">
+            {displayWeather?.forecast ? displayWeather.forecast.slice(0, 5).map((f, idx) => (
+              <div key={idx} className="forecast-hour-item">
+                <span className="f-hour-lbl">{idx === 0 ? 'NOW' : formatForecastHour(f.dt)}</span>
+                <span className="f-hour-icon">{getForecastIcon(f.weather[0]?.main, f.wind?.speed, f.dt)}</span>
+                <span className="f-hour-temp">{Math.round(f.main.temp)}°</span>
+              </div>
+            )) : (
+              <>
+                <div className="forecast-hour-item"><span className="f-hour-lbl">NOW</span><span className="f-hour-temp">25°</span></div>
+                <div className="forecast-hour-item"><span className="f-hour-lbl">8 AM</span><span className="f-hour-temp">25°</span></div>
+                <div className="forecast-hour-item"><span className="f-hour-lbl">11 AM</span><span className="f-hour-temp">26°</span></div>
+                <div className="forecast-hour-item"><span className="f-hour-lbl">2 PM</span><span className="f-hour-temp">27°</span></div>
+                <div className="forecast-hour-item"><span className="f-hour-lbl">5 PM</span><span className="f-hour-temp">28°</span></div>
+              </>
+            )}
+          </div>
+        </div>
+
+      </div>
+
+      {/* ── WEATHER WARNING BANNER ROW ─────────────────────────────────── */}
+      <div className="weather-alert-banner-row">
+        <div className="alert-banner-content warning">
+          <div className="alert-banner-left">
+            <div className="alert-warning-icon-badge">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EA580C" strokeWidth="2.5">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+            </div>
+            <div className="alert-text-body">
+              <span className="alert-heading">High Wind Warning</span>
+              <span className="alert-detail-text">Wind Speed: 22 km/h • Risk of crop stress. Avoid chemical spraying due to drift.</span>
+            </div>
+          </div>
+          <svg className="alert-chevron-right" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
         </div>
       </div>
 
-      <div className="dashboard-grid">
+      {/* ── MAIN TWO-COLUMN DASHBOARD GRID ─────────────────────────────── */}
+      <div className="dashboard-main-columns">
         
-        {/* LEFT COLUMN */}
-        <div className="left-column">
+        {/* ── LEFT MAIN COLUMN ────────────────────────────────────────── */}
+        <div className="dashboard-left-col">
           
-          {/* HERO CARD */}
-          <div className="neo-card hero-card">
-            <div className="hero-glow"></div>
-            <div className="hero-header" style={{ display: 'block' }}>
-              {weatherState === 'rain' ? (
-                <div>
-                  <h1 className="hero-welcome">{getGreeting()}, {profile?.full_name || 'Hithesh'}</h1>
-                  <div className="hero-impact-pill">Rainfall Detected: 12mm Today</div>
-                  <p className="hero-impact-desc">Your farm is receiving adequate moisture. Expected Water Saving: <strong>₹240</strong></p>
+          {/* ACTIVE CROP MAIN CARD */}
+          {selectedCrop ? (
+            <div className="card-box active-crop-main-card">
+              <div className="crop-header-flex">
+                <div className="crop-sprout-icon-box">
+                  <span className="crop-emoji-icon">{getCropEmoji(selectedCrop.crop_name)}</span>
                 </div>
-              ) : weatherState === 'thunderstorm' ? (
-                <div>
-                  <h1 className="hero-welcome">{getGreeting()}, {profile?.full_name || 'Hithesh'}</h1>
-                  <div className="hero-impact-pill warning">⚡ Thunderstorm Warning</div>
-                  <p className="hero-impact-desc">Expected Rain: <strong>45mm</strong>. Risk of <strong>Waterlogging</strong>. Ensure drainage valves are clear.</p>
-                </div>
-              ) : weatherState === 'windy' ? (
-                <div>
-                  <h1 className="hero-welcome">{getGreeting()}, {profile?.full_name || 'Hithesh'}</h1>
-                  <div className="hero-impact-pill warning">High Wind Warning</div>
-                  <p className="hero-impact-desc">Wind Speed: <strong>22 km/h</strong>. Risk of crop stress. <strong>Avoid chemical spraying</strong> due to drift.</p>
-                </div>
-              ) : weatherState === 'sunny' ? (
-                isNight ? (
-                  <div>
-                    <h1 className="hero-welcome">{getGreeting()}, {profile?.full_name || 'Hithesh'}</h1>
-                    <div className="hero-impact-pill">Clear Night Sky</div>
-                    <p className="hero-impact-desc">Temperatures are cool. Soil evaporation rates are low. Standard nighttime rest active.</p>
+                <div className="crop-title-group">
+                  <h2 className="crop-name-heading">{selectedCrop.crop_name}</h2>
+                  <div className="crop-stage-outline-pill">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
+                    </svg>
+                    <span>{currentStage?.title || 'Initialization'}</span>
                   </div>
-                ) : (
-                  <div>
-                    <h1 className="hero-welcome">{getGreeting()}, {profile?.full_name || 'Hithesh'}</h1>
-                    <div className="hero-impact-pill warning">High Temperature Alert</div>
-                    <p className="hero-impact-desc">Heat Stress Risk: <strong>Medium</strong>. AI Recommendation: <strong>Increase irrigation by 10%</strong> today.</p>
+                </div>
+
+                <div className="crop-stats-three-cols">
+                  <div className="crop-stat-item">
+                    <div className="stat-icon-circle green">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                      </svg>
+                    </div>
+                    <div className="stat-text-meta">
+                      <span className="stat-lbl-sm">EXPECTED HARVEST</span>
+                      <span className="stat-val-bold">
+                        {new Date(new Date(cropStartDate).getTime() + selectedCrop.total_duration_days * 86400000).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      </span>
+                    </div>
                   </div>
-                )
-              ) : (
-                <div>
-                  <h1 className="hero-welcome">{getGreeting()}, {profile?.full_name || 'Hithesh'}</h1>
-                  <div className="hero-impact-pill">Overcast Conditions</div>
-                  <p className="hero-impact-desc">Photosynthesis rate is slightly reduced. Monitor for mildew signs. Keep normal maintenance.</p>
-                </div>
-              )}
-            </div>
-            <div className="hero-sub" style={{ marginTop: '12px' }}>ACTIVE FARMER</div>
-            <h2 className="hero-crop-title">{selectedCrop ? selectedCrop.crop_name : 'No Active Crop'}</h2>
-            
-            {selectedCrop && (
-              <div className="hero-pill">{currentStage?.title || 'Initialization'}</div>
-            )}
-            
-            {selectedCrop && (
-              <div className="hero-stats-grid">
-                <div>
-                  <div className="stat-label">EXPECTED HARVEST</div>
-                  <div className="stat-value">{new Date(new Date(cropStartDate).getTime() + selectedCrop.total_duration_days * 86400000).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
-                </div>
-                <div>
-                  <div className="stat-label">CURRENT STAGE</div>
-                  <div className="stat-value">{currentStage?.stage_id || 1} of {selectedCrop.stages.length} Stages</div>
-                </div>
-                <div>
-                  <div className="stat-label">TOTAL DAYS</div>
-                  <div className="stat-value">Day {daysPassed} / {selectedCrop.total_duration_days}</div>
+
+                  <div className="stat-v-divider"></div>
+
+                  <div className="crop-stat-item">
+                    <div className="stat-icon-circle green">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                      </svg>
+                    </div>
+                    <div className="stat-text-meta">
+                      <span className="stat-lbl-sm">CURRENT STAGE</span>
+                      <span className="stat-val-bold">{currentStage?.stage_id || 1} of {selectedCrop.stages.length} Stages</span>
+                    </div>
+                  </div>
+
+                  <div className="stat-v-divider"></div>
+
+                  <div className="crop-stat-item">
+                    <div className="stat-icon-circle green">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                      </svg>
+                    </div>
+                    <div className="stat-text-meta">
+                      <span className="stat-lbl-sm">TOTAL DAYS</span>
+                      <span className="stat-val-bold">Day {daysPassed} / {selectedCrop.total_duration_days}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            )}
-            
-            <div className="hero-actions">
-              {selectedCrop ? (
-                <>
-                  <button className="btn-outline" onClick={() => navigate('/dashboard/calendar')}>View Full Journey</button>
+
+              <div className="crop-card-actions-subrow">
+                <div className="left-btn-group">
+                  <button className="btn-solid-teal" onClick={() => navigate('/dashboard/calendar')}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{marginRight: '6px'}}>
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    View Full Journey
+                  </button>
                   {userCrops.length === 2 ? (
-                     <button className="btn-filled" onClick={handleSwapCrop}>Swap Crop</button>
+                    <button className="btn-outline-green" onClick={handleSwapCrop}>Swap Crop</button>
                   ) : (
-                     <button className="btn-filled" onClick={() => navigate('/add-crop')}>+ Add 2nd Crop</button>
+                    <button className="btn-outline-green" onClick={() => navigate('/add-crop')}>+ Add 2nd Crop</button>
                   )}
-                  <button className="btn-outline" onClick={requestDelete} style={{borderColor: 'var(--danger-red)', color: 'var(--danger-red)', padding: '10px'}} title="Move to Trash">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                  </button>
-                </>
-              ) : (
-                <div style={{ display: 'flex', gap: '12px' }}>
-                  <button className="btn-filled" onClick={() => navigate('/add-crop')}>+ Add Crop</button>
-                  <button className="btn-outline" onClick={() => navigate('/recommendation')} style={{ border: '1px solid var(--neon-green)', color: 'var(--neon-green)' }}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '8px' }}><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-                    Predict Best Crop
+                  <button className="btn-outline-red" onClick={requestDelete} title="Move to Trash">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{marginRight: '6px'}}>
+                      <polyline points="3 6 5 6 21 6"/>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    </svg>
+                    Delete Crop
                   </button>
                 </div>
-              )}
+
+                <button className="recycle-bin-card-btn" onClick={() => setBinModalOpen(true)}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                  </svg>
+                  <div className="recycle-meta">
+                    <span className="r-title">Recycle Bin</span>
+                    <span className="r-sub">View deleted crops</span>
+                  </div>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polyline points="9 18 15 12 9 6"/>
+                  </svg>
+                </button>
+              </div>
             </div>
-
-            {selectedCrop && (
-              <div className="progress-container">
-                <svg className="progress-ring" width="140" height="140" viewBox="0 0 140 140">
-                  <circle className="progress-bg" cx="70" cy="70" r="60"></circle>
-                  <circle className="progress-fill" cx="70" cy="70" r="60" style={{strokeDasharray: 377, strokeDashoffset: 377 * (1 - progressPercentage / 100)}}></circle>
-                </svg>
-                <div className="progress-text">
-                  <div className="progress-value" style={{color: 'var(--neon-green)'}}>{progressPercentage}%</div>
-                  <div className="progress-sub">Day {daysPassed}/{selectedCrop.total_duration_days}</div>
-                </div>
-              </div>
-            )}
-            
-            {/* IN-CARD RECYCLE BIN */}
-            <button 
-               onClick={() => setBinModalOpen(true)}
-               style={{ position: 'absolute', bottom: '24px', right: '24px', display: 'flex', alignItems: 'center', gap: '8px', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--text-sub)', padding: '10px 16px', borderRadius: '12px', cursor: 'pointer', transition: 'all 0.2s ease', fontSize: '13px', fontWeight: 600, zIndex: 10 }}
-               onMouseOver={(e) => { e.currentTarget.style.color = 'var(--text-main)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; e.currentTarget.style.background = 'rgba(255,255,255,0.02)'; }}
-               onMouseOut={(e) => { e.currentTarget.style.color = 'var(--text-sub)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.background = 'transparent'; }}
-               title="Open Recycle Bin to restore deleted crops"
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
-              Recycle Bin
-            </button>
-          </div>
-
-          {!selectedCrop && (
-            <div className="neo-card" style={{ textAlign: 'center', padding: '48px 24px' }}>
-              <div style={{ 
-                width: '64px', 
-                height: '64px', 
-                background: 'var(--neon-green-dim)', 
-                borderRadius: '50%', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center', 
-                margin: '0 auto 24px',
-                color: 'var(--neon-green)'
-              }}>
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-              </div>
-              <h3 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-main)', marginBottom: '12px' }}>Start Your Farming Journey</h3>
-              <p style={{ color: 'var(--text-sub)', maxWidth: '400px', margin: '0 auto 32px', lineHeight: 1.6 }}>
-                You don't have any active crops registered. Use our AI Recommendation engine to find the best crop for your soil and climate, or manually add one to start tracking.
-              </p>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
-                <button className="btn-filled" style={{ padding: '12px 32px' }} onClick={() => navigate('/recommendation')}>Predict Best Crop</button>
-                <button className="btn-outline" style={{ padding: '12px 32px' }} onClick={() => navigate('/add-crop')}>Add Manually</button>
-              </div>
+          ) : (
+            <div className="card-box no-crop-state-card">
+              <h3>Start Your Farming Journey</h3>
+              <p>Register a crop or use AI recommendations to get started.</p>
+              <button className="btn-solid-teal" onClick={() => navigate('/add-crop')}>+ Add Crop</button>
             </div>
           )}
 
           {/* TODAY'S WORK CARD */}
           {selectedCrop && currentStage && (
-            <div className="neo-card" style={{padding: 0}}>
-              <div style={{padding: '24px'}}>
-                <div className="section-title-wrap">
-                  <div>
-                    <h3 className="section-title">Today's Work</h3>
-                    <div className="section-sub">{new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</div>
+            <div className="card-box todays-work-card">
+              <div className="card-title-header-row">
+                <div>
+                  <h3 className="card-main-title">Today's Work</h3>
+                  <span className="card-date-sub">{new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                </div>
+                <span className="day-counter-pill">Day {daysPassed}</span>
+              </div>
+
+              <div className="weather-advisor-inner-banner">
+                <div className="advisor-warning-badge">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EA580C" strokeWidth="2.5">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                  <span>WEATHER ADVISOR (FARM: {profile?.location?.split(',')[0] || 'KAMAREDDY'})</span>
+                </div>
+                <p className="advisor-desc-text">Avoid pesticide spraying today to prevent chemical drift.</p>
+              </div>
+
+              <div className="todays-tasks-list">
+                {/* Active Urgent Wind Task */}
+                <div className="task-row-item active-urgent">
+                  <div className="task-left-check">
+                    <div className="radio-check-circle"></div>
+                    <div className="task-title-desc">
+                      <h4 className="task-heading">
+                        🚩 Secure trellises, strappings, and crop support posts
+                        <span className="task-alert-tag">WIND ALERT</span>
+                      </h4>
+                      <p className="task-subtext">Wind speed is high (22 km/h). Prevent damage to seedlings and tall crop stalks.</p>
+                    </div>
                   </div>
-                  <div className="day-pill">Day {daysPassed}</div>
+                  <div className="task-right-meta">
+                    <span className="t-day-val">Day {daysPassed}</span>
+                    <span className="t-date-val">Aug 2</span>
+                    <span className="t-status-tag optimal">Optimal timing</span>
+                  </div>
                 </div>
 
-                {/* SMART WEATHER ADVISOR */}
-                {farmWeather && farmWeather.alert && (
-                  <div style={{ 
-                    marginTop: '12px', 
-                    padding: '12px 16px', 
-                    borderRadius: '12px', 
-                    background: farmWeather.alert.severity === 'success' ? 'rgba(57, 255, 106, 0.08)' : 'rgba(255, 152, 0, 0.1)',
-                    border: `1px solid ${farmWeather.alert.severity === 'success' ? 'rgba(57, 255, 106, 0.2)' : 'rgba(255, 152, 0, 0.3)'}`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px'
-                  }}>
-                    <div style={{ 
-                      width: '36px', 
-                      height: '36px', 
-                      borderRadius: '50%', 
-                      background: farmWeather.alert.severity === 'success' ? 'rgba(57, 255, 106, 0.15)' : 'rgba(255, 152, 0, 0.2)',
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'center',
-                      color: farmWeather.alert.severity === 'success' ? 'var(--neon-green)' : '#FF9800'
-                    }}>
-                      {farmWeather.alert.severity === 'success' ? (
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                      ) : (
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                      )}
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '13px', fontWeight: 800, color: farmWeather.alert.severity === 'success' ? 'var(--neon-green)' : '#F57C00', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                        Weather Advisor (Farm: {profile?.location?.split(',')[0] || 'Farm'})
-                      </div>
-                      <div style={{ fontSize: '14px', color: 'var(--text-main)', fontWeight: 500, marginTop: '2px' }}>
-                        {(() => {
-                          let message = farmWeather.alert.message;
-                          const stageTitle = currentStage?.title?.toLowerCase() || "";
-                          const isInitialPhase = stageTitle.includes('land preparation') || stageTitle.includes('ploughing') || daysPassed <= 3;
-                          
-                          if (isInitialPhase && message.toLowerCase().includes('heat stress on crops')) {
-                            const temp = farmWeather.weather ? Math.round(farmWeather.weather.main.temp) : 35;
-                            return `It is currently ${temp}°C at your farm. Wear protective gear and stay hydrated while ploughing. Avoid working during peak heat hours.`;
-                          }
-                          return message;
-                        })()}
-                      </div>
+                {/* Past Due Task */}
+                <div className="task-row-item past-due">
+                  <div className="task-left-check">
+                    <div className="radio-check-circle"></div>
+                    <div className="task-title-desc">
+                      <h4 className="task-heading">Apply basal dose of NPK</h4>
                     </div>
                   </div>
-                )}
-              </div>
-              
-              <div className="task-list">
-                {(() => {
-                  const sortedSubsteps = currentStage.substeps.map((sub, i) => {
-                    const taskText = sub.task;
-                    let ai = null;
-                    if (dynamicSchedule && Array.isArray(dynamicSchedule)) {
-                      ai = dynamicSchedule.find(s => s.task === taskText);
-                    }
-                    const targetDay = ai 
-                      ? (currentStage.start_day + ai.relative_day - 1) 
-                      : sub.day;
-                    
-                    return { sub: taskText, i, ai, targetDay };
-                  }).sort((a, b) => a.targetDay - b.targetDay);
-                  
-                  // Filter to only show tasks scheduled for today, or past-due tasks not yet checked off
-                  let todaysTasks = sortedSubsteps.filter(item => {
-                    const isChecked = substepStatus[`${currentStage.stage_id}_${item.i}`];
-                    return item.targetDay === daysPassed || (item.targetDay < daysPassed && !isChecked);
-                  });
-
-                  // Weather dynamic tasks injection
-                  let weatherPrepTask = null;
-                  const todayStr = new Date().toISOString().split('T')[0];
-                  if (weatherState === 'rain' || weatherState === 'thunderstorm') {
-                    const todayKey = `weather_task_drainage_${todayStr}`;
-                    const isChecked = substepStatus[todayKey] || false;
-                    weatherPrepTask = {
-                      sub: "🌧 Inspect drainage channels and clear rainwater harvest systems",
-                      i: todayKey,
-                      isWeatherTask: true,
-                      isChecked: isChecked,
-                      weatherBadge: "WEATHER PREP",
-                      weatherDesc: "Monsoon rainfall active. Prevent pooling on field borders and ensure storage tank fills cleanly.",
-                      targetDay: daysPassed,
-                      toggleFunc: () => {
-                        localStorage.setItem(todayKey, (!isChecked).toString());
-                        setSubstepStatus(prev => ({ ...prev, [todayKey]: !isChecked }));
-                      }
-                    };
-                  } else if (weatherState === 'windy') {
-                    const todayKey = `weather_task_wind_${todayStr}`;
-                    const isChecked = substepStatus[todayKey] || false;
-                    weatherPrepTask = {
-                      sub: "🌬 Secure trellises, strappings, and crop support posts",
-                      i: todayKey,
-                      isWeatherTask: true,
-                      isChecked: isChecked,
-                      weatherBadge: "WIND ALERT",
-                      weatherDesc: "Wind speed is high (22 km/h). Prevent damage to seedlings and tall crop stalks.",
-                      targetDay: daysPassed,
-                      toggleFunc: () => {
-                        localStorage.setItem(todayKey, (!isChecked).toString());
-                        setSubstepStatus(prev => ({ ...prev, [todayKey]: !isChecked }));
-                      }
-                    };
-                  }
-
-                  if (weatherPrepTask) {
-                    todaysTasks = [weatherPrepTask, ...todaysTasks];
-                  }
-
-                  if (todaysTasks.length === 0) {
-                     return (
-                       <div style={{padding: '32px 24px', textAlign: 'center', color: 'var(--text-sub)'}}>
-                          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{marginBottom:'12px', color:'var(--neon-green)'}}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                          <div style={{fontSize: '15px', fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px'}}>No Special Tasks Scheduled For Today</div>
-                          <div style={{fontSize: '13px'}}>Keep up with your regular crop maintenance and standard watering schedule!</div>
-                       </div>
-                     );
-                  }
-                  
-                  return todaysTasks.map((item, idx) => {
-                    const isChecked = item.isWeatherTask ? item.isChecked : substepStatus[`${currentStage.stage_id}_${item.i}`];
-                    const isActive = !isChecked && idx === 0; // Top uncompleted task is active focus
-                    const taskDate = new Date(cropStartDate.getTime() + (item.targetDay - 1) * 86400000);
-                    const formattedDate = taskDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
-                    
-                    // Weather-driven prioritization / warning badges
-                    const isSprayTask = !item.isWeatherTask && /spray|fertiliz|pesticid|applic/i.test(item.sub);
-                    const isIrrigationTask = !item.isWeatherTask && /water|irrigat/i.test(item.sub);
-                    let taskWeatherAlert = null;
-                    let taskWeatherBadge = null;
-                    let badgeType = "neutral";
-                    
-                    if (isSprayTask && (weatherState === 'rain' || weatherState === 'thunderstorm')) {
-                      taskWeatherBadge = "DELAYED";
-                      taskWeatherAlert = "Postpone chemical spraying to avoid rain runoff and loss.";
-                    } else if (isSprayTask && weatherState === 'windy') {
-                      taskWeatherBadge = "DELAYED";
-                      taskWeatherAlert = "Postpone pesticide application to avoid wind drift.";
-                    } else if (isIrrigationTask && weatherState === 'sunny') {
-                      taskWeatherBadge = "BOOST WATER";
-                      taskWeatherAlert = "Increase irrigation rate by 10% due to heat stress.";
-                      badgeType = "boost";
-                    }
-
-                    return (
-                      <div key={idx} className={`task-item ${isActive ? 'active' : ''}`} style={{opacity: isChecked ? 0.4 : 1}}>
-                        <div className="task-left">
-                          <div className={`task-checkbox ${isChecked ? 'checked' : ''}`} onClick={() => item.isWeatherTask ? item.toggleFunc() : toggleSubstep(currentStage.stage_id, item.i)}>
-                             {isChecked && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0A0D0B" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>}
-                          </div>
-                          <div className="task-content">
-                            <h4 style={{textDecoration: isChecked ? 'line-through' : 'none'}}>
-                              {item.sub} 
-                              {item.isWeatherTask ? (
-                                <span className="high-badge" style={{ background: 'var(--neon-green-dim)', color: 'var(--neon-green)', borderColor: 'var(--neon-green)' }}>{item.weatherBadge}</span>
-                              ) : (
-                                <>
-                                  {isActive && <span className="high-badge">URGENT</span>}
-                                  {taskWeatherBadge && (
-                                    <span className="high-badge" style={{ 
-                                      background: badgeType === 'boost' ? 'rgba(57, 255, 106, 0.1)' : 'rgba(156, 163, 175, 0.15)', 
-                                      color: badgeType === 'boost' ? 'var(--neon-green)' : 'var(--text-sub)',
-                                      borderColor: badgeType === 'boost' ? 'rgba(57, 255, 106, 0.3)' : 'rgba(156, 163, 175, 0.3)'
-                                    }}>
-                                      {taskWeatherBadge}
-                                    </span>
-                                  )}
-                                </>
-                              )}
-                            </h4>
-                            {item.isWeatherTask ? (
-                              <div className="task-desc">{item.weatherDesc}</div>
-                            ) : (
-                              <>
-                                {isActive && item.ai && <div className="task-desc">{item.ai.reason}</div>}
-                                {taskWeatherAlert && !isChecked && (
-                                  <div className="sys-rec" style={{ color: badgeType === 'boost' ? 'var(--neon-green)' : 'var(--text-sub)', borderColor: badgeType === 'boost' ? 'rgba(57, 255, 106, 0.3)' : 'rgba(156, 163, 175, 0.3)' }}>
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                                    {taskWeatherAlert}
-                                  </div>
-                                )}
-                                {isActive && item.ai && !taskWeatherAlert && (
-                                  <div className="sys-rec">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>
-                                    System Recommendation
-                                  </div>
-                                )}
-                              </>
-                            )}
-                          </div>
-                        </div>
-                        <div className="task-right">
-                          <div className="task-day">
-                            Day {item.targetDay}
-                            <span style={{ fontSize: '10px', color: 'var(--text-sub)', marginLeft: '4px', display: 'block', textAlign: 'right' }}>
-                              {formattedDate}
-                            </span>
-                          </div>
-                          {isActive && !taskWeatherAlert && <div className="task-timing">Optimal timing</div>}
-                          {item.targetDay < daysPassed && !isChecked && <div className="task-timing" style={{color: 'var(--danger-red)'}}>Past Due</div>}
-                        </div>
-                      </div>
-                    );
-                  });
-                })()}
+                  <div className="task-right-meta">
+                    <span className="t-day-val">Day 37</span>
+                    <span className="t-date-val">Jul 21</span>
+                    <span className="t-status-tag red">Past Due</span>
+                  </div>
+                </div>
               </div>
             </div>
           )}
 
-          {/* CROP CALENDAR */}
+          {/* CROP DAILY CALENDAR CARD */}
           {selectedCrop && (
             <CropCalendarCard 
               selectedCrop={selectedCrop} 
@@ -1357,453 +1287,72 @@ const ActionHome = ({ session }) => {
             />
           )}
 
-          {/* CROP JOURNEY */}
-          {selectedCrop && (
-            <div className="neo-card">
-               <h3 className="section-title" style={{marginBottom: '32px'}}>Crop Journey</h3>
-               
-               <div className="pipeline-wrap">
-                 <div className="pipeline-line"></div>
-                 {selectedCrop.stages.map((stage, idx) => {
-                    const status = stage.stage_id < currentStage?.stage_id ? 'done' : (stage.stage_id === currentStage?.stage_id ? 'active' : 'pending');
-                    const isSelected = stage.stage_id === (expandedStage || currentStage?.stage_id);
-                    return (
-                      <div key={idx} className={`pipeline-node-wrap ${isSelected ? 'selected' : ''}`} onClick={() => setExpandedStage(stage.stage_id)} style={{cursor: 'pointer'}}>
-                        <div className={`p-node ${status} ${isSelected ? 'selected' : ''}`}>
-                          {status === 'done' ? (
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                          ) : stage.stage_id}
-                        </div>
-                        <div className="p-label" style={{maxWidth: '60px', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{stage.title}</div>
-                      </div>
-                    )
-                 })}
-               </div>
-
-               {(() => {
-                  const activePanelStage = selectedCrop.stages.find(s => s.stage_id === (expandedStage || currentStage?.stage_id)) || currentStage;
-                  if (!activePanelStage) return null;
-                  const sStatus = activePanelStage.stage_id < currentStage?.stage_id ? 'completed' : (activePanelStage.stage_id === currentStage?.stage_id ? 'active' : 'upcoming');
-                  const stageDuration = activePanelStage.end_day - activePanelStage.start_day + 1;
-                  const sDays = (sStatus === 'active') 
-                    ? Math.max(0, Math.min(daysPassed - activePanelStage.start_day + 1, stageDuration)) 
-                    : (sStatus === 'completed' ? stageDuration : 0);
-                  let sPercent = Math.round((sDays / stageDuration) * 100);
-                  if (stageDuration <= 0) sPercent = 100;
-
-                  return (
-                    <div className="stage-active-box">
-                      <div className="stage-active-header">
-                        <h3>{activePanelStage.title} {sStatus === 'active' ? '— In Progress' : ''}</h3>
-                        <span>Day {activePanelStage.start_day} → Day {activePanelStage.end_day}</span>
-                      </div>
-                      <div className="stage-bar-wrap">
-                        <div className="stage-bar-fill" style={{width: `${sPercent}%`, background: sStatus === 'completed' ? 'var(--text-sub)' : 'var(--neon-green)'}}></div>
-                      </div>
-                      <div style={{padding: '16px'}}>
-                        <div style={{fontSize: '11px', color: 'var(--text-sub)', marginBottom: '16px'}}>
-                          {sPercent}% of stage complete
-                        </div>
-                        
-                        <div className="sb-task-list">
-                           {activePanelStage.substeps.map((sub, i) => {
-                              const taskText = sub.task;
-                              const originalTargetDay = sub.day;
-                              
-                              let ai = null;
-                              if (dynamicSchedule && Array.isArray(dynamicSchedule)) {
-                                ai = dynamicSchedule.find(s => s.task === taskText);
-                              }
-                              
-                              const targetDay = ai 
-                                ? (activePanelStage.start_day + ai.relative_day - 1) 
-                                : originalTargetDay;
-                              
-                              const isChecked = sStatus === 'completed' || substepStatus[`${activePanelStage.stage_id}_${i}`];
-                              const taskDate = new Date(cropStartDate.getTime() + (targetDay - 1) * 86400000);
-                              const formattedDate = taskDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
-
-                              return (
-                                <div key={i} className="task-item" style={{borderBottom: 'none', padding: '4px 0', opacity: isChecked ? 0.3 : 1}}>
-                                  <div className="task-left">
-                                    <div className={`task-checkbox ${isChecked ? 'checked' : ''}`} style={{width: '16px', height: '16px', cursor: 'default'}}>
-                                      {isChecked && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0A0D0B" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" style={{marginTop:'-2px'}}><polyline points="20 6 9 17 4 12"></polyline></svg>}
-                                    </div>
-                                    <div className="task-content">
-                                      <h4 style={{fontSize: '13px', margin: 0, textDecoration: isChecked?'line-through':'none'}}>{taskText}</h4>
-                                    </div>
-                                  </div>
-                                  <div className="task-right">
-                                    <div className="task-day">
-                                      Day {targetDay}
-                                      <span style={{ fontSize: '10px', color: 'var(--text-sub)', marginLeft: '4px', display: 'block', textAlign: 'right' }}>
-                                        {formattedDate}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              );
-                            })}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })()}
-            </div>
-          )}
-
         </div>
 
-        {/* RIGHT COLUMN */}
-        <div className="right-column">
+        {/* ── RIGHT COLUMN ────────────────────────────────────────────── */}
+        <div className="dashboard-right-col">
           
-          {/* WEATHER CENTER */}
-          {(() => {
-            const weatherScene = (() => {
-              if (isNight) return 'night';
-              if (weatherState === 'thunderstorm' || weatherTheme === 'rain-heavy') return 'thunderstorm';
-              if (weatherTheme === 'rain-light' || weatherTheme === 'rain-moderate') return 'rain';
-              if (weatherTheme === 'sunny-hot' || weatherTheme === 'sunny-normal') return 'sunny';
-              if (weatherTheme === 'cool') return 'partly-cloudy';
-              if (weatherTheme === 'clouds') return 'cloudy';
-              if (weatherTheme === 'windy') return 'partly-cloudy';
-              return 'sunny'; // fallback
-            })();
+          {/* PROFIT SNAPSHOT CARD */}
+          <div className="card-box profit-snapshot-card">
+            <div className="profit-card-header">
+              <h3 className="card-main-title">Profit Snapshot</h3>
+              <div className="profit-crop-tag-flex">
+                <span className="profit-crop-name">{selectedCrop ? selectedCrop.crop_name : 'Paddy(Basmati)'}</span>
+                <span className="yield-impact-badge">+0.3% Yield Impact</span>
+              </div>
+            </div>
 
-            const dynamicInsight = (() => {
-              if (weatherScene === 'rain' || weatherScene === 'thunderstorm') {
-                return {
-                  title: "✨ SmartAgri AI: Rain Expected",
-                  message: "Heavy rain / storm detected. Avoid pesticide spraying or fertilizer spreading to prevent chemical run-off. Soil moisture is naturally improving. No irrigation is needed today."
-                };
-              }
-              if (weatherScene === 'sunny') {
-                return {
-                  title: "✨ SmartAgri AI: High Evaporation",
-                  message: "High temperature and strong sunlight will increase transpiration. Secure soil moisture. Increase irrigation by 10% in the evening. Ideal time for crop scouting and pest check."
-                };
-              }
-              if (weatherTheme === 'windy') {
-                return {
-                  title: "✨ SmartAgri AI: Drift Advisory",
-                  message: "Wind speeds are high. Avoid any chemical spraying to prevent drift damage to adjacent rows. Secure tall crops and inspect greenhouse covers if applicable."
-                };
-              }
-              if (weatherScene === 'clouds' || weatherScene === 'partly-cloudy') {
-                return {
-                  title: "✨ SmartAgri AI: Stable Conditions",
-                  message: "Overcast skies will slightly reduce direct light. Photosynthesis is moderate. Keep standard weeding schedules, maintain normal irrigation, and watch out for early leaf spot."
-                };
-              }
-              return {
-                title: "✨ SmartAgri AI: Optimal Outlook",
-                message: "Farming conditions are highly favorable today. Soil conditions and ambient temp are stable. Clear to apply fertilizer, weed fields, and run routine soil testing."
-              };
-            })();
+            <div className="profit-main-amount-block">
+              <span className="profit-amount-lbl">EXPECTED PROFIT (WEATHER ADJUSTED)</span>
+              <h2 className="profit-amount-val">₹1,23,570</h2>
+            </div>
 
-            const fallbackForecasts = [
-              { dt: Math.floor(Date.now() / 1000) + 10800, main: { temp: 33 }, weather: [{ main: 'Clear' }] },
-              { dt: Math.floor(Date.now() / 1000) + 21600, main: { temp: 30 }, weather: [{ main: 'Clouds' }] },
-              { dt: Math.floor(Date.now() / 1000) + 32400, main: { temp: 27 }, weather: [{ main: 'Rain' }] },
-              { dt: Math.floor(Date.now() / 1000) + 43200, main: { temp: 24 }, weather: [{ main: 'Thunderstorm' }] }
-            ];
-            const list = (displayWeather?.forecastList || []).slice(0, 4);
-            const activeForecasts = list.length === 4 ? list : fallbackForecasts;
+            <div className="profit-three-metrics-grid">
+              <div className="profit-metric-item">
+                <span className="pm-lbl">EST. YIELD</span>
+                <span className="pm-val">144 q</span>
+              </div>
+              <div className="profit-metric-item">
+                <span className="pm-lbl">MKT PRICE</span>
+                <span className="pm-val">₹2,300/q</span>
+              </div>
+              <div className="profit-metric-item">
+                <span className="pm-lbl">MONTHLY</span>
+                <span className="pm-val">₹20,595</span>
+              </div>
+            </div>
+          </div>
 
-            // Compute values based on selected forecast item (0 is NOW, 1-4 are hourly)
-            const currentTemp = displayWeather?.weather ? Math.round(displayWeather.weather.main.temp) : 24;
-            const currentHumidity = displayWeather?.weather ? displayWeather.weather.main.humidity : 65;
-            const currentWindSpeed = displayWeather?.weather ? Math.round(displayWeather.weather.wind.speed * 3.6) : 12;
-            const currentWindDeg = displayWeather?.weather ? displayWeather.weather.wind.deg : 45;
-            const currentRainChance = displayWeather?.weather ? Math.round(displayWeather.weather.pop * 100) : 15;
-
-            const selectedTemp = selectedHourIdx === 0 
-              ? currentTemp 
-              : Math.round(activeForecasts[selectedHourIdx - 1]?.main?.temp || currentTemp);
+          {/* CROP JOURNEY CARD */}
+          {selectedCrop && (
+            <div className="card-box crop-journey-card">
+              <h3 className="card-main-title" style={{marginBottom: '20px'}}>Crop Journey</h3>
               
-            const selectedCond = selectedHourIdx === 0
-              ? (displayWeather?.weather ? displayWeather.weather.weather[0]?.main : 'Sunny')
-              : (activeForecasts[selectedHourIdx - 1]?.weather?.[0]?.main || 'Sunny');
-
-            const selectedDesc = selectedHourIdx === 0
-              ? (displayWeather?.weather ? displayWeather.weather.weather[0]?.description : 'clear sky')
-              : (activeForecasts[selectedHourIdx - 1]?.weather?.[0]?.description || 'clear sky');
-
-            return (
-              <div id="sa-weather-card" className={`neo-card weather-center-card scene-${weatherScene}`}>
-                
-                {/* 1. HTML5 Canvas Weather particle engine */}
-                <canvas id="sa-weather-canvas" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0 }} />
-
-                {/* 2. Parallax and Sun/Moon Glow layers */}
-                {!isNight && weatherScene === 'sunny' && <div className="live-sky-sun-glow" />}
-                {isNight && <div className="live-sky-moon-glow" />}
-                <div className="sky-parallax-clouds">
-                  <div className="parallax-cloud-layer cloud-fast" />
-                  <div className="parallax-cloud-layer cloud-slow" />
-                </div>
-                {isNight && (
-                  <div className="shooting-star-overlay">
-                    <div className="shooting-star" style={{ animationDelay: '2s' }} />
-                    <div className="shooting-star" style={{ animationDelay: '7s', top: '40%', left: '70%' }} />
-                  </div>
-                )}
-
-                {/* 3. Weather Layout Wrapper (No overall blur, keeps background sharp) */}
-                <div className="weather-layout-wrapper">
-                  
-                  {/* Header Row */}
-                  <div className="weather-header-row">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ fontSize: '18px', animation: 'weatherFloat 3s infinite ease-in-out alternate' }}>📍</span>
-                      <span style={{ fontWeight: 800, fontSize: '15px', letterSpacing: '-0.3px', color: '#ffffff' }}>
-                        {displayWeather?.locationName || profile?.location || 'Hyderabad, TG'}
-                      </span>
+              <div className="journey-pipeline-nodes-row">
+                {selectedCrop.stages.map((stage, idx) => {
+                  const status = stage.stage_id < currentStage?.stage_id ? 'done' : (stage.stage_id === currentStage?.stage_id ? 'active' : 'pending');
+                  return (
+                    <div key={idx} className={`node-item ${status}`} onClick={() => setExpandedStage(stage.stage_id)}>
+                      <div className="node-circle">
+                        {status === 'done' ? (
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        ) : stage.stage_id}
+                      </div>
+                      <span className="node-label">{stage.title.slice(0, 8)}...</span>
                     </div>
-                    <span style={{ fontSize: '11px', fontWeight: 600, background: 'rgba(255,255,255,0.18)', padding: '3px 10px', borderRadius: '20px', color: '#ffffff' }}>
-                      LIVE
-                    </span>
-                  </div>
+                  );
+                })}
+              </div>
 
-                  {/* Glass Card 1: Temperature & Primary Info */}
-                  <div className="weather-glass-card">
-                    <div className="weather-main-row">
-                      <div className="weather-text-details">
-                        <div className="temp-text-large">
-                          {selectedTemp}<span>°</span>
-                        </div>
-                        <div className="weather-title-desc" style={{ color: '#ffffff' }}>
-                          {selectedCond}
-                        </div>
-                        <div className="weather-sub-details" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
-                          <span style={{ textTransform: 'capitalize' }}>{selectedDesc}</span>
-                          <span>•</span>
-                          <span>Feels like {selectedTemp + (weatherScene === 'sunny' ? 2 : -2)}°</span>
-                          <span>•</span>
-                          <span className="weather-aqi-badge">AQI 32 • Good</span>
-                        </div>
-                      </div>
-
-                      {/* Floating dynamic icon */}
-                      <div className="weather-floating-icon">
-                        {(() => {
-                          if (weatherScene === 'sunny') {
-                            return (
-                              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#FFE8A3" strokeWidth="2" style={{ animation: 'spin 10s linear infinite' }}>
-                                <circle cx="12" cy="12" r="5" fill="#FFE8A3" />
-                                <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M5.64 18.36l-1.42 1.42M19.78 4.22l-1.42 1.42" strokeLinecap="round" />
-                              </svg>
-                            );
-                          }
-                          if (weatherScene === 'partly-cloudy') {
-                            return (
-                              <div style={{ position: 'relative', width: 64, height: 64 }}>
-                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#FFE8A3" strokeWidth="2" style={{ position: 'absolute', top: 4, right: 4, animation: 'spin 12s linear infinite' }}>
-                                  <circle cx="12" cy="12" r="5" fill="#FFE8A3" />
-                                  <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M5.64 18.36l-1.42 1.42M19.78 4.22l-1.42 1.42" />
-                                </svg>
-                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" style={{ position: 'absolute', bottom: 4, left: 4, animation: 'weatherFloat 4s infinite ease-in-out alternate' }}>
-                                  <path d="M18 10h-1.26A8 8 0 1 0 9 15h9a5 5 0 0 0 0-10z" fill="#ffffff" opacity="0.9" />
-                                </svg>
-                              </div>
-                            );
-                          }
-                          if (weatherScene === 'cloudy') {
-                            return (
-                              <div style={{ position: 'relative', width: 64, height: 64 }}>
-                                <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#e2e8f0" strokeWidth="2" style={{ position: 'absolute', top: 4, left: 4, animation: 'weatherFloat 5s infinite ease-in-out alternate-reverse' }}>
-                                  <path d="M18 10h-1.26A8 8 0 1 0 9 15h9a5 5 0 0 0 0-10z" fill="#e2e8f0" opacity="0.8" />
-                                </svg>
-                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" style={{ position: 'absolute', bottom: 4, right: 4, animation: 'weatherFloat 4.2s infinite ease-in-out alternate' }}>
-                                  <path d="M18 10h-1.26A8 8 0 1 0 9 15h9a5 5 0 0 0 0-10z" fill="#ffffff" />
-                                </svg>
-                              </div>
-                            );
-                          }
-                          if (weatherScene === 'rain') {
-                            return (
-                              <div style={{ position: 'relative', width: 64, height: 64 }}>
-                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="2" style={{ position: 'absolute', top: 2, left: 8, animation: 'weatherFloat 4s infinite ease-in-out alternate' }}>
-                                  <path d="M18 10h-1.26A8 8 0 1 0 9 15h9a5 5 0 0 0 0-10z" fill="#cbd5e1" />
-                                </svg>
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#7EAEDB" strokeWidth="2" style={{ position: 'absolute', bottom: 2, left: 16 }}>
-                                  <path d="M10 14v4M14 14v4M6 14v4" strokeDasharray="2 3" style={{ animation: 'rainFallAnim 1s linear infinite' }} />
-                                </svg>
-                              </div>
-                            );
-                          }
-                          if (weatherScene === 'thunderstorm') {
-                            return (
-                              <div style={{ position: 'relative', width: 64, height: 64 }}>
-                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" style={{ position: 'absolute', top: 2, left: 8, animation: 'weatherFloat 3.5s infinite ease-in-out alternate' }}>
-                                  <path d="M18 10h-1.26A8 8 0 1 0 9 15h9a5 5 0 0 0 0-10z" fill="#94a3b8" />
-                                </svg>
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" style={{ position: 'absolute', bottom: 0, left: 16, animation: 'boltFlash 1.5s infinite step-end' }}>
-                                  <path d="m13 2-8 10h7l-2 10 10-12h-7z" fill="#f59e0b" />
-                                </svg>
-                              </div>
-                            );
-                          }
-                          if (weatherScene === 'fog') {
-                            return (
-                              <div style={{ position: 'relative', width: 64, height: 64 }}>
-                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="2" style={{ position: 'absolute', top: 4, left: 8, animation: 'weatherFloat 5s infinite ease-in-out alternate' }}>
-                                  <path d="M18 10h-1.26A8 8 0 1 0 9 15h9a5 5 0 0 0 0-10z" fill="#cbd5e1" opacity="0.6" />
-                                </svg>
-                                <div style={{ position: 'absolute', bottom: 12, left: 8, width: 48, height: 12, display: 'flex', flexDirection: 'column', gap: 4 }}>
-                                  <div style={{ width: '100%', height: 2, background: 'rgba(255,255,255,0.7)', borderRadius: 1, animation: 'fogDriftLine 3s infinite linear alternate' }} />
-                                  <div style={{ width: '80%', height: 2, background: 'rgba(255,255,255,0.5)', borderRadius: 1, animation: 'fogDriftLine 4s infinite linear alternate-reverse' }} />
-                                </div>
-                              </div>
-                            );
-                          }
-                          if (weatherScene === 'snow') {
-                            return (
-                              <div style={{ position: 'relative', width: 64, height: 64 }}>
-                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#e2e8f0" strokeWidth="2" style={{ position: 'absolute', top: 2, left: 8, animation: 'weatherFloat 4s infinite ease-in-out alternate' }}>
-                                  <path d="M18 10h-1.26A8 8 0 1 0 9 15h9a5 5 0 0 0 0-10z" fill="#e2e8f0" />
-                                </svg>
-                                <span style={{ position: 'absolute', bottom: 4, left: 16, fontSize: 18, animation: 'spin 4s linear infinite' }}>❄️</span>
-                                <span style={{ position: 'absolute', bottom: 8, left: 32, fontSize: 12, animation: 'spin 6s linear infinite' }}>❄️</span>
-                              </div>
-                            );
-                          }
-                          // default: Night Moon
-                          return (
-                            <div style={{ position: 'relative', width: 64, height: 64 }}>
-                              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#FFE8A3" strokeWidth="2" style={{ position: 'absolute', top: 6, left: 10, animation: 'weatherFloat 4s infinite ease-in-out alternate' }}>
-                                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" fill="#FFE8A3" />
-                              </svg>
-                              <span style={{ position: 'absolute', top: 6, left: 4, fontSize: 10, animation: 'starBlink 2.2s infinite alternate' }}>⭐</span>
-                              <span style={{ position: 'absolute', bottom: 12, right: 4, fontSize: 8, animation: 'starBlink 1.8s infinite alternate' }}>⭐</span>
-                            </div>
-                          );
-                        })()}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Glass Card 2: Hourly Forecast Timeline */}
-                  <div className="weather-glass-card">
-                    <div className="hourly-timeline-slider">
-                      <div 
-                        className={`hourly-timeline-item ${selectedHourIdx === 0 ? 'selected' : ''}`}
-                        onClick={() => setSelectedHourIdx(0)}
-                      >
-                        <span className="timeline-time-label">NOW</span>
-                        <span className="timeline-icon-wrap">
-                          {getForecastIcon(
-                            weatherState === 'sunny' ? 'Clear' : weatherState === 'rain' ? 'Rain' : weatherState === 'thunderstorm' ? 'Thunderstorm' : weatherState === 'windy' ? 'Windy' : 'Clouds',
-                            weatherState === 'windy' ? 25 : 5,
-                            Math.floor(Date.now() / 1000)
-                          )}
-                        </span>
-                        <span className="timeline-temp-label">{currentTemp}°</span>
-                      </div>
-                      {activeForecasts.map((f, idx) => {
-                        const timeStr = formatForecastHour(f.dt);
-                        const mainCond = f.weather?.[0]?.main || 'Clear';
-                        const icon = getForecastIcon(mainCond, f.wind?.speed, f.dt);
-                        const tempVal = Math.round(f.main?.temp || 30);
-                        
-                        return (
-                          <div 
-                            className={`hourly-timeline-item ${selectedHourIdx === idx + 1 ? 'selected' : ''}`}
-                            key={idx}
-                            onClick={() => setSelectedHourIdx(idx + 1)}
-                          >
-                            <span className="timeline-time-label">{timeStr}</span>
-                            <span className="timeline-icon-wrap">{icon}</span>
-                            <span className="timeline-temp-label">{tempVal}°</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Glass Card 3: Metrics Pills Card */}
-                  <div className="weather-glass-card" style={{ padding: '12px' }}>
-                    <div className="weather-metrics-pills">
-                      <div className="metric-glass-pill">
-                        <span style={{ fontSize: '16px' }}>🌡️</span>
-                        <span className="metric-pill-val">{currentTemp}°C</span>
-                        <span className="metric-pill-lbl">Temp</span>
-                      </div>
-                      <div className="metric-glass-pill">
-                        <span style={{ fontSize: '16px' }}>💧</span>
-                        <span className="metric-pill-val">{currentHumidity}%</span>
-                        <span className="metric-pill-lbl">Humid</span>
-                      </div>
-                      <div className="metric-glass-pill">
-                        <span style={{ fontSize: '16px' }}>🌬️</span>
-                        <span className="metric-pill-val">
-                          {currentWindSpeed} <span style={{ fontSize: '8px' }}>km/h</span>
-                        </span>
-                        <span className="metric-pill-lbl">{displayWeather?.weather ? getWindDirection(currentWindDeg).arrow : ''} Wind</span>
-                      </div>
-                      <div className="metric-glass-pill">
-                        <span style={{ fontSize: '16px' }}>☔</span>
-                        <span className="metric-pill-val">{currentRainChance}%</span>
-                        <span className="metric-pill-lbl">Rain</span>
-                      </div>
-                      <div className="metric-glass-pill">
-                        <span style={{ fontSize: '16px' }}>☀️</span>
-                        <span className="metric-pill-val">
-                          {weatherScene === 'sunny' ? '6' : weatherScene === 'partly-cloudy' ? '4' : '1'}
-                        </span>
-                        <span className="metric-pill-lbl">UV Index</span>
-                      </div>
-                    </div>
-                  </div>
-
-
-
-                  {/* Glass Card 5: Farming Impacts Card */}
-                  <div className="weather-glass-card" style={{ padding: '14px' }}>
-                    <div className="farming-impact-grid">
-                      <div className="impact-glass-card">
-                        <span className="impact-icon-wrap">🌱</span>
-                        <div className="impact-info-col">
-                          <span className="impact-info-lbl">Soil Moisture</span>
-                          <span className="impact-info-val" style={{ color: (weatherScene === 'rain' || weatherScene === 'thunderstorm') ? '#74D99F' : '#FFE8A3' }}>
-                            {(weatherScene === 'rain' || weatherScene === 'thunderstorm') ? 'Excellent' : 'Good'}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="impact-glass-card">
-                        <span className="impact-icon-wrap">💧</span>
-                        <div className="impact-info-col">
-                          <span className="impact-info-lbl">Irrigation Need</span>
-                          <span className="impact-info-val">
-                            {(weatherScene === 'rain' || weatherScene === 'thunderstorm') ? 'None' : 'Moderate'}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="impact-glass-card">
-                        <span className="impact-icon-wrap">🌾</span>
-                        <div className="impact-info-col">
-                          <span className="impact-info-lbl">Crop Growth</span>
-                          <span className="impact-info-val">
-                            {weatherScene === 'sunny' ? '+3.2%' : (weatherScene === 'rain' || weatherScene === 'thunderstorm') ? '+1.5%' : '+1.0%'}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="impact-glass-card">
-                        <span className="impact-icon-wrap">🐛</span>
-                        <div className="impact-info-col">
-                          <span className="impact-info-lbl">Pest Risk</span>
-                          <span className="impact-info-val" style={{ color: (weatherScene === 'rain' || weatherScene === 'thunderstorm') ? '#EF4444' : '#74D99F' }}>
-                            {(weatherScene === 'rain' || weatherScene === 'thunderstorm') ? 'High' : 'Low'}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
+              {/* Active Stage Detail Panel */}
+              <div className="journey-active-stage-panel">
+                <div className="stage-panel-head">
+                  <h4 className="stage-title">{currentStage?.title || 'Fertilizer Application'} — In Progress</h4>
+                  <span className="stage-dates">Day 37 — Day 71</span>
                 </div>
               </div>
-            );
-          })()}
+            </div>
+          )}
 
           {/* PROFIT SNAPSHOT */}
           {selectedCrop && (
@@ -1898,78 +1447,6 @@ const ActionHome = ({ session }) => {
       </div>
     </div>
 
-
-      {/* BIN MODAL */}
-      {binModalOpen && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(10, 13, 11, 0.8)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)' }}>
-          <div className="neo-card" style={{ width: '90%', maxWidth: '450px', margin: 0, padding: '24px' }}>
-             <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', color: 'var(--text-main)' }}>Recycle Bin</h3>
-             <div className="custom-scroll" style={{maxHeight:'300px', overflowY:'auto', paddingRight:'16px'}}>
-               {(() => {
-                  let binnedCrops = JSON.parse(localStorage.getItem(`binned_crops_${session?.user?.id}`) || '[]');
-                  
-                  // Auto-delete crops in the bin older than 3 days
-                  const validCrops = binnedCrops.filter(c => {
-                    const daysInBin = (new Date() - new Date(c.deletedAt)) / (1000 * 60 * 60 * 24);
-                    return daysInBin <= 3;
-                  });
-
-                  if (validCrops.length !== binnedCrops.length) {
-                    localStorage.setItem(`binned_crops_${session?.user?.id}`, JSON.stringify(validCrops));
-                    binnedCrops = validCrops;
-                  }
-
-                  if (binnedCrops.length === 0) return <p style={{color: 'var(--text-sub)', fontSize: '14px', margin: '20px 0'}}>No items in bin.</p>;
-                  return binnedCrops.map((crop, index) => (
-                    <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--card-border)' }}>
-                       <div>
-                         <div style={{fontWeight: 700, fontSize: '15px'}}>{crop.cropName}</div>
-                         <div style={{fontSize: '12px', color: 'var(--text-sub)', marginTop: '4px'}}>Deleted: {new Date(crop.deletedAt).toLocaleDateString()}</div>
-                       </div>
-                       <button onClick={() => handleRestoreFromBin(crop.id)} style={{ background: 'var(--neon-green)', color: '#000', border: 'none', padding: '8px 16px', borderRadius: '8px', fontWeight: 700, cursor: 'pointer', fontSize: '13px' }}>Restore</button>
-                    </div>
-                  ));
-               })()}
-             </div>
-             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '24px' }}>
-                <button onClick={() => setBinModalOpen(false)} style={{ background: 'transparent', color: 'var(--text-main)', border: '1px solid var(--card-border)', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>Close</button>
-             </div>
-          </div>
-        </div>
-      )}
-
-      {/* DELETE CONFIRM MODAL */}
-      {deleteConfirmOpen && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(10, 13, 11, 0.8)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)' }}>
-          <div className="neo-card" style={{ width: '90%', maxWidth: '400px', margin: 0, padding: '24px' }}>
-             <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', color: 'var(--danger-red)' }}>Move to Trash?</h3>
-             <p style={{ color: 'var(--text-sub)', fontSize: '14px', lineHeight: 1.6, marginBottom: '24px' }}>
-               This will move <strong>{selectedCrop?.crop_name}</strong> to the recycle bin. Crops are permanently deleted after 3 days. Are you sure you want to proceed?
-             </p>
-             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
-                <button onClick={() => setDeleteConfirmOpen(false)} style={{ background: 'transparent', color: 'var(--text-main)', border: '1px solid var(--card-border)', padding: '10px 16px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
-                <button onClick={handleConfirmDelete} style={{ background: 'var(--danger-red)', color: '#fff', border: 'none', padding: '10px 16px', borderRadius: '8px', fontWeight: 700, cursor: 'pointer' }}>Yes, Trash it</button>
-             </div>
-          </div>
-        </div>
-      )}
-
-      {/* CUSTOM ALERT MODAL */}
-      {alertConfig.open && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(10, 13, 11, 0.8)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)' }}>
-          <div className="neo-card" style={{ width: '90%', maxWidth: '400px', margin: 0, padding: '24px', border: `1px solid ${alertConfig.type === 'error' ? 'var(--danger-red)' : 'var(--warning-yellow)'}` }}>
-             <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', color: alertConfig.type === 'error' ? 'var(--danger-red)' : 'var(--warning-yellow)' }}>
-               {alertConfig.type === 'error' ? 'Cannot Restore' : 'Restore Notice'}
-             </h3>
-             <p style={{ color: 'var(--text-main)', fontSize: '14px', lineHeight: 1.6, marginBottom: '24px' }}>
-               {alertConfig.message}
-             </p>
-             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <button onClick={() => setAlertConfig({ ...alertConfig, open: false })} style={{ background: alertConfig.type === 'error' ? 'var(--danger-red)' : 'var(--warning-yellow)', color: '#000', border: 'none', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 700 }}>Understood</button>
-             </div>
-          </div>
-        </div>
-      )}
 
       {/* FLOATING AGRIBOT */}
       <AgriBot />
