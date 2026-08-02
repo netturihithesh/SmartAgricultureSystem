@@ -40,12 +40,16 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
 
   if (!selectedCrop || !cropStartDate) return null;
 
-  const totalDays = selectedCrop.total_duration_days;
+  const totalDays = selectedCrop.total_duration_days || 140;
   const startMs = new Date(cropStartDate).getTime();
   
-  // Create an array of days from Day 1 to the present date (daysPassed)
-  const visibleDays = Math.min(totalDays, Math.max(1, daysPassed));
-  const daysArray = Array.from({ length: visibleDays }, (_, i) => i + 1);
+  // Show past 5 days before today, plus upcoming days for compact scrolling
+  const startDayNum = Math.max(1, (daysPassed || 1) - 5);
+  const endDayNum = Math.min(totalDays, Math.max(startDayNum + 15, (daysPassed || 1) + 20));
+  const daysArray = [];
+  for (let d = startDayNum; d <= endDayNum; d++) {
+    daysArray.push(d);
+  }
 
   const getStageForDay = (dayNum) => {
       if (!selectedCrop || !selectedCrop.stages) return null;
