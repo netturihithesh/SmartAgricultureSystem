@@ -94,23 +94,15 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
         </Box>
       </Box>
 
-      {/* Calendar Scroll Area */}
-      <Box sx={{ position: 'relative', borderBottom: '1px solid var(--card-border)', bgcolor: 'rgba(255,255,255,0.01)', width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
-        <IconButton 
-          onClick={() => handleScroll(-1)} 
-          sx={{ position: 'absolute', left: 4, top: '50%', transform: 'translateY(-50%)', zIndex: 2, bgcolor: 'var(--card-bg)', border: '1px solid var(--card-border)', '&:hover': { bgcolor: 'var(--card-border)' } }} 
-          size="small"
-        >
-          <ChevronLeft fontSize="small" />
-        </IconButton>
-        
+      {/* Calendar Scroll Area (Clean 100% full-width strip without obstructing overlay arrows) */}
+      <Box sx={{ borderBottom: '1px solid #F1F5F9', bgcolor: '#F8FAFC', width: '100%', py: 2 }}>
         <Box 
           ref={scrollRef}
           sx={{ 
             display: 'flex', 
             overflowX: 'auto', 
-            p: '12px 36px', 
-            gap: 1.5, 
+            px: 2, 
+            gap: 1.2, 
             scrollbarWidth: 'none', 
             '&::-webkit-scrollbar': { display: 'none' },
             width: '100%'
@@ -118,81 +110,57 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
         >
           {daysArray.map(dayNum => {
             const date = new Date(startMs + (dayNum - 1) * 86400000);
-            const isToday = dayNum === daysPassed;
+            const isToday = dayNum === Math.min(totalDays, daysPassed || 1);
             const isSelected = dayNum === selectedDay;
-            const isPast = dayNum < daysPassed;
-            const dayTasks = getTasksForDay(dayNum);
-            
-            // Check if all tasks for this day are done (if there are tasks)
-            const substepStatusObj = substepStatus || {};
-            const allDone = dayTasks.length > 0 && dayTasks.every(t => substepStatusObj[`${t.stage_id}_${t.i}`]);
-            const hasTask = dayTasks.length > 0;
+            const isStart = dayNum === 1;
 
-            const boxBorder = isSelected ? 'var(--neon-green)' : 'var(--card-border)';
-            let boxBg = 'transparent';
-            if (isSelected) boxBg = 'rgba(57, 255, 106, 0.08)';
-            else if (isToday) boxBg = 'rgba(20, 184, 166, 0.1)';
-            else if (isPast) boxBg = 'rgba(255,255,255,0.03)';
+            const boxBorder = isSelected ? '#059669' : isToday ? '#86EFAC' : '#E2E8F0';
+            const boxBg = isSelected ? '#ECFDF5' : isToday ? '#F0FDF4' : '#FFFFFF';
 
             return (
               <Box 
                 key={dayNum}
-                className={isSelected ? 'active-day' : ''}
                 onClick={() => setSelectedDay(dayNum)}
                 sx={{ 
-                  minWidth: '52px', 
-                  height: '64px',
-                  borderRadius: '10px', 
-                  border: `1px solid ${boxBorder}`,
+                  minWidth: '60px', 
+                  height: '72px',
+                  borderRadius: '14px', 
+                  border: isSelected ? `2px solid ${boxBorder}` : `1px solid ${boxBorder}`,
                   bgcolor: boxBg,
                   display: 'flex', 
                   flexDirection: 'column',
                   alignItems: 'center',
-                  pt: '10px',
+                  justifyContent: 'center',
                   cursor: 'pointer',
                   position: 'relative',
                   flexShrink: 0,
-                  transition: 'all 0.2s',
-                  '&:hover': { borderColor: 'var(--neon-green)', bgcolor: isSelected ? boxBg : 'rgba(57, 255, 106, 0.02)' }
+                  transition: 'all 0.2s ease',
+                  '&:hover': { transform: 'translateY(-2px)' }
                 }}
               >
-                {isToday && dayNum !== 1 && (
-                  <Typography variant="overline" sx={{ position: 'absolute', top: 3, left: '50%', transform: 'translateX(-50%)', whiteSpace: 'nowrap', color: 'var(--teal-blue)', fontSize: '8px', fontWeight: 800, letterSpacing: 0.5, lineHeight: 1 }}>
+                {isToday && (
+                  <Typography variant="caption" sx={{ position: 'absolute', top: -9, left: '50%', transform: 'translateX(-50%)', bgcolor: '#DCFCE7', color: '#15803D', fontSize: '8.5px', fontWeight: 800, px: 0.8, py: 0.1, borderRadius: '999px', whiteSpace: 'nowrap', border: '1px solid #86EFAC' }}>
                     TODAY
                   </Typography>
                 )}
-                {isToday && dayNum === 1 && (
-                  <Typography variant="overline" sx={{ position: 'absolute', top: 3, left: '50%', transform: 'translateX(-50%)', whiteSpace: 'nowrap', color: 'var(--teal-blue)', fontSize: '8px', fontWeight: 800, letterSpacing: 0.5, lineHeight: 1 }}>
-                    TODAY / START
+                {isStart && !isToday && (
+                  <Typography variant="caption" sx={{ position: 'absolute', top: -9, left: '50%', transform: 'translateX(-50%)', bgcolor: '#FEF3C7', color: '#B45309', fontSize: '8.5px', fontWeight: 800, px: 0.8, py: 0.1, borderRadius: '999px', whiteSpace: 'nowrap', border: '1px solid #FDE68A' }}>
+                    START
                   </Typography>
                 )}
-                {dayNum === 1 && !isToday && (
-                  <Typography variant="overline" sx={{ position: 'absolute', top: 3, left: '50%', transform: 'translateX(-50%)', whiteSpace: 'nowrap', color: 'var(--warning-yellow)', fontSize: '8px', fontWeight: 800, letterSpacing: 0.5, lineHeight: 1 }}>
-                    START DATE
-                  </Typography>
-                )}
-                
-                <Typography variant="caption" sx={{ color: isSelected ? 'var(--neon-green)' : (isToday ? 'var(--teal-blue)' : 'var(--text-sub)'), fontSize: '11px', textTransform: 'uppercase', fontWeight: 700 }}>
+                <Typography variant="caption" sx={{ fontSize: '10px', fontWeight: 700, color: isSelected ? '#059669' : '#64748B', mb: 0.1, textTransform: 'uppercase' }}>
                   {date.toLocaleDateString('en-US', { weekday: 'short' })}
                 </Typography>
-                <Typography variant="h6" sx={{ color: isSelected || isToday ? 'var(--text-main)' : (isPast ? 'var(--text-sub)' : 'var(--text-main)'), fontWeight: 800, lineHeight: 1.2 }}>
+                <Typography variant="body1" sx={{ fontWeight: 800, fontSize: '16px', color: isSelected ? '#047857' : '#0F172A', lineHeight: 1.1 }}>
                   {date.getDate()}
                 </Typography>
-                <Typography variant="caption" sx={{ color: 'var(--text-sub)', fontSize: '9px' }}>
+                <Typography variant="caption" sx={{ fontSize: '9px', fontWeight: 700, color: isSelected ? '#059669' : '#94A3B8', mt: 0.2 }}>
                   DAY {dayNum}
                 </Typography>
               </Box>
             );
           })}
         </Box>
-
-        <IconButton 
-          size="small" 
-          onClick={() => { if (scrollRef.current) scrollRef.current.scrollBy({ left: 140, behavior: 'smooth' }); }}
-          sx={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', zIndex: 2, bgcolor: '#FFFFFF', border: '1px solid #E2E8F0', boxShadow: '0 2px 6px rgba(0,0,0,0.05)', '&:hover': { bgcolor: '#F1F5F9' } }}
-        >
-          <ChevronRight />
-        </IconButton>
       </Box>
 
       {/* Day Details Area & View Full Journey Button */}
