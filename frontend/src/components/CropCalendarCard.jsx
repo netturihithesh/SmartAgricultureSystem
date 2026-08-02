@@ -94,8 +94,8 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
         </Box>
       </Box>
 
-      {/* Calendar Scroll Area (Clean 100% full-width strip without obstructing overlay arrows) */}
-      <Box sx={{ borderBottom: '1px solid #F1F5F9', bgcolor: '#F8FAFC', width: '100%', py: 2 }}>
+      {/* Calendar Scroll Area (Clean 100% full-width strip with non-colliding pill badges) */}
+      <Box sx={{ borderBottom: '1px solid #F1F5F9', bgcolor: '#F8FAFC', width: '100%', pt: 2, pb: 2 }}>
         <Box 
           ref={scrollRef}
           sx={{ 
@@ -123,7 +123,7 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
                 onClick={() => setSelectedDay(dayNum)}
                 sx={{ 
                   minWidth: '60px', 
-                  height: '72px',
+                  height: '78px',
                   borderRadius: '14px', 
                   border: isSelected ? `2px solid ${boxBorder}` : `1px solid ${boxBorder}`,
                   bgcolor: boxBg,
@@ -135,19 +135,20 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
                   position: 'relative',
                   flexShrink: 0,
                   transition: 'all 0.2s ease',
+                  px: 0.5,
                   '&:hover': { transform: 'translateY(-2px)' }
                 }}
               >
-                {isToday && (
-                  <Typography variant="caption" sx={{ position: 'absolute', top: -9, left: '50%', transform: 'translateX(-50%)', bgcolor: '#DCFCE7', color: '#15803D', fontSize: '8.5px', fontWeight: 800, px: 0.8, py: 0.1, borderRadius: '999px', whiteSpace: 'nowrap', border: '1px solid #86EFAC' }}>
+                {isToday ? (
+                  <Typography variant="caption" sx={{ fontSize: '8px', fontWeight: 800, color: '#15803D', bgcolor: '#DCFCE7', px: 0.7, py: 0.2, borderRadius: '999px', mb: 0.3, border: '1px solid #86EFAC', whiteSpace: 'nowrap', lineHeight: 1 }}>
                     TODAY
                   </Typography>
-                )}
-                {isStart && !isToday && (
-                  <Typography variant="caption" sx={{ position: 'absolute', top: -9, left: '50%', transform: 'translateX(-50%)', bgcolor: '#FEF3C7', color: '#B45309', fontSize: '8.5px', fontWeight: 800, px: 0.8, py: 0.1, borderRadius: '999px', whiteSpace: 'nowrap', border: '1px solid #FDE68A' }}>
+                ) : isStart ? (
+                  <Typography variant="caption" sx={{ fontSize: '8px', fontWeight: 800, color: '#B45309', bgcolor: '#FEF3C7', px: 0.7, py: 0.2, borderRadius: '999px', mb: 0.3, border: '1px solid #FDE68A', whiteSpace: 'nowrap', lineHeight: 1 }}>
                     START
                   </Typography>
-                )}
+                ) : null}
+
                 <Typography variant="caption" sx={{ fontSize: '10px', fontWeight: 700, color: isSelected ? '#059669' : '#64748B', mb: 0.1, textTransform: 'uppercase' }}>
                   {date.toLocaleDateString('en-US', { weekday: 'short' })}
                 </Typography>
