@@ -1288,7 +1288,7 @@ const ActionHome = ({ session }) => {
               {/* Top Banner Row */}
               <div className="crop-banner-top-row">
                 <div className="crop-header-left">
-                  <div className="crop-avatar-circle">
+                  <div className="crop-avatar-circle" title="Active Crop Avatar">
                     <svg width="56" height="56" viewBox="0 0 64 64" fill="none">
                       <path d="M14 52C16 38 24 24 36 16C28 26 24 38 22 52Z" fill="#16A34A"/>
                       <path d="M12 52C14 42 10 32 4 26C10 32 14 42 14 52Z" fill="#22C55E"/>
@@ -1306,7 +1306,7 @@ const ActionHome = ({ session }) => {
                     </svg>
                   </div>
                   <div className="crop-title-group">
-                    <div className="crop-active-farmer-badge">
+                    <div className="crop-active-farmer-badge" title="Verified Active Farmer">
                       <span className="farmer-dot"></span>
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -1314,8 +1314,13 @@ const ActionHome = ({ session }) => {
                       </svg>
                       <span>Active Farmer</span>
                     </div>
-                    <h2 className="crop-name-heading">{selectedCrop.crop_name}</h2>
-                    <div className="crop-stage-pill">
+                    <h2 className="crop-name-heading">{selectedCrop.crop_name || 'Paddy (Basmati)'}</h2>
+                    <div 
+                      className="crop-stage-pill" 
+                      onClick={() => { const el = document.querySelector('.crop-journey-card'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}
+                      style={{ cursor: 'pointer' }}
+                      title="Click to view Crop Journey Stages"
+                    >
                       <span className="leaf-icon">🌿</span>
                       <span>{currentStage?.title || 'Fertilizer Application'}</span>
                       <span className="leaf-icon">🌿</span>
@@ -1323,7 +1328,12 @@ const ActionHome = ({ session }) => {
                   </div>
                 </div>
 
-                <div className="crop-tip-card">
+                <div 
+                  className="crop-tip-card"
+                  onClick={() => { const el = document.querySelector('.todays-work-card') || document.querySelector('.crop-journey-card'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}
+                  style={{ cursor: 'pointer' }}
+                  title="Click to view recommendations & stage tasks"
+                >
                   <div className="tip-icon-circle">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M8.5 14.5A5 5 0 0 1 12 5a5 5 0 0 1 3.5 9.5c-.7.7-1.5 1.6-1.5 2.5V18h-4v-1c0-.9-.8-1.8-1.5-2.5z"/>
@@ -1339,9 +1349,14 @@ const ActionHome = ({ session }) => {
                 </div>
               </div>
 
-              {/* Middle Row: 4 Metric Cards */}
+              {/* Middle Row: 4 Interactive Metric Cards */}
               <div className="crop-stats-four-cols">
-                <div className="crop-stat-card-pill">
+                <div 
+                  className="crop-stat-card-pill"
+                  onClick={() => navigate('/dashboard/calendar')}
+                  style={{ cursor: 'pointer' }}
+                  title="Click to view Farm Calendar"
+                >
                   <div className="stat-icon-box green">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
@@ -1358,7 +1373,12 @@ const ActionHome = ({ session }) => {
                   </div>
                 </div>
 
-                <div className="crop-stat-card-pill">
+                <div 
+                  className="crop-stat-card-pill"
+                  onClick={() => { const el = document.querySelector('.crop-journey-card'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}
+                  style={{ cursor: 'pointer' }}
+                  title="Click to view Stage Details"
+                >
                   <div className="stat-icon-box green">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M12 10v12"/>
@@ -1378,7 +1398,12 @@ const ActionHome = ({ session }) => {
                   </div>
                 </div>
 
-                <div className="crop-stat-card-pill">
+                <div 
+                  className="crop-stat-card-pill"
+                  onClick={() => { const el = document.querySelector('.crop-calendar-card'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}
+                  style={{ cursor: 'pointer' }}
+                  title="Click to view Crop Daily Calendar"
+                >
                   <div className="stat-icon-box green">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
@@ -1393,7 +1418,12 @@ const ActionHome = ({ session }) => {
                   </div>
                 </div>
 
-                <div className="crop-stat-card-pill">
+                <div 
+                  className="crop-stat-card-pill"
+                  onClick={() => navigate('/dashboard/analytics')}
+                  style={{ cursor: 'pointer' }}
+                  title="Click to view Farm Analytics"
+                >
                   <div className="stat-icon-box green">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M3 3h18v18H3z"/>
