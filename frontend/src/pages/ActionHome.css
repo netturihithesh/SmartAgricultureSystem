@@ -3782,3 +3782,426 @@ body {
   100% { transform: scale(1.008); }
 }
 
+/* ── RIGHT COLUMN CARDS STYLING ────────────────────────────────────── */
+
+/* Live Weather Card */
+.weather-widget-card {
+  background: linear-gradient(135deg, #3A86FF 0%, #2563EB 100%);
+  border-radius: 20px;
+  padding: 20px 24px;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.2);
+  margin-bottom: 20px;
+}
+
+.weather-widget-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.weather-location-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.weather-live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.live-dot-indicator {
+  width: 6px;
+  height: 6px;
+  background: #10B981;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #10B981;
+}
+
+.weather-widget-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.weather-temp-val {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.weather-main-cond {
+  font-size: 18px;
+  font-weight: 700;
+  display: block;
+}
+
+.weather-sub-meta {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  display: block;
+  margin-top: 2px;
+}
+
+.weather-forecast-hourly-bar {
+  display: flex;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+
+.forecast-hour-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.f-hour-lbl {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.f-hour-temp {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* 5 Quick Weather Metrics Card */
+.weather-quick-metrics-card {
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.metrics-5grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  text-align: center;
+}
+
+.metric-box-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 4px;
+  background: #F9FAFB;
+  border-radius: 12px;
+  border: 1px solid #F3F4F6;
+}
+
+.m-icon {
+  font-size: 16px;
+}
+
+.m-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827;
+  white-space: nowrap;
+}
+
+.u-unit {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.m-lbl {
+  font-size: 10px;
+  color: #6B7280;
+  font-weight: 500;
+}
+
+/* Soil & Irrigation Summary Card */
+.soil-summary-card {
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.soil-summary-4grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+
+.soil-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #F8FAF7;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid #EAEFE7;
+}
+
+.s-icon {
+  font-size: 16px;
+}
+
+.s-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.s-lbl {
+  font-size: 10px;
+  color: #6B7280;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.s-val {
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.s-val.green {
+  color: #059669;
+}
+
+.s-val.amber {
+  color: #D97706;
+}
+
+/* Profit Snapshot Card */
+.profit-snapshot-card {
+  padding: 20px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.profit-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.profit-crop-sub {
+  font-size: 12px;
+  color: #6B7280;
+  font-weight: 500;
+  display: block;
+  margin-top: 2px;
+}
+
+.yield-impact-badge {
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #A7F3D0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.profit-main-amount-block {
+  margin-bottom: 16px;
+}
+
+.profit-amount-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  color: #9CA3AF;
+  letter-spacing: 0.5px;
+  display: block;
+}
+
+.profit-amount-val {
+  font-size: 32px;
+  font-weight: 800;
+  color: #059669;
+  margin: 4px 0 0 0;
+}
+
+.profit-three-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid #F3F4F6;
+}
+
+.profit-metric-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.pm-lbl {
+  font-size: 10px;
+  font-weight: 600;
+  color: #9CA3AF;
+}
+
+.pm-val {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+  margin-top: 2px;
+}
+
+.profit-wave-accent {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+/* Crop Journey Pipeline Card */
+.crop-journey-card {
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.journey-pipeline-nodes-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.node-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  z-index: 2;
+  flex: 1;
+}
+
+.node-circle {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #F3F4F6;
+  border: 1.5px solid #E5E7EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #6B7280;
+}
+
+.node-item.done .node-circle {
+  background: #ECFDF5;
+  border-color: #059669;
+  color: #059669;
+}
+
+.node-item.active .node-circle {
+  background: #059669;
+  border-color: #059669;
+  color: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
+}
+
+.node-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: #6B7280;
+  text-align: center;
+  line-height: 1.1;
+}
+
+.journey-active-stage-panel {
+  background: #F8FAF7;
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid #EAEFE7;
+}
+
+.stage-panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stage-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.stage-dates {
+  font-size: 11px;
+  color: #6B7280;
+  font-weight: 500;
+}
+
+.stage-progress-bar-wrap {
+  height: 6px;
+  background: #E5E7EB;
+  border-radius: 999px;
+  margin: 10px 0 4px;
+  overflow: hidden;
+}
+
+.stage-progress-fill {
+  height: 100%;
+  background: #059669;
+  border-radius: 999px;
+}
+
+.stage-progress-lbl {
+  font-size: 11px;
+  color: #6B7280;
+}
+
+.stage-substeps-checklist {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checklist-subitem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.check-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.circle-radio {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1.5px solid #9CA3AF;
+  display: inline-block;
+}
+
+.subitem-date {
+  font-size: 11px;
+  color: #6B7280;
+}
+
