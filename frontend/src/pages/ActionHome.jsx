@@ -519,6 +519,7 @@ const ActionHome = ({ session }) => {
   const [dynamicSchedule, setDynamicSchedule] = useState(null);
   const [isGeneratingSchedule, setIsGeneratingSchedule] = useState(false);
   const [binModalOpen, setBinModalOpen] = useState(false);
+  const [binnedCrops, setBinnedCrops] = useState([]);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [alertConfig, setAlertConfig] = useState({ open: false, message: '', type: 'info' });
 
@@ -1062,32 +1063,63 @@ const ActionHome = ({ session }) => {
     }
   };
 
+  const refreshBinnedCrops = useCallback(() => {
+    if (!session?.user?.id) return;
+    const rawBin = JSON.parse(localStorage.getItem(`binned_crops_${session.user.id}`) || '[]');
+    const now = new Date();
+    const validBin = rawBin.filter(c => {
+      if (!c.deletedAt) return false;
+      const delDate = new Date(c.deletedAt);
+      const diffDays = (now - delDate) / (1000 * 60 * 60 * 24);
+      return diffDays <= 3;
+    });
+    if (validBin.length !== rawBin.length) {
+      localStorage.setItem(`binned_crops_${session.user.id}`, JSON.stringify(validBin));
+    }
+    setBinnedCrops(validBin);
+  }, [session]);
+
+  useEffect(() => {
+    refreshBinnedCrops();
+  }, [refreshBinnedCrops, binModalOpen]);
+
   const requestDelete = () => setDeleteConfirmOpen(true);
 
   const handleConfirmDelete = () => {
-     const current = userCrops[activeCropIndex];
-     const bin = JSON.parse(localStorage.getItem(`binned_crops_${session.user.id}`) || '[]');
-     bin.push({ ...current, deletedAt: new Date().toISOString() });
-     localStorage.setItem(`binned_crops_${session.user.id}`, JSON.stringify(bin));
-     
-     const updated = userCrops.filter((_, i) => i !== activeCropIndex);
-     localStorage.setItem(`user_crops_${session.user.id}`, JSON.stringify(updated));
-     
-     if (updated.length > 0) {
-       localStorage.setItem(`active_crop_index_${session.user.id}`, '0');
-       setUserCrops(updated);
-       setActiveCropIndex(0);
-       loadCropView(updated[0]);
-     } else {
-       setUserCrops([]);
-       setSelectedCrop(null);
-     }
-     setDeleteConfirmOpen(false);
+    if (!userCrops[activeCropIndex]) return;
+    const current = userCrops[activeCropIndex];
+    const bin = JSON.parse(localStorage.getItem(`binned_crops_${session.user.id}`) || '[]');
+    
+    const binnedItem = {
+      id: current.id || `crop_${Date.now()}`,
+      cropName: current.cropName || current.crop_name || (selectedCrop ? selectedCrop.crop_name : 'Crop'),
+      startDate: current.startDate || (cropStartDate ? cropStartDate.toISOString() : new Date().toISOString()),
+      deletedAt: new Date().toISOString()
+    };
+
+    const newBin = [...bin, binnedItem];
+    localStorage.setItem(`binned_crops_${session.user.id}`, JSON.stringify(newBin));
+    setBinnedCrops(newBin);
+
+    const updated = userCrops.filter((_, i) => i !== activeCropIndex);
+    localStorage.setItem(`user_crops_${session.user.id}`, JSON.stringify(updated));
+    
+    if (updated.length > 0) {
+      localStorage.setItem(`active_crop_index_${session.user.id}`, '0');
+      setUserCrops(updated);
+      setActiveCropIndex(0);
+      loadCropView(updated[0]);
+    } else {
+      setUserCrops([]);
+      setSelectedCrop(null);
+    }
+    setDeleteConfirmOpen(false);
+    setAlertConfig({ open: true, message: `${binnedItem.cropName} moved to Recycle Bin`, type: 'info' });
   };
 
   const handleRestoreFromBin = (binnedId) => {
     if (userCrops.length >= 2) {
-      setAlertConfig({ open: true, message: 'You cannot restore this crop. You already have the maximum of two active crops.', type: 'warning' });
+      setAlertConfig({ open: true, message: 'Maximum 2 active crops allowed. Please delete or swap an active crop first.', type: 'warning' });
       return;
     }
     const bin = JSON.parse(localStorage.getItem(`binned_crops_${session.user.id}`) || '[]');
@@ -1097,24 +1129,41 @@ const ActionHome = ({ session }) => {
     const deletedDate = new Date(cropToRestore.deletedAt);
     const daysInBin = (new Date() - deletedDate) / (1000 * 60 * 60 * 24);
     if (daysInBin > 3) {
-      setAlertConfig({ open: true, message: 'This crop has been in the bin for more than 3 days and cannot be restored.', type: 'error' });
+      setAlertConfig({ open: true, message: 'This crop has been in the bin for more than 3 days and expired.', type: 'error' });
       const cleanedBin = bin.filter(c => c.id !== binnedId);
       localStorage.setItem(`binned_crops_${session.user.id}`, JSON.stringify(cleanedBin));
+      setBinnedCrops(cleanedBin);
       return;
     }
 
-    const newCrops = [...userCrops, { id: cropToRestore.id, cropName: cropToRestore.cropName, startDate: cropToRestore.startDate }];
+    const restoredCrop = {
+      id: cropToRestore.id,
+      cropName: cropToRestore.cropName,
+      startDate: cropToRestore.startDate
+    };
+
+    const newCrops = [...userCrops, restoredCrop];
     setUserCrops(newCrops);
     localStorage.setItem(`user_crops_${session.user.id}`, JSON.stringify(newCrops));
     
     const newBin = bin.filter(c => c.id !== binnedId);
     localStorage.setItem(`binned_crops_${session.user.id}`, JSON.stringify(newBin));
-    
+    setBinnedCrops(newBin);
+
     const newIndex = newCrops.length - 1;
     setActiveCropIndex(newIndex);
     localStorage.setItem(`active_crop_index_${session.user.id}`, newIndex.toString());
-    loadCropView(newCrops[newIndex]);
+    loadCropView(restoredCrop);
     setBinModalOpen(false);
+    setAlertConfig({ open: true, message: `${restoredCrop.cropName} restored successfully!`, type: 'success' });
+  };
+
+  const handlePermanentDelete = (binnedId) => {
+    const bin = JSON.parse(localStorage.getItem(`binned_crops_${session.user.id}`) || '[]');
+    const updatedBin = bin.filter(c => c.id !== binnedId);
+    localStorage.setItem(`binned_crops_${session.user.id}`, JSON.stringify(updatedBin));
+    setBinnedCrops(updatedBin);
+    setAlertConfig({ open: true, message: 'Crop permanently deleted.', type: 'info' });
   };
 
   const currentStage = useMemo(() => {
@@ -2009,30 +2058,69 @@ const ActionHome = ({ session }) => {
 
       {/* RECYCLE BIN MODAL */}
       {binModalOpen && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(10, 13, 11, 0.8)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)' }}>
-          <div className="neo-card" style={{ width: '90%', maxWidth: '500px', margin: 0, maxHeight: '80vh', overflowY: 'auto', padding: '24px' }}>
-             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                <h3 className="section-title" style={{ margin: 0 }}>Recycle Bin</h3>
-                <button onClick={() => setBinModalOpen(false)} style={{ background: 'transparent', border: 'none', color: 'var(--text-sub)', fontSize: '20px', cursor: 'pointer' }}>✕</button>
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(10, 13, 11, 0.75)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(6px)' }}>
+          <div style={{ width: '90%', maxWidth: '520px', margin: 0, maxHeight: '80vh', overflowY: 'auto', padding: '24px 28px', borderRadius: '24px', background: '#FFFFFF', border: '1px solid #E2E8F0', boxShadow: '0 20px 40px rgba(0,0,0,0.18)' }}>
+             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', paddingBottom: '14px', borderBottom: '1px solid #F1F5F9' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '12px', background: '#ECFDF5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="23 4 23 10 17 10"/>
+                      <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: '#0F172A' }}>Recycle Bin</h3>
+                    <span style={{ fontSize: '12px', color: '#64748B' }}>Deleted crops are retained for 3 days</span>
+                  </div>
+                </div>
+                <button onClick={() => setBinModalOpen(false)} style={{ background: '#F1F5F9', border: 'none', color: '#64748B', width: '32px', height: '32px', borderRadius: '50%', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
              </div>
              
-             {deletedCrops.length === 0 ? (
-               <div style={{ textAlign: 'center', padding: '32px 0', color: 'var(--text-sub)' }}>
-                 No deleted crops in bin.
+             {binnedCrops.length === 0 ? (
+               <div style={{ textAlign: 'center', padding: '40px 16px', color: '#64748B', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+                 <div style={{ width: '54px', height: '54px', borderRadius: '50%', background: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" strokeWidth="2">
+                     <polyline points="23 4 23 10 17 10"/>
+                     <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                   </svg>
+                 </div>
+                 <span style={{ fontWeight: 700, fontSize: '15px', color: '#334155' }}>Recycle Bin is Empty</span>
+                 <span style={{ fontSize: '12px', color: '#94A3B8' }}>Deleted crops will appear here and can be restored anytime within 3 days.</span>
                </div>
              ) : (
                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                 {deletedCrops.map(dc => (
-                   <div key={dc.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--card-border)', borderRadius: '12px', padding: '12px 16px' }}>
-                     <div>
-                       <div style={{ fontWeight: 700, color: 'var(--text-main)' }}>{dc.crop_name}</div>
-                       <div style={{ fontSize: '11px', color: 'var(--text-sub)', marginTop: '2px' }}>Deleted {new Date(dc.deleted_at).toLocaleDateString()}</div>
+                 {binnedCrops.map(dc => {
+                   const delDate = new Date(dc.deletedAt);
+                   const daysAgo = Math.floor((new Date() - delDate) / (1000 * 60 * 60 * 24));
+                   const daysLeft = Math.max(0, 3 - daysAgo);
+                   return (
+                     <div key={dc.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '14px 18px', flexWrap: 'wrap', gap: '12px' }}>
+                       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                         <div style={{ fontWeight: 800, fontSize: '15px', color: '#0F172A' }}>{dc.cropName || dc.crop_name}</div>
+                         <div style={{ fontSize: '11px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                           <span>Deleted {delDate.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}</span>
+                           <span>•</span>
+                           <span style={{ color: '#D97706', fontWeight: 600 }}>Expires in {daysLeft} day{daysLeft === 1 ? '' : 's'}</span>
+                         </div>
+                       </div>
+                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                         <button 
+                           onClick={() => handleRestoreFromBin(dc.id)} 
+                           style={{ background: '#ECFDF5', color: '#047857', border: '1px solid #A7F3D0', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer', fontWeight: 700, fontSize: '12px', transition: 'all 0.2s ease' }}
+                         >
+                           Restore
+                         </button>
+                         <button 
+                           onClick={() => handlePermanentDelete(dc.id)} 
+                           style={{ background: '#FEF2F2', color: '#DC2626', border: '1px solid #FECACA', padding: '8px 12px', borderRadius: '12px', cursor: 'pointer', fontWeight: 700, fontSize: '12px' }}
+                           title="Permanently Delete"
+                         >
+                           Delete
+                         </button>
+                       </div>
                      </div>
-                     <button onClick={() => handleRestoreCrop(dc)} style={{ background: 'var(--neon-green-dim)', color: 'var(--neon-green)', border: '1px solid var(--neon-green)', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600, fontSize: '12px' }}>
-                       Restore
-                     </button>
-                   </div>
-                 ))}
+                   );
+                 })}
                </div>
              )}
           </div>
