@@ -983,148 +983,140 @@ const ActionHome = ({ session }) => {
         {/* ── LEFT MAIN COLUMN ────────────────────────────────────────── */}
         <div className="dashboard-left-col">
           
-          {/* HERO TOP ROW: GREEN HERO BANNER + CROP PROGRESS CARD */}
-          <div className="hero-top-left-row">
-            
-            {/* HERO BANNER CARD */}
-            <div className="hero-banner-card">
-              <div className="hero-banner-content">
-                <span className="hero-greeting">{getGreeting()},</span>
-                <h1 className="hero-user-name">{profile?.full_name || 'Netturi Hitheshsena Reddy'}</h1>
-                <div className="hero-badge-pill">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                    <circle cx="12" cy="7" r="4"/>
-                  </svg>
-                  <span>Active Farmer</span>
-                </div>
-              </div>
-              <div className="hero-leaf-graphic">
-                <svg width="180" height="180" viewBox="0 0 200 200" fill="none">
-                  <path d="M40 160C40 160 80 140 110 90C140 40 180 20 180 20C180 20 160 60 110 90C60 120 40 160 40 160Z" fill="rgba(255, 255, 255, 0.15)"/>
-                  <path d="M20 180C20 180 70 150 90 100C110 50 140 30 140 30C140 30 120 70 90 100C60 130 20 180 20 180Z" fill="rgba(255, 255, 255, 0.1)"/>
+          {/* HERO BANNER CARD WITH INTEGRATED LANDSCAPE & EMBEDDED PROGRESS RING */}
+          <div className="hero-banner-card">
+            <div className="hero-landscape-svg-wrap">
+              <svg viewBox="0 0 900 240" fill="none" preserveAspectRatio="xMidYMid slice" className="landscape-svg">
+                <defs>
+                  <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#F4FAF5"/>
+                    <stop offset="100%" stopColor="#E2F4E7"/>
+                  </linearGradient>
+                  <linearGradient id="hillGrad1" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#2E7D32"/>
+                    <stop offset="100%" stopColor="#1B5E20"/>
+                  </linearGradient>
+                  <linearGradient id="hillGrad2" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#4CAF50"/>
+                    <stop offset="100%" stopColor="#2E7D32"/>
+                  </linearGradient>
+                </defs>
+                <rect width="900" height="240" fill="url(#skyGrad)"/>
+                <path d="M120 35 C140 18 180 18 200 35 C220 25 260 35 270 55 C280 75 260 90 240 90 L110 90 C90 90 80 75 100 55 Z" fill="rgba(255,255,255,0.7)"/>
+                <path d="M580 45 C600 30 630 30 650 45 C665 40 690 45 700 60 C710 75 695 88 680 88 L570 88 Z" fill="rgba(255,255,255,0.6)"/>
+                <path d="M0 150 Q250 80 500 140 T1000 110 L1000 240 L0 240 Z" fill="url(#hillGrad1)" opacity="0.45"/>
+                <path d="M420 135 L424 85 L428 135 Z" fill="#1B5E20"/>
+                <circle cx="424" cy="85" r="14" fill="none" stroke="#1B5E20" strokeWidth="1.5" strokeDasharray="3 3"/>
+                <path d="M350 135 L370 115 L390 135 L390 155 L350 155 Z" fill="#A04000"/>
+                <path d="M350 135 L370 115 L390 135 Z" fill="#78281F"/>
+                <path d="M0 170 Q350 110 700 160 T1000 140 L1000 240 L0 240 Z" fill="url(#hillGrad2)"/>
+                <path d="M-50 195 Q200 150 500 200 T1000 170 L1000 240 L-50 240 Z" fill="#1B5E20" opacity="0.85"/>
+              </svg>
+            </div>
+
+            <div className="hero-banner-left-text">
+              <span className="hero-greeting">{getGreeting()},</span>
+              <h1 className="hero-user-name">{profile?.full_name || 'Netturi Hitheshsena Reddy'}</h1>
+              <div className="hero-badge-pill">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
                 </svg>
+                <span>Active Farmer</span>
               </div>
             </div>
 
-            {/* CROP PROGRESS CARD */}
-            <div className="crop-progress-card">
-              <h3 className="card-section-title">Crop Progress</h3>
+            {/* EMBEDDED CROP PROGRESS CARD ON RIGHT SIDE OF HERO */}
+            <div className="hero-crop-progress-card">
               {selectedCrop ? (
                 <div className="progress-ring-container">
-                  <svg className="progress-ring-svg" width="110" height="110" viewBox="0 0 120 120">
+                  <svg className="progress-ring-svg" width="124" height="124" viewBox="0 0 120 120">
                     <circle className="progress-ring-bg" cx="60" cy="60" r="50"></circle>
                     <circle className="progress-ring-fill" cx="60" cy="60" r="50" style={{strokeDasharray: 314, strokeDashoffset: 314 * (1 - progressPercentage / 100)}}></circle>
                   </svg>
                   <div className="progress-ring-text">
                     <span className="progress-percent-val">{progressPercentage}%</span>
+                    <span className="progress-title-lbl">Crop Progress</span>
                     <span className="progress-days-lbl">Day {daysPassed} / {selectedCrop.total_duration_days}</span>
                   </div>
+                  <div className="ring-leaf-badge">🌱</div>
                 </div>
               ) : (
                 <div className="progress-empty-state">No Active Crop</div>
               )}
             </div>
-
           </div>
 
-      {/* ── WEATHER WARNING BANNER ROW ─────────────────────────────────── */}
-      <div className="weather-alert-banner-row">
-        <div className="alert-banner-content warning">
-          <div className="alert-banner-left">
-            <div className="alert-warning-icon-badge">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EA580C" strokeWidth="2.5">
-                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          {/* HIGH WIND WARNING ALERT BANNER */}
+          <div className="weather-alert-banner-row">
+            <div className="alert-banner-content warning">
+              <div className="alert-banner-left">
+                <div className="alert-warning-icon-badge">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2.5">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                </div>
+                <div className="alert-text-body">
+                  <span className="alert-heading">High Wind Warning</span>
+                  <span className="alert-detail-text">Wind Speed: 22 km/h • Risk of crop stress. Avoid chemical spraying due to drift.</span>
+                </div>
+              </div>
+              <svg className="alert-chevron-right" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2">
+                <polyline points="9 18 15 12 9 6"/>
               </svg>
             </div>
-            <div className="alert-text-body">
-              <span className="alert-heading">High Wind Warning</span>
-              <span className="alert-detail-text">Wind Speed: 22 km/h • Risk of crop stress. Avoid chemical spraying due to drift.</span>
-            </div>
           </div>
-          <svg className="alert-chevron-right" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <polyline points="9 18 15 12 9 6"/>
-          </svg>
-        </div>
-      </div>
-
 
           {/* ACTIVE CROP MAIN CARD */}
           {selectedCrop ? (
             <div className="card-box active-crop-main-card">
               <div className="crop-header-flex">
                 <div className="crop-sprout-icon-box">
-                  <span className="crop-emoji-icon">{getCropEmoji(selectedCrop.crop_name)}</span>
+                  <span className="crop-emoji-icon">🌾</span>
                 </div>
                 <div className="crop-title-group">
+                  <span className="crop-active-farmer-badge">👤 ACTIVE FARMER</span>
                   <h2 className="crop-name-heading">{selectedCrop.crop_name}</h2>
                   <div className="crop-stage-outline-pill">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
-                    </svg>
-                    <span>{currentStage?.title || 'Initialization'}</span>
+                    <span className="sprout-icon">🌿</span>
+                    <span>{currentStage?.title || 'Fertilizer Application'}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="crop-stats-three-cols">
+                <div className="crop-stat-item">
+                  <div className="stat-icon-circle green">📅</div>
+                  <div className="stat-text-meta">
+                    <span className="stat-lbl-sm">Expected Harvest</span>
+                    <span className="stat-val-bold">
+                      {new Date(new Date(cropStartDate).getTime() + selectedCrop.total_duration_days * 86400000).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    </span>
                   </div>
                 </div>
 
-                <div className="crop-stats-three-cols">
-                  <div className="crop-stat-item">
-                    <div className="stat-icon-circle green">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                        <line x1="16" y1="2" x2="16" y2="6"/>
-                        <line x1="8" y1="2" x2="8" y2="6"/>
-                        <line x1="3" y1="10" x2="21" y2="10"/>
-                      </svg>
-                    </div>
-                    <div className="stat-text-meta">
-                      <span className="stat-lbl-sm">EXPECTED HARVEST</span>
-                      <span className="stat-val-bold">
-                        {new Date(new Date(cropStartDate).getTime() + selectedCrop.total_duration_days * 86400000).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                      </span>
-                    </div>
+                <div className="crop-stat-item">
+                  <div className="stat-icon-circle green">🌱</div>
+                  <div className="stat-text-meta">
+                    <span className="stat-lbl-sm">Current Stage</span>
+                    <span className="stat-val-bold">{currentStage?.stage_id || 4} of {selectedCrop.stages?.length || 8} Stages</span>
                   </div>
+                </div>
 
-                  <div className="stat-v-divider"></div>
-
-                  <div className="crop-stat-item">
-                    <div className="stat-icon-circle green">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                      </svg>
-                    </div>
-                    <div className="stat-text-meta">
-                      <span className="stat-lbl-sm">CURRENT STAGE</span>
-                      <span className="stat-val-bold">{currentStage?.stage_id || 1} of {selectedCrop.stages.length} Stages</span>
-                    </div>
-                  </div>
-
-                  <div className="stat-v-divider"></div>
-
-                  <div className="crop-stat-item">
-                    <div className="stat-icon-circle green">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                        <line x1="16" y1="2" x2="16" y2="6"/>
-                        <line x1="8" y1="2" x2="8" y2="6"/>
-                        <line x1="3" y1="10" x2="21" y2="10"/>
-                      </svg>
-                    </div>
-                    <div className="stat-text-meta">
-                      <span className="stat-lbl-sm">TOTAL DAYS</span>
-                      <span className="stat-val-bold">Day {daysPassed} / {selectedCrop.total_duration_days}</span>
-                    </div>
+                <div className="crop-stat-item">
+                  <div className="stat-icon-circle green">⏱️</div>
+                  <div className="stat-text-meta">
+                    <span className="stat-lbl-sm">Total Days</span>
+                    <span className="stat-val-bold">Day {daysPassed} / {selectedCrop.total_duration_days}</span>
                   </div>
                 </div>
               </div>
 
               <div className="crop-card-actions-subrow">
                 <div className="left-btn-group">
-                  <button className="btn-solid-teal" onClick={() => navigate('/dashboard/calendar')}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{marginRight: '6px'}}>
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                      <circle cx="12" cy="12" r="3"/>
-                    </svg>
+                  <button className="btn-solid-dark-green" onClick={() => navigate('/dashboard/calendar')}>
+                    <span style={{marginRight: '6px'}}>👁️</span>
                     View Full Journey
                   </button>
                   {userCrops.length === 2 ? (
@@ -1133,19 +1125,13 @@ const ActionHome = ({ session }) => {
                     <button className="btn-outline-green" onClick={() => navigate('/add-crop')}>+ Add 2nd Crop</button>
                   )}
                   <button className="btn-outline-red" onClick={requestDelete} title="Move to Trash">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{marginRight: '6px'}}>
-                      <polyline points="3 6 5 6 21 6"/>
-                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                    </svg>
+                    <span style={{marginRight: '6px'}}>🗑️</span>
                     Delete Crop
                   </button>
                 </div>
 
                 <button className="recycle-bin-card-btn" onClick={() => setBinModalOpen(true)}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                    <path d="M3 3v5h5"/>
-                  </svg>
+                  <span className="recycle-emoji">♻️</span>
                   <div className="recycle-meta">
                     <span className="r-title">Recycle Bin</span>
                     <span className="r-sub">View deleted crops</span>
@@ -1160,7 +1146,7 @@ const ActionHome = ({ session }) => {
             <div className="card-box no-crop-state-card">
               <h3>Start Your Farming Journey</h3>
               <p>Register a crop or use AI recommendations to get started.</p>
-              <button className="btn-solid-teal" onClick={() => navigate('/add-crop')}>+ Add Crop</button>
+              <button className="btn-solid-dark-green" onClick={() => navigate('/add-crop')}>+ Add Crop</button>
             </div>
           )}
 
@@ -1172,28 +1158,24 @@ const ActionHome = ({ session }) => {
                   <h3 className="card-main-title">Today's Work</h3>
                   <span className="card-date-sub">{new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</span>
                 </div>
-                <span className="day-counter-pill">Day {daysPassed}</span>
+                <span className="day-counter-pill">📅 Day {daysPassed}</span>
               </div>
 
               <div className="weather-advisor-inner-banner">
                 <div className="advisor-warning-badge">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EA580C" strokeWidth="2.5">
-                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                    <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-                  </svg>
-                  <span>WEATHER ADVISOR (FARM: {profile?.location?.split(',')[0] || 'KAMAREDDY'})</span>
+                  <span className="sun-icon">☀️</span>
+                  <span>WEATHER ADVISOR (FARM: {profile?.location?.split(',')[0]?.toUpperCase() || 'KAMAREDDY'})</span>
                 </div>
                 <p className="advisor-desc-text">Avoid pesticide spraying today to prevent chemical drift.</p>
               </div>
 
               <div className="todays-tasks-list">
-                {/* Active Urgent Wind Task */}
                 <div className="task-row-item active-urgent">
                   <div className="task-left-check">
                     <div className="radio-check-circle"></div>
                     <div className="task-title-desc">
                       <h4 className="task-heading">
-                        🚩 Secure trellises, strappings, and crop support posts
+                        <span className="flag-icon">🚩</span> Secure trellises, strappings, and crop support posts
                         <span className="task-alert-tag">WIND ALERT</span>
                       </h4>
                       <p className="task-subtext">Wind speed is high (22 km/h). Prevent damage to seedlings and tall crop stalks.</p>
@@ -1206,12 +1188,13 @@ const ActionHome = ({ session }) => {
                   </div>
                 </div>
 
-                {/* Past Due Task */}
                 <div className="task-row-item past-due">
                   <div className="task-left-check">
                     <div className="radio-check-circle"></div>
                     <div className="task-title-desc">
-                      <h4 className="task-heading">Apply basal dose of NPK</h4>
+                      <h4 className="task-heading">
+                        <span className="leaf-icon">🌿</span> Apply basal dose of NPK
+                      </h4>
                     </div>
                   </div>
                   <div className="task-right-meta">
@@ -1239,7 +1222,7 @@ const ActionHome = ({ session }) => {
         {/* ── RIGHT COLUMN ────────────────────────────────────────────── */}
         <div className="dashboard-right-col">
           
-          {/* 1. LIVE WEATHER WIDGET CARD */}
+          {/* 1. SKY-BLUE LIVE WEATHER WIDGET CARD */}
           <div className="weather-widget-card">
             <div className="weather-widget-top">
               <div className="weather-location-wrap">
@@ -1257,19 +1240,19 @@ const ActionHome = ({ session }) => {
             <div className="weather-widget-body">
               <div className="weather-temp-group">
                 <span className="weather-temp-val">
-                  {displayWeather?.weather ? Math.round(displayWeather.weather.main.temp) : 25}°
+                  {displayWeather?.weather ? Math.round(displayWeather.weather.main.temp) : 25}°<span className="unit-c">C</span>
                 </span>
                 <div className="weather-desc-group">
                   <span className="weather-main-cond">{displayWeather?.weather?.weather[0]?.main || 'Clouds'}</span>
                   <span className="weather-sub-meta">
-                    {displayWeather?.weather?.weather[0]?.description || 'Few Clouds'} • Feels like {displayWeather?.weather ? Math.round(displayWeather.weather.main.feels_like) : 23}° • AQI 32 - Good
+                    {displayWeather?.weather?.weather[0]?.description || 'Few Clouds'} • Feels like {displayWeather?.weather ? Math.round(displayWeather.weather.main.feels_like) : 23}° • AQI 32 – Good
                   </span>
                 </div>
               </div>
               <div className="weather-icon-illustration">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="10" r="5" fill="#FBBF24"/>
-                  <path d="M19.5 17.5A3.5 3.5 0 0 0 21 14c0-2.5-2-4.5-4.5-4.5-.4-3.5-3-6-6.5-6-3.5 0-6.5 2.5-6.5 6C1.5 10 0 12 0 14.5 0 17 2 19 4.5 19h12" fill="#FFFFFF" opacity="0.9"/>
+                <svg width="72" height="72" viewBox="0 0 24 24" fill="none">
+                  <circle cx="15" cy="9" r="4.5" fill="#FBBF24"/>
+                  <path d="M19.5 17.5A3.5 3.5 0 0 0 21 14c0-2.5-2-4.5-4.5-4.5-.4-3.5-3-6-6.5-6-3.5 0-6.5 2.5-6.5 6C1.5 10 0 12 0 14.5 0 17 2 19 4.5 19h12" fill="#FFFFFF" opacity="0.95"/>
                 </svg>
               </div>
             </div>
@@ -1277,25 +1260,25 @@ const ActionHome = ({ session }) => {
             <div className="weather-forecast-hourly-bar">
               {displayWeather?.forecast ? displayWeather.forecast.slice(0, 5).map((f, idx) => (
                 <div key={idx} className="forecast-hour-item">
-                  <span className="f-hour-lbl">{idx === 0 ? 'NOW' : formatForecastHour(f.dt)}</span>
+                  <span className="f-hour-lbl">{idx === 0 ? 'Now' : formatForecastHour(f.dt)}</span>
                   <span className="f-hour-icon">{getForecastIcon(f.weather[0]?.main, f.wind?.speed, f.dt)}</span>
                   <span className="f-hour-temp">{Math.round(f.main.temp)}°</span>
                 </div>
               )) : (
                 <>
-                  <div className="forecast-hour-item"><span className="f-hour-lbl">NOW</span><span className="f-hour-temp">25°</span></div>
-                  <div className="forecast-hour-item"><span className="f-hour-lbl">8 AM</span><span className="f-hour-temp">25°</span></div>
-                  <div className="forecast-hour-item"><span className="f-hour-lbl">11 AM</span><span className="f-hour-temp">26°</span></div>
-                  <div className="forecast-hour-item"><span className="f-hour-lbl">2 PM</span><span className="f-hour-temp">27°</span></div>
-                  <div className="forecast-hour-item"><span className="f-hour-lbl">5 PM</span><span className="f-hour-temp">28°</span></div>
+                  <div className="forecast-hour-item"><span className="f-hour-lbl">Now</span><span className="f-hour-icon">☁️</span><span className="f-hour-temp">25°</span></div>
+                  <div className="forecast-hour-item"><span className="f-hour-lbl">8 AM</span><span className="f-hour-icon">🌬️</span><span className="f-hour-temp">25°</span></div>
+                  <div className="forecast-hour-item"><span className="f-hour-lbl">11 AM</span><span className="f-hour-icon">🌬️</span><span className="f-hour-temp">26°</span></div>
+                  <div className="forecast-hour-item"><span className="f-hour-lbl">2 PM</span><span className="f-hour-icon">🌧️</span><span className="f-hour-temp">27°</span></div>
+                  <div className="forecast-hour-item"><span className="f-hour-lbl">5 PM</span><span className="f-hour-icon">🌧️</span><span className="f-hour-temp">28°</span></div>
                 </>
               )}
             </div>
           </div>
 
-          {/* 2. 4 QUICK WEATHER METRICS */}
+          {/* 2. 5 QUICK WEATHER METRICS CARD */}
           <div className="card-box weather-quick-metrics-card">
-            <div className="metrics-4grid">
+            <div className="metrics-5grid">
               <div className="metric-box-item">
                 <span className="m-icon red">🌡️</span>
                 <span className="m-val">{displayWeather?.weather ? Math.round(displayWeather.weather.main.temp) : 25}°C</span>
@@ -1308,8 +1291,13 @@ const ActionHome = ({ session }) => {
               </div>
               <div className="metric-box-item">
                 <span className="m-icon cyan">🌬️</span>
-                <span className="m-val">{displayWeather?.weather ? Math.round(displayWeather.weather.wind.speed * 3.6) : 21} km/h</span>
+                <span className="m-val">{displayWeather?.weather ? Math.round(displayWeather.weather.wind.speed * 3.6) : 21} <span className="u-unit">km/h</span></span>
                 <span className="m-lbl">Wind</span>
+              </div>
+              <div className="metric-box-item">
+                <span className="m-icon blue">🌧️</span>
+                <span className="m-val">0%</span>
+                <span className="m-lbl">Rain</span>
               </div>
               <div className="metric-box-item">
                 <span className="m-icon amber">☀️</span>
@@ -1356,11 +1344,11 @@ const ActionHome = ({ session }) => {
           {/* 4. PROFIT SNAPSHOT CARD */}
           <div className="card-box profit-snapshot-card">
             <div className="profit-card-header">
-              <h3 className="card-main-title">Profit Snapshot</h3>
-              <div className="profit-crop-tag-flex">
-                <span className="profit-crop-name">{selectedCrop ? selectedCrop.crop_name : 'Paddy(Basmati)'}</span>
-                <span className="yield-impact-badge">+0.3% Yield Impact</span>
+              <div>
+                <h3 className="card-main-title">Profit Snapshot</h3>
+                <span className="profit-crop-sub">{selectedCrop ? selectedCrop.crop_name : 'Paddy(Basmati)'}</span>
               </div>
+              <span className="yield-impact-badge">+0.3% Yield Impact</span>
             </div>
 
             <div className="profit-main-amount-block">
@@ -1382,6 +1370,12 @@ const ActionHome = ({ session }) => {
                 <span className="pm-val">₹20,595</span>
               </div>
             </div>
+
+            <div className="profit-wave-accent">
+              <svg viewBox="0 0 400 30" preserveAspectRatio="none" style={{width: '100%', height: '30px', display: 'block'}}>
+                <path d="M0 15 Q100 0 200 15 T400 15 L400 30 L0 30 Z" fill="rgba(5, 150, 105, 0.08)"/>
+              </svg>
+            </div>
           </div>
 
           {/* 5. CROP JOURNEY CARD */}
@@ -1390,16 +1384,25 @@ const ActionHome = ({ session }) => {
               <h3 className="card-main-title" style={{marginBottom: '20px'}}>Crop Journey</h3>
               
               <div className="journey-pipeline-nodes-row">
-                {selectedCrop.stages.map((stage, idx) => {
-                  const status = stage.stage_id < currentStage?.stage_id ? 'done' : (stage.stage_id === currentStage?.stage_id ? 'active' : 'pending');
+                {[
+                  { id: 1, name: 'Land Prep.' },
+                  { id: 2, name: 'Seed Prep.' },
+                  { id: 3, name: 'Transplant.' },
+                  { id: 4, name: 'Fertilizer...' },
+                  { id: 5, name: 'Water Man.' },
+                  { id: 6, name: 'Pest & Dis.' },
+                  { id: 7, name: 'Harvesting' },
+                  { id: 8, name: 'Post Harv.' }
+                ].map((stg) => {
+                  const status = stg.id < (currentStage?.stage_id || 4) ? 'done' : (stg.id === (currentStage?.stage_id || 4) ? 'active' : 'pending');
                   return (
-                    <div key={idx} className={`node-item ${status}`} onClick={() => setExpandedStage(stage.stage_id)}>
+                    <div key={stg.id} className={`node-item ${status}`}>
                       <div className="node-circle">
                         {status === 'done' ? (
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
-                        ) : stage.stage_id}
+                        ) : stg.id}
                       </div>
-                      <span className="node-label">{stage.title.slice(0, 8)}...</span>
+                      <span className="node-label">{stg.name}</span>
                     </div>
                   );
                 })}
@@ -1410,37 +1413,38 @@ const ActionHome = ({ session }) => {
                   <h4 className="stage-title">{currentStage?.title || 'Fertilizer Application'} — In Progress</h4>
                   <span className="stage-dates">Day 37 — Day 71</span>
                 </div>
-                <div className="stage-progress-bar-wrap" style={{height: '6px', background: '#E5E7EB', borderRadius: '999px', margin: '12px 0 6px', overflow: 'hidden'}}>
-                  <div className="stage-progress-fill" style={{width: '37%', height: '100%', background: '#059669', borderRadius: '999px'}}></div>
+                <div className="stage-progress-bar-wrap">
+                  <div className="stage-progress-fill" style={{width: '37%'}}></div>
                 </div>
-                <span className="stage-progress-lbl" style={{fontSize: '11px', color: 'var(--text-sub)'}}>37% of stage complete</span>
+                <span className="stage-progress-lbl">37% of stage complete</span>
 
-                <div className="stage-substeps-checklist" style={{marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px'}}>
-                  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12px'}}>
-                    <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
-                      <span style={{width: '12px', height: '12px', borderRadius: '50%', border: '1.5px solid #9CA3AF'}}></span>
+                <div className="stage-substeps-checklist">
+                  <div className="checklist-subitem">
+                    <div className="check-left">
+                      <span className="circle-radio"></span>
                       <span>Apply basal dose of NPK</span>
                     </div>
-                    <span style={{color: 'var(--text-sub)'}}>Day 37 (Jul 21)</span>
+                    <span className="subitem-date">Day 37 (Jul 21)</span>
                   </div>
-                  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12px'}}>
-                    <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
-                      <span style={{width: '12px', height: '12px', borderRadius: '50%', border: '1.5px solid #9CA3AF'}}></span>
+                  <div className="checklist-subitem">
+                    <div className="check-left">
+                      <span className="circle-radio"></span>
                       <span>Apply top dressing of Urea in splits</span>
                     </div>
-                    <span style={{color: 'var(--text-sub)'}}>Day 54 (Aug 7)</span>
+                    <span className="subitem-date">Day 54 (Aug 7)</span>
                   </div>
-                  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12px'}}>
-                    <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
-                      <span style={{width: '12px', height: '12px', borderRadius: '50%', border: '1.5px solid #9CA3AF'}}></span>
+                  <div className="checklist-subitem">
+                    <div className="check-left">
+                      <span className="circle-radio"></span>
                       <span>Apply Zinc sulfate to prevent Khaira disease</span>
                     </div>
-                    <span style={{color: 'var(--text-sub)'}}>Day 71 (Aug 24)</span>
+                    <span className="subitem-date">Day 71 (Aug 24)</span>
                   </div>
                 </div>
               </div>
             </div>
           )}
+
         </div>
 
       </div>
