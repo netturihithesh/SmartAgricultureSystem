@@ -3885,38 +3885,37 @@ body {
 
 /* 5 Quick Weather Metrics Card */
 .weather-quick-metrics-card {
-  padding: 16px 20px;
+  padding: 16px;
   margin-bottom: 20px;
 }
 
 .metrics-5grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 12px;
-  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(95px, 1fr));
+  gap: 10px;
 }
 
 .metric-box-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
-  background: #FFFFFF;
-  border-right: 1px solid #F3F4F6;
-  padding-right: 8px;
-}
-
-.metric-box-item:last-child {
-  border-right: none;
+  text-align: center;
+  gap: 4px;
+  padding: 10px 6px;
+  background: #F9FAFB;
+  border-radius: 12px;
+  border: 1px solid #F3F4F6;
+  min-width: 0;
 }
 
 .m-icon-circle {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 16px;
   flex-shrink: 0;
 }
 
@@ -3929,10 +3928,12 @@ body {
 .m-text-meta {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  overflow: hidden;
 }
 
 .m-val {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 800;
   color: #111827;
   white-space: nowrap;
@@ -3940,12 +3941,12 @@ body {
 }
 
 .u-unit {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
 }
 
 .m-lbl {
-  font-size: 11px;
+  font-size: 10px;
   color: #6B7280;
   font-weight: 500;
   white-space: nowrap;
@@ -3954,7 +3955,7 @@ body {
 
 /* Soil & Irrigation Summary Card */
 .soil-summary-card {
-  padding: 16px 20px;
+  padding: 0;
   margin-bottom: 20px;
   background: transparent;
   border: none;
@@ -3963,36 +3964,36 @@ body {
 
 .soil-summary-4grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
 }
 
 .soil-card-item {
   background: #FFFFFF;
   border: 1px solid #EAEFE7;
-  border-radius: 16px;
-  padding: 16px;
+  border-radius: 14px;
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 14px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+  gap: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
 }
 
 .soil-card-top {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .s-icon-box {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 16px;
   flex-shrink: 0;
 }
 
@@ -4002,17 +4003,18 @@ body {
 .s-text {
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .s-lbl {
-  font-size: 11px;
+  font-size: 10px;
   color: #6B7280;
   font-weight: 500;
   white-space: nowrap;
 }
 
 .s-val {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 800;
   margin-top: 1px;
   white-space: nowrap;
@@ -4023,7 +4025,7 @@ body {
 .s-val.amber { color: #D97706; }
 
 .soil-progress-bar {
-  height: 4px;
+  height: 3px;
   border-radius: 999px;
   width: 100%;
 }
