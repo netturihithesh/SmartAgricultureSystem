@@ -1335,8 +1335,10 @@ const ActionHome = ({ session }) => {
         {/* ── RIGHT COLUMN ────────────────────────────────────────────── */}
         <div className="dashboard-right-col">
           
-          {/* 1. SKY-BLUE LIVE WEATHER WIDGET CARD */}
-          <div className="weather-widget-card">
+          {/* ── UNIFIED WEATHER + METRICS + SOIL CARD ── */}
+          <div className="unified-weather-card">
+
+            {/* TOP: location + live pill */}
             <div className="weather-widget-top">
               <div className="weather-location-wrap">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -1350,6 +1352,7 @@ const ActionHome = ({ session }) => {
               </div>
             </div>
 
+            {/* BODY: big temperature + cloud/sun illustration */}
             <div className="weather-widget-body">
               <div className="weather-temp-group">
                 <span className="weather-temp-val">
@@ -1363,120 +1366,105 @@ const ActionHome = ({ session }) => {
                 </div>
               </div>
               <div className="weather-icon-illustration">
-                <svg width="72" height="72" viewBox="0 0 24 24" fill="none">
-                  <circle cx="15" cy="9" r="4.5" fill="#FBBF24"/>
-                  <path d="M19.5 17.5A3.5 3.5 0 0 0 21 14c0-2.5-2-4.5-4.5-4.5-.4-3.5-3-6-6.5-6-3.5 0-6.5 2.5-6.5 6C1.5 10 0 12 0 14.5 0 17 2 19 4.5 19h12" fill="#FFFFFF" opacity="0.95"/>
+                <svg width="90" height="90" viewBox="0 0 80 80" fill="none">
+                  <circle cx="54" cy="26" r="16" fill="#FBBF24" opacity="0.95"/>
+                  <circle cx="54" cy="26" r="11" fill="#FDE68A"/>
+                  <ellipse cx="34" cy="50" rx="22" ry="14" fill="white" opacity="0.97"/>
+                  <ellipse cx="22" cy="54" rx="14" ry="10" fill="white" opacity="0.97"/>
+                  <ellipse cx="48" cy="54" rx="16" ry="10" fill="white" opacity="0.97"/>
+                  <rect x="8" y="50" width="52" height="14" rx="7" fill="white" opacity="0.97"/>
+                  <ellipse cx="30" cy="46" rx="14" ry="9" fill="white" opacity="0.6"/>
                 </svg>
               </div>
             </div>
 
-            <div className="weather-forecast-hourly-bar">
+            {/* WHITE PANEL 1: Hourly forecast */}
+            <div className="unified-inner-panel forecast-inner-panel">
               {displayWeather?.forecast ? displayWeather.forecast.slice(0, 5).map((f, idx) => (
-                <div key={idx} className="forecast-hour-item">
-                  <span className="f-hour-lbl">{idx === 0 ? 'Now' : formatForecastHour(f.dt)}</span>
-                  <span className="f-hour-icon">{getForecastIcon(f.weather[0]?.main, f.wind?.speed, f.dt)}</span>
-                  <span className="f-hour-temp">{Math.round(f.main.temp)}°</span>
+                <div key={idx} className="fhu-item">
+                  <span className="fhu-lbl">{idx === 0 ? 'Now' : formatForecastHour(f.dt)}</span>
+                  <span className="fhu-icon">{getForecastIcon(f.weather[0]?.main, f.wind?.speed, f.dt)}</span>
+                  <span className="fhu-temp">{Math.round(f.main.temp)}°</span>
                 </div>
               )) : (
                 <>
-                  <div className="forecast-hour-item"><span className="f-hour-lbl">Now</span><span className="f-hour-icon">☁️</span><span className="f-hour-temp">25°</span></div>
-                  <div className="forecast-hour-item"><span className="f-hour-lbl">8 AM</span><span className="f-hour-icon">🌬️</span><span className="f-hour-temp">25°</span></div>
-                  <div className="forecast-hour-item"><span className="f-hour-lbl">11 AM</span><span className="f-hour-icon">🌬️</span><span className="f-hour-temp">26°</span></div>
-                  <div className="forecast-hour-item"><span className="f-hour-lbl">2 PM</span><span className="f-hour-icon">🌧️</span><span className="f-hour-temp">27°</span></div>
-                  <div className="forecast-hour-item"><span className="f-hour-lbl">5 PM</span><span className="f-hour-icon">🌧️</span><span className="f-hour-temp">28°</span></div>
+                  <div className="fhu-item"><span className="fhu-lbl">Now</span><span className="fhu-icon">☁️</span><span className="fhu-temp">25°</span></div>
+                  <div className="fhu-item"><span className="fhu-lbl">8 AM</span><span className="fhu-icon">🌬️</span><span className="fhu-temp">25°</span></div>
+                  <div className="fhu-item"><span className="fhu-lbl">11 AM</span><span className="fhu-icon">🌬️</span><span className="fhu-temp">26°</span></div>
+                  <div className="fhu-item"><span className="fhu-lbl">2 PM</span><span className="fhu-icon">🌧️</span><span className="fhu-temp">27°</span></div>
+                  <div className="fhu-item"><span className="fhu-lbl">5 PM</span><span className="fhu-icon">🌧️</span><span className="fhu-temp">28°</span></div>
                 </>
               )}
             </div>
-          </div>
 
-          {/* 2. 5 QUICK WEATHER METRICS CARD */}
-          <div className="card-box weather-quick-metrics-card">
-            <div className="metrics-5grid">
-              <div className="metric-box-item">
-                <div className="m-icon-circle red">🌡️</div>
-                <div className="m-text-meta">
-                  <span className="m-val">{displayWeather?.weather ? Math.round(displayWeather.weather.main.temp) : 25}°C</span>
-                  <span className="m-lbl">Temperature</span>
-                </div>
+            {/* WHITE PANEL 2: 5 weather metrics */}
+            <div className="unified-inner-panel metrics-inner-panel">
+              <div className="um-item">
+                <div className="um-icon red">🌡️</div>
+                <span className="um-val">{displayWeather?.weather ? Math.round(displayWeather.weather.main.temp) : 25}°C</span>
+                <span className="um-lbl">Temp</span>
               </div>
-              <div className="metric-box-item">
-                <div className="m-icon-circle blue">💧</div>
-                <div className="m-text-meta">
-                  <span className="m-val">{displayWeather?.weather ? displayWeather.weather.main.humidity : 81}%</span>
-                  <span className="m-lbl">Humidity</span>
-                </div>
+              <div className="um-item">
+                <div className="um-icon blue">💧</div>
+                <span className="um-val">{displayWeather?.weather ? displayWeather.weather.main.humidity : 81}%</span>
+                <span className="um-lbl">Humidity</span>
               </div>
-              <div className="metric-box-item">
-                <div className="m-icon-circle cyan">🌬️</div>
-                <div className="m-text-meta">
-                  <span className="m-val">{displayWeather?.weather ? Math.round(displayWeather.weather.wind.speed * 3.6) : 21} <span className="u-unit">km/h</span></span>
-                  <span className="m-lbl">Wind</span>
-                </div>
+              <div className="um-item">
+                <div className="um-icon cyan">🌬️</div>
+                <span className="um-val">{displayWeather?.weather ? Math.round(displayWeather.weather.wind.speed * 3.6) : 21}<span className="um-unit"> km/h</span></span>
+                <span className="um-lbl">Wind</span>
               </div>
-              <div className="metric-box-item">
-                <div className="m-icon-circle purple">🌧️</div>
-                <div className="m-text-meta">
-                  <span className="m-val">0%</span>
-                  <span className="m-lbl">Rain Chance</span>
-                </div>
+              <div className="um-item">
+                <div className="um-icon purple">🌧️</div>
+                <span className="um-val">0%</span>
+                <span className="um-lbl">Rain</span>
               </div>
-              <div className="metric-box-item">
-                <div className="m-icon-circle amber">☀️</div>
-                <div className="m-text-meta">
-                  <span className="m-val">4</span>
-                  <span className="m-lbl">UV Index</span>
-                </div>
+              <div className="um-item">
+                <div className="um-icon amber">☀️</div>
+                <span className="um-val">4</span>
+                <span className="um-lbl">UV Index</span>
               </div>
             </div>
-          </div>
 
-          {/* 3. SOIL & IRRIGATION SUMMARY CARD */}
-          <div className="card-box soil-summary-card">
-            <div className="soil-summary-4grid">
-              <div className="soil-card-item">
-                <div className="soil-card-top">
-                  <div className="s-icon-box green">🌱</div>
-                  <div className="s-text">
-                    <span className="s-lbl">Soil Moisture</span>
-                    <span className="s-val green">Good</span>
-                  </div>
+            {/* WHITE PANEL 3: 4 soil items in a single row with dividers */}
+            <div className="unified-inner-panel soil-inner-panel">
+              <div className="sui-item">
+                <div className="sui-icon green">🌱</div>
+                <div className="sui-text">
+                  <span className="sui-lbl">Soil Moisture</span>
+                  <span className="sui-val green">Good</span>
                 </div>
-                <div className="soil-progress-bar green"></div>
+                <div className="sui-bar green"></div>
               </div>
-
-              <div className="soil-card-item">
-                <div className="soil-card-top">
-                  <div className="s-icon-box blue">💧</div>
-                  <div className="s-text">
-                    <span className="s-lbl">Irrigation Need</span>
-                    <span className="s-val blue">Moderate</span>
-                  </div>
+              <div className="sui-divider"></div>
+              <div className="sui-item">
+                <div className="sui-icon blue">💧</div>
+                <div className="sui-text">
+                  <span className="sui-lbl">Irrigation Need</span>
+                  <span className="sui-val blue">Moderate</span>
                 </div>
-                <div className="soil-progress-bar blue"></div>
+                <div className="sui-bar blue"></div>
               </div>
-
-              <div className="soil-card-item">
-                <div className="soil-card-top">
-                  <div className="s-icon-box green">🌾</div>
-                  <div className="s-text">
-                    <span className="s-lbl">Crop Growth</span>
-                    <span className="s-val green">+1.0%</span>
-                  </div>
+              <div className="sui-divider"></div>
+              <div className="sui-item">
+                <div className="sui-icon yellow">🌾</div>
+                <div className="sui-text">
+                  <span className="sui-lbl">Crop Growth</span>
+                  <span className="sui-val green">+1.0%</span>
                 </div>
-                <div className="soil-progress-bar green"></div>
+                <div className="sui-bar green"></div>
               </div>
-
-              <div className="soil-card-item">
-                <div className="soil-card-top">
-                  <div className="s-icon-box green">🐛</div>
-                  <div className="s-text">
-                    <span className="s-lbl">Pest Risk</span>
-                    <span className="s-val green">Low</span>
-                  </div>
+              <div className="sui-divider"></div>
+              <div className="sui-item">
+                <div className="sui-icon teal">🐛</div>
+                <div className="sui-text">
+                  <span className="sui-lbl">Pest Risk</span>
+                  <span className="sui-val green">Low</span>
                 </div>
-                <div className="soil-progress-bar green"></div>
+                <div className="sui-bar green"></div>
               </div>
             </div>
+
           </div>
 
           {/* 4. PROFIT SNAPSHOT CARD */}

@@ -276,7 +276,243 @@ body {
   margin-top: 2px;
 }
 
-/* Weather Widget Card */
+/* ── UNIFIED WEATHER CARD (weather + metrics + soil merged) ──────── */
+.unified-weather-card {
+  background: linear-gradient(180deg, #4A90E2 0%, #7BB8F5 40%, #B8D9F8 70%, #F0F7FF 100%);
+  border-radius: 24px;
+  padding: 22px 20px 16px;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 8px 32px rgba(74, 144, 226, 0.25);
+  margin-bottom: 20px;
+}
+
+/* Reuse existing widget-top / widget-body / location styles inside unified card */
+.unified-weather-card .weather-widget-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.unified-weather-card .weather-location-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.unified-weather-card .weather-live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255,255,255,0.4);
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #fff;
+}
+
+.unified-weather-card .weather-widget-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 4px 0 0;
+}
+
+.unified-weather-card .weather-temp-val {
+  font-size: 56px;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1;
+}
+
+.unified-weather-card .unit-c {
+  font-size: 28px;
+}
+
+.unified-weather-card .weather-desc-group {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+}
+
+.unified-weather-card .weather-main-cond {
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.unified-weather-card .weather-sub-meta {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.88);
+  margin-top: 3px;
+  line-height: 1.5;
+}
+
+/* White inner panels */
+.unified-inner-panel {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 14px 16px;
+}
+
+/* Forecast panel */
+.forecast-inner-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fhu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.fhu-lbl {
+  font-size: 12px;
+  font-weight: 700;
+  color: #2563EB;
+}
+
+.fhu-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.fhu-temp {
+  font-size: 13px;
+  font-weight: 800;
+  color: #1F2937;
+}
+
+/* Metrics panel */
+.metrics-inner-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+}
+
+.um-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.um-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.um-icon.red    { background: #FEF2F2; }
+.um-icon.blue   { background: #EFF6FF; }
+.um-icon.cyan   { background: #ECFEFF; }
+.um-icon.purple { background: #F5F3FF; }
+.um-icon.amber  { background: #FFFBEB; }
+
+.um-val {
+  font-size: 14px;
+  font-weight: 800;
+  color: #111827;
+  white-space: nowrap;
+}
+
+.um-unit {
+  font-size: 10px;
+  font-weight: 600;
+  color: #6B7280;
+}
+
+.um-lbl {
+  font-size: 10px;
+  color: #6B7280;
+  font-weight: 500;
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* Soil panel – 4 items in a single row */
+.soil-inner-panel {
+  display: flex;
+  align-items: stretch;
+  padding: 12px 10px;
+  gap: 0;
+}
+
+.sui-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 0 8px;
+  position: relative;
+}
+
+.sui-icon {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.sui-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.sui-lbl {
+  font-size: 10px;
+  color: #6B7280;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.sui-val {
+  font-size: 13px;
+  font-weight: 800;
+  margin-top: 1px;
+}
+
+.sui-val.green { color: #059669; }
+.sui-val.blue  { color: #2563EB; }
+
+.sui-bar {
+  height: 3px;
+  border-radius: 999px;
+  width: 100%;
+  margin-top: 6px;
+}
+
+.sui-bar.green { background: #059669; }
+.sui-bar.blue  { background: #2563EB; }
+
+.sui-divider {
+  width: 1px;
+  background: #E5E7EB;
+  align-self: stretch;
+  flex-shrink: 0;
+}
+
+/* Keep old weather-widget-card for backward compat but de-prioritise */
 .weather-widget-card {
   background: linear-gradient(135deg, #2563EB 0%, #3B82F6 50%, #60A5FA 100%);
   border-radius: 20px;
