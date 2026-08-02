@@ -55,6 +55,25 @@ const adjustStageRanges = (crop) => {
     }
   }
 
+  // Populate substep day numbers evenly across each stage's [start_day, end_day] range if not explicitly provided
+  for (const s of tempStages) {
+    if (s.substeps && s.substeps.length > 0) {
+      const len = s.substeps.length;
+      const start = s.start_day || 1;
+      const end = s.end_day || start;
+      const span = Math.max(0, end - start);
+
+      s.substeps = s.substeps.map((sub, idx) => {
+        if (typeof sub === 'object' && sub.day !== null && sub.day !== undefined && !isNaN(sub.day)) {
+          return sub;
+        }
+        const taskText = typeof sub === 'object' ? sub.task : sub;
+        const calcDay = len <= 1 ? start : Math.round(start + (idx * span) / (len - 1));
+        return { task: taskText, day: calcDay };
+      });
+    }
+  }
+
   return { ...crop, stages: tempStages };
 };
 
@@ -1735,7 +1754,15 @@ const ActionHome = ({ session }) => {
                         const isSubDone = isPast || (substepStatus && substepStatus[`${activeStgObj.stage_id}_${idx}`]);
                         const subTask = typeof sub === 'object' ? sub.task : sub;
                         const subDayNum = typeof sub === 'object' ? sub.day : null;
-                        const targetDay = subDayNum || activeStgObj.start_day;
+                        
+                        let targetDay = subDayNum;
+                        if (targetDay === null || targetDay === undefined || isNaN(targetDay)) {
+                          const totalSubs = activeStgObj.substeps.length;
+                          const start = activeStgObj.start_day || 1;
+                          const end = activeStgObj.end_day || start;
+                          const span = Math.max(0, end - start);
+                          targetDay = totalSubs <= 1 ? start : Math.round(start + (idx * span) / (totalSubs - 1));
+                        }
 
                         let subDateFormatted = `Day ${targetDay}`;
                         if (cropStartDate && !isNaN(new Date(cropStartDate).getTime())) {
