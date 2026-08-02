@@ -181,77 +181,58 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
                 <Typography variant="caption" sx={{ color: 'var(--text-sub)', fontSize: '9px' }}>
                   DAY {dayNum}
                 </Typography>
-                
-                {/* Task Indicators */}
-                <Box sx={{ position: 'absolute', bottom: '6px', display: 'flex', gap: '4px' }}>
-                  {hasTask && !allDone && <Box sx={{ width: 5, height: 5, borderRadius: '50%', bgcolor: isPast ? 'var(--danger-red)' : 'var(--warning-yellow)' }} />}
-                  {allDone && <Box sx={{ width: 5, height: 5, borderRadius: '50%', bgcolor: 'var(--neon-green)' }} />}
-                </Box>
               </Box>
             );
           })}
         </Box>
 
         <IconButton 
-          onClick={() => handleScroll(1)} 
-          sx={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', zIndex: 2, bgcolor: 'var(--card-bg)', border: '1px solid var(--card-border)', '&:hover': { bgcolor: 'var(--card-border)' } }} 
-          size="small"
+          size="small" 
+          onClick={() => { if (scrollRef.current) scrollRef.current.scrollBy({ left: 140, behavior: 'smooth' }); }}
+          sx={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', zIndex: 2, bgcolor: '#FFFFFF', border: '1px solid #E2E8F0', boxShadow: '0 2px 6px rgba(0,0,0,0.05)', '&:hover': { bgcolor: '#F1F5F9' } }}
         >
           <ChevronRight />
         </IconButton>
       </Box>
 
-      {/* Day Details Area */}
-      <Box sx={{ p: '24px', minHeight: '130px' }}>
-         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
-           <Box>
-             <Typography variant="subtitle2" sx={{ color: 'var(--neon-green)', fontWeight: 800, fontSize: '14px', mb: 0.2 }}>
+      {/* Day Details Area & View Full Journey Button */}
+      <Box sx={{ p: '20px 24px' }}>
+         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2, flexWrap: 'nowrap', gap: 1.5 }}>
+           <Box sx={{ minWidth: 0 }}>
+             <Typography variant="subtitle2" sx={{ color: '#059669', fontWeight: 800, fontSize: '14px', mb: 0.2, whiteSpace: 'nowrap' }}>
                 DAY {selectedDay} / {totalDays}
              </Typography>
-             <Typography variant="caption" sx={{ color: 'var(--text-sub)', display: 'block', fontWeight: 500 }}>
-                {new Date(startMs + (selectedDay - 1) * 86400000).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+             <Typography variant="caption" sx={{ color: '#64748B', display: 'block', fontWeight: 600, fontSize: '12px', whiteSpace: 'nowrap' }}>
+                {new Date(startMs + (selectedDay - 1) * 86400000).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
              </Typography>
            </Box>
-           <Box sx={{ px: 1.5, py: 0.5, border: '1px solid var(--card-border)', borderRadius: '20px', bgcolor: 'rgba(255,255,255,0.02)' }}>
-             <Typography variant="caption" sx={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '11px' }}>
-               {selectedStage?.title} Stage
+           <Box sx={{ px: 1.5, py: 0.6, border: '1px solid #DCFCE7', borderRadius: '20px', bgcolor: '#F0FDF4', flexShrink: 0 }}>
+             <Typography variant="caption" sx={{ color: '#15803D', fontWeight: 700, fontSize: '12px', whiteSpace: 'nowrap' }}>
+               {selectedStage?.title || 'Fertilizer Application'} Stage
              </Typography>
            </Box>
          </Stack>
 
-         {selectedTasks.length > 0 ? (
-           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-             {selectedTasks.map((t, idx) => {
-               const substepStatusObj = substepStatus || {};
-               const isDone = substepStatusObj[`${t.stage_id}_${t.i}`];
-               
-               return (
-                 <Box key={idx} sx={{ display: 'flex', gap: 2, alignItems: 'flex-start', p: 2, bgcolor: isDone ? 'rgba(57, 255, 106, 0.05)' : 'rgba(255,255,255,0.02)', borderRadius: '12px', border: `1px solid ${isDone ? 'rgba(57, 255, 106, 0.2)' : 'var(--card-border)'}`, transition: 'all 0.2s' }}>
-                   {isDone ? (
-                     <CheckCircle sx={{ color: 'var(--neon-green)', fontSize: 22, mt: '-2px' }} />
-                   ) : (
-                     <Box sx={{ width: 20, height: 20, borderRadius: '50%', border: '2px solid var(--card-border)', mt: '2px', flexShrink: 0 }} />
-                   )}
-                   <Box>
-                     <Typography variant="body2" sx={{ color: isDone ? 'var(--text-sub)' : 'var(--text-main)', textDecoration: isDone ? 'line-through' : 'none', fontWeight: 600, fontSize: '14px', lineHeight: 1.4 }}>
-                       {t.sub}
-                     </Typography>
-                     {isDone && (
-                       <Typography variant="caption" sx={{ color: 'var(--neon-green)', mt: 0.5, display: 'block', fontWeight: 600 }}>
-                         ✓ Completed on {new Date(startMs + (selectedDay - 1) * 86400000).toLocaleDateString()}
-                       </Typography>
-                     )}
-                   </Box>
-                 </Box>
-               );
-             })}
-           </Box>
-         ) : (
-           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80px', flexDirection: 'column', bgcolor: 'rgba(255,255,255,0.01)', borderRadius: '12px', border: '1px dashed var(--card-border)' }}>
-              <Typography variant="body2" sx={{ color: 'var(--text-main)', fontWeight: 600, mb: 0.5 }}>No major tasks scheduled</Typography>
-              <Typography variant="caption" sx={{ color: 'var(--text-sub)', textAlign: 'center' }}>Regular checkup based on crop condition recommended</Typography>
-           </Box>
-         )}
+         {/* VIEW FULL CROP JOURNEY BUTTON */}
+         <Box sx={{ mt: 1.5, pt: 1.5, borderTop: '1px solid #F1F5F9' }}>
+           <button 
+             className="btn-predict-crop-gradient" 
+             onClick={() => {
+               const el = document.querySelector('.crop-journey-card');
+               if (el) {
+                 el.scrollIntoView({ behavior: 'smooth' });
+               } else {
+                 navigate('/dashboard/calendar');
+               }
+             }}
+             style={{ width: '100%', justifyContent: 'center', padding: '10px 16px', borderRadius: '14px', fontSize: '13px' }}
+           >
+             <span>View Full Crop Journey</span>
+             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+               <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+             </svg>
+           </button>
+         </Box>
       </Box>
     </Paper>
   );
