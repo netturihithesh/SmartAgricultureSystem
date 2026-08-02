@@ -136,7 +136,7 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
                   flexShrink: 0,
                   transition: 'all 0.2s ease',
                   px: 0.5,
-                  '&:hover': { transform: 'translateY(-2px)' }
+                  '&:hover': { borderColor: '#059669', boxShadow: '0 2px 8px rgba(5, 150, 105, 0.15)' }
                 }}
               >
                 {isToday ? (
