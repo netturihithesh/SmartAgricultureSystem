@@ -1657,7 +1657,7 @@ const ActionHome = ({ session }) => {
             <div className="card-box crop-journey-card">
               <div className="card-title-header-row" style={{ marginBottom: '24px' }}>
                 <div>
-                  <h3 className="card-main-title">Crop Journey & Daily Tasks</h3>
+                  <h3 className="card-main-title">Crop Calendar</h3>
                   <span className="card-date-sub">Complete daily activities and track overall stage milestones</span>
                 </div>
                 <span className="day-counter-pill">📅 Day {daysPassed}</span>
