@@ -523,6 +523,14 @@ const ActionHome = ({ session }) => {
   const [cropEconomics, setCropEconomics] = useState(null);
   const [upcomingTasks, setUpcomingTasks] = useState([]);
 
+  const currentStage = useMemo(() => {
+    if (!selectedCrop || !selectedCrop.stages) return null;
+    for (let stage of selectedCrop.stages) {
+      if (daysPassed >= stage.start_day && daysPassed <= stage.end_day) return stage;
+    }
+    return selectedCrop.stages[selectedCrop.stages.length - 1];
+  }, [selectedCrop, daysPassed]);
+
 
   const [expandedStage, setExpandedStage] = useState(null);
   const [activeJourneyStageId, setActiveJourneyStageId] = useState(null);
@@ -679,18 +687,27 @@ const ActionHome = ({ session }) => {
       setLoading(true);
       if (session?.user?.id) {
         // 1. Fetch User Profile
-        const { data: profileData, error: profileError } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', session.user.id)
-          .single();
+        let userLocation = 'Kamareddy, Telangana';
+        try {
+          const { data: profileData, error: profileError } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single();
 
-        if (!profileError && profileData) {
-          setProfile(profileData);
+          if (!profileError && profileData) {
+            setProfile(profileData);
+            if (profileData.location) userLocation = profileData.location;
+          } else {
+            setProfile({ id: session.user.id, location: userLocation, land_size: 1.5 });
+          }
+        } catch (e) {
+          setProfile({ id: session.user.id, location: userLocation, land_size: 1.5 });
+        }
 
-          // 2. Fetch User's Active Crops
+        // 2. Fetch User's Active Crops
+        try {
           let crops = JSON.parse(localStorage.getItem(`user_crops_${session.user.id}`) || '[]');
-          
           if (crops.length > 0) {
             let index = parseInt(localStorage.getItem(`active_crop_index_${session.user.id}`) || '0');
             if (index >= crops.length) index = 0;
@@ -699,31 +716,32 @@ const ActionHome = ({ session }) => {
             setActiveCropIndex(index);
             loadCropView(crops[index]);
           }
+        } catch (e) {
+          console.error("Failed to parse user crops", e);
+        }
 
-          // Fetch Daily Quote
-          try {
-            const todayStr = new Date().toISOString().split('T')[0];
-            let savedQuoteObj = JSON.parse(localStorage.getItem('daily_agri_quote_v1') || 'null');
-            
-            if (savedQuoteObj && savedQuoteObj.date === todayStr) {
-              setDailyQuote(savedQuoteObj.quote);
-            } else {
-              const fetchedQuote = await getDailyQuote();
-              setDailyQuote(fetchedQuote);
-              localStorage.setItem('daily_agri_quote_v1', JSON.stringify({ date: todayStr, quote: fetchedQuote }));
-            }
-          } catch (err) {
-            setDailyQuote('The ultimate goal of farming is not the growing of crops, but the cultivation and perfection of human beings.');
+        // 3. Fetch Daily Quote
+        try {
+          const todayStr = new Date().toISOString().split('T')[0];
+          let savedQuoteObj = JSON.parse(localStorage.getItem('daily_agri_quote_v1') || 'null');
+          
+          if (savedQuoteObj && savedQuoteObj.date === todayStr) {
+            setDailyQuote(savedQuoteObj.quote);
+          } else {
+            const fetchedQuote = await getDailyQuote();
+            setDailyQuote(fetchedQuote);
+            localStorage.setItem('daily_agri_quote_v1', JSON.stringify({ date: todayStr, quote: fetchedQuote }));
           }
+        } catch (err) {
+          setDailyQuote('The ultimate goal of farming is not the growing of crops, but the cultivation and perfection of human beings.');
+        }
 
-          // Fetch Weather
-          try {
-            // Always fetch farm location weather
-            const farmRes = await fetchWeatherAndAlerts(profileData.location, import.meta.env.VITE_OPENWEATHER_API_KEY);
-            if (farmRes) setFarmWeather(farmRes);
-          } catch (err) {
-            console.error("Weather fetch failed", err);
-          }
+        // 4. Fetch Weather
+        try {
+          const farmRes = await fetchWeatherAndAlerts(userLocation, import.meta.env.VITE_OPENWEATHER_API_KEY);
+          if (farmRes) setFarmWeather(farmRes);
+        } catch (err) {
+          console.error("Weather fetch failed", err);
         }
       }
       setLoading(false);
@@ -1009,8 +1027,8 @@ const ActionHome = ({ session }) => {
       setCropStartDate(start);
       setDaysPassed(diffDays);
 
-      const currentStage = calculateCurrentStage(crop.stages, diffDays);
-      setExpandedStage(currentStage?.stage_id);
+      const curStage = calculateCurrentStage(crop.stages, diffDays);
+      setExpandedStage(curStage?.stage_id);
 
       const cd = cropDataList.find(c => normalizeName(c.api_name) === targetName || normalizeName(c.name) === targetName);
       if (cd && cd.economics) {
@@ -1275,10 +1293,6 @@ const ActionHome = ({ session }) => {
     setAlertConfig({ open: true, message: 'Crop permanently deleted.', type: 'info' });
   };
 
-  const currentStage = useMemo(() => {
-    if (!selectedCrop) return null;
-    return calculateCurrentStage(selectedCrop.stages, daysPassed);
-  }, [selectedCrop, daysPassed]);
 
   useEffect(() => {
     const fetchSchedule = async () => {
