@@ -340,6 +340,9 @@ const Navbar = () => {
           border-left: 1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(45,90,39,0.1)'};
         }
         .sa-drawer.open { transform: translateX(0); }
+        @media (min-width: 1024px) {
+          .sa-drawer, .sa-drawer-overlay { display: none !important; }
+        }
         .sa-drawer-head {
           display: flex; align-items: center;
           justify-content: space-between;
@@ -684,7 +687,10 @@ const Navbar = () => {
                     aria-label="User menu"
                   >
                     <div className="sa-avatar">
-                      {getInitials()}
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                      </svg>
                     </div>
                   </button>
                   

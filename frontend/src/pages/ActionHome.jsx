@@ -1364,8 +1364,9 @@ const ActionHome = ({ session }) => {
             </div>
 
             <div className="hero-banner-left-text">
-              <span className="hero-greeting">{getGreeting()},</span>
-              <h1 className="hero-user-name">{formattedUserName}</h1>
+              <h1 className="hero-user-name">
+                {getGreeting()}{formattedUserName && formattedUserName !== 'Farmer' ? `, ${formattedUserName}` : ''}
+              </h1>
               <div className="hero-badge-pill">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -1662,7 +1663,6 @@ const ActionHome = ({ session }) => {
                   <h3 className="card-main-title">Crop Journey & Daily Tasks</h3>
                   <span className="card-date-sub">Complete daily activities and track overall stage milestones</span>
                 </div>
-                <span className="day-counter-pill">📅 Day {daysPassed}</span>
               </div>
 
               {/* DAILY TASKS SECTION */}
@@ -1672,9 +1672,6 @@ const ActionHome = ({ session }) => {
                     <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 800, color: '#065F46', display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <span>📋</span> Today's Action Items
                     </h4>
-                    <span style={{ fontSize: '12px', color: '#047857', fontWeight: 700, background: 'rgba(5, 150, 105, 0.1)', padding: '2px 8px', borderRadius: '999px' }}>
-                      Active Stage: {currentStage.title}
-                    </span>
                   </div>
 
                   {/* Weather Advisor banner inside combined card */}
@@ -2107,7 +2104,7 @@ const ActionHome = ({ session }) => {
               <div className="profit-card-header">
                 <div>
                   <h3 className="card-main-title">Profit Snapshot</h3>
-                  <span className="profit-crop-sub">{selectedCrop.crop_name} • {profile?.land_size || '1.5'} Acres</span>
+                  <span className="profit-crop-sub">{selectedCrop.crop_name} • {landSizeNum} Acres</span>
                 </div>
                 <span className={`yield-impact-badge ${weatherYieldImpact >= 0 ? 'positive' : 'negative'}`}>
                   {weatherYieldImpact >= 0 ? `+${(weatherYieldImpact * 100).toFixed(1)}%` : `${(weatherYieldImpact * 100).toFixed(1)}%`} Yield Impact
