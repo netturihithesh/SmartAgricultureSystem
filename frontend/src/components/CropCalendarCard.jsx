@@ -84,17 +84,17 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
   };
 
   return (
-    <Paper className="neo-card" sx={{ width: '100%', maxWidth: '100%', p: 0, overflow: 'hidden', bgcolor: 'var(--card-bg)', borderColor: 'var(--card-border)', mb: '24px' }}>
-      <Box sx={{ p: '20px 24px', borderBottom: '1px solid var(--card-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <Box sx={{ p: 1, bgcolor: 'rgba(57, 255, 106, 0.1)', borderRadius: '10px', display: 'flex', border: '1px solid rgba(57, 255, 106, 0.2)' }}>
-             <EventAvailable sx={{ color: 'var(--neon-green)', fontSize: 20 }} />
+    <Paper className="neo-card" sx={{ width: '100%', maxWidth: '100%', p: 0, overflow: 'hidden', bgcolor: 'var(--card-bg)', borderColor: 'var(--card-border)', mb: '16px' }}>
+      <Box sx={{ p: '12px 16px', borderBottom: '1px solid var(--card-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box sx={{ p: 0.75, bgcolor: 'rgba(57, 255, 106, 0.1)', borderRadius: '8px', display: 'flex', border: '1px solid rgba(57, 255, 106, 0.2)' }}>
+             <EventAvailable sx={{ color: 'var(--neon-green)', fontSize: 18 }} />
           </Box>
           <Box>
-            <Typography variant="subtitle1" sx={{ fontWeight: 800, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: 1 }}>
               Crop Daily Calendar
             </Typography>
-            <Typography variant="caption" sx={{ color: 'var(--text-sub)' }}>
+            <Typography variant="caption" sx={{ color: 'var(--text-sub)', fontSize: '11px' }}>
               Scroll left to right to check daily tasks
             </Typography>
           </Box>
@@ -105,10 +105,10 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
       <Box sx={{ position: 'relative', borderBottom: '1px solid var(--card-border)', bgcolor: 'rgba(255,255,255,0.01)', width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
         <IconButton 
           onClick={() => handleScroll(-1)} 
-          sx={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', zIndex: 2, bgcolor: 'var(--card-bg)', border: '1px solid var(--card-border)', '&:hover': { bgcolor: 'var(--card-border)' } }} 
+          sx={{ position: 'absolute', left: 4, top: '50%', transform: 'translateY(-50%)', zIndex: 2, bgcolor: 'var(--card-bg)', border: '1px solid var(--card-border)', '&:hover': { bgcolor: 'var(--card-border)' } }} 
           size="small"
         >
-          <ChevronLeft />
+          <ChevronLeft fontSize="small" />
         </IconButton>
         
         <Box 
@@ -116,8 +116,8 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
           sx={{ 
             display: 'flex', 
             overflowX: 'auto', 
-            p: '24px 48px', 
-            gap: 2, 
+            p: '12px 36px', 
+            gap: 1.5, 
             scrollbarWidth: 'none', 
             '&::-webkit-scrollbar': { display: 'none' },
             width: '100%'
@@ -147,15 +147,15 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
                 className={isSelected ? 'active-day' : ''}
                 onClick={() => setSelectedDay(dayNum)}
                 sx={{ 
-                  minWidth: '65px', 
-                  height: '80px',
-                  borderRadius: '14px', 
+                  minWidth: '52px', 
+                  height: '64px',
+                  borderRadius: '10px', 
                   border: `1px solid ${boxBorder}`,
                   bgcolor: boxBg,
                   display: 'flex', 
                   flexDirection: 'column',
                   alignItems: 'center',
-                  pt: '16px',
+                  pt: '10px',
                   cursor: 'pointer',
                   position: 'relative',
                   flexShrink: 0,
