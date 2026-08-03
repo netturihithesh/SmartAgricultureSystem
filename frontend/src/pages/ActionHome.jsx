@@ -522,6 +522,7 @@ const ActionHome = ({ session }) => {
   const [daysPassed, setDaysPassed] = useState(0);
   const [cropEconomics, setCropEconomics] = useState(null);
   const [upcomingTasks, setUpcomingTasks] = useState([]);
+  const [dashboardTab, setDashboardTab] = useState('overview');
 
 
   const [expandedStage, setExpandedStage] = useState(null);
@@ -643,10 +644,25 @@ const ActionHome = ({ session }) => {
     return isNaN(parsed) || parsed <= 0 ? 1.5 : parsed;
   }, [profile, selectedCrop]);
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good Morning';
+    if (hour < 17) return 'Good Afternoon';
+    return 'Good Evening';
+  };
+
   const formattedUserName = useMemo(() => {
-    if (!profile?.full_name) return 'Farmer';
-    return profile.full_name.replace(/[*,\s]+/g, ' ').trim() || 'Farmer';
+    if (!profile?.full_name) return '';
+    return profile.full_name.replace(/[*,\s]+/g, ' ').trim();
   }, [profile]);
+
+  const greetingText = useMemo(() => {
+    const greeting = getGreeting();
+    if (formattedUserName && formattedUserName !== 'Farmer') {
+      return `${greeting}, ${formattedUserName}`;
+    }
+    return greeting;
+  }, [formattedUserName]);
 
   const adjustedProfitData = useMemo(() => {
     if (!selectedCrop) return null;
@@ -658,13 +674,6 @@ const ActionHome = ({ session }) => {
       weatherYieldImpact
     );
   }, [selectedCrop, cropEconomics, landSizeNum, weatherYieldImpact]);
-
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'Good Morning';
-    if (hour < 17) return 'Good Afternoon';
-    return 'Good Evening';
-  };
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -1335,38 +1344,12 @@ const ActionHome = ({ session }) => {
           {/* HERO BANNER CARD WITH INTEGRATED LANDSCAPE & EMBEDDED PROGRESS RING */}
           <div className="hero-banner-card">
             <div className="hero-landscape-svg-wrap">
-              <svg viewBox="0 0 900 240" fill="none" preserveAspectRatio="xMidYMid slice" className="landscape-svg">
-                <defs>
-                  <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#F4FAF5"/>
-                    <stop offset="100%" stopColor="#E2F4E7"/>
-                  </linearGradient>
-                  <linearGradient id="hillGrad1" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#2E7D32"/>
-                    <stop offset="100%" stopColor="#1B5E20"/>
-                  </linearGradient>
-                  <linearGradient id="hillGrad2" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#4CAF50"/>
-                    <stop offset="100%" stopColor="#2E7D32"/>
-                  </linearGradient>
-                </defs>
-                <rect width="900" height="240" fill="url(#skyGrad)"/>
-                <path d="M120 35 C140 18 180 18 200 35 C220 25 260 35 270 55 C280 75 260 90 240 90 L110 90 C90 90 80 75 100 55 Z" fill="rgba(255,255,255,0.7)"/>
-                <path d="M580 45 C600 30 630 30 650 45 C665 40 690 45 700 60 C710 75 695 88 680 88 L570 88 Z" fill="rgba(255,255,255,0.6)"/>
-                <path d="M0 150 Q250 80 500 140 T1000 110 L1000 240 L0 240 Z" fill="url(#hillGrad1)" opacity="0.45"/>
-                <path d="M420 135 L424 85 L428 135 Z" fill="#1B5E20"/>
-                <circle cx="424" cy="85" r="14" fill="none" stroke="#1B5E20" strokeWidth="1.5" strokeDasharray="3 3"/>
-                <path d="M350 135 L370 115 L390 135 L390 155 L350 155 Z" fill="#A04000"/>
-                <path d="M350 135 L370 115 L390 135 Z" fill="#78281F"/>
-                <path d="M0 170 Q350 110 700 160 T1000 140 L1000 240 L0 240 Z" fill="url(#hillGrad2)"/>
-                <path d="M-50 195 Q200 150 500 200 T1000 170 L1000 240 L-50 240 Z" fill="#1B5E20" opacity="0.85"/>
-              </svg>
+              <img src="/assets/dashboard_banner.jpg" alt="Dashboard Banner" className="landscape-svg" />
+              <div className="landscape-overlay"></div>
             </div>
 
             <div className="hero-banner-left-text">
-              <h1 className="hero-user-name">
-                {getGreeting()}{formattedUserName && formattedUserName !== 'Farmer' ? `, ${formattedUserName}` : ''}
-              </h1>
+              <h1 className="hero-user-name">{greetingText}</h1>
               <div className="hero-badge-pill">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -1380,16 +1363,14 @@ const ActionHome = ({ session }) => {
             <div className="hero-crop-progress-card">
               {selectedCrop ? (
                 <div className="progress-ring-container">
-                  <svg className="progress-ring-svg" width="124" height="124" viewBox="0 0 120 120">
-                    <circle className="progress-ring-bg" cx="60" cy="60" r="50"></circle>
-                    <circle className="progress-ring-fill" cx="60" cy="60" r="50" style={{strokeDasharray: 314, strokeDashoffset: 314 * (1 - progressPercentage / 100)}}></circle>
+                  <svg className="progress-ring-svg" width="160" height="160" viewBox="0 0 160 160">
+                    <circle className="progress-ring-bg" cx="80" cy="80" r="70"></circle>
+                    <circle className="progress-ring-fill" cx="80" cy="80" r="70" style={{strokeDasharray: 439.8, strokeDashoffset: 439.8 * (1 - progressPercentage / 100)}}></circle>
                   </svg>
                   <div className="progress-ring-text">
                     <span className="progress-percent-val">{progressPercentage}%</span>
                     <span className="progress-title-lbl">Crop Progress</span>
-                    <span className="progress-days-lbl">Day {daysPassed} / {selectedCrop.total_duration_days}</span>
                   </div>
-                  <div className="ring-leaf-badge">🌱</div>
                 </div>
               ) : (
                 <div className="progress-empty-state">No Active Crop</div>
@@ -1416,6 +1397,38 @@ const ActionHome = ({ session }) => {
                 <polyline points="9 18 15 12 9 6"/>
               </svg>
             </div>
+          </div>
+
+          {/* DASHBOARD TAB NAVIGATION BAR */}
+          <div className="dashboard-tab-bar">
+            <button 
+              className={`dashboard-tab-btn ${dashboardTab === 'overview' ? 'active' : ''}`}
+              onClick={() => setDashboardTab('overview')}
+            >
+              <span className="tab-icon">📊</span>
+              <span>Overview</span>
+            </button>
+            <button 
+              className="dashboard-tab-btn"
+              onClick={() => navigate('/weather')}
+            >
+              <span className="tab-icon">🌤️</span>
+              <span>Weather Center</span>
+            </button>
+            <button 
+              className="dashboard-tab-btn"
+              onClick={() => navigate('/profit')}
+            >
+              <span className="tab-icon">💰</span>
+              <span>Profit Snapshot</span>
+            </button>
+            <button 
+              className="dashboard-tab-btn"
+              onClick={() => navigate('/calendar')}
+            >
+              <span className="tab-icon">📅</span>
+              <span>Crop Calendar</span>
+            </button>
           </div>
 
           {/* ACTIVE CROP MAIN CARD */}
@@ -1445,9 +1458,9 @@ const ActionHome = ({ session }) => {
                     <h2 className="crop-name-heading">{selectedCrop.crop_name || 'Paddy (Basmati)'}</h2>
                     <div 
                       className="crop-stage-pill" 
-                      onClick={() => { const el = document.querySelector('.crop-journey-card'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}
+                      onClick={() => setDashboardTab('calendar')}
                       style={{ cursor: 'pointer' }}
-                      title="Click to view Crop Journey Stages"
+                      title="Click to view Crop Calendar & Stages"
                     >
                       <span>{currentStage?.title || 'Fertilizer Application'} Stage</span>
                     </div>
@@ -1456,7 +1469,7 @@ const ActionHome = ({ session }) => {
 
                 <div 
                   className="crop-tip-card"
-                  onClick={() => { const el = document.querySelector('.todays-work-card') || document.querySelector('.crop-journey-card'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}
+                  onClick={() => setDashboardTab('overview')}
                   style={{ cursor: 'pointer' }}
                   title="Click to view recommendations & stage tasks"
                 >
@@ -1479,9 +1492,9 @@ const ActionHome = ({ session }) => {
               <div className="crop-stats-four-cols">
                 <div 
                   className="crop-stat-card-pill"
-                  onClick={() => navigate('/dashboard/calendar')}
+                  onClick={() => setDashboardTab('calendar')}
                   style={{ cursor: 'pointer' }}
-                  title="Click to view Farm Calendar"
+                  title="Click to view Crop Calendar"
                 >
                   <div className="stat-icon-box green">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1501,7 +1514,7 @@ const ActionHome = ({ session }) => {
 
                 <div 
                   className="crop-stat-card-pill"
-                  onClick={() => { const el = document.querySelector('.crop-journey-card'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}
+                  onClick={() => setDashboardTab('calendar')}
                   style={{ cursor: 'pointer' }}
                   title="Click to view Stage Details"
                 >
@@ -1526,7 +1539,7 @@ const ActionHome = ({ session }) => {
 
                 <div 
                   className="crop-stat-card-pill"
-                  onClick={() => { const el = document.querySelector('.crop-calendar-card'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}
+                  onClick={() => setDashboardTab('calendar')}
                   style={{ cursor: 'pointer' }}
                   title="Click to view Crop Daily Calendar"
                 >
@@ -1656,7 +1669,7 @@ const ActionHome = ({ session }) => {
           )}
 
           {/* COMBINED CROP JOURNEY & DAILY TASKS CARD */}
-          {selectedCrop && (
+          {selectedCrop && (dashboardTab === 'overview' || dashboardTab === 'calendar') && (
             <div className="card-box crop-journey-card">
               <div className="card-title-header-row" style={{ marginBottom: '24px' }}>
                 <div>
@@ -1747,26 +1760,16 @@ const ActionHome = ({ session }) => {
                 </div>
               )}
 
-              {/* PIPELINE PROGRESS FLOW */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 800, color: '#1E293B' }}>
-                  Pipeline Milestones
-                </h4>
-                <span className="stage-counter-pill" style={{ background: 'rgba(71, 85, 105, 0.08)', color: '#475569', fontSize: '11px', padding: '2px 8px', borderRadius: '999px', fontWeight: 700 }}>
-                  Stage {(activeJourneyStageId || currentStage?.stage_id || 4)} of {selectedCrop.stages?.length || 8}
-                </span>
-              </div>
-              
               <div className="journey-pipeline-nodes-row">
                 {(selectedCrop.stages || [
-                  { stage_id: 1, title: 'Land Prep.', start_day: 1, end_day: 15 },
-                  { stage_id: 2, title: 'Seed Prep.', start_day: 16, end_day: 30 },
-                  { stage_id: 3, title: 'Transplant.', start_day: 31, end_day: 36 },
+                  { stage_id: 1, title: 'Land Preparation', start_day: 1, end_day: 15 },
+                  { stage_id: 2, title: 'Seed Preparation', start_day: 16, end_day: 30 },
+                  { stage_id: 3, title: 'Transplanting', start_day: 31, end_day: 36 },
                   { stage_id: 4, title: 'Fertilizer Application', start_day: 37, end_day: 71 },
-                  { stage_id: 5, title: 'Water Man.', start_day: 72, end_day: 90 },
-                  { stage_id: 6, title: 'Pest & Dis.', start_day: 91, end_day: 110 },
+                  { stage_id: 5, title: 'Water Management', start_day: 72, end_day: 90 },
+                  { stage_id: 6, title: 'Pest & Disease Control', start_day: 91, end_day: 110 },
                   { stage_id: 7, title: 'Harvesting', start_day: 111, end_day: 130 },
-                  { stage_id: 8, title: 'Post Harv.', start_day: 131, end_day: 140 }
+                  { stage_id: 8, title: 'Post Harvest', start_day: 131, end_day: 140 }
                 ]).map((stg) => {
                   const currentCurId = currentStage?.stage_id || 4;
                   const isDone = stg.stage_id < currentCurId;
@@ -1787,7 +1790,7 @@ const ActionHome = ({ session }) => {
                         ) : stg.stage_id}
                       </div>
                       <span className="node-label">
-                        {stg.title.length > 12 ? stg.title.slice(0, 10) + '...' : stg.title}
+                        {stg.title}
                       </span>
                     </div>
                   );
@@ -1892,7 +1895,7 @@ const ActionHome = ({ session }) => {
         <div className="dashboard-right-col">
           
           {/* ── UNIFIED WEATHER + METRICS + SOIL CARD ── */}
-          {(() => {
+          {(dashboardTab === 'overview' || dashboardTab === 'weather') && (() => {
             const _wMain   = displayWeather?.weather?.weather[0]?.main || null;
             const _windKmh = displayWeather?.weather ? Math.round(displayWeather.weather.wind.speed * 3.6) : 10;
             const _curHr   = new Date().getHours();
@@ -2099,7 +2102,7 @@ const ActionHome = ({ session }) => {
           })()}
 
           {/* 4. PROFIT SNAPSHOT CARD (Fully Dynamic & Weather-Adjusted) */}
-          {selectedCrop && adjustedProfitData && (
+          {selectedCrop && adjustedProfitData && (dashboardTab === 'overview' || dashboardTab === 'profit') && (
             <div className="card-box profit-snapshot-card">
               <div className="profit-card-header">
                 <div>
@@ -2143,7 +2146,7 @@ const ActionHome = ({ session }) => {
 
           {/* 5. CROP DAILY CALENDAR CARD (Moved to Right Column below Profit Snapshot) */}
           {selectedCrop && (
-            <div style={{ marginTop: '20px' }}>
+            <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', flex: 1 }}>
               <CropCalendarCard 
                 selectedCrop={selectedCrop} 
                 cropStartDate={cropStartDate} 

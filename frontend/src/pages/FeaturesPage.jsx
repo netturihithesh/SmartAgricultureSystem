@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import { useColorMode } from '../context/ThemeContext';
 
 const FeaturesPage = () => {
-  const navigate = useNavigate();
   const { mode } = useColorMode();
   const isDark = mode === 'dark';
 
@@ -18,7 +17,6 @@ const FeaturesPage = () => {
   const textSecondary = isDark ? '#94a3b8' : '#475569';
   const borderColor = isDark ? 'rgba(255,255,255,0.1)' : '#e8ecea';
   const altBg = isDark ? '#0A0D0B' : '#f7faf8';
-  const accentColor = isDark ? '#39FF6A' : '#2E7D32';
 
   const features = [
     { title: 'Crop Recommendation', description: 'Suggests optimal crops using soil & climate datasets', icon: <SproutIcon sx={{ fontSize: 20, color: '#2E7D32' }} />, color: isDark ? '#334d3d' : '#E8F5E9' },

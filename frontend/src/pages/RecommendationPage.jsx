@@ -1,49 +1,39 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CircularProgress } from '@mui/material';
 import { supabase } from '../supabase';
 import { fetchWeatherAndAlerts } from '../services/weatherService';
 import { generateSmartRecommendation } from '../services/recommendationEngine';
 import { useColorMode } from '../context/ThemeContext';
+import { Person, Terrain, Opacity, CalendarToday, Agriculture, WbSunny, TrendingUp, Spa, EmojiEvents, CheckCircle, Grass } from '@mui/icons-material';
 
-// Colors mapped to match the wider SmartAgri MUI theme but retaining the premium earthly color grade
-const getThemeColors = (mode) => ({
-  soil: mode === 'light' ? '#25211e' : '#FFFFFF', // Rich dark brown-black or clean white text
-  leaf: '#2E7D32',
-  leafMid: '#256628',
-  leafBright: '#4CAF50',
-  leafGlow: '#66BB6A',
-  gold: mode === 'light' ? '#c8902a' : '#E5A93C', // Premium dynamic gold
-  goldLight: '#e5b95c', // Premium light gold
-  cream: mode === 'light' ? '#fcfbfa' : '#1a241e', // Input bg
-  creamDark: mode === 'light' ? '#f0ebe0' : '#101512', // earth card subelements
-  earth: mode === 'light' ? '#8b6914' : '#E5A93C', // Earthy brown/gold accent
-  sky: '#E3F2FD',
-  muted: mode === 'light' ? '#7a7060' : '#9CA3AF', // Subtext gray
-  cardBg: mode === 'light' ? '#FFFFFF' : '#111613',
-  pageBg: mode === 'light' ? '#faf9f7' : '#0A0D0B', // Dark charcoal page background
-  border: mode === 'light' ? '#E8E4DF' : '#1A241E', // Border lines
-  shadowGreen: '0 4px 20px rgba(46,125,50,0.12)',
-  shadowCard: '0 8px 30px rgba(0,0,0,0.06)',
+// Colors mapped to match the core SmartAgri emerald & slate UI theme
+const getThemeColors = () => ({
+  soil: '#0F172A',
+  leaf: '#059669',
+  leafMid: '#047857',
+  leafBright: '#10B981',
+  leafGlow: '#34D399',
+  gold: '#D97706',
+  goldLight: '#F59E0B',
+  cream: '#F8FAFC',
+  creamDark: '#F1F5F9',
+  earth: '#B45309',
+  sky: '#E0F2FE',
+  muted: '#64748B',
+  cardBg: '#FFFFFF',
+  pageBg: '#F8FAFC',
+  border: '#E2E8F0',
+  shadowGreen: '0 4px 20px rgba(5,150,105,0.12)',
+  shadowCard: '0 4px 16px rgba(0,0,0,0.03)',
   fontAccent: '"Inter", sans-serif',
   fontBody: '"Inter", sans-serif',
 });
 
-const getCropEmoji = (name) => {
+const getCropIcon = (name) => {
   const n = name.toLowerCase();
-  if (n.includes('paddy')) return '🌾';
-  if (n.includes('cotton')) return '☁️';
-  if (n.includes('sugarcane')) return '🎋';
-  if (n.includes('turmeric')) return '🎗️';
-  if (n.includes('mango')) return '🥭';
-  if (n.includes('chili')) return '🌶️';
-  if (n.includes('castor')) return '🫘';
-  if (n.includes('maize')) return '🌽';
-  if (n.includes('banana')) return '🍌';
-  if (n.includes('tomato')) return '🍅';
-  if (n.includes('potato')) return '🥔';
-  if (n.includes('onion')) return '🧅';
-  if (n.includes('papaya')) return '🌿';
-  return '🌱';
+  if (n.includes('paddy') || n.includes('sugarcane') || n.includes('maize')) return <Grass fontSize="inherit" />;
+  return <Spa fontSize="inherit" />;
 };
 
 const formatCurrency = (val) => {
@@ -52,8 +42,7 @@ const formatCurrency = (val) => {
 
 const RecommendationPage = () => {
   const navigate = useNavigate();
-  const { mode } = useColorMode();
-  const theme = useMemo(() => getThemeColors(mode), [mode]);
+  const theme = useMemo(() => getThemeColors(), []);
   const [profile, setProfile] = useState(null);
   const [uiState, setUiState] = useState('initial'); // 'initial', 'loading', 'success', 'error'
 
@@ -66,9 +55,6 @@ const RecommendationPage = () => {
   const [temperature, setTemperature] = useState(null);
 
   const [topCrops, setTopCrops] = useState([]);
-  const [maxProfit, setMaxProfit] = useState(1);
-  const [isSyncing, setIsSyncing] = useState(false);
-
   useEffect(() => {
     const fetchProfileAndWeather = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -97,26 +83,6 @@ const RecommendationPage = () => {
     fetchProfileAndWeather();
   }, [navigate]);
 
-  const handleSyncPrices = async () => {
-    setIsSyncing(true);
-    try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-      const response = await fetch(`${apiUrl}/api/prices/update`, {
-        method: 'POST',
-      });
-      if (response.ok) {
-        alert('Live market prices synced successfully!');
-      } else {
-        alert('Failed to sync prices.');
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Error connecting to the server to sync prices.');
-    } finally {
-      setIsSyncing(false);
-    }
-  };
-
   const handleRecommendation = async () => {
     if (!waterAvailability || !soilType || !cropDurationType) return;
     
@@ -142,9 +108,6 @@ const RecommendationPage = () => {
         cropDurationType,
         agmarknetKeysArray
       );
-
-      const maxP = Math.max(...winners.map(w => w.estimatedProfit), 1);
-      setMaxProfit(maxP);
 
       setTopCrops(winners);
       setUiState('success');
@@ -238,7 +201,11 @@ const RecommendationPage = () => {
     }
   };
 
-  if (!profile) return null;
+  if (!profile) return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh', width: '100%' }}>
+      <CircularProgress sx={{ color: '#059669' }} />
+    </div>
+  );
 
   return (
     <div style={{
@@ -257,122 +224,139 @@ const RecommendationPage = () => {
       }} />
 
       {/* Page Header */}
-      <div style={{ padding: '100px 24px 0', maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-        <h1 style={{ fontFamily: theme.fontAccent, fontWeight: 800, fontSize: 'clamp(26px, 5vw, 40px)', lineHeight: 1.1, color: theme.leaf, letterSpacing: '-1px', margin: 0 }}>
-          Crop <span style={{ color: theme.gold }}>Prediction</span>
-        </h1>
-        <p style={{ fontSize: '14px', color: theme.muted, marginTop: '6px', fontWeight: 400, margin: 0 }}>
-          Based on your soil, water & season — AI-ranked for maximum profit
-        </p>
+      <div style={{ padding: '32px 32px', width: '100%', position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ position: 'absolute', top: 0, right: 0, width: '600px', height: '100%', opacity: 0.8, backgroundImage: `url('/assets/bg_abstract_green.png')`, backgroundSize: 'cover', backgroundPosition: 'center', WebkitMaskImage: 'linear-gradient(to right, transparent, black 80%)', maskImage: 'linear-gradient(to right, transparent, black 80%)', pointerEvents: 'none', zIndex: -1 }} />
+        <div>
+          <h1 style={{ fontFamily: theme.fontAccent, fontWeight: 900, fontSize: 'clamp(26px, 5vw, 42px)', lineHeight: 1.1, color: '#059669', letterSpacing: '-1px', margin: 0 }}>
+            Crop <span style={{ color: '#D97706' }}>Prediction</span>
+          </h1>
+          <p style={{ fontSize: '15px', color: theme.muted, marginTop: '8px', fontWeight: 500, margin: 0, maxWidth: '500px' }}>
+            AI-powered crop recommendations based on your farm conditions for maximum profit.
+          </p>
+        </div>
       </div>
 
       {/* Main Grid */}
       <div style={{
-        maxWidth: '1100px', margin: '24px auto 0', padding: '0 24px 48px',
+        width: '100%', padding: '0 24px 48px', margin: '24px 0 0',
         display: 'grid', gridTemplateColumns: 'minmax(280px, 300px) 1fr', gap: '24px', alignItems: 'start', position: 'relative', zIndex: 1
       }}>
         {/* Left Column: Filter Panel */}
         <aside style={{
-          background: theme.cardBg, borderRadius: '20px', padding: '24px',
-          boxShadow: theme.shadowCard, border: `1px solid ${theme.border}`,
+          background: theme.cardBg, borderRadius: '24px', padding: '24px',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.02)', border: `1px solid ${theme.border}`,
           position: 'sticky', top: '90px'
         }}>
-          <div style={{ fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '.08em', color: theme.muted, marginBottom: '16px' }}>
-            Farm Profile
+          {/* Farm Profile Header */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+             <div style={{ padding: '8px', background: '#ECFDF5', borderRadius: '12px', color: '#059669', display: 'flex' }}>
+                <Person style={{ fontSize: '20px' }} />
+             </div>
+             <div>
+               <div style={{ fontFamily: theme.fontAccent, fontWeight: 900, fontSize: '16px', color: '#0F172A' }}>Farm Profile</div>
+               <div style={{ fontSize: '12px', color: theme.muted, fontWeight: 500 }}>Your field conditions</div>
+             </div>
           </div>
 
           {/* Soil */}
-          <div style={{ marginBottom: '20px' }}>
-            <div style={{ fontSize: '12px', fontWeight: 600, color: theme.muted, marginBottom: '8px' }}>Soil Type</div>
-            <select 
-              value={soilType} onChange={(e) => setSoilType(e.target.value)}
-              style={{ width: '100%', appearance: 'none', background: theme.cream, border: `1.5px solid ${theme.border}`, borderRadius: '12px', padding: '11px 14px', fontFamily: theme.fontBody, fontSize: '14px', fontWeight: 500, color: theme.soil, outline: 'none', cursor: 'pointer' }}
-            >
-              <option value="Black Soil">Black Soil</option>
-              <option value="Red Soil">Red Soil</option>
-              <option value="Alluvial Soil">Alluvial Soil</option>
-              <option value="Sandy Soil">Sandy Soil</option>
-              <option value="Clay Soil">Clay Soil</option>
-              <option value="Loamy Soil">Loamy Soil</option>
-              <option value="Laterite Soil">Laterite Soil</option>
-            </select>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: '#F8FAFC', borderRadius: '16px', padding: '12px 16px', marginBottom: '16px' }}>
+             <div style={{ padding: '8px', background: '#ECFDF5', borderRadius: '12px', color: '#059669', display: 'flex' }}>
+                <Terrain style={{ fontSize: '18px' }} />
+             </div>
+             <div style={{ flex: 1 }}>
+                <div style={{ fontSize: '11px', fontWeight: 700, color: theme.muted, marginBottom: '2px' }}>Soil Type</div>
+                <select 
+                  value={soilType} onChange={(e) => setSoilType(e.target.value)}
+                  style={{ width: '100%', appearance: 'none', background: 'transparent', border: 'none', padding: 0, fontFamily: theme.fontBody, fontSize: '14px', fontWeight: 800, color: '#0F172A', outline: 'none', cursor: 'pointer' }}
+                >
+                  <option value="Black Soil">Black Soil</option>
+                  <option value="Red Soil">Red Soil</option>
+                  <option value="Alluvial Soil">Alluvial Soil</option>
+                  <option value="Sandy Soil">Sandy Soil</option>
+                  <option value="Clay Soil">Clay Soil</option>
+                  <option value="Loamy Soil">Loamy Soil</option>
+                  <option value="Laterite Soil">Laterite Soil</option>
+                </select>
+             </div>
           </div>
 
           {/* Water */}
-          <div style={{ marginBottom: '20px' }}>
-            <div style={{ fontSize: '12px', fontWeight: 600, color: theme.muted, marginBottom: '8px' }}>Water Source</div>
-            <select 
-              value={waterAvailability} onChange={(e) => setWaterAvailability(e.target.value)}
-              style={{ width: '100%', appearance: 'none', background: theme.cream, border: `1.5px solid ${theme.border}`, borderRadius: '12px', padding: '11px 14px', fontFamily: theme.fontBody, fontSize: '14px', fontWeight: 500, color: theme.soil, outline: 'none', cursor: 'pointer' }}
-            >
-              <option value="more_water">High (Canal)</option>
-              <option value="moderate_water">Medium (Borewell)</option>
-              <option value="less_water">Low (Rainfed)</option>
-            </select>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: '#F8FAFC', borderRadius: '16px', padding: '12px 16px', marginBottom: '16px' }}>
+             <div style={{ padding: '8px', background: '#ECFDF5', borderRadius: '12px', color: '#059669', display: 'flex' }}>
+                <Opacity style={{ fontSize: '18px' }} />
+             </div>
+             <div style={{ flex: 1 }}>
+                <div style={{ fontSize: '11px', fontWeight: 700, color: theme.muted, marginBottom: '2px' }}>Water Source</div>
+                <select 
+                  value={waterAvailability} onChange={(e) => setWaterAvailability(e.target.value)}
+                  style={{ width: '100%', appearance: 'none', background: 'transparent', border: 'none', padding: 0, fontFamily: theme.fontBody, fontSize: '14px', fontWeight: 800, color: '#0F172A', outline: 'none', cursor: 'pointer' }}
+                >
+                  <option value="more_water">High (Canal)</option>
+                  <option value="moderate_water">Medium (Borewell)</option>
+                  <option value="less_water">Low (Rainfed)</option>
+                </select>
+             </div>
           </div>
 
           {/* Duration */}
-          <div style={{ marginBottom: '20px' }}>
-            <div style={{ fontSize: '12px', fontWeight: 600, color: theme.muted, marginBottom: '8px' }}>Duration Plan</div>
-            <select 
-              value={cropDurationType} onChange={(e) => setCropDurationType(e.target.value)}
-              style={{ width: '100%', appearance: 'none', background: theme.cream, border: `1.5px solid ${theme.border}`, borderRadius: '12px', padding: '11px 14px', fontFamily: theme.fontBody, fontSize: '14px', fontWeight: 500, color: theme.soil, outline: 'none', cursor: 'pointer' }}
-            >
-              <option value="short_term">Short-Term</option>
-              <option value="long_term">Long-Term</option>
-              <option value="perennial">Perennial</option>
-            </select>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: '#F8FAFC', borderRadius: '16px', padding: '12px 16px', marginBottom: '16px' }}>
+             <div style={{ padding: '8px', background: '#ECFDF5', borderRadius: '12px', color: '#059669', display: 'flex' }}>
+                <CalendarToday style={{ fontSize: '18px' }} />
+             </div>
+             <div style={{ flex: 1 }}>
+                <div style={{ fontSize: '11px', fontWeight: 700, color: theme.muted, marginBottom: '2px' }}>Duration Plan</div>
+                <select 
+                  value={cropDurationType} onChange={(e) => setCropDurationType(e.target.value)}
+                  style={{ width: '100%', appearance: 'none', background: 'transparent', border: 'none', padding: 0, fontFamily: theme.fontBody, fontSize: '14px', fontWeight: 800, color: '#0F172A', outline: 'none', cursor: 'pointer' }}
+                >
+                  <option value="short_term">Short-Term</option>
+                  <option value="long_term">Long-Term</option>
+                  <option value="perennial">Perennial</option>
+                </select>
+             </div>
           </div>
 
           {/* Land */}
-          <div style={{ marginBottom: '20px' }}>
-            <div style={{ fontSize: '12px', fontWeight: 600, color: theme.muted, marginBottom: '8px' }}>Land (Acres)</div>
-            <input 
-              type="number"
-              min="0.1"
-              step="0.1"
-              value={landSize} 
-              onChange={(e) => setLandSize(e.target.value)}
-              style={{ width: '100%', background: theme.cream, border: `1.5px solid ${theme.border}`, borderRadius: '12px', padding: '11px 14px', fontFamily: theme.fontBody, fontSize: '14px', fontWeight: 500, color: theme.soil, outline: 'none' }}
-            />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: '#F8FAFC', borderRadius: '16px', padding: '12px 16px', marginBottom: '24px' }}>
+             <div style={{ padding: '8px', background: '#ECFDF5', borderRadius: '12px', color: '#059669', display: 'flex' }}>
+                <Agriculture style={{ fontSize: '18px' }} />
+             </div>
+             <div style={{ flex: 1 }}>
+                <div style={{ fontSize: '11px', fontWeight: 700, color: theme.muted, marginBottom: '2px' }}>Land (Acres)</div>
+                <input 
+                  type="number"
+                  min="0.1"
+                  step="0.1"
+                  value={landSize} 
+                  onChange={(e) => setLandSize(e.target.value)}
+                  style={{ width: '100%', background: 'transparent', border: 'none', padding: 0, fontFamily: theme.fontBody, fontSize: '14px', fontWeight: 800, color: '#0F172A', outline: 'none' }}
+                />
+             </div>
           </div>
 
-          {/* Weather Chip */}
+          {/* Weather Block */}
           <div style={{
-            display: 'flex', alignItems: 'center', gap: '10px', background: 'linear-gradient(135deg, #fff8e8, #fef3d3)',
-            border: '1.5px solid rgba(200,144,42,0.25)', borderRadius: '12px', padding: '12px 16px', marginBottom: '20px'
+            display: 'flex', alignItems: 'center', gap: '16px', background: '#FFFBEB',
+            border: '1px solid #FEF3C7', borderRadius: '16px', padding: '16px', marginBottom: '24px'
           }}>
-            <div style={{ fontSize: '28px' }}>☀️</div>
+            <WbSunny style={{ fontSize: '32px', color: '#F59E0B' }} />
             <div>
-              <div style={{ fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '22px', color: theme.gold }}>{temperature !== null ? `${temperature}°C` : '--°C'}</div>
-              <div style={{ fontSize: '12px', color: theme.earth, fontWeight: 500 }}>{profile.season} · {weatherSummary?.isGps ? weatherSummary.locationName : (weatherSummary?.locationName?.split(',')[0] || profile.location?.split(',')[0])}</div>
+              <div style={{ fontFamily: theme.fontAccent, fontWeight: 900, fontSize: '24px', color: '#D97706', lineHeight: 1 }}>{temperature !== null ? `${temperature}°C` : '--°C'}</div>
+              <div style={{ fontSize: '12px', color: '#D97706', fontWeight: 600, marginTop: '4px' }}>{profile.season} · {weatherSummary?.isGps ? weatherSummary.locationName : (weatherSummary?.locationName?.split(',')[0] || profile.location?.split(',')[0])}</div>
             </div>
           </div>
-
-          <button 
-            onClick={handleSyncPrices}
-            disabled={isSyncing}
-            style={{
-              width: '100%', background: 'transparent', color: theme.leaf, border: `1.5px solid ${theme.leaf}`, borderRadius: '14px',
-              padding: '10px', fontFamily: theme.fontAccent, fontWeight: 600, fontSize: '13px',
-              cursor: isSyncing ? 'wait' : 'pointer', transition: 'all .2s', marginBottom: '20px',
-              opacity: isSyncing ? 0.6 : 1
-            }}
-          >
-            {isSyncing ? 'Syncing...' : '🔄 Sync Live Prices'}
-          </button>
 
           <button 
             onClick={handleRecommendation}
             disabled={uiState === 'loading'}
             style={{
-              width: '100%', background: theme.leaf, color: '#fff', border: 'none', borderRadius: '14px',
-              padding: '15px', fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '15px',
-              cursor: uiState === 'loading' ? 'wait' : 'pointer', transition: 'background .2s', boxShadow: '0 4px 16px rgba(45,90,27,0.3)',
-              opacity: uiState === 'loading' ? 0.7 : 1
+              width: '100%', background: '#059669', color: '#fff', border: 'none', borderRadius: '12px',
+              padding: '16px', fontFamily: theme.fontAccent, fontWeight: 800, fontSize: '15px',
+              cursor: uiState === 'loading' ? 'wait' : 'pointer', transition: 'background .2s', boxShadow: '0 4px 12px rgba(5,150,105,0.2)',
+              opacity: uiState === 'loading' ? 0.7 : 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px'
             }}
           >
-            {uiState === 'loading' ? 'Predicting...' : 'Predict Now'}
+            <TrendingUp style={{ fontSize: '18px' }} /> {uiState === 'loading' ? 'Predicting...' : 'Predict Now'}
           </button>
         </aside>
 
@@ -381,7 +365,7 @@ const RecommendationPage = () => {
 
           {uiState === 'initial' && (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '300px', backgroundColor: theme.cream, borderRadius: '20px', border: `1px dashed ${theme.border}`}}>
-              <div style={{ fontSize: '40px', filter: 'grayscale(1)', opacity: 0.3 }}>🌱</div>
+              <Spa style={{ fontSize: '40px', filter: 'grayscale(1)', opacity: 0.3 }} />
               <p style={{ color: theme.muted, fontWeight: 500, marginTop: '10px' }}>Adjust farm profile to see prediction</p>
             </div>
           )}
@@ -396,8 +380,8 @@ const RecommendationPage = () => {
           {uiState === 'success' && topCrops.length > 0 && (
             <>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                <span style={{ fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '14px', color: theme.leaf, background: 'rgba(82,168,50,0.1)', borderRadius: '20px', padding: '4px 12px' }}>
-                  {topCrops.length} crops matched
+                <span style={{ fontFamily: theme.fontAccent, fontWeight: 800, fontSize: '14px', color: '#059669', background: '#ECFDF5', borderRadius: '24px', padding: '6px 16px', border: '1px solid #D1FAE5', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <CheckCircle style={{ fontSize: '16px' }} /> {topCrops.length} crops matched
                 </span>
               </div>
 
@@ -405,94 +389,92 @@ const RecommendationPage = () => {
               {topCrops.map((crop, idx) => {
                 const isFirst = idx === 0;
                 
-                let suitBadgeStyle = { background: 'rgba(82,168,50,0.13)', color: '#2d6e10' };
-                let fillBarColor = `linear-gradient(90deg, ${theme.leafMid}, ${theme.leafGlow})`;
+                let suitBadgeStyle = { background: '#ECFDF5', color: '#059669' };
+                let fillBarColor = `linear-gradient(90deg, #059669, #34D399)`;
                 if (crop.finalScore < 60) {
-                   suitBadgeStyle = { background: 'rgba(180,60,40,0.10)', color: '#8b3020' };
-                   fillBarColor = `linear-gradient(90deg, #c0504d, #e07070)`;
+                   suitBadgeStyle = { background: '#FEF2F2', color: '#DC2626' };
+                   fillBarColor = `linear-gradient(90deg, #DC2626, #F87171)`;
                 } else if (crop.finalScore < 80) {
-                   suitBadgeStyle = { background: 'rgba(200,144,42,0.13)', color: '#8b5a10' };
-                   fillBarColor = `linear-gradient(90deg, ${theme.gold}, ${theme.goldLight})`;
+                   suitBadgeStyle = { background: '#FFFBEB', color: '#D97706' };
+                   fillBarColor = `linear-gradient(90deg, #D97706, #FBBF24)`;
                 }
 
                 return (
                   <div key={crop.name} style={{
-                    background: theme.cardBg, borderRadius: '20px', border: `1.5px solid ${isFirst ? 'rgba(200,144,42,0.35)' : theme.border}`,
-                    boxShadow: theme.shadowCard, overflow: 'hidden', position: 'relative'
+                    background: '#fff', borderRadius: '20px', border: `1.5px solid ${isFirst ? '#059669' : '#E2E8F0'}`,
+                    boxShadow: isFirst ? '0 8px 24px rgba(5, 150, 105, 0.08)' : '0 4px 12px rgba(0,0,0,0.02)', overflow: 'hidden', position: 'relative'
                   }}>
                     {isFirst && (
-                       <div style={{ background: `linear-gradient(90deg, ${theme.gold}, ${theme.goldLight})`, color: '#fff', fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '11px', letterSpacing: '.08em', textAlign: 'center', padding: '5px' }}>
-                         # 1 Best Match
+                       <div style={{ position: 'absolute', top: 0, right: 0, background: '#059669', color: '#fff', fontFamily: theme.fontAccent, fontWeight: 800, fontSize: '12px', padding: '6px 16px', borderBottomLeftRadius: '16px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                         <EmojiEvents style={{ fontSize: '14px' }} /> #1 Best Match
                        </div>
                     )}
-                    <div style={{ padding: '20px' }}>
+                    <div style={{ padding: '24px' }}>
                       
                       {/* Top Header */}
-                      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '14px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                          <div style={{ width: '48px', height: '48px', background: theme.cream, borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px', border: `1.5px solid ${theme.creamDark}` }}>
-                            {getCropEmoji(crop.name)}
-                          </div>
-                          <div>
-                            <div style={{ fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '19px', color: theme.soil }}>{crop.name}</div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '5px', flexWrap: 'wrap' }}>
-                               <span style={{ ...suitBadgeStyle, borderRadius: '6px', padding: '3px 8px', fontSize: '12px', fontWeight: 600, fontFamily: theme.fontAccent, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                 <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor' }} /> {crop.finalScore}% Suitability
-                               </span>
-                               <span style={{ fontSize: '12px', color: theme.muted, fontWeight: 400 }}>Market: <strong style={{ color: theme.leaf, fontWeight: 600 }}>₹{crop.marketPrice}/qtl</strong></span>
-                            </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '24px' }}>
+                        <div style={{ width: '80px', height: '80px', background: 'radial-gradient(circle, #F4FBF7 0%, #ECFDF5 100%)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '42px', color: '#059669', flexShrink: 0 }}>
+                          {getCropIcon(crop.name)}
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontFamily: theme.fontAccent, fontWeight: 900, fontSize: '22px', color: '#0F172A', marginBottom: '6px' }}>{crop.name}</div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                             <span style={{ ...suitBadgeStyle, borderRadius: '8px', padding: '4px 10px', fontSize: '12px', fontWeight: 800, fontFamily: theme.fontAccent, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                               <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor' }} /> {crop.finalScore}% Suitability
+                             </span>
+                             <span style={{ fontSize: '13px', color: '#64748B', fontWeight: 500 }}>Market Price: <strong style={{ color: '#059669', fontWeight: 800 }}>₹{crop.marketPrice}/qtl</strong></span>
                           </div>
                         </div>
                       </div>
 
                       {/* Suitability Fill */}
-                      <div style={{ marginBottom: '14px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: theme.muted, marginBottom: '5px' }}>
-                          <span>Suitability score</span><span>{crop.finalScore}%</span>
+                      <div style={{ marginBottom: '24px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#64748B', fontWeight: 600, marginBottom: '8px' }}>
+                          <span>Suitability Score</span><span>{crop.finalScore}%</span>
                         </div>
-                        <div style={{ height: '6px', background: theme.creamDark, borderRadius: '99px', overflow: 'hidden' }}>
-                          <div style={{ height: '100%', background: fillBarColor, width: `${crop.finalScore}%` }} />
+                        <div style={{ height: '6px', background: '#F1F5F9', borderRadius: '99px', overflow: 'hidden' }}>
+                          <div style={{ height: '100%', background: fillBarColor, width: `${crop.finalScore}%`, borderRadius: '99px' }} />
                         </div>
                       </div>
 
                       {/* Metrics Strip */}
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: theme.border, borderRadius: '12px', overflow: 'hidden', marginBottom: '14px', border: `1px solid ${theme.border}` }}>
-                        <div style={{ background: theme.cream, padding: '12px 10px', textAlign: 'center' }}>
-                          <div style={{ fontSize: '10px', fontWeight: 500, color: theme.muted, textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: '3px' }}>Total Profit</div>
-                          <div style={{ fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '15px', color: theme.leaf }}>{formatCurrency(crop.totalProfit)}</div>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2px', background: '#F1F5F9', borderRadius: '16px', overflow: 'hidden', marginBottom: '20px', border: `1px solid #F1F5F9` }}>
+                        <div style={{ background: '#fff', padding: '16px 12px', textAlign: 'center' }}>
+                          <div style={{ fontSize: '10px', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>Total Profit</div>
+                          <div style={{ fontFamily: theme.fontAccent, fontWeight: 900, fontSize: '18px', color: '#059669' }}>{formatCurrency(crop.totalProfit)}</div>
                         </div>
-                        <div style={{ background: theme.cream, padding: '12px 10px', textAlign: 'center' }}>
-                          <div style={{ fontSize: '10px', fontWeight: 500, color: theme.muted, textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: '3px' }}>Monthly Income</div>
-                          <div style={{ fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '15px', color: theme.gold }}>{formatCurrency(crop.monthlyIncome)}</div>
+                        <div style={{ background: '#fff', padding: '16px 12px', textAlign: 'center' }}>
+                          <div style={{ fontSize: '10px', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>Monthly Income</div>
+                          <div style={{ fontFamily: theme.fontAccent, fontWeight: 900, fontSize: '18px', color: '#D97706' }}>{formatCurrency(crop.monthlyIncome)}</div>
                         </div>
-                        <div style={{ background: theme.cream, padding: '12px 10px', textAlign: 'center' }}>
-                          <div style={{ fontSize: '10px', fontWeight: 500, color: theme.muted, textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: '3px' }}>Per Acre</div>
-                          <div style={{ fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '15px', color: theme.soil }}>{formatCurrency(crop.profitPerAcre)}</div>
+                        <div style={{ background: '#fff', padding: '16px 12px', textAlign: 'center' }}>
+                          <div style={{ fontSize: '10px', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>Per Acre</div>
+                          <div style={{ fontFamily: theme.fontAccent, fontWeight: 900, fontSize: '18px', color: '#0F172A' }}>{formatCurrency(crop.profitPerAcre)}</div>
                         </div>
                       </div>
 
                       {/* Tags */}
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '14px' }}>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
                         {crop.reasons?.map((rsn, idx) => (
-                           <span key={idx} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'rgba(82,168,50,0.08)', border: '1px solid rgba(82,168,50,0.15)', color: theme.leaf, borderRadius: '20px', padding: '3px 10px', fontSize: '12px' }}>
-                             {rsn}
+                           <span key={idx} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#F0FDF4', color: '#059669', borderRadius: '24px', padding: '6px 14px', fontSize: '12px', fontWeight: 600 }}>
+                             <Spa style={{ fontSize: '14px' }} /> {rsn}
                            </span>
                         ))}
                       </div>
 
                       {/* Actions */}
-                      <div style={{ display: 'flex', gap: '10px' }}>
+                      <div style={{ display: 'flex', gap: '12px' }}>
                          <button 
                            onClick={() => handleAddCrop(crop.name)}
-                           style={{ flex: 1, background: theme.leaf, color: '#fff', border: 'none', borderRadius: '12px', padding: '12px 18px', fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '13px', cursor: 'pointer', transition: 'all 0.2s' }}
+                           style={{ flex: 1, background: '#059669', color: '#fff', border: 'none', borderRadius: '12px', padding: '14px', fontFamily: theme.fontAccent, fontWeight: 800, fontSize: '14px', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 4px 12px rgba(5,150,105,0.2)' }}
                          >
                            + Add to Active Crops
                          </button>
                          <button 
                            onClick={() => handleQuickAddAndRedirect(crop.name)}
-                           style={{ flex: 1, background: 'transparent', color: theme.leaf, border: `1.5px solid ${theme.leaf}`, borderRadius: '12px', padding: '12px 18px', fontFamily: theme.fontAccent, fontWeight: 700, fontSize: '13px', cursor: 'pointer', transition: 'all 0.2s' }}
+                           style={{ flex: 1, background: '#fff', color: '#059669', border: `1.5px solid #059669`, borderRadius: '12px', padding: '14px', fontFamily: theme.fontAccent, fontWeight: 800, fontSize: '14px', cursor: 'pointer', transition: 'all 0.2s' }}
                          >
-                           Quick Plan →
+                           View Journey →
                          </button>
                       </div>
 

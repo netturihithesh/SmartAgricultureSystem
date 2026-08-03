@@ -133,7 +133,7 @@ const AddCropPage = () => {
   }
 
   return (
-    <Box sx={{ maxWidth: '650px', margin: '0 auto', padding: '24px', minHeight: '80vh', pt: { xs: '90px', md: '110px' } }}>
+    <Box sx={{ maxWidth: '650px', margin: '0 auto', padding: '24px', minHeight: '80vh', pt: 4 }}>
 
       {/* Header */}
       <Box sx={{ textAlign: 'center', mb: '32px' }}>

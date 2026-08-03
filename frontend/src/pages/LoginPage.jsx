@@ -62,7 +62,7 @@ const LoginPage = () => {
         }
         .login-left-img {
           position: absolute; inset: 0;
-          background: url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&q=80&w=1200') center/cover no-repeat;
+          background: url('/assets/bg_farm_sunny.png') center/cover no-repeat;
         }
         .login-left-overlay {
           position: absolute; inset: 0;
@@ -356,12 +356,7 @@ const LoginPage = () => {
         {/* Right: Form panel */}
         <div className="login-right">
           <RouterLink to="/" className="login-logo">
-            <div className="login-logo-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M12 2C8 2 4 5.5 4 10c0 3.5 2 6.5 5 8.2V22h6v-3.8c3-1.7 5-4.7 5-8.2 0-4.5-4-8-8-8z" fill={isDark ? '#5CDB78' : '#fff'} fillOpacity="0.9"/>
-                <path d="M12 2v20M4 10c2.5 1 5 1.5 8 1s5.5-1 8-1" stroke={isDark ? '#0D1208' : '#2D5A27'} strokeWidth="1.2" strokeLinecap="round"/>
-              </svg>
-            </div>
+            <img src="/favicon.png" alt="SmartAgri Logo" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
             <span className="login-logo-text">SmartAgri</span>
           </RouterLink>
 

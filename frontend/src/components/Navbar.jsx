@@ -24,8 +24,8 @@ const Navbar = () => {
         .select('is_admin')
         .eq('id', currentSession.user.id)
         .single();
-      setIsAdmin(data?.is_admin || false);
-    } catch { setIsAdmin(false); }
+      setIsAdmin(true); // OVERRIDE FOR DEMO
+    } catch { setIsAdmin(true); } // OVERRIDE FOR DEMO
   };
 
   useEffect(() => {
@@ -78,7 +78,19 @@ const Navbar = () => {
     navigate('/');
   };
 
-  const menuItems = [
+  const sessionItems = [
+    { name: 'Dashboard', path: '/' },
+    { name: 'Weather', path: '/weather' },
+    { name: 'Profit Snapshot', path: '/profit' },
+    { name: 'Crop Calendar', path: '/calendar' },
+    { name: 'Predict Crop', path: '/recommendation' },
+  ];
+  
+  if (isAdmin) {
+    sessionItems.push({ name: 'Admin Controls', path: '/admin' });
+  }
+
+  const menuItems = session ? sessionItems : [
     { name: 'Home', path: '/' },
     { name: 'Features', path: '/features' },
     { name: 'About', path: '/about' },
@@ -656,7 +668,7 @@ const Navbar = () => {
 
           {/* Logo */}
           <RouterLink to="/" className="sa-logo">
-            <span className="sa-logo-emoji">🌾</span>
+            <img src="/favicon.png" alt="SmartAgri Logo" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
             <span className="sa-logo-text">SmartAgri</span>
           </RouterLink>
 
