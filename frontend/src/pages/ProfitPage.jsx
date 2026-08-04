@@ -95,10 +95,27 @@ const ProfitPage = () => {
 
   // Set default expenses once when landSizeNum is ready
   useEffect(() => {
-    if (landSizeNum) {
+    if (landSizeNum && profile?.id) {
+      const saved = localStorage.getItem(`custom_expenses_${profile.id}`);
+      if (saved) {
+        try {
+          setExpenses(JSON.parse(saved));
+          return;
+        } catch(e) {
+          console.error(e);
+        }
+      }
+      handleResetExpenses();
+    } else if (landSizeNum) {
       handleResetExpenses();
     }
-  }, [landSizeNum]);
+  }, [landSizeNum, profile]);
+
+  useEffect(() => {
+    if (profile?.id) {
+      localStorage.setItem(`custom_expenses_${profile.id}`, JSON.stringify(expenses));
+    }
+  }, [expenses, profile]);
 
   const handleExpenseChange = (field, value) => {
     const num = parseInt(value) || 0;
@@ -148,7 +165,7 @@ const ProfitPage = () => {
       {profitData && (
         <Grid container spacing={3}>
           {/* Left Column */}
-          <Grid item xs={12} lg={8} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+          <Grid item xs={12} md={7} lg={7} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             
             {/* Expected Revenue Breakdown Card */}
             <Paper sx={{ p: { xs: 3, md: 4 }, borderRadius: '20px', border: '1px solid #E2E8F0', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
@@ -237,7 +254,7 @@ const ProfitPage = () => {
           </Grid>
 
           {/* Right Column: Expense Tracker */}
-          <Grid item xs={12} lg={4}>
+          <Grid item xs={12} md={5} lg={5}>
             <Paper sx={{ p: 4, borderRadius: '20px', border: '1px solid #E2E8F0', boxShadow: '0 4px 20px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', height: '100%' }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 4 }}>
                 <Box sx={{ p: 1.5, bgcolor: '#ECFDF5', borderRadius: '12px', color: '#059669', display: 'flex' }}>

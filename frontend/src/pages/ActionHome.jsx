@@ -666,14 +666,31 @@ const ActionHome = ({ session }) => {
 
   const adjustedProfitData = useMemo(() => {
     if (!selectedCrop) return null;
-    return calculateProfitSnapshot(
+    const baseData = calculateProfitSnapshot(
       cropEconomics,
       landSizeNum,
       selectedCrop.total_duration_days,
       selectedCrop.crop_name,
       weatherYieldImpact
     );
-  }, [selectedCrop, cropEconomics, landSizeNum, weatherYieldImpact]);
+
+    if (profile?.id) {
+      try {
+        const saved = localStorage.getItem(`custom_expenses_${profile.id}`);
+        if (saved) {
+           const expObj = JSON.parse(saved);
+           const totalCustom = Object.values(expObj).reduce((a, b) => a + (Number(b) || 0), 0);
+           if (totalCustom > 0) {
+             baseData.totalCost = totalCustom;
+             baseData.totalProfit = Math.max(0, baseData.revenue - baseData.totalCost);
+             let durationMonths = Math.max(1, Math.ceil((selectedCrop.total_duration_days || 120) / 30));
+             baseData.monthlyIncome = Math.round(baseData.totalProfit / durationMonths);
+           }
+        }
+      } catch(e) {}
+    }
+    return baseData;
+  }, [selectedCrop, cropEconomics, landSizeNum, weatherYieldImpact, profile]);
 
   useEffect(() => {
     if (session?.user?.id) {
