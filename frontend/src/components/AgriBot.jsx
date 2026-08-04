@@ -3,7 +3,7 @@ import {
   Box, Fab, Paper, Typography, TextField, IconButton, List, ListItem,
   ListItemText, Avatar, CircularProgress, Collapse, Fade, Tooltip, Button, useTheme
 } from '@mui/material';
-import { Chat as ChatIcon, Close, Send, SmartToy, Person, Mic, MicOff } from '@mui/icons-material';
+import { Chat as ChatIcon, Close, Send, SmartToy, Person, Mic, MicOff, OpenInFull, CloseFullscreen } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { getAiCompletion } from '../services/aiService';
 import { supabase } from '../supabase';
@@ -99,6 +99,7 @@ const AgriBot = () => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === 'dark';
   const [isOpen, setIsOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
   const [messages, setMessages] = useState([
     { role: 'assistant', content: 'Hello! I am AgriBot, your AI farming assistant. How can I help you today?' }
@@ -319,8 +320,9 @@ const AgriBot = () => {
             right: { xs: 'auto', lg: 32 },
             left: { xs: '50%', lg: 'auto' },
             transform: { xs: 'translateX(-50%)', lg: 'none' },
-            width: { xs: 'calc(100% - 32px)', lg: 380 },
-            height: { xs: '70vh', lg: '520px' },
+            width: isExpanded ? { xs: 'calc(100% - 32px)', lg: 800 } : { xs: 'calc(100% - 32px)', lg: 380 },
+            height: isExpanded ? { xs: '85vh', lg: '80vh' } : { xs: '70vh', lg: '520px' },
+            transition: 'all 0.3s ease',
             borderRadius: '24px',
             display: 'flex',
             flexDirection: 'column',
@@ -345,9 +347,14 @@ const AgriBot = () => {
                 </Typography>
               </Box>
             </Box>
-            <IconButton onClick={() => setIsOpen(false)} sx={{ color: isDarkMode ? '#fff' : '#475569' }} size="small">
-              <Close />
-            </IconButton>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <IconButton onClick={() => setIsExpanded(!isExpanded)} sx={{ color: isDarkMode ? '#fff' : '#475569' }} size="small">
+                {isExpanded ? <CloseFullscreen fontSize="small" /> : <OpenInFull fontSize="small" />}
+              </IconButton>
+              <IconButton onClick={() => setIsOpen(false)} sx={{ color: isDarkMode ? '#fff' : '#475569', ml: 0.5 }} size="small">
+                <Close />
+              </IconButton>
+            </Box>
           </Box>
 
           {/* Messages List */}
