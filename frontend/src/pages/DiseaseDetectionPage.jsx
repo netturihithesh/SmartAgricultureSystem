@@ -6,21 +6,37 @@ const DiseaseDetectionPage = () => {
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState(null);
 
-  const handleSimulatedDiagnosis = (diseaseName) => {
+  const handleImageUpload = async (file) => {
+    if (!file) return;
     setAnalyzing(true);
-    setTimeout(() => {
-      setAnalyzing(false);
-      setResult({
-        disease: diseaseName || 'Paddy Leaf Blast (Magnaporthe oryzae)',
-        severity: 'Moderate Infection (25% leaf surface)',
-        confidence: '94.8% AI Match',
-        treatment: [
-          'Apply Tricyclazole 75% WP @ 0.6g/L of water',
-          'Avoid excess nitrogenous fertilizer application',
-          'Maintain proper field drainage to reduce relative humidity'
-        ]
+    setResult(null);
+    
+    const formData = new FormData();
+    formData.append('image', file);
+    
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiUrl}/detect/detect`, {
+        method: 'POST',
+        body: formData,
       });
-    }, 1500);
+      
+      if (!response.ok) throw new Error('Detection failed');
+      
+      const data = await response.json();
+      
+      setResult({
+        disease: data.disease_name || 'Unknown',
+        severity: data.cause || 'Biological Cause Identified',
+        confidence: data.confidence_level || 'High Confidence',
+        treatment: (data.treatment || 'Consult local expert').split('\n').filter(t => t.trim() !== '')
+      });
+    } catch (error) {
+      console.error('Detection Error:', error);
+      alert('AI Detection failed. Please ensure the backend is running.');
+    } finally {
+      setAnalyzing(false);
+    }
   };
 
   return (
@@ -87,7 +103,7 @@ const DiseaseDetectionPage = () => {
                   <Button
                     variant="contained"
                     startIcon={<CameraAlt />}
-                    onClick={() => handleSimulatedDiagnosis('Paddy Leaf Blast')}
+                    onClick={() => document.getElementById('camera-upload-dd').click()}
                     sx={{ bgcolor: '#059669', color: '#fff', fontWeight: 800, borderRadius: '12px', textTransform: 'none', py: 1.5, fontSize: '15px', boxShadow: '0 4px 12px rgba(5,150,105,0.2)', '&:hover': { bgcolor: '#047857' } }}
                   >
                     Take Photo
@@ -95,7 +111,7 @@ const DiseaseDetectionPage = () => {
                   <Button
                     variant="outlined"
                     startIcon={<CloudUpload />}
-                    onClick={() => handleSimulatedDiagnosis('Yellow Stem Borer')}
+                    onClick={() => document.getElementById('gallery-upload-dd').click()}
                     sx={{ borderColor: '#059669', color: '#059669', fontWeight: 800, borderRadius: '12px', textTransform: 'none', py: 1.5, fontSize: '15px', bgcolor: '#fff', '&:hover': { bgcolor: '#F0FDF4' } }}
                   >
                     Upload File
@@ -182,6 +198,10 @@ const DiseaseDetectionPage = () => {
           </Paper>
         </Grid>
       </Grid>
+      
+      {/* Hidden file inputs */}
+      <input type="file" id="camera-upload-dd" accept="image/*" capture="environment" style={{ display: 'none' }} onChange={(e) => handleImageUpload(e.target.files[0])} />
+      <input type="file" id="gallery-upload-dd" accept="image/*" style={{ display: 'none' }} onChange={(e) => handleImageUpload(e.target.files[0])} />
     </Box>
   );
 };
