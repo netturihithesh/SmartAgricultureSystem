@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Box, Typography, Paper, Grid, Button, Chip, LinearProgress, Checkbox, Container, Divider } from '@mui/material';
 import { 
   CheckCircle, RadioButtonUnchecked, Timeline, Agriculture, WaterDrop, 
@@ -8,6 +9,10 @@ import { supabase } from '../supabase';
 import cropProcessData from '../data/crop_process.json';
 
 const CropJourneyPage = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const targetCropQuery = queryParams.get('crop');
+
   const [session, setSession] = useState(null);
   const [selectedCrop, setSelectedCrop] = useState(cropProcessData[0]);
   const [daysPassed, setDaysPassed] = useState(49);
@@ -23,6 +28,16 @@ const CropJourneyPage = () => {
           if (Array.isArray(crops) && crops.length > 0) {
             let activeIndex = parseInt(localStorage.getItem(`active_crop_index_${session.user.id}`) || '0');
             if (isNaN(activeIndex) || activeIndex >= crops.length) activeIndex = 0;
+            
+            if (targetCropQuery) {
+              const queryName = targetCropQuery.toLowerCase();
+              const foundIdx = crops.findIndex(c => {
+                const n = (c.cropName || c.crop_name || '').toLowerCase();
+                return n === queryName || n.includes(queryName) || queryName.includes(n);
+              });
+              if (foundIdx >= 0) activeIndex = foundIdx;
+            }
+
             const rawName = crops[activeIndex]?.cropName || crops[activeIndex]?.crop_name || '';
             const targetName = rawName.toLowerCase();
             const found = cropProcessData.find(c => c.crop_name && c.crop_name.toLowerCase().includes(targetName));

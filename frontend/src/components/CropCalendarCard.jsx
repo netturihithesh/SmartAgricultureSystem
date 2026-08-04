@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Typography, Paper, IconButton, Stack } from '@mui/material';
 import { ChevronLeft, ChevronRight, CheckCircle, EventAvailable } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStatus }) => {
+  const navigate = useNavigate();
   const [selectedDay, setSelectedDay] = useState(() => {
     if (selectedCrop && daysPassed) {
       const totalDays = selectedCrop.total_duration_days || 0;
@@ -191,7 +193,7 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
                if (el) {
                  el.scrollIntoView({ behavior: 'smooth' });
                } else {
-                 navigate('/dashboard/calendar');
+                 navigate(`/dashboard/calendar?crop=${encodeURIComponent(selectedCrop.crop_name)}`);
                }
              }}
              style={{ width: '100%', justifyContent: 'center', padding: '10px 16px', borderRadius: '14px', fontSize: '13px' }}
