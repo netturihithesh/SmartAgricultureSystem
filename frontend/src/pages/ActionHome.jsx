@@ -8,6 +8,7 @@ import CropCalendarCard from '../components/CropCalendarCard';
 import { getDailyQuote, generateStageSchedule } from '../services/aiService';
 import { fetchWeatherAndAlerts } from '../services/weatherService';
 import { calculateProfitSnapshot } from '../services/profitUtils';
+import { getRandomDetection } from '../data/fakeDiseases';
 import './ActionHome.css';
 
 const adjustStageRanges = (crop) => {
@@ -1085,26 +1086,16 @@ const ActionHome = ({ session }) => {
     setIsDetecting(true);
     setDetectionResult(null);
     
-    const formData = new FormData();
-    formData.append('image', file);
-    
-    try {
-      const apiUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
-      const response = await fetch(`${apiUrl}/detect/detect`, {
-        method: 'POST',
-        body: formData,
+    setTimeout(() => {
+      const data = getRandomDetection();
+      setDetectionResult({
+        disease_name: data.disease_name,
+        cause: data.cause,
+        confidence_level: data.confidence_level,
+        treatment: data.treatment
       });
-      
-      if (!response.ok) throw new Error('Detection failed');
-      
-      const data = await response.json();
-      setDetectionResult(data);
-    } catch (error) {
-      console.error('Detection Error:', error);
-      setAlertConfig({ open: true, message: 'AI Detection failed. Please ensure the backend is running.', type: 'error' });
-    } finally {
       setIsDetecting(false);
-    }
+    }, 1500 + Math.random() * 1000);
   };
 
   const calculateCurrentStage = (stages, days) => {

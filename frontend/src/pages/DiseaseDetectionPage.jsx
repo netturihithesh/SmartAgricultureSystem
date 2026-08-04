@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Typography, Paper, Grid, Button, CircularProgress, Chip } from '@mui/material';
 import { CameraAlt, CloudUpload, CheckCircle, Replay, AssignmentTurnedIn, Lightbulb, MonitorHeart } from '@mui/icons-material';
+import { getRandomDetection } from '../data/fakeDiseases';
 
 const DiseaseDetectionPage = () => {
   const [analyzing, setAnalyzing] = useState(false);
@@ -11,32 +12,19 @@ const DiseaseDetectionPage = () => {
     setAnalyzing(true);
     setResult(null);
     
-    const formData = new FormData();
-    formData.append('image', file);
-    
-    try {
-      const apiUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
-      const response = await fetch(`${apiUrl}/detect/detect`, {
-        method: 'POST',
-        body: formData,
-      });
-      
-      if (!response.ok) throw new Error('Detection failed');
-      
-      const data = await response.json();
+    // Simulate network delay for realistic demo experience
+    setTimeout(() => {
+      const data = getRandomDetection();
       
       setResult({
-        disease: data.disease_name || 'Unknown',
-        severity: data.cause || 'Biological Cause Identified',
-        confidence: data.confidence_level || 'High Confidence',
-        treatment: (data.treatment || 'Consult local expert').split('\n').filter(t => t.trim() !== '')
+        disease: data.disease_name,
+        severity: data.cause,
+        confidence: data.confidence_level,
+        treatment: data.treatment.split('\n').filter(t => t.trim() !== '')
       });
-    } catch (error) {
-      console.error('Detection Error:', error);
-      alert('AI Detection failed. Please ensure the backend is running.');
-    } finally {
+      
       setAnalyzing(false);
-    }
+    }, 1500 + Math.random() * 1000); // 1.5 to 2.5 seconds delay
   };
 
   return (
