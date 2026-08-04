@@ -36,8 +36,8 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
   const totalDays = selectedCrop.total_duration_days || 140;
   const startMs = new Date(cropStartDate).getTime();
   
-  // Render from Day 1 (Start Date) up to present date (daysPassed) only
-  const endDayNum = Math.min(totalDays, Math.max(1, daysPassed || 1));
+  // Render all days so the user can scroll ahead
+  const endDayNum = totalDays;
   const daysArray = Array.from({ length: endDayNum }, (_, i) => i + 1);
 
   const getStageForDay = (dayNum) => {
@@ -86,6 +86,9 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
           <Box>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: 1 }}>
               Crop Daily Calendar
+            </Typography>
+            <Typography variant="caption" sx={{ color: 'var(--text-sub)', fontSize: '11px' }}>
+              Scroll left to right to check daily tasks
             </Typography>
           </Box>
         </Box>
@@ -162,14 +165,19 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
       </Box>
 
       {/* Day Details Area & View Full Journey Button */}
-      <Box sx={{ p: '16px 20px' }}>
-         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1.5 }}>
+      <Box sx={{ p: '20px 24px' }}>
+         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2, flexWrap: 'nowrap', gap: 1.5 }}>
            <Box sx={{ minWidth: 0 }}>
-             <Typography variant="subtitle2" sx={{ color: '#059669', fontWeight: 800, fontSize: '14px', mb: 0.2 }}>
+             <Typography variant="subtitle2" sx={{ color: '#059669', fontWeight: 800, fontSize: '14px', mb: 0.2, whiteSpace: 'nowrap' }}>
                 DAY {selectedDay} / {totalDays}
              </Typography>
-             <Typography variant="caption" sx={{ color: '#64748B', display: 'block', fontWeight: 600, fontSize: '12px' }}>
+             <Typography variant="caption" sx={{ color: '#64748B', display: 'block', fontWeight: 600, fontSize: '12px', whiteSpace: 'nowrap' }}>
                 {new Date(startMs + (selectedDay - 1) * 86400000).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+             </Typography>
+           </Box>
+           <Box sx={{ px: 1.5, py: 0.6, border: '1px solid #DCFCE7', borderRadius: '20px', bgcolor: '#F0FDF4', flexShrink: 0 }}>
+             <Typography variant="caption" sx={{ color: '#15803D', fontWeight: 700, fontSize: '12px', whiteSpace: 'nowrap' }}>
+               {selectedStage?.title || 'Fertilizer Application'} Stage
              </Typography>
            </Box>
          </Stack>

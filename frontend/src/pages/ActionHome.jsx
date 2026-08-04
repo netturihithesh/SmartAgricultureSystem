@@ -2402,6 +2402,10 @@ const ActionHome = ({ session }) => {
           </div>
         </div>
       )}
+      
+      {/* Hidden file inputs for detection */}
+      <input type="file" id="camera-upload" accept="image/*" capture="environment" style={{ display: 'none' }} onChange={(e) => handleDetection(e.target.files[0])} />
+      <input type="file" id="gallery-upload" accept="image/*" style={{ display: 'none' }} onChange={(e) => handleDetection(e.target.files[0])} />
     </>
   );
 };
