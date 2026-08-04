@@ -193,7 +193,7 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
                if (el) {
                  el.scrollIntoView({ behavior: 'smooth' });
                } else {
-                 navigate(`/dashboard/calendar?crop=${encodeURIComponent(selectedCrop.crop_name)}`);
+                 navigate(`/journey?crop=${encodeURIComponent(selectedCrop.crop_name)}`);
                }
              }}
              style={{ width: '100%', justifyContent: 'center', padding: '10px 16px', borderRadius: '14px', fontSize: '13px' }}

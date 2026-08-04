@@ -166,15 +166,17 @@ const MyCropsPage = () => {
                       Set Active
                     </Button>
                   )}
-                  <Button
-                    variant="contained"
-                    fullWidth
-                    onClick={() => navigate('/journey')}
-                    endIcon={<ArrowForward />}
-                    sx={{ bgcolor: '#059669', color: '#fff', fontWeight: 800, borderRadius: '12px', textTransform: 'none', py: 1.2, boxShadow: '0 4px 12px rgba(5,150,105,0.2)', '&:hover': { bgcolor: '#047857' } }}
-                  >
-                    View Journey
-                  </Button>
+                  {isActive && (
+                    <Button
+                      variant="contained"
+                      fullWidth
+                      onClick={() => navigate('/journey')}
+                      endIcon={<ArrowForward />}
+                      sx={{ bgcolor: '#059669', color: '#fff', fontWeight: 800, borderRadius: '12px', textTransform: 'none', py: 1.2, boxShadow: '0 4px 12px rgba(5,150,105,0.2)', '&:hover': { bgcolor: '#047857' } }}
+                    >
+                      View Journey
+                    </Button>
+                  )}
                 </Box>
               </Paper>
             </Grid>
