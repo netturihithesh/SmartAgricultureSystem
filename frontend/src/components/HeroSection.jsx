@@ -479,7 +479,7 @@ const HeroSection = () => {
             <div className="hero-img-frame">
               <img
                 className="hero-img"
-                src="/assets/bg_abstract_green.png"
+                src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&q=80&w=900"
                 alt="Farmer in a lush green rice paddy field"
               />
               <div className="hero-img-overlay" />
