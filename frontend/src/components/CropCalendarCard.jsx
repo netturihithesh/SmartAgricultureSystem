@@ -36,8 +36,8 @@ const CropCalendarCard = ({ selectedCrop, cropStartDate, daysPassed, substepStat
   const totalDays = selectedCrop.total_duration_days || 140;
   const startMs = new Date(cropStartDate).getTime();
   
-  // Render all days so the user can scroll ahead
-  const endDayNum = totalDays;
+  // Render from Day 1 (Start Date) up to present date (daysPassed) only
+  const endDayNum = Math.min(totalDays, Math.max(1, daysPassed || 1));
   const daysArray = Array.from({ length: endDayNum }, (_, i) => i + 1);
 
   const getStageForDay = (dayNum) => {
